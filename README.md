@@ -12,8 +12,20 @@ el checklist de lo que fue aplicando, y registra lo que observa cuando camina el
 campo. Todo funciona **sin señal** y se sincroniza con la planilla de su chacra
 cuando hay conexión.
 
+**La app está publicada en <https://martintrigo.github.io/BioSalud/>**
+
 > El plan de trabajo completo, con las fases y las decisiones de diseño, está en
 > [PLAN.md](PLAN.md).
+
+## Cómo instalarla en el celular
+
+1. Abrir <https://martintrigo.github.io/BioSalud/> en el navegador del teléfono.
+2. En el menú del navegador (los tres puntos), tocar **"Instalar aplicación"** o
+   **"Agregar a pantalla de inicio"**.
+3. Queda un ícono como cualquier otra app, y desde ahí abre a pantalla completa
+   y funciona sin señal.
+
+No hace falta cuenta ni contraseña: cada teléfono guarda sus propios datos.
 
 ## Estado
 
@@ -35,11 +47,23 @@ fase 4.
 
 ## Cómo verla mientras se desarrolla
 
+Para probar cambios antes de publicarlos, se levanta un servidor local:
+
 ```bash
 python -m http.server 8123 --directory docs
 ```
 
-Y abrir <http://localhost:8123>.
+Ese comando queda corriendo y no muestra nada por sí solo: hay que **abrir
+<http://localhost:8123> en el navegador**. Para cortarlo, Ctrl+C.
+
+## Cómo publicar un cambio
+
+```bash
+git add -A && git commit -m "qué se cambió" && git push
+```
+
+En un minuto está en <https://martintrigo.github.io/BioSalud/>, y los celulares
+que ya la tengan instalada se actualizan solos la próxima vez que la abran.
 
 ## Cómo se organiza
 
@@ -78,7 +102,9 @@ valores se actualiza toda la app.
 
 ## Todavía falta
 
-- El **logo de IFAB** (ver [docs/img/LEEME.md](docs/img/LEEME.md)).
+- El **sello ECOMARCAL y el logo de IFAB en mayor resolución**: los archivos
+  actuales son chicos y limitan la nitidez del ícono y la cabecera
+  (ver [docs/img/LEEME.md](docs/img/LEEME.md)).
 - El **pliego ECOMARCAL**: qué productos admite el sello y cuáles no. Es lo que
   define las marcas de compatibilidad de la fase 2.
 - El listado de **bioinsumos que promueve el INTA** con sus dosis y frecuencias.
