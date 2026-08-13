@@ -1,0 +1,15 @@
+# Restos de la sincronización de Google Drive
+.tmp.drivedownload/
+.tmp.driveupload/
+*.gsheet
+desktop.ini
+Thumbs.db
+
+# Configuración local del editor
+.claude/settings.local.json
+
+# Bibliografía de consulta: son publicaciones de terceros (FAO, Rivera y
+# Wright, fichas Milpa) y el repositorio es público, así que no se redistribuyen
+# desde acá. Quedan en la carpeta local para escribir la wiki; a la app van los
+# contenidos redactados por nosotros, con la cita correspondiente.
+bibliografía/
