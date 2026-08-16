@@ -97,14 +97,22 @@ window.BioDB = (function () {
   // Se usa a partir de la fase de sincronización. Cada registro lleva su
   // propio id, así un reintento nunca duplica filas en la planilla.
 
-  function encolar(tipo, datos) {
-    return guardar("salida", {
+  // Cada registro lleva el identificador del teléfono desde que se crea, no
+  // desde que se envía: así queda constancia de dónde salió aunque se suba
+  // semanas después.
+  function sobre(tipo, datos) {
+    return {
       id: nuevoId(),
       tipo: tipo,
       datos: datos,
+      dispositivo: window.Acceso.dispositivo(),
       creado: new Date().toISOString(),
       intentos: 0,
-    });
+    };
+  }
+
+  function encolar(tipo, datos) {
+    return guardar("salida", sobre(tipo, datos));
   }
 
   // Para lo que se corrige en vez de acumularse, como la configuración: la
@@ -119,10 +127,7 @@ window.BioDB = (function () {
       cursor.onsuccess = (evento) => {
         const puntero = evento.target.result;
         if (puntero) { puntero.delete(); puntero.continue(); return; }
-        almacen.put({
-          id: nuevoId(), tipo: tipo, datos: datos,
-          creado: new Date().toISOString(), intentos: 0,
-        });
+        almacen.put(sobre(tipo, datos));
       };
 
       tx.oncomplete = () => resolver(true);

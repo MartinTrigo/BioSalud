@@ -7,7 +7,7 @@
 // ==========================================================================
 
 window.Config = (function () {
-  const { esc, brindis, numero, superficie } = window.Util;
+  const { esc, brindis, numero, aNumero, superficie } = window.Util;
 
   const LOCALIDADES = [
     "El Bolsón", "Mallín Ahogado", "Lago Puelo", "El Hoyo",
@@ -143,7 +143,7 @@ window.Config = (function () {
             <strong>${superficie(superficieTotal(c))}</strong> en total</p>
         ` : `<p class="vacio">Todavía no cargaste ningún sector.</p>`}
 
-        <h2 style="margin-top:20px">${enEdicion ? "Editar sector " + esc(enEdicion.nombre) : "Agregar un sector"}</h2>
+        <h2 class="separado">${enEdicion ? "Editar sector " + esc(enEdicion.nombre) : "Agregar un sector"}</h2>
 
         <div class="fila">
           <div class="campo">
@@ -154,8 +154,8 @@ window.Config = (function () {
           </div>
           <div class="campo">
             <label for="f-superficie">Superficie (m²)</label>
-            <input id="f-superficie" class="${mal("superficie")}" type="number" inputmode="numeric"
-                   min="1" step="1" value="${esc(s.superficie || "")}" placeholder="1000">
+            <input id="f-superficie" class="${mal("superficie")}" type="text" inputmode="decimal"
+                   value="${esc(s.superficie || "")}" placeholder="1000">
             ${error("superficie")}
           </div>
         </div>
@@ -163,8 +163,9 @@ window.Config = (function () {
         <div class="fila">
           <div class="campo">
             <label for="f-bancales">Bancales <span class="ayuda">Opcional</span></label>
-            <input id="f-bancales" type="number" inputmode="numeric" min="1" step="1"
+            <input id="f-bancales" class="${mal("bancales")}" type="text" inputmode="numeric"
                    value="${esc(s.bancales || "")}" placeholder="8">
+            ${error("bancales")}
           </div>
           <div class="campo">
             <label for="f-cultivo">Tipo de cultivo</label>
@@ -183,8 +184,8 @@ window.Config = (function () {
         <button class="boton boton--secundario boton--ancho" id="btn-sector">
           ${enEdicion ? "Guardar cambios del sector" : "Agregar sector"}
         </button>
-        ${enEdicion ? `<button class="boton--peligro" id="btn-cancelar-sector"
-                        style="display:block;margin:8px auto 0">Cancelar edición</button>` : ""}
+        ${enEdicion ? `<button class="boton--peligro centrado"
+                        id="btn-cancelar-sector">Cancelar edición</button>` : ""}
       </div>
 
       <button class="boton boton--ancho" id="btn-guardar">Guardar configuración</button>
@@ -207,8 +208,8 @@ window.Config = (function () {
           <span class="sector__nombre">${esc(s.nombre)}</span>
           <span class="sector__detalle">${esc(detalle)}</span>
         </span>
-        <button class="boton--peligro" data-editar="${esc(s.id)}" aria-label="Editar sector ${esc(s.nombre)}"
-                style="color:var(--azul)">Editar</button>
+        <button class="boton--peligro boton--editar" data-editar="${esc(s.id)}"
+                aria-label="Editar sector ${esc(s.nombre)}">Editar</button>
         <button class="boton--peligro" data-borrar="${esc(s.id)}" aria-label="Borrar sector ${esc(s.nombre)}">Borrar</button>
       </li>`;
   }
@@ -266,8 +267,9 @@ window.Config = (function () {
     errores = {};
 
     const nombre = valor("#f-sector").trim();
-    const sup = Number(valor("#f-superficie"));
-    const bancales = Number(valor("#f-bancales"));
+    const sup = aNumero(valor("#f-superficie"));
+    const textoBancales = valor("#f-bancales").trim();
+    const bancales = textoBancales ? aNumero(textoBancales) : 0;
     const cultivo = valor("#f-cultivo");
 
     if (!nombre) errores.sector = "Poné un nombre o letra para el sector.";
@@ -275,7 +277,11 @@ window.Config = (function () {
              && s.nombre.trim().toUpperCase() === nombre.toUpperCase())) {
       errores.sector = "Ya hay un sector con ese nombre.";
     }
-    if (!sup || sup <= 0) errores.superficie = "Indicá la superficie en metros cuadrados.";
+    if (Number.isNaN(sup)) errores.superficie = "La superficie tiene que ser un número. Por ejemplo: 1200";
+    else if (sup <= 0) errores.superficie = "Indicá la superficie en metros cuadrados.";
+    if (textoBancales && (Number.isNaN(bancales) || bancales <= 0)) {
+      errores.bancales = "Poné cuántos bancales, o dejalo vacío.";
+    }
     if (!cultivo) errores.cultivo = "Elegí el tipo de cultivo.";
 
     if (Object.keys(errores).length) { pintar(); return; }

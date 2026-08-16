@@ -1,14 +1,27 @@
 // ==========================================================================
 // BioSalud ECOMARCAL — service worker
 //
-// Guarda la app entera en el teléfono la primera vez que se abre con señal.
-// Después arranca y funciona completa en el campo, sin conexión.
+// Guarda la app en el teléfono para que funcione en el campo sin señal.
 //
-// IMPORTANTE: cada vez que se cambia un archivo de esta lista hay que subir el
-// número de CACHE. Si no, los celulares siguen usando la versión vieja.
+// Estrategia: RED PRIMERO CON PACIENCIA CORTA, caché de respaldo.
+//
+// En MonAgric aprendimos que "caché primero" deja a los teléfonos con la
+// versión vieja para siempre, porque nunca vuelven a preguntar. Por eso acá se
+// pide siempre a la red.
+//
+// Pero la red de la Comarca no es "hay o no hay": muchas veces hay una señal
+// débil que tarda quince segundos en contestar, y eso es peor que no tener
+// nada, porque la app queda colgada esperando. Por eso se espera solo unos
+// segundos: si el servidor no contestó, se usa lo guardado y listo. Con buena
+// señal siempre llega lo último; con señal mala o nula, la app abre igual.
+//
+// IMPORTANTE: al cambiar un archivo de la lista, subir el número de CACHE.
 // ==========================================================================
 
-const CACHE = "biosalud-v4";
+const CACHE = "biosalud-v6";
+
+// Cuánto se espera a la red antes de usar lo guardado en el teléfono.
+const ESPERA_MS = 3000;
 
 const ARCHIVOS = [
   "./",
@@ -16,6 +29,7 @@ const ARCHIVOS = [
   "manifest.webmanifest",
   "css/estilos.css",
   "js/util.js",
+  "js/acceso.js",
   "js/db.js",
   "js/config.js",
   "js/app.js",
@@ -26,10 +40,10 @@ const ARCHIVOS = [
 ];
 
 self.addEventListener("install", (evento) => {
-  // El "cache: reload" es importante: obliga a bajar cada archivo del servidor
-  // en vez de tomarlo del caché del navegador. Sin eso, al publicar una versión
-  // nueva el teléfono puede guardar una mezcla de archivos viejos y nuevos, que
-  // es peor que quedarse con la versión vieja entera: la app queda rota.
+  // El "cache: reload" obliga a bajar cada archivo del servidor en vez de
+  // tomarlo del caché del navegador. Sin eso, al publicar una versión nueva el
+  // teléfono puede guardar una mezcla de archivos viejos y nuevos, que es peor
+  // que quedarse con la versión vieja entera: la app queda rota.
   const pedidos = ARCHIVOS.map((url) => new Request(url, { cache: "reload" }));
 
   evento.waitUntil(
@@ -49,29 +63,34 @@ self.addEventListener("activate", (evento) => {
   );
 });
 
+function conPaciencia(pedido) {
+  return new Promise((resolver, rechazar) => {
+    const reloj = setTimeout(() => rechazar(new Error("la red tardó demasiado")), ESPERA_MS);
+    fetch(pedido).then(
+      (respuesta) => { clearTimeout(reloj); resolver(respuesta); },
+      (error) => { clearTimeout(reloj); rechazar(error); }
+    );
+  });
+}
+
 self.addEventListener("fetch", (evento) => {
   const pedido = evento.request;
   if (pedido.method !== "GET") return;
 
-  // Al abrir la app: siempre la pantalla guardada, haya señal o no.
-  if (pedido.mode === "navigate") {
-    evento.respondWith(
-      caches.match("index.html").then((guardada) => guardada || fetch(pedido))
-    );
-    return;
-  }
+  // Los pedidos al servicio de las planillas van siempre a la red, sin pasar
+  // por acá: guardar respuestas de datos en el caché daría información vieja
+  // como si fuera actual.
+  if (new URL(pedido.url).origin !== self.location.origin) return;
 
   evento.respondWith(
-    caches.match(pedido).then((guardada) => {
-      if (guardada) return guardada;
-      return fetch(pedido).then((respuesta) => {
-        // Solo se guarda lo propio de la app; nada de terceros.
-        if (respuesta.ok && pedido.url.startsWith(self.registration.scope)) {
+    conPaciencia(pedido)
+      .then((respuesta) => {
+        if (respuesta.ok) {
           const copia = respuesta.clone();
           caches.open(CACHE).then((cache) => cache.put(pedido, copia));
         }
         return respuesta;
-      });
-    })
+      })
+      .catch(() => caches.match(pedido).then((guardada) => guardada || caches.match("index.html")))
   );
 });

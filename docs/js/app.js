@@ -144,10 +144,10 @@
         </button>
       </div>
 
-      ${instalador ? `<button class="boton boton--secundario boton--ancho" id="btn-instalar"
-                        style="margin-top:16px">Instalar en el celular</button>` : ""}
+      ${instalador ? `<button class="boton boton--secundario boton--ancho separado"
+                        id="btn-instalar">Instalar en el celular</button>` : ""}
 
-      <p class="nota" style="margin-top:24px">
+      <p class="nota nota--pie">
         Esta aplicación funciona sin señal: todo lo que cargues queda guardado en
         el teléfono y se envía a la planilla de tu chacra cuando haya conexión.
       </p>`;
@@ -186,7 +186,7 @@
       <div class="tarjeta">
         <h2>${s.icono} ${esc(s.titulo)}</h2>
         <p>${s.queVa}</p>
-        <p class="aviso aviso--info" style="margin:16px 0 0">
+        <p class="aviso aviso--info al-final">
           Esta sección llega en la <strong>fase ${s.fase}</strong> del desarrollo.
         </p>
       </div>
@@ -219,19 +219,19 @@
         Detalle: ${esc(err.message || err)}</p>`;
     });
 
-  // La app arranca siempre desde lo guardado en el teléfono, así abre al toque
-  // y funciona sin señal. La contra es que, cuando publicamos una versión
-  // nueva, el celular seguiría mostrando la vieja hasta la próxima vez que la
-  // abra. Por eso, apenas la versión nueva toma el control, se recarga sola:
-  // el productor no tiene que hacer nada ni enterarse de que existe una
-  // actualización.
-  if ("serviceWorker" in navigator) {
-    let recargando = false;
-    navigator.serviceWorker.addEventListener("controllerchange", () => {
-      if (recargando) return;      // sin esto, dos avisos seguidos harían un bucle
-      recargando = true;
-      location.reload();
+  // Si algún archivo de logo faltara, se muestra la sigla en un recuadro de
+  // texto en vez de una imagen rota. Va acá y no como atributo en el HTML
+  // porque la política de contenido no admite código suelto en la página.
+  function cuidarLogos() {
+    document.querySelectorAll(".logo img").forEach((img) => {
+      const falló = () => img.parentNode.classList.add("logo--texto") || img.remove();
+      if (img.complete) { if (!img.naturalWidth) falló(); return; }
+      img.addEventListener("error", falló);
     });
+  }
+  cuidarLogos();
+
+  if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
   }
 })();

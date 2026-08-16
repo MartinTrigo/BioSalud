@@ -1,15 +1,41 @@
-# Restos de la sincronización de Google Drive
-.tmp.drivedownload/
-.tmp.driveupload/
+# === Nunca se publican: son las llaves de todo ===
+# La clave de administración abre cualquier chacra sin credencial, y el id de
+# la planilla de accesos expone quiénes tienen acceso. El repositorio es
+# público: si algo de esto se sube una vez, hay que rotarlo todo.
+clave_admin.txt
+servicio.txt
+accesos.txt
+*.credenciales
+secretos*.json
+
+# === Datos de las chacras ===
+# Registros, exportaciones y respaldos con datos de productores y de sus
+# establecimientos. Los datos viven en las planillas, no en el repositorio.
+datos/
+csv/
+*.sqlite3
+*.log
+
+# === Bibliografía de consulta ===
+# Son publicaciones de terceros (FAO, Rivera y Wright, fichas Milpa) y el
+# repositorio es público, así que no se redistribuyen desde acá. Quedan en la
+# carpeta local para escribir la wiki; a la app van los contenidos redactados
+# por nosotros, con la cita correspondiente.
+bibliografía/
+
+# === Google Drive para escritorio ===
+# La carpeta está sincronizada con Drive: los .gsheet y .gdoc son accesos
+# directos a los archivos de Google (llevan el id y el correo), no documentos.
 *.gsheet
+*.gdoc
+*.gslides
+*.gform
+*.gdraw
+.tmp.drive*/
+
+# === Configuración local de la PC ===
+.claude/settings.local.json
 desktop.ini
 Thumbs.db
-
-# Configuración local del editor
-.claude/settings.local.json
-
-# Bibliografía de consulta: son publicaciones de terceros (FAO, Rivera y
-# Wright, fichas Milpa) y el repositorio es público, así que no se redistribuyen
-# desde acá. Quedan en la carpeta local para escribir la wiki; a la app van los
-# contenidos redactados por nosotros, con la cita correspondiente.
-bibliografía/
+__pycache__/
+*.pyc

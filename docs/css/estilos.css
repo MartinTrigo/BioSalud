@@ -330,6 +330,17 @@ input.mal, select.mal { border-color: var(--error); background: var(--error-suav
   margin: 0 0 8px;
 }
 
+/* ---------- Espaciados sueltos ----------
+   Van acá y no como atributo "style" en el HTML: la política de contenido no
+   admite estilos sueltos en la página, justamente para que nada que se cuele
+   pueda pintar la pantalla. */
+
+.separado { margin-top: 20px; }
+.centrado { display: block; margin: 8px auto 0; }
+.al-final { margin: 16px 0 0; }
+.nota--pie { margin-top: 24px; }
+.boton--editar { color: var(--azul); }
+
 /* ---------- Pie ---------- */
 
 .pie {
