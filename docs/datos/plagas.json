@@ -1,0 +1,251 @@
+{
+  "version": "2026-08-18",
+  "nota": "Fichas redactadas por el equipo del IFAB a partir de la bibliografía citada. Los umbrales son orientativos: se ajustan con la experiencia local y con lo que se vaya registrando en la app.",
+
+  "fuentes": {
+    "P1": "Chillo, V. (comp.) (2026). Manejo agroecológico de plagas hortícolas, Parte 2: insectos y ácaros de importancia hortícola en la Patagonia Andina.",
+    "P2": "Rivera, M. C.; Wright, E. R. (2020). Apuntes de patología vegetal.",
+    "P3": "Venegas Jaque, P.; Cardozo, A. G. y otros (2021). Comunicación Técnica N.º 91, INTA AER El Bolsón."
+  },
+
+  "grupos": [
+    { "id": "insectos", "nombre": "Insectos", "icono": "🦗", "descripcion": "Mastican, minan o chupan savia. La mayoría tiene enemigos naturales que conviene cuidar antes que reemplazar." },
+    { "id": "acaros", "nombre": "Ácaros", "icono": "🕷️", "descripcion": "Se ven con lupa. En el clima seco de la Comarca se disparan con el calor del verano." },
+    { "id": "hongos", "nombre": "Enfermedades fúngicas", "icono": "🍄", "descripcion": "En preparación: las fichas de oídio, mildiu, roya, botritis y hongos de suelo llegan en la próxima tanda." }
+  ],
+
+  "fichas": [
+    {
+      "id": "polilla-col",
+      "nombre": "Polilla de la col",
+      "cientifico": "Plutella xylostella",
+      "grupo": "insectos",
+      "orden": "Lepidoptera, Plutellidae",
+      "resumen": "Especialista de crucíferas. Es la plaga con más resistencia a insecticidas registrada en el mundo, así que depender de una sola herramienta no funciona.",
+      "cultivos": "Repollo, brócoli, coliflor, colza, mostaza, nabo, rúcula, y crucíferas silvestres que le sirven de hospederas alternativas.",
+      "dano": "La larva come el tejido de la hoja entre las nervaduras. En plantas chicas se mete en las yemas apicales y puede destruirlas, arruinando la formación de la cabeza en repollo, brócoli y coliflor.",
+      "ciclo": "Ciclo corto, con muchas generaciones superpuestas por temporada. En Patagonia es más abundante en primavera y otoño, y baja después del solsticio de verano. El huevo incuba 3 a 6 días; la larva pasa por cuatro estadios en 12 a 16 días; la pupa tarda 7 a 15 días. Los adultos son nocturnos, de día descansan en el envés de la hoja, y pueden migrar largas distancias.",
+      "monitoreo": [
+        "Recorrida semanal revisando el envés de las hojas: huevos, larvas jóvenes y pupas.",
+        "Reforzar el monitoreo en primavera y otoño, que son los picos en Patagonia."
+      ],
+      "umbral": [
+        { "momento": "Crecimiento vegetativo", "valor": "Alrededor de 1 larva por planta" },
+        { "momento": "Cerca de la formación de la cabeza", "valor": "0,5 larvas por planta (etapa más sensible)" }
+      ],
+      "prevencion": [
+        "No sembrar crucíferas de forma continua en el mismo lote: rotar con otras familias.",
+        "Sacar los restos de cosecha de crucíferas de la temporada anterior, que sostienen la plaga entre ciclos.",
+        "Poner franjas de plantas nectaríferas (aliso dulce, trébol, trigo sarraceno) y mantener crucíferas silvestres en los bordes: favorecen el parasitismo natural.",
+        "Evitar trasplantar en los picos poblacionales, primavera y otoño temprano.",
+        "Mallas protectoras sobre el cultivo.",
+        "Trampeo masivo de adultos con trampas de luz a la noche."
+      ],
+      "enemigos": "Los parasitoides son el grupo más importante: microavispas que parasitan sobre todo las larvas. Las plantas nectaríferas alargan mucho su vida y su fecundidad.",
+      "entomopatogenos": "Bacillus thuringiensis (Bt) es el más usado y efectivo contra las larvas. También Beauveria bassiana y Metarhizium anisopliae, que rinden más con humedad ambiente alta.",
+      "tratamientos": ["biorepelente-picante"],
+      "cuidados": [
+        "Ya tiene resistencia registrada al Bt. Alternar herramientas y no depender de una sola."
+      ],
+      "fuente": ["P1", "P3"]
+    },
+    {
+      "id": "polilla-tomate",
+      "nombre": "Polilla del tomate",
+      "cientifico": "Tuta absoluta",
+      "grupo": "insectos",
+      "orden": "Lepidoptera, Gelechiidae",
+      "resumen": "Una de las plagas de mayor impacto económico en tomate. Cuando perfora el fruto, la pérdida es total.",
+      "cultivos": "Hospedero preferido: tomate. También papa, berenjena, pimiento, poroto, pepino, tabaco y solanáceas silvestres.",
+      "dano": "Las larvas minan hojas, tallos y frutos. En la hoja hacen galerías; en el fruto, perforaciones que abren la puerta a pudriciones y dejan la fruta fuera de venta.",
+      "ciclo": "Los adultos están activos entre 8 y 35 °C. De larva recién nacida a la puesta de la generación siguiente pueden pasar 20 a 25 días en verano, y se acelera con el calor. Pupa en el suelo, aunque también lo hace sobre la planta o en cualquier rincón protegido de la estructura del invernadero.",
+      "monitoreo": [
+        "Trampas negras sobre el suelo, revisadas semanalmente.",
+        "Revisión visual de las hojas en las plantas más cercanas a las entradas del invernadero, buscando las primeras minas."
+      ],
+      "umbral": [
+        { "momento": "Disparador para intensificar el manejo", "valor": "Unas 3 capturas de adultos por trampa por semana, o galerías en el 4 % del cultivo" }
+      ],
+      "prevencion": [
+        "Eliminar y destruir los restos de cultivo apenas termina la temporada: ahí sobreviven pupas y larvas.",
+        "Rotar con cultivos que no sean solanáceas.",
+        "Revisar y mantener en buen estado mallas y plásticos del invernadero para que no entren los adultos.",
+        "Desinfectar los plásticos después de una temporada de alta infestación.",
+        "Trampas de luz nocturnas y trampas negras en el suelo dentro del invernadero."
+      ],
+      "enemigos": "Las chinches depredadoras y los parasitoides de huevos son los más efectivos. Conviene instalar dentro del invernadero islas con plantas de floración continua que les den recursos.",
+      "entomopatogenos": "Bacillus thuringiensis (Bt), especialmente eficaz sobre larvas recién eclosionadas. También Beauveria bassiana y Metarhizium anisopliae, con mejor desempeño con humedad relativa alta.",
+      "tratamientos": ["biorepelente-picante", "caldo-mineral-caliente"],
+      "cuidados": [
+        "El manejo cultural pesa tanto como las trampas. Sin sacar los restos de cultivo, lo demás rinde poco."
+      ],
+      "fuente": ["P1"]
+    },
+    {
+      "id": "mosca-cebolla",
+      "nombre": "Mosca de la cebolla",
+      "cientifico": "Delia antiqua y Delia platura",
+      "grupo": "insectos",
+      "orden": "Diptera, Anthomyiidae",
+      "resumen": "Una vez que la larva entró al bulbo o al cuello del plantín, no hay nada que hacer. Todo el manejo es prevención.",
+      "cultivos": "Principalmente cebolla, también ajo y puerro. Delia platura es mucho más polífaga: zapallo, crucíferas, maíz, poroto, espárrago y papa, sobre todo en siembra directa.",
+      "dano": "Las larvas comen las semillas de cebolla en germinación y las plantas hasta que empieza la bulbificación. En bulbos más grandes varias larvas conviven adentro y hacen cavidades grandes, que después invaden bacterias y terminan de descomponerlos. En zapallo o repollo comen el tejido interno del cuello del plantín y la planta muere.",
+      "ciclo": "Pasa el invierno como pupa en el suelo, a 5-20 cm según la especie. Los adultos emergen en primavera y necesitan alimentarse de néctar para poder poner huevos. El ciclo depende mucho de la temperatura: de 2 a 5 generaciones por año, y en Delia platura se registraron ciclos de 16-17 días a 25 °C y de hasta 85 días a 10 °C. El daño más grave lo hace la primera generación del año.",
+      "monitoreo": [
+        "Trampas adhesivas de colores o baldes con agua jabonosa, para detectar adultos.",
+        "Revisar los plantines buscando marchitez, amarilleo o muerte inesperada, y el suelo cercano buscando larvas o túneles."
+      ],
+      "umbral": [
+        { "momento": "Huerta a pequeña escala", "valor": "No hay umbral numérico estandarizado. Una sola planta dañada ya es motivo suficiente para intervenir, y las decisiones se toman por bancal." }
+      ],
+      "prevencion": [
+        "No sembrar ni trasplantar durante el pico de emergencia de adultos, en primavera.",
+        "No preparar sustratos ni bancales con abono fresco o compost sin madurar. Incorporar el rastrojo varias semanas antes del trasplante.",
+        "No dejar rastrojos ni material en descomposición en el bancal ni alrededor.",
+        "Remover la tierra superficialmente para dejar expuestas larvas y pupas.",
+        "La biosolarización sirve en suelos que tuvieron Delia en temporadas anteriores.",
+        "Arrancar y sacar del lote las plantas con síntomas, para cortar la fuente de nuevas generaciones.",
+        "En un bancal con alta incidencia, rotar al menos dos años."
+      ],
+      "enemigos": "Nematodos, coleópteros y ácaros del suelo, y parasitoides de pupas, también en el suelo. Mantener el suelo aireado, con materia orgánica y algo de cobertura viva, es lo que los favorece.",
+      "tratamientos": ["biorepelente-picante", "caldo-mineral-caliente"],
+      "cuidados": [
+        "Está fuertemente asociada a la materia orgánica en descomposición: rastrojos y estiércol fresco. Ese dato es la clave del manejo, y hay que tenerlo presente al aplicar biopreparados a base de estiércol."
+      ],
+      "fuente": ["P1"]
+    },
+    {
+      "id": "pulgones",
+      "nombre": "Pulgones",
+      "cientifico": "Varias especies, familia Aphididae",
+      "grupo": "insectos",
+      "orden": "Hemiptera, Aphididae",
+      "resumen": "El grupo donde los biopreparados caseros tienen más antecedentes de uso, y donde el momento de aplicar decide casi todo: hay que llegar antes de que se instale la colonia.",
+      "cultivos": "Como grupo atacan prácticamente todos los hortícolas. Cada especie tiene su preferencia: lechuga (Nasonovia ribisnigri), papa y tomate (Macrosiphum euphorbiae), brasicáceas (Brevicoryne brassicae), arvejas y leguminosas (Acyrthosiphon pisum), zanahoria y apiáceas (Cavariella aegopodii).",
+      "dano": "Extraen savia con su aparato picador-succionador, debilitan la planta y deforman brotes y hojas nuevas. Excretan una sustancia azucarada, la mielecilla, sobre la que se desarrolla la fumagina, un hongo negro superficial. Además transmiten muchos virus vegetales.",
+      "ciclo": "Durante la temporada de crecimiento las hembras se reproducen sin macho y paren ninfas vivas: por eso la población explota. Las ninfas pasan por 4 estadios, en 6 días a 25 °C o más de 12 días a 15 °C. Cuando la planta se satura aparecen adultos alados que emigran. Al final de la temporada aparecen machos y hembras sexuadas, y el huevo de invierno resiste el frío en la planta o en los restos vegetales hasta la primavera. El ciclo completo va de 16 a 50 días según la temperatura.",
+      "monitoreo": [
+        "Revisión semanal del envés de las hojas jóvenes y de los brotes terminales.",
+        "Trampas amarillas en los bordes del cultivo, para detectar la llegada de los primeros alados."
+      ],
+      "umbral": [
+        { "momento": "Momento clave", "valor": "La detección de los primeros alados, antes de que se instale la colonia. Ahí se empieza con repelentes." },
+        { "momento": "Umbral práctico", "valor": "No hay un número único para todas las especies. Conviene intervenir cuando se ven colonias establecidas: adultos y ninfas en la misma hoja." }
+      ],
+      "prevencion": [
+        "Evitar el exceso de nitrógeno: los brotes tiernos y el follaje denso los atraen y les facilitan la picadura.",
+        "Eliminar los restos de cultivo de la temporada anterior.",
+        "Evitar densidades de plantación muy altas, que generan microclimas húmedos y cerrados dentro del follaje."
+      ],
+      "enemigos": "Es el grupo con más enemigos naturales conocidos: vaquitas de San Antonio, depredadoras tanto de larvas como de adultos; sírfidos, cuyas larvas depredan y cuyos adultos comen polen y néctar; crisopas; y varias especies de parasitoides. Los pulgones parasitados quedan como momias, fáciles de reconocer en el cultivo. Conviene tener bordes florales diversos, y también plantas hospederas de pulgones que no atacan al cultivo, como cereales u ortiga, para que los parasitoides tengan de qué vivir.",
+      "entomopatogenos": "Beauveria bassiana y Lecanicillium lecanii son los más usados, aunque su incidencia natural sobre pulgones suele ser menor que sobre otras plagas.",
+      "tratamientos": ["bioestimulante-ortiga", "biorepelente-picante", "extracto-botanico", "lejia-ceniza", "caldo-ceniza", "caldo-mineral-caliente"],
+      "cuidados": [
+        "El momento ideal de aplicación de un biopreparado es cuando aparecen los adultos alados, antes de la colonia. Como repelente se aplica dos veces por semana.",
+        "El jabón potásico es la opción de mejor relación entre eficacia y respeto por la fauna benéfica: actúa por contacto sobre insectos de cuerpo blando sin afectar a sus enemigos naturales."
+      ],
+      "fuente": ["P1", "P3"]
+    },
+    {
+      "id": "trips",
+      "nombre": "Trips",
+      "cientifico": "Familia Thripidae",
+      "grupo": "insectos",
+      "orden": "Thysanoptera, Thripidae",
+      "resumen": "El daño que se ve —el punteado plateado— no es lo peor. Lo grave es que son el principal vector de virus en tomate.",
+      "cultivos": "Polífagos: tomate, pimiento, cebolla, lechuga, frutilla, berenjena y más de 500 especies entre hortícolas, frutales y ornamentales.",
+      "dano": "Raspan el tejido y succionan el contenido de las células, dejando un punteado plateado o clorótico en hojas, flores y frutos. Son especialmente dañinos en floración, comiendo tejido floral y frutos recién cuajados.",
+      "ciclo": "Pasa por 6 estadios: huevo, dos ninfales, prepupa, pupa y adulto. Los huevos se insertan dentro del tejido vegetal con un ovipositor aserrado. El ciclo completo va de 10-15 días con calor a varias semanas a 10-15 °C; en general se cita un rango de 11 a 30 días. La prepupa y la pupa ocurren en el suelo o en grietas protegidas.",
+      "monitoreo": [
+        "Trampas cromáticas azules, más atractivas para trips que las amarillas, revisadas semanalmente.",
+        "Revisar flores y brotes tiernos, sacudiéndolos suavemente sobre una superficie blanca y contando los que caen."
+      ],
+      "umbral": [
+        { "momento": "Referencia orientativa", "valor": "Reforzar el manejo cuando se detectan trips en la mayoría de las flores revisadas, antes de que el daño pase al fruto" }
+      ],
+      "prevencion": [
+        "Rotación de cultivos.",
+        "Remover el suelo después de la cosecha, para exponer las pupas.",
+        "Colocar trampas cromáticas azules en los invernaderos."
+      ],
+      "enemigos": "Ácaros depredadores, micro-coccinélidos y chinches (antocóridos y míridos). Los cultivos de servicio y los abonos verdes son un excelente refugio de invierno para ellos.",
+      "entomopatogenos": "Beauveria bassiana y Metarhizium anisopliae. Su acción pesa sobre todo en prepupa y pupa, que están en el suelo o en grietas: hay que apuntar la aplicación ahí.",
+      "tratamientos": ["caldo-mineral-caliente", "biorepelente-picante"],
+      "cuidados": [
+        "La tierra de diatomeas puede servir por su acción abrasiva, pero afecta también a los depredadores.",
+        "Dejar el jabón potásico y el aceite de neem como último recurso."
+      ],
+      "fuente": ["P1"]
+    },
+    {
+      "id": "mosca-blanca",
+      "nombre": "Mosca blanca",
+      "cientifico": "Bemisia tabaci",
+      "grupo": "insectos",
+      "orden": "Hemiptera, Aleyrodidae",
+      "resumen": "Vector de más de 100 virus vegetales. En el clima seco de la Comarca, los hongos que la controlan trabajan a media máquina.",
+      "cultivos": "Muy polífaga: se le catalogaron entre 600 y 900 especies hospederas. En horticultura pesa sobre todo en tomate, pimiento, zapallo, calabaza, melón y poroto.",
+      "dano": "Adultos y ninfas succionan savia del envés de las hojas, debilitan la planta y, en infestaciones severas, provocan amarillamiento y caída prematura de hojas. Como los pulgones y los trips, excretan sustancia azucarada que favorece la fumagina.",
+      "ciclo": "Pasa por 4 estadios: huevo y 3 ninfales. Los huevos se depositan en el envés de las hojas jóvenes, en grupos o semicírculos; son blancos y se van oscureciendo. El ciclo completo es de unos 14 días a 28 °C y puede estirarse a 44 días a 14 °C, con desarrollo óptimo entre 30 y 33 °C. Los machos viven unos 28 días y las hembras hasta 60.",
+      "monitoreo": [
+        "Trampas amarillas, revisadas semanalmente.",
+        "Revisión del envés de las hojas buscando ninfas."
+      ],
+      "umbral": [
+        { "momento": "Referencia orientativa", "valor": "Más de 10 adultos por hoja, o más de 8 ninfas por folíolo" }
+      ],
+      "prevencion": [
+        "Desinfectar herramientas y manos al pasar de un sector del invernadero a otro.",
+        "Distanciar en el tiempo las nuevas plantaciones del mismo cultivo susceptible, para que un lote recién implantado no quede al lado de uno ya infestado.",
+        "Podas de limpieza periódicas, sacando las hojas de la parte baja de las plantas.",
+        "Fertilizar de forma equilibrada, sin exceso de nitrógeno."
+      ],
+      "enemigos": "Ácaros y chinches depredadores, y parasitoides. Conviene implantar islas con plantas nectaríferas de floración extendida dentro de los invernaderos.",
+      "entomopatogenos": "Beauveria bassiana e Isaria fumosorosea. Todos rinden mejor con humedad relativa alta, lo que es una limitación real en el clima seco patagónico: puede hacer falta más frecuencia de aplicación, o riego por microaspersión para sostener la humedad.",
+      "tratamientos": ["lejia-ceniza", "extracto-botanico", "biopescado", "caldo-mineral-caliente", "caldo-ceniza"],
+      "cuidados": [
+        "Para mosca blanca, mezclar la lejía al 5 % con 1 kg de harina de trigo mejora la adherencia.",
+        "El jabón potásico sigue siendo la opción más compatible con los enemigos naturales."
+      ],
+      "fuente": ["P1"]
+    },
+    {
+      "id": "aranuela-roja",
+      "nombre": "Arañuela roja",
+      "cientifico": "Tetranychus urticae",
+      "grupo": "acaros",
+      "orden": "Trombidiformes (Acari), Tetranychidae",
+      "resumen": "Mide medio milímetro y en verano completa su ciclo en una semana. El clima cálido y seco de la Comarca es exactamente lo que la dispara.",
+      "cultivos": "Muy polífaga: tomate, pimiento, pepino, frutilla, zapallo, arvejas y porotos, berenjena, lúpulo y muchos hortícolas y ornamentales.",
+      "dano": "Se instala en el envés de las hojas y raspa y succiona el contenido de las células. Deja un punteado clorótico que a simple vista parece polvo gris. Con poblaciones altas forma telarañas visibles por las que se desplaza, y puede provocar defoliación severa.",
+      "ciclo": "Mide 0,3 a 0,5 mm. El ciclo puede completarse en apenas 7 días con más de 25 °C y humedad relativa por debajo del 50 %: condiciones que en el verano patagónico se dan seguido. Desarrolla resistencia a acaricidas sintéticos en solo 3 o 4 generaciones.",
+      "monitoreo": [
+        "Muestrear hojas del tercio inferior de la planta, que es donde se instala primero.",
+        "Buscar el punteado clorótico y confirmar con lupa la presencia de ácaros o telarañas."
+      ],
+      "umbral": [
+        { "momento": "Referencia orientativa", "valor": "Alrededor del 20 % de plantas con presencia de la plaga" }
+      ],
+      "prevencion": [
+        "En invernaderos, mantener alta la humedad relativa: la sequedad y el calor la favorecen.",
+        "Evitar el exceso de nitrógeno en la fertilización.",
+        "Implantar o mantener plantas nectaríferas, sobre todo umbelíferas, para alimentar a los enemigos naturales.",
+        "Manejar bien la humedad del cultivo y evitar el estrés hídrico: es una herramienta preventiva de peso."
+      ],
+      "enemigos": "Los ácaros depredadores y los micro-coccinélidos son el pilar del control biológico. Los cultivos de servicio y los abonos verdes les sirven de refugio de invierno.",
+      "entomopatogenos": "Beauveria bassiana y Metarhizium anisopliae, con la salvedad de que también pueden afectar a los ácaros depredadores.",
+      "tratamientos": ["bioestimulante-ortiga", "biorepelente-picante", "extracto-botanico", "caldo-mineral-caliente"],
+      "cuidados": [
+        "Aplicar cuando la población de depredadores todavía no se estableció, para no perjudicarla sin necesidad.",
+        "Desarrolla resistencia rapidísimo. Priorizar siempre las herramientas no químicas."
+      ],
+      "fuente": ["P1"]
+    }
+  ],
+
+  "pendiente": [
+    "Enfermedades fúngicas: oídio, mildiu, roya, botritis y hongos de suelo (Fusarium, Rhizoctonia, Sclerotinia). Salen de los Apuntes de patología vegetal y del material regional.",
+    "Babosas y caracoles, bicho moro y tucura, que aparecen en los biopreparados pero todavía no tienen ficha propia.",
+    "Fotos de síntomas tomadas en la Comarca. Son las que más ayudan a reconocer en el campo y las que menos se pueden tomar de otra publicación."
+  ]
+}

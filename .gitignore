@@ -11,10 +11,18 @@ secretos*.json
 # === Datos de las chacras ===
 # Registros, exportaciones y respaldos con datos de productores y de sus
 # establecimientos. Los datos viven en las planillas, no en el repositorio.
-datos/
-csv/
+#
+# La barra del principio importa: sin ella esta regla también tapaba
+# docs/datos/, que es el contenido de la wiki y SÍ tiene que publicarse.
+/datos/
+/csv/
 *.sqlite3
 *.log
+
+# === Material de trabajo ===
+# Notas y borradores propios, que no hacen falta en el repositorio.
+promps*.md
+prompts*.md
 
 # === Bibliografía de consulta ===
 # Son publicaciones de terceros (FAO, Rivera y Wright, fichas Milpa) y el
