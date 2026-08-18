@@ -60,6 +60,9 @@
       detalle: "Biopreparados y plagas de la Comarca",
       subtitulo: "Material de consulta",
       listo: true,          // esta sección ya está: la atiende js/wiki.js
+      // Única sección que no espera a la configuración: es material de lectura
+      // y no necesita saber nada del establecimiento.
+      sinConfig: true,
     },
   };
 
@@ -81,8 +84,11 @@
     window.scrollTo(0, 0);
 
     // Nadie entra a una sección con la configuración incompleta, ni siquiera
-    // escribiendo la dirección a mano.
-    if (base !== "inicio" && base !== "config" && !habilitada) {
+    // escribiendo la dirección a mano. La wiki es la excepción: se puede leer
+    // desde el primer momento.
+    const libre = base === "inicio" || base === "config"
+                  || (SECCIONES[base] || {}).sinConfig;
+    if (!libre && !habilitada) {
       ir("config");
       return;
     }
@@ -121,21 +127,25 @@
   // ---------- Inicio ----------
 
   function inicio(habilitada) {
-    const menu = Object.entries(SECCIONES).map(([ruta, s]) => `
-      <button class="menu__boton" data-ir="${ruta}" ${habilitada ? "" : "disabled"}>
+    const menu = Object.entries(SECCIONES).map(([ruta, s]) => {
+      const abierta = habilitada || s.sinConfig;
+      return `
+      <button class="menu__boton" data-ir="${ruta}" ${abierta ? "" : "disabled"}>
         <span class="menu__icono">${s.icono}</span>
         <span>
           <span class="menu__titulo">${esc(s.titulo)}</span>
-          <span class="menu__detalle">${habilitada ? esc(s.detalle) : "Completá primero la configuración"}</span>
+          <span class="menu__detalle">${abierta ? esc(s.detalle) : "Completá primero la configuración"}</span>
         </span>
-      </button>`).join("");
+      </button>`;
+    }).join("");
 
     vista.innerHTML = `
       ${habilitada ? resumen(config) : `
         <p class="aviso aviso--info">
           <strong>Empezá por la configuración.</strong> Cargá los datos de tu
-          establecimiento y tus sectores de riego. Hasta que estén, el resto de
-          las secciones queda bloqueado.
+          establecimiento y tus sectores de riego. Hasta que estén, las secciones
+          de planificación y registro quedan bloqueadas. La <strong>Info / Wiki</strong>
+          se puede leer desde ahora.
         </p>`}
 
       <div class="menu">

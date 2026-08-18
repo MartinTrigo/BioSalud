@@ -83,8 +83,9 @@ window.Config = (function () {
 
     destino.innerHTML = `
       ${completa(c) ? "" : `<p class="aviso aviso--info">
-        Completá estos datos una sola vez. Hasta que estén cargados, el resto de
-        las secciones queda bloqueado.</p>`}
+        Completá estos datos una sola vez. Hasta que estén cargados quedan
+        bloqueadas las secciones de planificación y registro; la Info / Wiki se
+        puede leer desde ahora.</p>`}
 
       <div class="tarjeta">
         <h2>Datos del establecimiento</h2>

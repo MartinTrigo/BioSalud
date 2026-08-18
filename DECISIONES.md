@@ -276,6 +276,22 @@ en [DERECHOS.md](DERECHOS.md).
 
 ---
 
+## Por qué la wiki es la única sección que no espera a la configuración
+
+**Decisión (18/08/2026):** la Info / Wiki se puede leer desde que se abre la app
+por primera vez. El resto sigue bloqueado hasta cargar el establecimiento.
+
+La regla original era que sin configuración no se activaba ningún botón, y para
+las secciones de planificación y registro se mantiene: no se puede planificar una
+aplicación sin saber qué sectores tiene la chacra.
+
+Pero la wiki no necesita saber nada del establecimiento. Es material de lectura.
+Bloquearla obligaba a cargar una chacra entera solo para poder mostrarle a
+alguien de qué se trata, y le cerraba la puerta a un productor que todavía no se
+decidió pero quiere leer cómo se hace un biofertilizante.
+
+---
+
 ## Decisiones menores que conviene recordar
 
 **El código de chacra lo asigna el equipo, no el productor.** Si cada uno
