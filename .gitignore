@@ -20,6 +20,11 @@ secretos*.json
 *.sqlite3
 *.log
 
+# === Fotos originales ===
+# Las que salen del celular pesan varios megas cada una. Al repositorio va solo
+# la versión liviana que produce tools/preparar-fotos.py, en docs/img/fichas/.
+fotos-originales/
+
 # === Material de trabajo ===
 # Notas y borradores propios, que no hacen falta en el repositorio.
 promps*.md

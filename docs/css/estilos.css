@@ -372,6 +372,42 @@ input.mal, select.mal { border-color: var(--error); background: var(--error-suav
   vertical-align: middle;
 }
 
+/* ---------- Fotos de las fichas ----------
+   Se reservan las proporciones con aspect-ratio para que el texto no salte
+   mientras la imagen carga, que en el campo con señal lenta es molesto. */
+
+.fotos { display: grid; gap: 12px; margin-bottom: 16px; }
+
+.foto {
+  margin: 0;
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  overflow: hidden;
+}
+
+.foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--verde-suave);
+}
+
+.foto figcaption {
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--texto-suave);
+}
+
+.foto__credito { display: block; font-size: 12px; opacity: .8; margin-top: 2px; }
+
+/* En pantallas anchas entran de a dos sin quedar gigantes. */
+@media (min-width: 560px) {
+  .fotos { grid-template-columns: 1fr 1fr; }
+}
+
 .lista, .pasos { margin: 8px 0 0; padding-left: 22px; }
 .lista li, .pasos li { margin-bottom: 8px; }
 .pasos li { padding-left: 4px; }

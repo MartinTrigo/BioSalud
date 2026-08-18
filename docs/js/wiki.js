@@ -156,6 +156,8 @@ window.Wiki = (function () {
         <p class="resumen-ficha">${esc(p.resumen)}</p>
       </div>
 
+      ${fotos(p.fotos)}
+
       ${bloque("Cultivos que afecta", `<p>${esc(p.cultivos)}</p>`)}
       ${bloque("Daño que produce", `<p>${esc(p.dano)}</p>`)}
       ${bloque("Ciclo de vida", `<p>${esc(p.ciclo)}</p>`)}
@@ -249,6 +251,8 @@ window.Wiki = (function () {
       ${f.revisar ? `<p class="aviso aviso--error"><strong>Dato a verificar.</strong>
         ${esc(f.revisar)}</p>` : ""}
 
+      ${fotos(f.fotos)}
+
       ${bloque("Qué lleva", lista(f.ingredientes))}
       ${bloque("Cómo se prepara", pasos(f.preparacion))}
       ${f.uso ? bloque("Para qué sirve", `<p>${esc(f.uso)}</p>`) : ""}
@@ -281,6 +285,28 @@ window.Wiki = (function () {
 
   const bloque = (titulo, cuerpo, clase) =>
     `<div class="tarjeta ${clase || ""}"><h2>${esc(titulo)}</h2>${cuerpo}</div>`;
+
+  // Las fotos van arriba de todo: para reconocer algo en el campo, la imagen
+  // hace el trabajo que el texto solo confirma. Van a 900 px y viajan con la
+  // app, así que se ven aunque no haya señal (ver tools/preparar-fotos.py).
+  //
+  // El "loading=lazy" evita que se decodifiquen las que están más abajo hasta
+  // que el productor llegue a mirarlas.
+  function fotos(items) {
+    if (!items || !items.length) return "";
+    return `
+      <div class="fotos">
+        ${items.map((f) => `
+          <figure class="foto">
+            <img src="img/fichas/${esc(f.archivo)}" alt="${esc(f.pie || "")}"
+                 loading="lazy" decoding="async">
+            ${f.pie || f.credito ? `<figcaption>
+              ${esc(f.pie || "")}
+              ${f.credito ? `<span class="foto__credito">${esc(f.credito)}</span>` : ""}
+            </figcaption>` : ""}
+          </figure>`).join("")}
+      </div>`;
+  }
 
   const lista = (items) =>
     `<ul class="lista">${(items || []).map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;

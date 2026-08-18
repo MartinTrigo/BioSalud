@@ -179,33 +179,39 @@ la app entera pesa menos que el logo de una sola tipografía web.
 
 ---
 
-## Por qué la wiki viaja entera en el teléfono, pero las fotos no
+## Por qué la wiki viaja entera en el teléfono, fotos incluidas
 
-**Decisión:** todo el texto de la wiki se descarga y queda guardado; las fotos se
-bajan cuando se miran y recién ahí quedan guardadas.
+**Decisión (18/08/2026):** todo se descarga y queda guardado. Texto y fotos.
 
-La pregunta era si convenía dejar la wiki online para que la app fuera más
-liviana. La respuesta salió de mirar cuánto pesa cada cosa:
+La pregunta original era si convenía dejar la wiki online para que la app fuera
+más liviana. La primera respuesta fue "el texto sí, las fotos bajo demanda",
+sobre una estimación de cuánto pesaba una foto. **Esa estimación estaba mal.**
+Al medirlo con fotos reales de plagas, a distintos anchos y formatos:
 
-| Qué | Cuánto pesa |
-|---|---|
-| Las 27 recetas y las 7 fichas de plagas, en texto | 45 KB |
-| **Una sola** foto de un síntoma, comprimida | 80 a 150 KB |
-| Tres fotos por ficha, para 40 fichas | unos 12 MB |
+| Ancho | WebP q78 | AVIF q60 | JPEG q80 |
+|---|---|---|---|
+| 480 px | 18 KB | 15 KB | 26 KB |
+| **900 px** | **43 KB** | 38 KB | 72 KB |
+| 1400 px | 72 KB | 65 KB | 136 KB |
 
-El texto no es el problema: la wiki completa pesa menos que una foto. Lo que
-pesa son las imágenes. Así que la división no va por secciones —esta online,
-esta offline— sino **por peso**.
+A 900 px en WebP una foto pesa 43 KB, no los 80 a 150 KB estimados. Con eso, la
+biblioteca completa —unas 54 fichas con tres fotos cada una— entra en **7 MB**.
+No hace falta partir nada.
 
-Y hay una razón de uso que lo decide del todo: **el momento en que se necesita
-la wiki es justo el peor momento de señal.** El productor está caminando el
-campo, ve una mancha rara y quiere saber qué es. Una wiki online falla
-exactamente ahí.
+**Formato: WebP a 900 px, calidad 78.** AVIF sale un 12 % más chico pero WebP
+tiene soporte universal, y esa diferencia no justifica el riesgo. Los 900 px son
+el ancho justo para verse nítida a pantalla completa en un celular de alta
+densidad.
 
-**Cómo queda:** el texto entra en la descarga inicial, con las fichas cruzadas
-entre plagas y tratamientos. Cuando haya fotos, se cargan al abrir la ficha y
-quedan guardadas para la próxima, con un botón para bajar todas de una antes de
-salir al campo.
+Y la razón de uso confirma la decisión: **el momento en que se necesita la wiki
+es justo el peor momento de señal.** El productor camina el campo, ve una mancha
+rara y quiere compararla con una foto. Ahí es donde una wiki online falla, y es
+exactamente donde la foto hace el trabajo que el texto solo confirma.
+
+**El techo es 8 MB.** El script `tools/preparar-fotos.py` avisa si se pasa. Si
+alguna vez ocurre, ahí sí se parte: lo primero que pasaría a cargarse bajo
+demanda son las fotos de los biopreparados, que se consultan en el galpón y con
+señal, nunca las de plagas.
 
 ---
 

@@ -99,6 +99,16 @@ AppBio/
 
 **Para corregir o sumar una ficha de la wiki no hace falta programar.** Se edita
 el JSON de `docs/datos/`, se sube el número de `CACHE` en `sw.js` y se publica.
+
+**Para sumar fotos**, dejarlas en `fotos-originales/` con el id de la ficha
+adelante (`polilla-col-dano.jpg`) y correr:
+
+```bash
+python tools/preparar-fotos.py
+```
+
+Las deja en `docs/img/fichas/` a 900 px y unos 43 KB cada una, e imprime el
+fragmento JSON para pegar en la ficha. Los originales no se publican.
 Cada ficha lleva su cita bibliográfica y las plagas declaran qué biopreparados
 las tratan; el cruce inverso lo calcula la app sola.
 
