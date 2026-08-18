@@ -54,6 +54,22 @@ Lo que ya funciona: la app abre y se usa completa sin conexión, guarda en el
 teléfono, bloquea el menú hasta que la configuración esté completa, y deja la
 configuración en cola para subirla apenas se despliegue el servicio.
 
+## Dónde vive cada cosa
+
+El proyecto está repartido en dos lugares **a propósito**, y conviene que siga
+así:
+
+| Dónde | Qué | Por qué separado |
+|---|---|---|
+| `C:\MARTO\INFORMATICA\AppBio` | El código y los documentos. Sincronizado con Drive y publicado en GitHub | Es el repositorio de git y la fuente de GitHub Pages |
+| `Mi unidad/BioSalud — Datos` | Las planillas de las chacras | Un Google Sheets no se guarda de verdad en una carpeta sincronizada: baja como un acceso directo de 194 bytes, y **si esa carpeta local se borra, Drive borra las planillas reales** |
+
+A eso se suma que a cada chacra se le comparte **su** planilla y ninguna otra:
+manejar esos permisos es mucho más simple en una carpeta que solo tiene datos.
+
+La carpeta de Drive tiene adentro un documento *LEEME* que explica lo mismo,
+para quien la abra sin pasar por acá.
+
 ## Cómo se organiza
 
 ```
