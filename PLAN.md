@@ -39,7 +39,7 @@ app y cómo se usa, en el [README](README.md).
 | **1 · Base** | Armazón, identidad, funcionamiento sin señal, **Configuración** del establecimiento, servicio con control de acceso escrito | ✅ hecha |
 | **2 · Catálogo y Plan** | Lista de bioinsumos, biopreparados y banda verde + **Registrar Plan de Salud** con recurrencias | pendiente |
 | **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | pendiente |
-| **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | pendiente |
+| **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 planillas creadas y servicio escrito; falta desplegarlo y programar el envío |
 | **5 · Monitoreo** | Registro a campo + motor de sugerencia + aviso al técnico + plan de tratamiento | pendiente |
 | **6 · Wiki** | Fichas de bioinsumos y de plagas regionales, consultables sin señal | 🔄 en curso — 27 biopreparados y 7 plagas cargados; faltan las enfermedades fúngicas y las fotos |
 | **7 · Avisos** | Correo automático de aplicaciones pendientes | pendiente |
@@ -61,7 +61,7 @@ si hay tiempo para redactar fichas.
 |---|---|---|
 | 1 | **Pliego ECOMARCAL**: qué productos admite el sello, cuáles no, y qué registros exige | Fase 2 |
 | 2 | **Bioinsumos que promueve el INTA**, con dosis, método y frecuencia recomendada | Fase 2 |
-| 3 | **Cuenta institucional de Drive** donde alojar las planillas | Fase 4 |
+| 3 | **Cuenta institucional de Drive**. Por ahora las planillas están en el Drive personal, que es lo acordado mientras dure el desarrollo | Antes del piloto |
 | 4 | **Códigos y nombres de las chacras** del piloto | Fase 4 |
 | 5 | **Correo de contacto del equipo** para el botón "contactar al técnico" | Fase 5 |
 

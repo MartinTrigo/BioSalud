@@ -22,6 +22,7 @@ establecimiento cuando hay conexión.
 | [PLAN.md](PLAN.md) | Las fases, qué falta y qué hace falta para avanzar |
 | [DECISIONES.md](DECISIONES.md) | Por qué cada cosa es como es, y qué se descartó |
 | [SEGURIDAD.md](SEGURIDAD.md) | El acceso a los datos y cómo operarlo |
+| [INSTALACION.md](INSTALACION.md) | Cómo desplegar el servicio y sumar una chacra |
 | [DERECHOS.md](DERECHOS.md) | Titularidad, marcas, datos personales y licencia |
 | [TERMINOS.md](TERMINOS.md) | Términos de uso, para que los lea el productor |
 

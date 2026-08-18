@@ -157,7 +157,10 @@ tiempo no se pisan.
 | Escape de todo lo que escribe el productor | ✅ fase 1 |
 | Política de contenido y cero recursos externos | ✅ fase 1 |
 | Identificador de teléfono en cada registro | ✅ fase 1 |
-| Servicio con control de acceso escrito | ✅ fase 1 (se despliega en la 4) |
+| Servicio con control de acceso escrito | ✅ fase 1 |
+| Planillas creadas y estructura de hojas definida | ✅ 18/08/2026 |
+| Identificadores y clave fuera del repositorio | ✅ van en propiedades del script |
+| Servicio desplegado y publicado | fase 4 |
 | Canje de invitación desde la app | fase 4 |
 | Huella, revocación y trazabilidad en planilla | fase 4 |
 | Términos aceptados por el productor en la app | fase 4 |
@@ -165,3 +168,7 @@ tiempo no se pisan.
 El servicio se escribió **con el control de acceso desde la primera línea** a
 propósito: en MonAgric se agregó después, y en el medio hubo un período con la
 puerta abierta.
+
+Los pasos para desplegarlo están en [INSTALACION.md](INSTALACION.md). Los
+identificadores de las planillas viven en `IDS.txt`, en la carpeta del proyecto,
+que no se publica.

@@ -5,6 +5,7 @@
 clave_admin.txt
 servicio.txt
 accesos.txt
+IDS.txt
 *.credenciales
 secretos*.json
 

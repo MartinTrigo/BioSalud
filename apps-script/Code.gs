@@ -24,26 +24,126 @@
 //   4. Crear las invitaciones con crearInvitacion() (ver más abajo).
 // ==========================================================================
 
+// ---------- Lo que se configura sin tocar el código ----------
+//
+// Nada de esto vive acá adentro: va en Configuración del proyecto (engranaje)
+// → Propiedades del script. Así el repositorio, que es público, no lleva
+// identificadores ni claves.
+//
+//   ACCESOS      id de la planilla "BioSalud · Accesos"
+//   CHACRAS      {"codigo":"id de su planilla", …}
+//   CLAVE_ADMIN  clave de administración, larga y al azar
+//
+function propiedad(nombre) {
+  return PropertiesService.getScriptProperties().getProperty(nombre) || "";
+}
+
 // Planilla aparte con quién tiene acceso. No es la de ninguna chacra: si una
 // chacra pudiera abrirla, vería las huellas de todas las demás.
-var PLANILLA_ACCESOS_ID = "";   // ← completar al desplegar
+function planillaAccesos() {
+  var id = propiedad("ACCESOS");
+  if (!id) throw new Error("Falta la propiedad ACCESOS con el id de la planilla de accesos.");
+  return id;
+}
 
 var INVITACIONES_ENCABEZADOS = ["Código", "Chacra", "Para quién", "Estado", "Creada",
                                 "Usada el", "Dispositivo"];
 var DISPOSITIVOS_ENCABEZADOS = ["Dispositivo", "Chacra", "Persona", "Activo", "Alta",
                                 "Última actividad", "Registros", "Huella"];
 
-// Las hojas de datos se van sumando en cada fase: Plan (fase 2), Aplicaciones
-// (fase 3), Monitoreos y Tratamientos (fase 5). La configuración va aparte
-// porque no se acumula: se reescribe entera.
-var HOJAS = {};
+// ---------- Las hojas de datos de cada chacra ----------
+//
+// La configuración va aparte, más abajo, porque no se acumula: se reescribe
+// entera. Estas cuatro sí se acumulan, una fila por registro.
+//
+// Cada fila arranca con el Id que puso el teléfono. Es lo que permite que un
+// reintento no duplique, y lo que ata una aplicación con su renglón del plan o
+// un tratamiento con el monitoreo que lo originó.
+
+// Los sectores viajan como lista; en la planilla van en una sola celda.
+function comoTexto(valor) {
+  if (Array.isArray(valor)) return valor.join(", ");
+  return valor === undefined || valor === null ? "" : String(valor);
+}
+
+var HOJAS = {
+  // Fase 2 — los renglones del plan de salud de la temporada.
+  plan: {
+    nombre: "Plan",
+    encabezados: ["Id", "Temporada", "Producto", "Categoría", "Dosis", "Método",
+                  "Sectores", "Desde", "Hasta", "Cada (días)", "Motivo",
+                  "Estado", "Observaciones", "Cargado por", "Recibido"],
+    fila: function (r) {
+      var d = r.datos;
+      return [r.id, comoTexto(d.temporada), comoTexto(d.producto), comoTexto(d.categoria),
+              comoTexto(d.dosis), comoTexto(d.metodo), comoTexto(d.sectores),
+              comoTexto(d.desde), comoTexto(d.hasta), d.cada_dias || "",
+              comoTexto(d.motivo), comoTexto(d.estado) || "Activo",
+              comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date()];
+    },
+  },
+
+  // Fase 3 — lo que se aplicó de verdad. Es el corazón del seguimiento: la
+  // fecha programada y la real van juntas para poder ver el desvío.
+  aplicaciones: {
+    nombre: "Aplicaciones",
+    encabezados: ["Id", "Plan Id", "Fecha programada", "Fecha aplicada", "Producto",
+                  "Dosis", "Método", "Sector", "Superficie (m²)", "Volumen aplicado",
+                  "Operador", "Clima", "Estado", "Observaciones", "Cargado por", "Recibido"],
+    fila: function (r) {
+      var d = r.datos;
+      return [r.id, comoTexto(d.plan_id), comoTexto(d.fecha_programada),
+              comoTexto(d.fecha_aplicada), comoTexto(d.producto), comoTexto(d.dosis),
+              comoTexto(d.metodo), comoTexto(d.sector), d.superficie || "",
+              comoTexto(d.volumen), comoTexto(d.operador), comoTexto(d.clima),
+              comoTexto(d.estado) || "Aplicada", comoTexto(d.observaciones),
+              comoTexto(r.dispositivo), new Date()];
+    },
+  },
+
+  // Fase 5 — lo que se ve caminando el campo.
+  monitoreos: {
+    nombre: "Monitoreos",
+    encabezados: ["Id", "Fecha", "Sector", "Bancal", "Cultivo", "Qué se observó",
+                  "Tipo", "Incidencia (%)", "Severidad", "Plantas revisadas",
+                  "Avisó al técnico", "Observaciones", "Cargado por", "Recibido"],
+    fila: function (r) {
+      var d = r.datos;
+      return [r.id, comoTexto(d.fecha), comoTexto(d.sector), comoTexto(d.bancal),
+              comoTexto(d.cultivo), comoTexto(d.deteccion), comoTexto(d.tipo),
+              d.incidencia === undefined ? "" : d.incidencia, comoTexto(d.severidad),
+              d.revisadas || "", d.aviso_tecnico ? "SÍ" : "NO",
+              comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date()];
+    },
+  },
+
+  // Fase 5 — el plan de tratamiento que sale de un monitoreo. Lleva quién lo
+  // validó: una recomendación sanitaria no queda sin firma.
+  tratamientos: {
+    nombre: "Tratamientos",
+    encabezados: ["Id", "Monitoreo Id", "Fecha", "Problema", "Producto", "Dosis",
+                  "Método", "Sectores", "Desde", "Hasta", "Cada (días)",
+                  "Sugerido por", "Validado por", "Validado el", "Estado",
+                  "Observaciones", "Cargado por", "Recibido"],
+    fila: function (r) {
+      var d = r.datos;
+      return [r.id, comoTexto(d.monitoreo_id), comoTexto(d.fecha), comoTexto(d.problema),
+              comoTexto(d.producto), comoTexto(d.dosis), comoTexto(d.metodo),
+              comoTexto(d.sectores), comoTexto(d.desde), comoTexto(d.hasta),
+              d.cada_dias || "", comoTexto(d.sugerido_por) || "App",
+              comoTexto(d.validado_por), comoTexto(d.validado_el),
+              comoTexto(d.estado) || "Propuesto", comoTexto(d.observaciones),
+              comoTexto(r.dispositivo), new Date()];
+    },
+  },
+};
 
 // ==========================================================================
 // ACCESOS
 // ==========================================================================
 
 function hojaAccesos(nombre, encabezados) {
-  return hojaSuelta(PLANILLA_ACCESOS_ID, nombre, encabezados);
+  return hojaSuelta(planillaAccesos(), nombre, encabezados);
 }
 
 // De la credencial sale siempre la misma huella, pero de la huella no se puede
@@ -67,7 +167,7 @@ function alAzar(largo) {
 }
 
 function esAdmin(clave) {
-  var guardada = PropertiesService.getScriptProperties().getProperty("CLAVE_ADMIN");
+  var guardada = propiedad("CLAVE_ADMIN");
   return !!guardada && String(clave || "") === guardada;
 }
 
@@ -83,6 +183,68 @@ function crearInvitacion() {
     .appendRow([codigo, chacra, persona, "Nueva", new Date(), "", ""]);
   Logger.log("Código para " + persona + " (" + chacra + "): " + codigo);
   return codigo;
+}
+
+// ==========================================================================
+// PREPARAR LAS PLANILLAS
+//
+// Se ejecuta A MANO desde el editor, una vez al desplegar y otra vez cada vez
+// que se suma una chacra. Deja todas las hojas creadas con sus encabezados.
+//
+// No hace falta correrla para que la app funcione —el servicio crea la hoja
+// que necesita cuando le llega el primer registro—, pero conviene: así la
+// planilla ya se ve armada cuando el productor entra a mirarla, y los
+// encabezados salen del mismo código que después escribe las filas, con lo
+// cual no pueden quedar corridos.
+//
+// Es idempotente: correrla dos veces no rompe ni duplica nada.
+// ==========================================================================
+
+function prepararPlanillas() {
+  var hechas = [];
+
+  // 1. La planilla de accesos
+  hojaAccesos("Invitaciones", INVITACIONES_ENCABEZADOS);
+  hojaAccesos("Dispositivos", DISPOSITIVOS_ENCABEZADOS);
+  limpiarHojaSobrante(SpreadsheetApp.openById(planillaAccesos()));
+  hechas.push("Accesos: Invitaciones y Dispositivos");
+
+  // 2. La planilla de cada chacra
+  var codigos = chacrasConocidas();
+  if (!codigos.length) {
+    hechas.push("Sin chacras todavía: cargá la propiedad CHACRAS y volvé a ejecutar.");
+  }
+
+  codigos.forEach(function (codigo) {
+    var libro = planillaDe(codigo);
+
+    // La configuración: sin filas, solo el encabezado.
+    var config = libro.getSheetByName("Config") || libro.insertSheet("Config");
+    ponerEncabezados(config, CONFIG_ENCABEZADOS);
+    config.autoResizeColumns(1, CONFIG_ENCABEZADOS.length);
+
+    // Las hojas que se acumulan.
+    Object.keys(HOJAS).forEach(function (tipo) {
+      obtenerHoja(libro, HOJAS[tipo]);
+    });
+
+    limpiarHojaSobrante(libro);
+    hechas.push(codigo + " → " + libro.getName());
+  });
+
+  var resumen = hechas.join("\n");
+  Logger.log(resumen);
+  return resumen;
+}
+
+// La hoja vacía que Google crea sola con cada planilla nueva.
+function limpiarHojaSobrante(libro) {
+  ["Hoja 1", "Hoja1", "Sheet1"].forEach(function (nombre) {
+    var sobrante = libro.getSheetByName(nombre);
+    if (sobrante && libro.getSheets().length > 1 && sobrante.getLastRow() === 0) {
+      libro.deleteSheet(sobrante);
+    }
+  });
 }
 
 // Canjea el código por una credencial. El código queda usado y no sirve más.
@@ -136,7 +298,7 @@ function registrarDispositivo(chacra, dispositivo, persona, credencial) {
 function permitido(chacra, credencial, dispositivo) {
   if (!credencial) return rechazo("Este teléfono todavía no tiene acceso.");
 
-  var hoja = SpreadsheetApp.openById(PLANILLA_ACCESOS_ID).getSheetByName("Dispositivos");
+  var hoja = SpreadsheetApp.openById(planillaAccesos()).getSheetByName("Dispositivos");
   if (!hoja || hoja.getLastRow() < 2) return rechazo("Este teléfono todavía no tiene acceso.");
 
   var buscada = huella(credencial);
@@ -159,7 +321,7 @@ function permitido(chacra, credencial, dispositivo) {
 // Deja constancia de que ese teléfono estuvo activo y cuánto cargó.
 function marcarActividad(fila, cuantos) {
   try {
-    var hoja = SpreadsheetApp.openById(PLANILLA_ACCESOS_ID).getSheetByName("Dispositivos");
+    var hoja = SpreadsheetApp.openById(planillaAccesos()).getSheetByName("Dispositivos");
     hoja.getRange(fila, 6).setValue(new Date());
     if (cuantos) {
       var previos = Number(hoja.getRange(fila, 7).getValue()) || 0;
@@ -179,7 +341,7 @@ function rechazo(motivo) {
 function planillaDe(chacra) {
   var mapa = {};
   try {
-    mapa = JSON.parse(PropertiesService.getScriptProperties().getProperty("CHACRAS") || "{}");
+    mapa = JSON.parse(propiedad("CHACRAS") || "{}");
   } catch (err) { mapa = {}; }
 
   var id = mapa[String(chacra || "").toLowerCase()];
