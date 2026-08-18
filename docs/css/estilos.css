@@ -330,6 +330,85 @@ input.mal, select.mal { border-color: var(--error); background: var(--error-suav
   margin: 0 0 8px;
 }
 
+/* ---------- Wiki ---------- */
+
+.cientifico { font-style: italic; color: var(--texto-suave); font-size: 15px; margin: 0 0 8px; }
+.cientifico .sello-comarca { font-style: normal; }
+
+.resumen-ficha { font-size: 17px; margin: 0; }
+
+.indice { list-style: none; margin: 12px 0 0; padding: 0; }
+
+.indice__item {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 14px;
+  text-align: left;
+  font: inherit;
+  color: var(--texto);
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-left: 4px solid var(--verde-claro);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.indice__item:active { background: var(--verde-suave); }
+
+.indice__nombre { display: block; font-weight: 600; }
+.indice__cientifico { display: block; font-size: 14px; color: var(--texto-suave); margin-top: 2px; }
+
+.sello-comarca {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--verde-claro);
+  border-radius: 10px;
+  padding: 2px 8px;
+  vertical-align: middle;
+}
+
+.lista, .pasos { margin: 8px 0 0; padding-left: 22px; }
+.lista li, .pasos li { margin-bottom: 8px; }
+.pasos li { padding-left: 4px; }
+
+.umbrales { margin: 8px 0 0; }
+.umbrales dt { font-weight: 600; font-size: 15px; }
+.umbrales dd { margin: 2px 0 12px; color: var(--texto-suave); }
+
+.datos-rapidos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin: 12px 0 0;
+  font-size: 15px;
+}
+.datos-rapidos div { display: flex; gap: 6px; }
+.datos-rapidos dt { color: var(--texto-suave); }
+.datos-rapidos dd { margin: 0; font-weight: 600; }
+
+.etiquetas { margin: 12px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+
+.etiqueta {
+  font-size: 13px;
+  color: var(--verde);
+  background: var(--verde-suave);
+  border: 1px solid var(--verde-claro);
+  border-radius: 12px;
+  padding: 2px 10px;
+}
+
+/* Los cuidados se distinguen del resto: son lo que evita un accidente. */
+.tarjeta--cuidado { border-left: 5px solid var(--dorado); background: #fdfaf3; }
+.tarjeta--fuente { background: transparent; border-style: dashed; }
+.tarjeta--fuente .lista li { font-size: 14px; color: var(--texto-suave); }
+.tarjeta--pendiente { border-style: dashed; }
+.tarjeta--pendiente .lista li { font-size: 14px; color: var(--texto-suave); }
+
 /* ---------- Espaciados sueltos ----------
    Van acá y no como atributo "style" en el HTML: la política de contenido no
    admite estilos sueltos en la página, justamente para que nada que se cuele

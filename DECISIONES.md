@@ -179,6 +179,52 @@ la app entera pesa menos que el logo de una sola tipografía web.
 
 ---
 
+## Por qué la wiki viaja entera en el teléfono, pero las fotos no
+
+**Decisión:** todo el texto de la wiki se descarga y queda guardado; las fotos se
+bajan cuando se miran y recién ahí quedan guardadas.
+
+La pregunta era si convenía dejar la wiki online para que la app fuera más
+liviana. La respuesta salió de mirar cuánto pesa cada cosa:
+
+| Qué | Cuánto pesa |
+|---|---|
+| Las 27 recetas y las 7 fichas de plagas, en texto | 45 KB |
+| **Una sola** foto de un síntoma, comprimida | 80 a 150 KB |
+| Tres fotos por ficha, para 40 fichas | unos 12 MB |
+
+El texto no es el problema: la wiki completa pesa menos que una foto. Lo que
+pesa son las imágenes. Así que la división no va por secciones —esta online,
+esta offline— sino **por peso**.
+
+Y hay una razón de uso que lo decide del todo: **el momento en que se necesita
+la wiki es justo el peor momento de señal.** El productor está caminando el
+campo, ve una mancha rara y quiere saber qué es. Una wiki online falla
+exactamente ahí.
+
+**Cómo queda:** el texto entra en la descarga inicial, con las fichas cruzadas
+entre plagas y tratamientos. Cuando haya fotos, se cargan al abrir la ficha y
+quedan guardadas para la próxima, con un botón para bajar todas de una antes de
+salir al campo.
+
+---
+
+## Por qué la wiki tiene dos ejes y no uno
+
+**Decisión:** *Enfermedades y plagas* por un lado y *Manejo y tratamientos* por
+el otro, cruzados entre sí.
+
+Son las dos maneras reales en que alguien llega a consultar: "veo algo raro en
+el campo" y "qué preparo y cómo". Un único índice obliga a la mitad de las
+consultas a entrar por la puerta equivocada.
+
+El cruce se declara **una sola vez**, del lado de la plaga: cada ficha de plaga
+lista los biopreparados que la controlan. La lista inversa —contra qué se usa
+cada biopreparado— la calcula la app al mostrarla. Así no hay dos listas que
+puedan quedar contradiciéndose cuando alguien corrige una sola.
+
+---
+
 ## Por qué el service worker pide a la red y espera poco
 
 **Decisión:** red primero, con tres segundos de paciencia, y caché de respaldo.

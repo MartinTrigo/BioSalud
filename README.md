@@ -45,7 +45,7 @@ equipo técnico, y se escribe una sola vez.
 | 3 · Seguimiento | Agenda Hoy / Semana / Atrasado + checklist | pendiente |
 | 4 · Sincronización | Despliegue del servicio, planillas por chacra, invitaciones | pendiente |
 | 5 · Monitoreo | Registro a campo + sugerencia de tratamiento | pendiente |
-| 6 · Wiki | Fichas de bioinsumos y de plagas regionales | pendiente |
+| 6 · Wiki | Fichas de bioinsumos y de plagas regionales | 🔄 **en curso** |
 | 7 · Avisos | Correo automático de aplicaciones pendientes | pendiente |
 | 8 · Piloto | Prueba con 2 chacras y despliegue a las 10 | pendiente |
 
@@ -68,13 +68,22 @@ AppBio/
     ├── sw.js                   guarda la app en el teléfono: el modo sin señal
     ├── css/estilos.css         colores institucionales y estilos
     ├── img/                    logos e íconos que viajan al celular
+    ├── datos/                  EL CONTENIDO DE LA WIKI
+    │   ├── biopreparados.json  recetas, por función
+    │   └── plagas.json         plagas y enfermedades, con sus umbrales
     └── js/
         ├── util.js             ayudas cortas: escape, números, fechas
         ├── acceso.js           identificador del teléfono y credencial
         ├── db.js               base local del teléfono y cola de envío
         ├── config.js           sección Configuración
+        ├── wiki.js             sección Info / Wiki
         └── app.js              menú, navegación y bloqueo de secciones
 ```
+
+**Para corregir o sumar una ficha de la wiki no hace falta programar.** Se edita
+el JSON de `docs/datos/`, se sube el número de `CACHE` en `sw.js` y se publica.
+Cada ficha lleva su cita bibliográfica y las plagas declaran qué biopreparados
+las tratan; el cruce inverso lo calcula la app sola.
 
 ## Cómo verla mientras se desarrolla
 

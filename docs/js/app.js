@@ -57,13 +57,9 @@
     wiki: {
       icono: "📖",
       titulo: "Info / Wiki",
-      detalle: "Bioinsumos, biopreparados y plagas de la Comarca",
+      detalle: "Biopreparados y plagas de la Comarca",
       subtitulo: "Material de consulta",
-      fase: 6,
-      queVa: `Fichas de cada bioinsumo y biopreparado: cómo se prepara, para
-        qué sirve, cómo se aplica, qué cuidados y riesgos tiene. Y las plagas y
-        enfermedades más comunes de la Comarca Andina, para consultar en el
-        campo aunque no haya señal.`,
+      listo: true,          // esta sección ya está: la atiende js/wiki.js
     },
   };
 
@@ -77,6 +73,7 @@
 
   async function mostrar() {
     const ruta = rutaActual();
+    const base = ruta.split("/")[0];      // "wiki/plagas/pulgones" → "wiki"
     config = await window.BioDB.leerConfig();
     const habilitada = window.Config.completa(config);
 
@@ -85,19 +82,27 @@
 
     // Nadie entra a una sección con la configuración incompleta, ni siquiera
     // escribiendo la dirección a mano.
-    if (ruta !== "inicio" && ruta !== "config" && !habilitada) {
+    if (base !== "inicio" && base !== "config" && !habilitada) {
       ir("config");
       return;
     }
 
-    if (ruta === "config") {
+    if (base === "config") {
       encabezado("Configuración", "Datos de tu establecimiento");
       await window.Config.render(vista, () => ir("inicio"));
       return;
     }
 
-    if (SECCIONES[ruta]) {
-      const s = SECCIONES[ruta];
+    // La wiki maneja sus propias sub-pantallas y devuelve qué poner en la
+    // cabecera, que cambia según se esté viendo el índice o una ficha.
+    if (base === "wiki") {
+      const cabecera = await window.Wiki.render(vista, ruta, ir);
+      encabezado(cabecera.titulo, cabecera.subtitulo);
+      return;
+    }
+
+    if (SECCIONES[base]) {
+      const s = SECCIONES[base];
       encabezado(s.titulo, s.subtitulo);
       enConstruccion(s);
       return;
@@ -199,7 +204,13 @@
 
   // ---------- Arranque ----------
 
-  botonVolver.onclick = () => ir("inicio");
+  // La flecha sube un nivel, no salta al inicio: desde una ficha de plaga
+  // vuelve a la lista de plagas, y recién desde ahí al inicio.
+  botonVolver.onclick = () => {
+    const partes = rutaActual().split("/");
+    if (partes.length > 1) { partes.pop(); ir(partes.join("/")); return; }
+    ir("inicio");
+  };
   window.addEventListener("hashchange", mostrar);
 
   window.addEventListener("beforeinstallprompt", (evento) => {
