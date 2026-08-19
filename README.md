@@ -56,25 +56,56 @@ configuración en cola para subirla apenas se despliegue el servicio.
 
 ## Dónde vive cada cosa
 
-El proyecto está repartido en dos lugares **a propósito**, y conviene que siga
-así:
+Hay **una sola fuente de la verdad**: la carpeta del proyecto,
+`C:\MARTO\INFORMATICA\BioSalud`. Todo lo demás sale de ahí.
+
+```
+   ┌──────────────────────────────────────────────────┐
+   │  C:\MARTO\INFORMATICA\BioSalud                   │   ← se edita acá
+   │  código, documentos, contenido de la wiki        │      y solo acá
+   └──────────────────────────────────────────────────┘
+        │                        │
+        │ Drive sincroniza       │ git push
+        │ solo (respaldo)        ▼
+        ▼                   ┌─────────────────────────┐
+   ┌──────────┐             │ github.com/…/BioSalud   │
+   │  Drive   │             └─────────────────────────┘
+   │ (espejo) │                        │ GitHub Pages publica docs/
+   └──────────┘                        ▼
+                            ┌──────────────────────────────┐
+                            │ martintrigo.github.io/…      │ ← lo que se
+                            └──────────────────────────────┘    instala
+```
+
+El espejo de Drive **no es otra copia que haya que mantener**: es la misma
+carpeta, respaldada sola. Nunca se edita desde ahí.
+
+Aparte, y a propósito, están los **datos**:
 
 | Dónde | Qué | Por qué separado |
 |---|---|---|
-| `C:\MARTO\INFORMATICA\AppBio` | El código y los documentos. Sincronizado con Drive y publicado en GitHub | Es el repositorio de git y la fuente de GitHub Pages |
-| `Mi unidad/BioSalud — Datos` | Las planillas de las chacras | Un Google Sheets no se guarda de verdad en una carpeta sincronizada: baja como un acceso directo de 194 bytes, y **si esa carpeta local se borra, Drive borra las planillas reales** |
-
-A eso se suma que a cada chacra se le comparte **su** planilla y ninguna otra:
-manejar esos permisos es mucho más simple en una carpeta que solo tiene datos.
+| `Mi unidad/BioSalud — Datos` | Las planillas de las chacras | Un Google Sheets no se guarda de verdad en una carpeta sincronizada: baja como un acceso directo de 194 bytes, y **si esa carpeta local se borra, Drive borra las planillas reales**. Además a cada chacra se le comparte su planilla y ninguna otra, y eso se maneja mejor en una carpeta que solo tiene datos |
 
 La carpeta de Drive tiene adentro un documento *LEEME* que explica lo mismo,
 para quien la abra sin pasar por acá.
 
+### La única copia que puede quedar desactualizada
+
+Cuando el servicio esté desplegado, `apps-script/Code.gs` va a existir **dos
+veces**: acá, que es el original, y pegado dentro del editor de Apps Script, que
+es la copia que corre. Git no llega hasta ahí.
+
+Así que cada vez que se toque ese archivo hay que volver a pegarlo en el editor
+y hacer **Implementar → Administrar implementaciones → Nueva versión**. Es el
+único lugar del proyecto donde "cuál es la última versión" puede volverse una
+pregunta, y la respuesta siempre es: **la del repositorio**.
+
 ## Cómo se organiza
 
 ```
-AppBio/
+BioSalud/
 ├── PLAN.md · DECISIONES.md · SEGURIDAD.md · DERECHOS.md · TERMINOS.md
+├── CREDITOS.md · INSTALACION.md · IDS.txt (no se publica)
 ├── bibliografía/        material de referencia (no se publica: ver DERECHOS.md)
 ├── img/                 logos originales, tal como llegaron
 ├── apps-script/

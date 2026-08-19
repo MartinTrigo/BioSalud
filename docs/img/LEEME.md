@@ -1,7 +1,8 @@
 # Imágenes de la app
 
 Los archivos de esta carpeta son los que **viajan al celular** del productor.
-Los originales quedan en `AppBio/img/`; acá van con el nombre que espera la app.
+Los originales quedan en la carpeta `img/` de la raíz del proyecto; acá van con
+el nombre que espera la app.
 
 ## Logos de la cabecera
 
@@ -14,7 +15,7 @@ En la cabecera van **solo estos dos**. El logo del IFAB ya es un conjunto que
 incluye CONICET, INTA y la sigla del instituto, así que poner además los dos
 sueltos sería repetirlos y llenar de logos una pantalla de 375 px de ancho.
 
-Los originales de CONICET e INTA por separado siguen en `AppBio/img/` por si
+Los originales de CONICET e INTA por separado siguen en `img/` por si
 alguna vez hacen falta, pero no viajan al celular.
 
 Los logos se muestran sobre una franja **blanca**, porque están hechos para
