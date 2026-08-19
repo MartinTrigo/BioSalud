@@ -14,6 +14,74 @@ establecimiento cuando hay conexión.
 
 **La app está publicada en <https://martintrigo.github.io/BioSalud/>**
 
+Contacto: Martín Trigo, IFAB (CONICET / INTA El Bolsón) —
+martinemilianotrigo@gmail.com
+
+---
+
+## Si llegás nuevo a este proyecto
+
+Según para qué vengas, el camino corto:
+
+| Si sos… | Empezá por | Después |
+|---|---|---|
+| **Del equipo del IFAB o de la agencia** | Abrí la app y andá a *Info / Wiki* | [PLAN.md](PLAN.md), para ver en qué fase está y qué falta |
+| **Programador o informático que va a revisar** | La sección de acá abajo, *Cómo funciona*. Después `docs/js/app.js`, que son 223 líneas y es el que manda | [DECISIONES.md](DECISIONES.md) antes de proponer cambios: explica qué se descartó y con qué argumento |
+| **Quien tenga que poner el servicio en marcha** | [INSTALACION.md](INSTALACION.md) | [SEGURIDAD.md](SEGURIDAD.md) |
+| **Del área legal o de vinculación** | [DERECHOS.md](DERECHOS.md) | [TERMINOS.md](TERMINOS.md) |
+| **Un productor** | El enlace de arriba, y listo | — |
+
+---
+
+## Cómo funciona, en resumen
+
+Para quien tenga que evaluarlo técnicamente, todo lo importante en una pantalla.
+
+**Qué es.** Una aplicación web instalable (PWA). No hay app en Play Store: se
+abre un enlace y el navegador la instala. Se actualiza sola al publicarla.
+
+**Con qué está hecha.** HTML, CSS y JavaScript **sin frameworks y sin ninguna
+dependencia externa**. No hay `npm install`, no hay paso de compilación, no hay
+nada que se baje de un CDN. Se sirve la carpeta `docs/` tal cual está y funciona.
+Son 1.641 líneas en total.
+
+**Por qué así.** Porque el requisito principal es que funcione **sin señal** en
+el campo, y porque tiene que poder mantenerla alguien más dentro de diez años sin
+pelearse con versiones de librerías. Está argumentado en
+[DECISIONES.md](DECISIONES.md).
+
+**Dónde viven los datos.** En dos lugares: en el teléfono, en IndexedDB, que es
+lo que permite cargar sin señal; y en una planilla de Google por cada
+establecimiento. Entre medio hay un único Apps Script que enruta cada registro a
+la planilla que corresponde. **No hay servidor propio ni base de datos que
+mantener**, y ese fue un criterio explícito, no una limitación.
+
+**Cómo se protege.** Cada teléfono canjea una vez un código de invitación y
+recibe una credencial; el servicio guarda solo su huella SHA-256. Sin credencial
+no se lee ni se escribe nada. Ver [SEGURIDAD.md](SEGURIDAD.md).
+
+**Está todo en castellano**, incluidos los nombres de las funciones y las
+variables, y los comentarios explican el *porqué* y no el *qué*. Es a propósito:
+esto lo va a mantener gente del ámbito agronómico local, no una empresa de
+software.
+
+**Lo que conviene saber antes de opinar:**
+
+- **No hay tests automatizados.** La verificación se hizo abriendo la app y
+  probando cada cambio en el navegador, incluido apagar el servidor para
+  comprobar el modo sin señal. Para 1.600 líneas sin dependencias es defendible,
+  pero es una deuda real y crece con el proyecto.
+- **El servicio todavía no está desplegado.** `apps-script/Code.gs` está escrito
+  y verificado, pero no corre en ningún lado. Hoy los datos quedan solo en cada
+  teléfono.
+- **El repositorio no tiene licencia todavía**, a propósito: hay que resolver
+  antes la titularidad entre INTA y CONICET. Está explicado en
+  [DERECHOS.md](DERECHOS.md).
+- **El historial de git es parte de la documentación.** Cada commit explica qué
+  se cambió y por qué. `git log` cuenta la historia del proyecto.
+
+---
+
 ## Los documentos del proyecto
 
 | Documento | Para qué |
@@ -25,6 +93,13 @@ establecimiento cuando hay conexión.
 | [INSTALACION.md](INSTALACION.md) | Cómo desplegar el servicio y sumar una chacra |
 | [DERECHOS.md](DERECHOS.md) | Titularidad, marcas, datos personales y licencia |
 | [TERMINOS.md](TERMINOS.md) | Términos de uso, para que los lea el productor |
+| [CREDITOS.md](CREDITOS.md) | Autoría y licencia de cada foto de la wiki |
+
+Son ocho documentos, que para 1.641 líneas de código puede parecer mucho. La
+razón es que este proyecto tiene tantas decisiones **no técnicas** —qué admite el
+sello, de quién son los datos, qué se le puede recomendar a un productor— como
+técnicas, y cada una tiene su destinatario. Un programador solo necesita este
+README y DECISIONES.
 
 ## Cómo instalarla en el celular
 
