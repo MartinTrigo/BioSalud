@@ -18,7 +18,7 @@
 // IMPORTANTE: al cambiar un archivo de la lista, subir el número de CACHE.
 // ==========================================================================
 
-const CACHE = "biosalud-v8";
+const CACHE = "biosalud-v9";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -40,6 +40,27 @@ const ARCHIVOS = [
   "img/logo-ecomarcal.jpg",
   "img/icono-192.png",
   "img/icono-512.png",
+
+  // Fotos de las fichas de plagas. Viajan con la app a propósito: el momento
+  // en que hacen falta —comparar lo que se ve en el campo con una imagen— es
+  // justo el peor momento de señal. Son 1,1 MB en total.
+  "img/fichas/polilla-col-adulto.webp",
+  "img/fichas/polilla-col-detalle.webp",
+  "img/fichas/polilla-tomate-dano.webp",
+  "img/fichas/polilla-tomate-adulto.webp",
+  "img/fichas/polilla-tomate-trampa.webp",
+  "img/fichas/mosca-cebolla-larvas.webp",
+  "img/fichas/mosca-cebolla-plantin.webp",
+  "img/fichas/mosca-cebolla-adulto.webp",
+  "img/fichas/pulgones-alados.webp",
+  "img/fichas/pulgones-colonia.webp",
+  "img/fichas/pulgones-papa.webp",
+  "img/fichas/trips-adulto.webp",
+  "img/fichas/trips-flor.webp",
+  "img/fichas/mosca-blanca-adultos.webp",
+  "img/fichas/mosca-blanca-ninfas.webp",
+  "img/fichas/aranuela-roja-hembra.webp",
+  "img/fichas/aranuela-roja-huevos.webp",
 ];
 
 self.addEventListener("install", (evento) => {

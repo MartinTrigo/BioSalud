@@ -22,6 +22,10 @@
       "grupo": "insectos",
       "orden": "Lepidoptera, Plutellidae",
       "resumen": "Especialista de crucíferas. Es la plaga con más resistencia a insecticidas registrada en el mundo, así que depender de una sola herramienta no funciona.",
+      "fotos": [
+        { "archivo": "polilla-col-adulto.webp", "pie": "Adulto de polilla de la col. Es nocturno; de día descansa en el envés de la hoja.", "credito": "Andy Reago y Chrissy McClarren · CC BY 2.0", "pagina": "https://commons.wikimedia.org/wiki/File:-_2366_%E2%80%93_Plutella_xylostella_%E2%80%93_Diamondback_Moth_(13195070313).jpg" },
+        { "archivo": "polilla-col-detalle.webp", "pie": "Detalle del adulto: la franja clara del dorso es lo que le da el nombre en inglés, polilla del diamante.", "credito": "Annika Lindqvist · CC BY 4.0", "pagina": "https://commons.wikimedia.org/wiki/File:Plutella_xylostella_91323788.jpg" }
+      ],
       "cultivos": "Repollo, brócoli, coliflor, colza, mostaza, nabo, rúcula, y crucíferas silvestres que le sirven de hospederas alternativas.",
       "dano": "La larva come el tejido de la hoja entre las nervaduras. En plantas chicas se mete en las yemas apicales y puede destruirlas, arruinando la formación de la cabeza en repollo, brócoli y coliflor.",
       "ciclo": "Ciclo corto, con muchas generaciones superpuestas por temporada. En Patagonia es más abundante en primavera y otoño, y baja después del solsticio de verano. El huevo incuba 3 a 6 días; la larva pasa por cuatro estadios en 12 a 16 días; la pupa tarda 7 a 15 días. Los adultos son nocturnos, de día descansan en el envés de la hoja, y pueden migrar largas distancias.",
@@ -56,6 +60,11 @@
       "grupo": "insectos",
       "orden": "Lepidoptera, Gelechiidae",
       "resumen": "Una de las plagas de mayor impacto económico en tomate. Cuando perfora el fruto, la pérdida es total.",
+      "fotos": [
+        { "archivo": "polilla-tomate-dano.webp", "pie": "Fruto de tomate perforado por la larva. Cuando llega al fruto, la pérdida es total.", "credito": "Metin Gulesci, Leaf Tobacco, Bugwood.org · CC BY 3.0 US", "pagina": "https://commons.wikimedia.org/wiki/File:Tuta_absoluta_Tomato_loss.jpg" },
+        { "archivo": "polilla-tomate-adulto.webp", "pie": "Adulto de Tuta absoluta. Mide unos 6 mm.", "credito": "Ben Sale · CC BY 2.0", "pagina": "https://commons.wikimedia.org/wiki/File:Tuta_absoluta_(52465714396).jpg" },
+        { "archivo": "polilla-tomate-trampa.webp", "pie": "Machos capturados en trampa de feromona con agua, en un lote de tomate a campo.", "credito": "Geronimatrix · CC0", "pagina": "https://commons.wikimedia.org/wiki/File:Tuta_absoluta_pheromon_trap.jpg" }
+      ],
       "cultivos": "Hospedero preferido: tomate. También papa, berenjena, pimiento, poroto, pepino, tabaco y solanáceas silvestres.",
       "dano": "Las larvas minan hojas, tallos y frutos. En la hoja hacen galerías; en el fruto, perforaciones que abren la puerta a pudriciones y dejan la fruta fuera de venta.",
       "ciclo": "Los adultos están activos entre 8 y 35 °C. De larva recién nacida a la puesta de la generación siguiente pueden pasar 20 a 25 días en verano, y se acelera con el calor. Pupa en el suelo, aunque también lo hace sobre la planta o en cualquier rincón protegido de la estructura del invernadero.",
@@ -88,6 +97,11 @@
       "grupo": "insectos",
       "orden": "Diptera, Anthomyiidae",
       "resumen": "Una vez que la larva entró al bulbo o al cuello del plantín, no hay nada que hacer. Todo el manejo es prevención.",
+      "fotos": [
+        { "archivo": "mosca-cebolla-larvas.webp", "pie": "Larvas dentro de un puerro. Una vez adentro son inalcanzables: por eso todo el manejo es preventivo.", "credito": "Rasbak · CC BY-SA 3.0", "pagina": "https://commons.wikimedia.org/wiki/File:Delia_antiqua_maggots_at_Allium_porrum_,_uienvlieg_maden_op_prei.jpg" },
+        { "archivo": "mosca-cebolla-plantin.webp", "pie": "Plantín de poroto comido por las larvas bajo tierra: la planta muere sin causa aparente.", "credito": "Howard F. Schwartz, Colorado State University, Bugwood.org · CC BY 3.0 US", "pagina": "https://commons.wikimedia.org/wiki/File:Bohnen_Bohnenfliege_-_seedcorn_maggot_(Delia_platura)-Howard_F._Schwartz.jpg" },
+        { "archivo": "mosca-cebolla-adulto.webp", "pie": "Adulto de Delia platura, la más polífaga de las dos especies.", "credito": "Janet Graham · CC BY 2.0", "pagina": "https://commons.wikimedia.org/wiki/File:Delia_platura,_Holt,_North_Wales,_July_2018.jpg" }
+      ],
       "cultivos": "Principalmente cebolla, también ajo y puerro. Delia platura es mucho más polífaga: zapallo, crucíferas, maíz, poroto, espárrago y papa, sobre todo en siembra directa.",
       "dano": "Las larvas comen las semillas de cebolla en germinación y las plantas hasta que empieza la bulbificación. En bulbos más grandes varias larvas conviven adentro y hacen cavidades grandes, que después invaden bacterias y terminan de descomponerlos. En zapallo o repollo comen el tejido interno del cuello del plantín y la planta muere.",
       "ciclo": "Pasa el invierno como pupa en el suelo, a 5-20 cm según la especie. Los adultos emergen en primavera y necesitan alimentarse de néctar para poder poner huevos. El ciclo depende mucho de la temperatura: de 2 a 5 generaciones por año, y en Delia platura se registraron ciclos de 16-17 días a 25 °C y de hasta 85 días a 10 °C. El daño más grave lo hace la primera generación del año.",
@@ -121,6 +135,11 @@
       "grupo": "insectos",
       "orden": "Hemiptera, Aphididae",
       "resumen": "El grupo donde los biopreparados caseros tienen más antecedentes de uso, y donde el momento de aplicar decide casi todo: hay que llegar antes de que se instale la colonia.",
+      "fotos": [
+        { "archivo": "pulgones-alados.webp", "pie": "Formas aladas. Aparecen cuando la planta se satura y emigran: este es el momento clave para intervenir.", "credito": "Rasbak · CC BY-SA 3.0", "pagina": "https://commons.wikimedia.org/wiki/File:Melige_koolluis_op_boerenkool,_Brevicoryne_brassicae_on_curley_kale_(4).jpg" },
+        { "archivo": "pulgones-colonia.webp", "pie": "Colonia de pulgón ceniciento de las coles sobre kale. Adultos y ninfas juntos: ya está instalada.", "credito": "Rasbak · CC BY-SA 3.0", "pagina": "https://commons.wikimedia.org/wiki/File:Brevicoryne_brassicae_on_curley_kale_(Melige_koolluis_op_boerenkool).jpg" },
+        { "archivo": "pulgones-papa.webp", "pie": "Pulgón de la papa y el tomate, con aladas, ápteras y mudas. Las mudas blancas delatan la colonia.", "credito": "Whitney Cranshaw, Colorado State University, Bugwood.org · CC BY 3.0 US", "pagina": "https://commons.wikimedia.org/wiki/File:Macrosiphum_euphorbiae.jpg" }
+      ],
       "cultivos": "Como grupo atacan prácticamente todos los hortícolas. Cada especie tiene su preferencia: lechuga (Nasonovia ribisnigri), papa y tomate (Macrosiphum euphorbiae), brasicáceas (Brevicoryne brassicae), arvejas y leguminosas (Acyrthosiphon pisum), zanahoria y apiáceas (Cavariella aegopodii).",
       "dano": "Extraen savia con su aparato picador-succionador, debilitan la planta y deforman brotes y hojas nuevas. Excretan una sustancia azucarada, la mielecilla, sobre la que se desarrolla la fumagina, un hongo negro superficial. Además transmiten muchos virus vegetales.",
       "ciclo": "Durante la temporada de crecimiento las hembras se reproducen sin macho y paren ninfas vivas: por eso la población explota. Las ninfas pasan por 4 estadios, en 6 días a 25 °C o más de 12 días a 15 °C. Cuando la planta se satura aparecen adultos alados que emigran. Al final de la temporada aparecen machos y hembras sexuadas, y el huevo de invierno resiste el frío en la planta o en los restos vegetales hasta la primavera. El ciclo completo va de 16 a 50 días según la temperatura.",
@@ -153,6 +172,10 @@
       "grupo": "insectos",
       "orden": "Thysanoptera, Thripidae",
       "resumen": "El daño que se ve —el punteado plateado— no es lo peor. Lo grave es que son el principal vector de virus en tomate.",
+      "fotos": [
+        { "archivo": "trips-adulto.webp", "pie": "Adulto de trips de las flores. Mide entre 1 y 2 mm: se ve mejor sacudiendo la flor sobre algo blanco.", "credito": "Frank Peairs, Colorado State University, Bugwood.org · CC BY 3.0", "pagina": "https://commons.wikimedia.org/wiki/File:Frankliniella_occidentalis_5364132-LGPT.jpg" },
+        { "archivo": "trips-flor.webp", "pie": "Trips dentro de una flor, que es donde hacen el daño que más importa.", "credito": "Dave Kirkeby · CC BY-SA 4.0", "pagina": "https://commons.wikimedia.org/wiki/File:Frankliniella_occidentalis_7826crop.jpg" }
+      ],
       "cultivos": "Polífagos: tomate, pimiento, cebolla, lechuga, frutilla, berenjena y más de 500 especies entre hortícolas, frutales y ornamentales.",
       "dano": "Raspan el tejido y succionan el contenido de las células, dejando un punteado plateado o clorótico en hojas, flores y frutos. Son especialmente dañinos en floración, comiendo tejido floral y frutos recién cuajados.",
       "ciclo": "Pasa por 6 estadios: huevo, dos ninfales, prepupa, pupa y adulto. Los huevos se insertan dentro del tejido vegetal con un ovipositor aserrado. El ciclo completo va de 10-15 días con calor a varias semanas a 10-15 °C; en general se cita un rango de 11 a 30 días. La prepupa y la pupa ocurren en el suelo o en grietas protegidas.",
@@ -184,6 +207,10 @@
       "grupo": "insectos",
       "orden": "Hemiptera, Aleyrodidae",
       "resumen": "Vector de más de 100 virus vegetales. En el clima seco de la Comarca, los hongos que la controlan trabajan a media máquina.",
+      "fotos": [
+        { "archivo": "mosca-blanca-adultos.webp", "pie": "Adultos de Bemisia tabaci. Levantan vuelo en nube al mover la planta.", "credito": "Stephen Ausmus, USDA · dominio público", "pagina": "https://commons.wikimedia.org/wiki/File:Bemisia_tabaci_from_USDA_2.jpg" },
+        { "archivo": "mosca-blanca-ninfas.webp", "pie": "Ninfas en el envés de la hoja. Es lo que hay que contar: más de 8 por folíolo es umbral de acción.", "credito": "CSIRO · CC BY 3.0", "pagina": "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_1489_Silverleaf_whitefly_Bemisia_tabaci_biotype_B.jpg" }
+      ],
       "cultivos": "Muy polífaga: se le catalogaron entre 600 y 900 especies hospederas. En horticultura pesa sobre todo en tomate, pimiento, zapallo, calabaza, melón y poroto.",
       "dano": "Adultos y ninfas succionan savia del envés de las hojas, debilitan la planta y, en infestaciones severas, provocan amarillamiento y caída prematura de hojas. Como los pulgones y los trips, excretan sustancia azucarada que favorece la fumagina.",
       "ciclo": "Pasa por 4 estadios: huevo y 3 ninfales. Los huevos se depositan en el envés de las hojas jóvenes, en grupos o semicírculos; son blancos y se van oscureciendo. El ciclo completo es de unos 14 días a 28 °C y puede estirarse a 44 días a 14 °C, con desarrollo óptimo entre 30 y 33 °C. Los machos viven unos 28 días y las hembras hasta 60.",
@@ -216,6 +243,10 @@
       "grupo": "acaros",
       "orden": "Trombidiformes (Acari), Tetranychidae",
       "resumen": "Mide medio milímetro y en verano completa su ciclo en una semana. El clima cálido y seco de la Comarca es exactamente lo que la dispara.",
+      "fotos": [
+        { "archivo": "aranuela-roja-hembra.webp", "pie": "Hembra con sus hilos de seda sobre hoja de poroto. Mide medio milímetro: hace falta lupa.", "credito": "Gilles San Martin · CC BY-SA 2.0", "pagina": "https://commons.wikimedia.org/wiki/File:Tetranychus_urticae_with_silk_threads.jpg" },
+        { "archivo": "aranuela-roja-huevos.webp", "pie": "Huevos de arañuela. Con calor y aire seco el ciclo se completa en una semana.", "credito": "Gareevmcr · CC BY 4.0", "pagina": "https://commons.wikimedia.org/wiki/File:%D0%9F%D0%B0%D1%83%D1%82%D0%B8%D0%BD%D0%BD%D1%8B%D0%B9_%D0%BA%D0%BB%D0%B5%D1%89_Tetranychus_urticae.png" }
+      ],
       "cultivos": "Muy polífaga: tomate, pimiento, pepino, frutilla, zapallo, arvejas y porotos, berenjena, lúpulo y muchos hortícolas y ornamentales.",
       "dano": "Se instala en el envés de las hojas y raspa y succiona el contenido de las células. Deja un punteado clorótico que a simple vista parece polvo gris. Con poblaciones altas forma telarañas visibles por las que se desplaza, y puede provocar defoliación severa.",
       "ciclo": "Mide 0,3 a 0,5 mm. El ciclo puede completarse en apenas 7 días con más de 25 °C y humedad relativa por debajo del 50 %: condiciones que en el verano patagónico se dan seguido. Desarrolla resistencia a acaricidas sintéticos en solo 3 o 4 generaciones.",
@@ -246,6 +277,7 @@
   "pendiente": [
     "Enfermedades fúngicas: oídio, mildiu, roya, botritis y hongos de suelo (Fusarium, Rhizoctonia, Sclerotinia). Salen de los Apuntes de patología vegetal y del material regional.",
     "Babosas y caracoles, bicho moro y tucura, que aparecen en los biopreparados pero todavía no tienen ficha propia.",
-    "Fotos de síntomas tomadas en la Comarca. Son las que más ayudan a reconocer en el campo y las que menos se pueden tomar de otra publicación."
+    "Fotos propias, tomadas en la Comarca. Las actuales son de licencia libre y sirven para reconocer la plaga, pero muestran otros lugares y otros cultivos. Se reemplazan en la temporada 2026-27.",
+    "Fotos del daño en los cultivos de acá: frutilla, frambuesa, lúpulo y las hortalizas de la zona."
   ]
 }
