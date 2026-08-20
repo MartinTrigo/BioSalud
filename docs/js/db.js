@@ -115,6 +115,14 @@ window.BioDB = (function () {
     return guardar("salida", sobre(tipo, datos));
   }
 
+  // Para lo que ya tiene identidad propia: un renglón del plan, una aplicación.
+  // La cola usa ESE id en vez de inventar uno, así volver a encolar el mismo
+  // registro lo reemplaza en lugar de sumarlo, y en la planilla no aparece
+  // dos veces aunque se toque "guardar" tres veces seguidas.
+  function encolarCon(id, tipo, datos) {
+    return guardar("salida", Object.assign(sobre(tipo, datos), { id: id }));
+  }
+
   // Para lo que se corrige en vez de acumularse, como la configuración: la
   // versión nueva reemplaza a la anterior que todavía no se envió, así la
   // planilla no recibe tres configuraciones distintas de la misma chacra.
@@ -147,7 +155,7 @@ window.BioDB = (function () {
   return {
     abrir, guardar, obtener, todos, borrar, contar,
     leerConfig, guardarConfig,
-    encolar, encolarUnico, pendientes,
+    encolar, encolarCon, encolarUnico, pendientes,
     nuevoId,
   };
 })();

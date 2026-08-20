@@ -1,7 +1,6 @@
 {
   "version": "2026-08-18",
   "nota": "Fichas redactadas por el equipo del IFAB a partir de la bibliografía citada en cada una. No son copia de las fuentes: cada texto está reescrito y cada receta indica de dónde sale, para que el productor pueda ir al original.",
-
   "fuentes": {
     "F1": "Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.",
     "F2": "Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón.",
@@ -11,7 +10,6 @@
     "F6": "Sánchez Miranda, M. (2025). Biopreparado Supermagro: análisis y comparación de distintos casos de estudio. INTA IPAF Región Pampeana.",
     "F7": "Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP."
   },
-
   "categorias": [
     {
       "id": "biofertilizantes",
@@ -56,13 +54,16 @@
       "descripcion": "No se aplican solos. Son la materia prima de los demás biopreparados, y conviene tenerlos hechos de antemano."
     }
   ],
-
   "fichas": [
     {
       "id": "mm-solido",
       "nombre": "Microorganismos de montaña (MM) sólido",
       "categoria": "base",
-      "etiquetas": ["microorganismos", "de la Comarca", "base de otros preparados"],
+      "etiquetas": [
+        "microorganismos",
+        "de la Comarca",
+        "base de otros preparados"
+      ],
       "comarca": true,
       "resumen": "La captura del bosque nativo: hojarasca con microorganismos locales, multiplicada sobre afrecho y azúcar. Es el punto de partida de casi todo lo demás.",
       "rinde": "Un tambor de 200 litros de material sólido",
@@ -89,15 +90,29 @@
         "Colectar sin arrasar: se saca hojarasca superficial de varios puntos, no un pozo en un solo lugar.",
         "El tambor tiene que cerrar bien. Si entra aire, la fermentación se pudre en vez de conservarse."
       ],
-      "fuente": ["F1", "F2"]
+      "fuente": [
+        "F1",
+        "F2"
+      ]
     },
     {
       "id": "mm-liquido",
       "nombre": "Microorganismos de montaña (MM) líquido",
       "categoria": "biofertilizantes",
-      "etiquetas": ["microorganismos", "de la Comarca", "fertirriego", "foliar", "hongos de suelo"],
+      "etiquetas": [
+        "microorganismos",
+        "de la Comarca",
+        "fertirriego",
+        "foliar",
+        "hongos de suelo"
+      ],
       "comarca": true,
       "resumen": "La versión aplicable del MM sólido. Es el biofertilizante más usado en la Comarca y el que mejor se adapta al fertirriego por goteo.",
+      "sugerencia": {
+        "metodo": "Fertirriego",
+        "dosis": "Diluir al 30 % (al suelo)",
+        "cada_dias": 7
+      },
       "rinde": "200 litros",
       "tiempo": "15 días",
       "ingredientes": [
@@ -116,10 +131,22 @@
       ],
       "uso": "Biofertilizante de suelo y foliar. También se usa contra hongos patógenos del suelo. Terminados los 200 litros, la misma bolsa con MM sólido sirve para preparar otra tanda.",
       "dosis": [
-        { "cuando": "Al suelo", "cuanto": "Diluir al 30 %" },
-        { "cuando": "Foliar", "cuanto": "Diluir al 20 %" },
-        { "cuando": "Contra hongos de suelo", "cuanto": "Diluir al 50 % o aplicar puro, directo al suelo" },
-        { "cuando": "Frecuencia en hortalizas", "cuanto": "Semanal" }
+        {
+          "cuando": "Al suelo",
+          "cuanto": "Diluir al 30 %"
+        },
+        {
+          "cuando": "Foliar",
+          "cuanto": "Diluir al 20 %"
+        },
+        {
+          "cuando": "Contra hongos de suelo",
+          "cuanto": "Diluir al 50 % o aplicar puro, directo al suelo"
+        },
+        {
+          "cuando": "Frecuencia en hortalizas",
+          "cuanto": "Semanal"
+        }
       ],
       "conservacion": "Se usa fresco. No es un producto para guardar meses.",
       "carencia": "Evitar aplicar en los 20 días previos a la cosecha.",
@@ -127,15 +154,27 @@
         "Usar siempre agua sin cloro: el cloro mata justamente lo que se quiere multiplicar.",
         "La tapa tiene que dejar escapar los gases."
       ],
-      "fuente": ["F1", "F2"]
+      "fuente": [
+        "F1",
+        "F2"
+      ]
     },
     {
       "id": "supermagro",
       "nombre": "Súpermagro sólido enriquecido",
       "categoria": "biofertilizantes",
-      "etiquetas": ["remineralizante", "estiércol", "fertirriego", "de la Comarca"],
+      "etiquetas": [
+        "remineralizante",
+        "estiércol",
+        "fertirriego",
+        "de la Comarca"
+      ],
       "comarca": true,
       "resumen": "Biofertilizante fermentado a base de estiércol fresco y enriquecido con sales minerales. Es el más estudiado de todos y también el que más cuidado exige.",
+      "sugerencia": {
+        "metodo": "Fertirriego",
+        "dosis": "1 kg cada 100 litros de agua"
+      },
       "rinde": "Alrededor de 65 kg de preparado sólido",
       "tiempo": "25 días de fermentación",
       "ingredientes": [
@@ -156,7 +195,10 @@
       ],
       "uso": "Se disuelve y se aplica al suelo, con mochila o por fertirriego.",
       "dosis": [
-        { "cuando": "Al suelo", "cuanto": "1 kg cada 100 litros de agua. Mezclar, dejar disolver 20 minutos agitando, colar con lienzo y aplicar." }
+        {
+          "cuando": "Al suelo",
+          "cuanto": "1 kg cada 100 litros de agua. Mezclar, dejar disolver 20 minutos agitando, colar con lienzo y aplicar."
+        }
       ],
       "conservacion": "Hasta un año.",
       "carencia": "Evitar aplicar en los 20 días previos a la cosecha.",
@@ -166,14 +208,27 @@
         "El estiércol tiene que ser de rumiantes, de animales sin tratamiento antibiótico y que no hayan pastoreado potreros fumigados con herbicidas.",
         "Las dosis publicadas van del 0,1 % al 40 % según el cultivo y el trabajo. No hay todavía una recomendación única: la de acá es la que se usa en la Comarca."
       ],
-      "fuente": ["F2", "F6"]
+      "fuente": [
+        "F2",
+        "F6"
+      ]
     },
     {
       "id": "biopescado",
       "nombre": "Biopescado",
       "categoria": "biofertilizantes",
-      "etiquetas": ["nitrógeno", "fósforo", "foliar", "fertirriego"],
+      "etiquetas": [
+        "nitrógeno",
+        "fósforo",
+        "foliar",
+        "fertirriego"
+      ],
       "resumen": "Aprovecha los desechos de pescado y los convierte en un biofertilizante rico en nitrógeno y fósforo. Se hace en dos días y arranca con una cocción.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "Diluir al 3 % en hortalizas",
+        "cada_dias": 30
+      },
       "rinde": "100 litros",
       "tiempo": "2 días de elaboración y 5 de fermentación",
       "ingredientes": [
@@ -197,9 +252,18 @@
       ],
       "uso": "Biofertilizante foliar o por fertirriego. Se puede combinar con té de compost o biocalabaza para ampliar la diversidad de nutrientes.",
       "dosis": [
-        { "cuando": "Hortalizas", "cuanto": "Diluir al 3 %" },
-        { "cuando": "Frutales", "cuanto": "Diluir al 6 %" },
-        { "cuando": "Frecuencia", "cuanto": "Una aplicación foliar mensual" }
+        {
+          "cuando": "Hortalizas",
+          "cuanto": "Diluir al 3 %"
+        },
+        {
+          "cuando": "Frutales",
+          "cuanto": "Diluir al 6 %"
+        },
+        {
+          "cuando": "Frecuencia",
+          "cuanto": "Una aplicación foliar mensual"
+        }
       ],
       "conservacion": "Hasta un año en envases oscuros y rotulados.",
       "cuidados": [
@@ -207,14 +271,24 @@
         "Huele fuerte. Elegir un lugar alejado de la casa y de los vecinos.",
         "El análisis de laboratorio del preparado patagónico dio pH 3,32, con 2,3 g/l de nitrógeno y 0,21 g/l de fósforo."
       ],
-      "fuente": ["F3", "F4"]
+      "fuente": [
+        "F3",
+        "F4"
+      ]
     },
     {
       "id": "biocalabaza",
       "nombre": "Biofertilizante de calabaza",
       "categoria": "biofertilizantes",
-      "etiquetas": ["microorganismos", "desintoxicante de suelo"],
+      "etiquetas": [
+        "microorganismos",
+        "desintoxicante de suelo"
+      ],
       "resumen": "Fermento de calabaza y agua de mar. El tambor tiene que ser blanco: la luz es parte de la receta, porque favorece a las bacterias fototróficas.",
+      "sugerencia": {
+        "metodo": "Al suelo",
+        "dosis": "3 % (600 cc por mochila de 20 L)"
+      },
       "rinde": "100 litros",
       "tiempo": "30 días",
       "ingredientes": [
@@ -235,21 +309,33 @@
       ],
       "uso": "Aporta nutrientes y microorganismos. Se aplica al suelo en la preparación, al trasplante y en estado vegetativo.",
       "dosis": [
-        { "cuando": "Al suelo", "cuanto": "3 % — 3 litros en 100 de agua, o 600 cc en una mochila de 20 litros" }
+        {
+          "cuando": "Al suelo",
+          "cuanto": "3 % — 3 litros en 100 de agua, o 600 cc en una mochila de 20 litros"
+        }
       ],
       "cuidados": [
         "El tambor blanco no es un detalle estético: deja pasar luz y de eso dependen las bacterias fototróficas.",
         "La cáscara de camarones aporta el efecto fungicida y la bosta de ternero, Bacillus subtilis.",
         "El agua de mar es el ingrediente difícil en la Comarca. Es una receta pensada para el Valle Inferior; acá habría que probar reemplazos."
       ],
-      "fuente": ["F3"]
+      "fuente": [
+        "F3"
+      ]
     },
     {
       "id": "te-compost",
       "nombre": "Té de compost",
       "categoria": "biofertilizantes",
-      "etiquetas": ["sustancias húmicas", "foliar"],
+      "etiquetas": [
+        "sustancias húmicas",
+        "foliar"
+      ],
       "resumen": "Extrae en agua lo soluble del compost maduro. Rico en sustancias húmicas y pobre en nitrógeno, así que rinde mucho más combinado con otro preparado.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "3 %"
+      },
       "rinde": "50 litros",
       "tiempo": "4 días",
       "ingredientes": [
@@ -267,18 +353,34 @@
       ],
       "uso": "Fertilizante foliar.",
       "dosis": [
-        { "cuando": "Foliar", "cuanto": "3 %" },
-        { "cuando": "Combinado", "cuanto": "3 % de té de compost + 3 % de bio lana, para compensar su bajo nitrógeno" }
+        {
+          "cuando": "Foliar",
+          "cuanto": "3 %"
+        },
+        {
+          "cuando": "Combinado",
+          "cuanto": "3 % de té de compost + 3 % de bio lana, para compensar su bajo nitrógeno"
+        }
       ],
       "conservacion": "12 meses.",
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "bio-lana",
       "nombre": "Bio lana",
       "categoria": "biofertilizantes",
-      "etiquetas": ["nitrógeno", "foliar", "cuidado: cáustico"],
+      "etiquetas": [
+        "nitrógeno",
+        "foliar",
+        "cuidado: cáustico"
+      ],
       "resumen": "Fertilizante nitrogenado a partir de lana de oveja, que en la región suele ser un descarte. Es el preparado más peligroso de elaborar de toda esta lista.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "Diluir al 3 %"
+      },
       "rinde": "50 litros",
       "tiempo": "15 días",
       "ingredientes": [
@@ -297,7 +399,10 @@
       ],
       "uso": "Fertilizante nitrogenado foliar.",
       "dosis": [
-        { "cuando": "Foliar", "cuanto": "Diluir al 3 %" }
+        {
+          "cuando": "Foliar",
+          "cuanto": "Diluir al 3 %"
+        }
       ],
       "conservacion": "1 año.",
       "cuidados": [
@@ -306,14 +411,23 @@
         "Preparar al aire libre y lejos de chicos y animales.",
         "Es el único preparado de esta lista con un ingrediente peligroso de verdad. Si hay dudas, mejor no hacerlo."
       ],
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "fertilizante-fosforo",
       "nombre": "Fertilizante rico en fósforo",
       "categoria": "biofertilizantes",
-      "etiquetas": ["fósforo", "minerales"],
+      "etiquetas": [
+        "fósforo",
+        "minerales"
+      ],
       "resumen": "Fermento de fuentes minerales con microorganismos. Interesa especialmente en la Comarca, donde la alta retención de fosfatos es la carencia típica de los suelos.",
+      "sugerencia": {
+        "metodo": "Fertirriego",
+        "dosis": "3 a 10 %, en 3 aplicaciones por ciclo"
+      },
       "rinde": "50 litros",
       "tiempo": "12 a 15 días",
       "ingredientes": [
@@ -330,20 +444,33 @@
       ],
       "uso": "Fertilizante. Se puede aplicar junto con el preparado de microorganismos líquidos.",
       "dosis": [
-        { "cuando": "Vegetales", "cuanto": "3 a 10 %, repartido en tres aplicaciones a lo largo del ciclo del cultivo" }
+        {
+          "cuando": "Vegetales",
+          "cuanto": "3 a 10 %, repartido en tres aplicaciones a lo largo del ciclo del cultivo"
+        }
       ],
       "conservacion": "12 meses.",
       "cuidados": [
         "Los suelos de la Comarca vienen de desmontes y mallines: tienen buena materia orgánica pero retienen mucho el fósforo. Este preparado apunta justo ahí, aunque falta ensayarlo localmente."
       ],
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "bacterias-lacticas",
       "nombre": "Bacterias ácido lácticas",
       "categoria": "biofertilizantes",
-      "etiquetas": ["microorganismos", "protección biológica", "foliar"],
+      "etiquetas": [
+        "microorganismos",
+        "protección biológica",
+        "foliar"
+      ],
       "resumen": "Multiplica bacterias lácticas a partir del pasto fermentado. Actúa como una protección biológica sobre la planta más que como un fertilizante.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "20 % en hortalizas"
+      },
       "rinde": "180 litros",
       "tiempo": "1 semana",
       "ingredientes": [
@@ -362,18 +489,32 @@
       ],
       "uso": "Reduce la incidencia de plagas y patógenos. Se combina bien con el biopescado.",
       "dosis": [
-        { "cuando": "Hortalizas, foliar", "cuanto": "20 %" },
-        { "cuando": "Frutales, foliar", "cuanto": "30 %" },
-        { "cuando": "Al suelo", "cuanto": "50 %" }
+        {
+          "cuando": "Hortalizas, foliar",
+          "cuanto": "20 %"
+        },
+        {
+          "cuando": "Frutales, foliar",
+          "cuanto": "30 %"
+        },
+        {
+          "cuando": "Al suelo",
+          "cuanto": "50 %"
+        }
       ],
       "conservacion": "30 días. Pasado ese mes pierde sentido usarlo.",
-      "fuente": ["F3"]
+      "fuente": [
+        "F3"
+      ]
     },
     {
       "id": "pasto-fermentado",
       "nombre": "Pasto fermentado",
       "categoria": "base",
-      "etiquetas": ["microorganismos", "base de otros preparados"],
+      "etiquetas": [
+        "microorganismos",
+        "base de otros preparados"
+      ],
       "resumen": "La alternativa a los microorganismos de montaña cuando no hay bosque cerca: se capturan del pasto y del compost del propio establecimiento.",
       "rinde": "1 tambor de 200 litros",
       "tiempo": "30 días",
@@ -395,21 +536,36 @@
       ],
       "uso": "Fuente de microorganismos locales. Sirve para revitalizar suelos degradados por manejo convencional. Para aplicarlo hay que activarlo en fase líquida.",
       "dosis": [
-        { "cuando": "Hortalizas, foliar (una vez activado)", "cuanto": "Diluir al 20 %" },
-        { "cuando": "Frutales, foliar (una vez activado)", "cuanto": "Diluir al 30 %" },
-        { "cuando": "Desintoxicación de suelos", "cuanto": "Diluir al 50 %, durante la preparación de la cama de siembra" }
+        {
+          "cuando": "Hortalizas, foliar (una vez activado)",
+          "cuanto": "Diluir al 20 %"
+        },
+        {
+          "cuando": "Frutales, foliar (una vez activado)",
+          "cuanto": "Diluir al 30 %"
+        },
+        {
+          "cuando": "Desintoxicación de suelos",
+          "cuanto": "Diluir al 50 %, durante la preparación de la cama de siembra"
+        }
       ],
       "conservacion": "El sólido se conserva bien. Una vez activado en fase líquida, la vida útil es de 30 días.",
       "cuidados": [
         "Para activarlo: 5 kg de pasto fermentado en una bolsa de tela, 5 kg de melaza y 10 litros de suero en el tambor, completar con agua y cerrar con zuncho. A partir del cuarto día se puede usar."
       ],
-      "fuente": ["F3", "F4"]
+      "fuente": [
+        "F3",
+        "F4"
+      ]
     },
     {
       "id": "microorganismos-silo",
       "nombre": "Microorganismos de silo de maíz",
       "categoria": "base",
-      "etiquetas": ["reemplaza el suero", "base de otros preparados"],
+      "etiquetas": [
+        "reemplaza el suero",
+        "base de otros preparados"
+      ],
       "resumen": "La salida cuando no hay quesería cerca. Reemplaza al suero de leche en cualquiera de las otras recetas.",
       "rinde": "100 litros",
       "tiempo": "4 días",
@@ -426,13 +582,19 @@
         "Cerrar con tapa y zuncho y dejar fermentar 4 días."
       ],
       "uso": "Reemplaza al suero de quesería en las demás recetas.",
-      "fuente": ["F3"]
+      "fuente": [
+        "F3"
+      ]
     },
     {
       "id": "lejia-ceniza",
       "nombre": "Lejía de ceniza",
       "categoria": "base",
-      "etiquetas": ["base de otros preparados", "insecticida suave", "desinfectante"],
+      "etiquetas": [
+        "base de otros preparados",
+        "insecticida suave",
+        "desinfectante"
+      ],
       "resumen": "Agua de ceniza. Es el ingrediente de arranque de varios caldos y, por sí sola, un insecticida suave y un desinfectante.",
       "rinde": "50 litros",
       "tiempo": "4 días",
@@ -451,18 +613,37 @@
       ],
       "uso": "Ingrediente del té de compost y de varios caldos. Sola sirve como insecticida y como desinfectante.",
       "dosis": [
-        { "cuando": "Insecticida (pulgones, mosca blanca)", "cuanto": "5 % en agua" },
-        { "cuando": "Mosca blanca, con mejor adherencia", "cuanto": "5 % de lejía + 1 kg de harina de trigo" },
-        { "cuando": "Desinfectante", "cuanto": "Diluir al 10 %" }
+        {
+          "cuando": "Insecticida (pulgones, mosca blanca)",
+          "cuanto": "5 % en agua"
+        },
+        {
+          "cuando": "Mosca blanca, con mejor adherencia",
+          "cuanto": "5 % de lejía + 1 kg de harina de trigo"
+        },
+        {
+          "cuando": "Desinfectante",
+          "cuanto": "Diluir al 10 %"
+        }
       ],
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "bocashi",
       "nombre": "Bocashi",
       "categoria": "abonos",
-      "etiquetas": ["compostaje acelerado", "sólido", "almácigos"],
+      "etiquetas": [
+        "compostaje acelerado",
+        "sólido",
+        "almácigos"
+      ],
       "resumen": "Compostaje acelerado: en lugar de meses, unos días. Aprovecha lo que sobra en la chacra y en la agroindustria de la zona, incluido el bagazo de cervecería.",
+      "sugerencia": {
+        "metodo": "Al suelo",
+        "dosis": "200 g por planta"
+      },
       "rinde": "Unos 60 kg",
       "tiempo": "De días a dos semanas, según la temperatura",
       "ingredientes": [
@@ -482,21 +663,38 @@
       ],
       "uso": "Se aplica al suelo, evitando el contacto directo con las raíces: en camellones, surcos de trasplante o al costado de las plantas ya instaladas. También sirve mezclado en el sustrato de almácigos.",
       "dosis": [
-        { "cuando": "Por planta", "cuanto": "Unos 200 g" },
-        { "cuando": "Hortalizas", "cuanto": "Aplicar 15 días antes de la siembra o el trasplante" }
+        {
+          "cuando": "Por planta",
+          "cuanto": "Unos 200 g"
+        },
+        {
+          "cuando": "Hortalizas",
+          "cuanto": "Aplicar 15 días antes de la siembra o el trasplante"
+        }
       ],
       "cuidados": [
         "Si pasa de 55 °C se mueren los microorganismos que se quieren conservar. Por eso se mide y se remueve.",
         "Usar barbijo contra el polvo, guantes, pañuelo o gorra y botas de goma."
       ],
-      "fuente": ["F5"]
+      "fuente": [
+        "F5"
+      ]
     },
     {
       "id": "abono-aerobico",
       "nombre": "Abono orgánico aeróbico de pozo",
       "categoria": "abonos",
-      "etiquetas": ["estiércol", "minerales", "fertirriego"],
+      "etiquetas": [
+        "estiércol",
+        "minerales",
+        "fertirriego"
+      ],
       "resumen": "Bosta y minerales fermentando en un pozo revestido con madera, tres meses. Poco trabajo y mucha espera.",
+      "sugerencia": {
+        "metodo": "Fertirriego",
+        "dosis": "1 kg en 100 litros, se aplica puro",
+        "cada_dias": 15
+      },
       "rinde": "Unos 50 kg",
       "tiempo": "90 días",
       "ingredientes": [
@@ -515,17 +713,34 @@
       ],
       "uso": "Abono líquido, al suelo. No sirve como fertilizante foliar.",
       "dosis": [
-        { "cuando": "Al suelo", "cuanto": "1 kg del preparado en 100 litros de agua. Agitar 10 minutos, filtrar con lienzo y aplicar puro, sin diluir de nuevo." },
-        { "cuando": "Frecuencia", "cuanto": "Cada 15 días, en preparación de suelo, a la siembra y en estado vegetativo por fertirriego" }
+        {
+          "cuando": "Al suelo",
+          "cuanto": "1 kg del preparado en 100 litros de agua. Agitar 10 minutos, filtrar con lienzo y aplicar puro, sin diluir de nuevo."
+        },
+        {
+          "cuando": "Frecuencia",
+          "cuanto": "Cada 15 días, en preparación de suelo, a la siembra y en estado vegetativo por fertirriego"
+        }
       ],
-      "fuente": ["F3"]
+      "fuente": [
+        "F3"
+      ]
     },
     {
       "id": "abono-anaerobico",
       "nombre": "Abono orgánico anaeróbico",
       "categoria": "abonos",
-      "etiquetas": ["nitrógeno", "fósforo", "sólido", "sustrato"],
+      "etiquetas": [
+        "nitrógeno",
+        "fósforo",
+        "sólido",
+        "sustrato"
+      ],
       "resumen": "Abono concentrado de afrechillo y harina de pescado, fermentado sin aire. Sirve sólido al suelo, disuelto como foliar y mezclado en el sustrato de trasplante.",
+      "sugerencia": {
+        "metodo": "Al suelo",
+        "dosis": "500 g por metro cuadrado"
+      },
       "rinde": "Alrededor de 100 kg",
       "tiempo": "21 días",
       "ingredientes": [
@@ -544,20 +759,44 @@
       ],
       "uso": "Abono sólido o líquido, y componente de sustrato.",
       "dosis": [
-        { "cuando": "Preparación del suelo", "cuanto": "500 g por metro cuadrado" },
-        { "cuando": "Al trasplante", "cuanto": "Un puñado; reabonar a los 20 días al costado del cultivo" },
-        { "cuando": "Foliar", "cuanto": "1 kg en 100 litros de agua" },
-        { "cuando": "Sustrato para trasplante", "cuanto": "10 kg de este abono + 10 kg de bocashi + 80 kg de tierra negra" }
+        {
+          "cuando": "Preparación del suelo",
+          "cuanto": "500 g por metro cuadrado"
+        },
+        {
+          "cuando": "Al trasplante",
+          "cuanto": "Un puñado; reabonar a los 20 días al costado del cultivo"
+        },
+        {
+          "cuando": "Foliar",
+          "cuanto": "1 kg en 100 litros de agua"
+        },
+        {
+          "cuando": "Sustrato para trasplante",
+          "cuanto": "10 kg de este abono + 10 kg de bocashi + 80 kg de tierra negra"
+        }
       ],
-      "fuente": ["F3"]
+      "fuente": [
+        "F3"
+      ]
     },
     {
       "id": "bioestimulante-ortiga",
       "nombre": "Bioestimulante de ortiga, consuelda y cola de caballo",
       "categoria": "bioestimulantes",
-      "etiquetas": ["enraizante", "de la Comarca", "pulgones y ácaros", "foliar"],
+      "etiquetas": [
+        "enraizante",
+        "de la Comarca",
+        "pulgones y ácaros",
+        "foliar"
+      ],
       "comarca": true,
       "resumen": "Tres plantas que crecen solas en la Comarca, fermentadas juntas. Estimula el crecimiento y de paso funciona contra pulgones y ácaros.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "300 cc cada 20 litros (1,5 %)",
+        "cada_dias": 15
+      },
       "rinde": "100 litros",
       "tiempo": "8 días",
       "ingredientes": [
@@ -577,9 +816,18 @@
       ],
       "uso": "Estimulante del crecimiento radicular y vegetativo. También controla pulgones, ácaros y áfidos en general.",
       "dosis": [
-        { "cuando": "Hortalizas, al inicio del cultivo", "cuanto": "1 litro cada 20 litros de agua (5 %)" },
-        { "cuando": "Hortalizas, después", "cuanto": "300 cc cada 20 litros (1,5 %), foliar cada 15 días" },
-        { "cuando": "Frutales", "cuanto": "3 litros cada 20 litros (15 %), cada 3 meses" }
+        {
+          "cuando": "Hortalizas, al inicio del cultivo",
+          "cuanto": "1 litro cada 20 litros de agua (5 %)"
+        },
+        {
+          "cuando": "Hortalizas, después",
+          "cuanto": "300 cc cada 20 litros (1,5 %), foliar cada 15 días"
+        },
+        {
+          "cuando": "Frutales",
+          "cuanto": "3 litros cada 20 litros (15 %), cada 3 meses"
+        }
       ],
       "conservacion": "Hasta 2 meses en lugar fresco, seco y oscuro.",
       "carencia": "Evitar aplicar en los 20 días previos a la cosecha.",
@@ -587,14 +835,23 @@
         "La ortiga aporta cerca de 52 minerales; es el ingrediente que hace el trabajo nutricional.",
         "Cosechar la ortiga con guantes y antes de que semille, para no dispersarla donde no se la quiere."
       ],
-      "fuente": ["F2"]
+      "fuente": [
+        "F2"
+      ]
     },
     {
       "id": "adherente-bioestimulante",
       "nombre": "Adherente y bioestimulante de aloe",
       "categoria": "bioestimulantes",
-      "etiquetas": ["adherente", "mejora otras aplicaciones"],
+      "etiquetas": [
+        "adherente",
+        "mejora otras aplicaciones"
+      ],
       "resumen": "El complemento que hace que los demás biopreparados se queden en la hoja en vez de escurrir. Cambiando un ingrediente pasa de adherente a bioestimulante.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "400 cc en 10 litros, junto a otro preparado"
+      },
       "rinde": "20 litros",
       "tiempo": "1 semana",
       "ingredientes": [
@@ -611,22 +868,38 @@
       ],
       "uso": "Se agrega a los demás biopreparados para que se adhieran mejor a la planta.",
       "dosis": [
-        { "cuando": "Junto a otros biopreparados", "cuanto": "400 cc en 10 litros de agua" }
+        {
+          "cuando": "Junto a otros biopreparados",
+          "cuanto": "400 cc en 10 litros de agua"
+        }
       ],
       "cuidados": [
         "Cambiando el aloe por 1 kg de ortiga, el efecto pasa a ser bioestimulante. Con 500 g de cada uno se logran los dos a la vez.",
         "Equivalencia útil: 1 kg de ortiga fresca ≈ 200 g de ortiga seca.",
         "La fuente menciona una variante con flor de floripondio para efecto nematicida. No la incluimos: el floripondio (Brugmansia) es muy tóxico para las personas y no corresponde recomendarlo sin protocolo de manejo."
       ],
-      "fuente": ["F3"]
+      "fuente": [
+        "F3"
+      ]
     },
     {
       "id": "biorepelente-picante",
       "nombre": "Biorepelente picante",
       "categoria": "insectos",
-      "etiquetas": ["de la Comarca", "pulgones", "polilla de las coles", "hongos de suelo", "nematodos"],
+      "etiquetas": [
+        "de la Comarca",
+        "pulgones",
+        "polilla de las coles",
+        "hongos de suelo",
+        "nematodos"
+      ],
       "comarca": true,
       "resumen": "El biocontrolador más probado en la Comarca. Ajo, ají, cebolla y jengibre macerados en alcohol, con buenos resultados locales contra pulgón y polilla de las coles.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "200 cc por mochila de 20 litros",
+        "cada_dias": 15
+      },
       "rinde": "100 litros",
       "tiempo": "15 días de maceración",
       "ingredientes": [
@@ -649,9 +922,18 @@
       ],
       "uso": "Repele insectos y controla nematodos y hongos patógenos del suelo. En la Comarca dio buenos resultados con pulgones y con polilla de las coles (Plutella xylostella), y contra Fusarium, Rhizoctonia y Sclerotinia. Aporta minerales.",
       "dosis": [
-        { "cuando": "Hortalizas", "cuanto": "200 cc por mochila de 20 litros, foliar y al suelo, cada 15 a 20 días" },
-        { "cuando": "Frutales", "cuanto": "5 litros en 200 litros de agua (2,5 %)" },
-        { "cuando": "Papa", "cuanto": "Aplicar al suelo antes de sembrar" }
+        {
+          "cuando": "Hortalizas",
+          "cuanto": "200 cc por mochila de 20 litros, foliar y al suelo, cada 15 a 20 días"
+        },
+        {
+          "cuando": "Frutales",
+          "cuanto": "5 litros en 200 litros de agua (2,5 %)"
+        },
+        {
+          "cuando": "Papa",
+          "cuanto": "Aplicar al suelo antes de sembrar"
+        }
       ],
       "carencia": "Evitar aplicar en los 20 días previos a la cosecha.",
       "cuidados": [
@@ -659,14 +941,26 @@
         "Repele insectos en general, incluidos los benéficos. Aplicar cuando el monitoreo lo justifique, no por rutina.",
         "Un ensayo del INTA en Córdoba comparando biopreparados encontró que el extracto de ajo y ají fue el que más redujo la presencia de insectos fitófagos en tomate."
       ],
-      "fuente": ["F2", "F7"]
+      "fuente": [
+        "F2",
+        "F7"
+      ]
     },
     {
       "id": "extracto-botanico",
       "nombre": "Extracto botánico de ajo, ají y pimienta",
       "categoria": "insectos",
-      "etiquetas": ["repelente", "mosca blanca", "cochinilla", "aves"],
+      "etiquetas": [
+        "repelente",
+        "mosca blanca",
+        "cochinilla",
+        "aves"
+      ],
       "resumen": "Primo hermano del biorepelente picante, más concentrado y más simple. Sirve también para repeler pájaros.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "1 % en hortalizas"
+      },
       "rinde": "20 litros",
       "tiempo": "15 a 21 días",
       "ingredientes": [
@@ -687,19 +981,38 @@
       ],
       "uso": "Repelente de mosca blanca, pulgones, ácaros, cochinillas y también de aves.",
       "dosis": [
-        { "cuando": "Hortalizas", "cuanto": "1 % — 1 litro en 99 de agua" },
-        { "cuando": "Frutales", "cuanto": "2 %" },
-        { "cuando": "Repeler aves", "cuanto": "1 %" }
+        {
+          "cuando": "Hortalizas",
+          "cuanto": "1 % — 1 litro en 99 de agua"
+        },
+        {
+          "cuando": "Frutales",
+          "cuanto": "2 %"
+        },
+        {
+          "cuando": "Repeler aves",
+          "cuanto": "1 %"
+        }
       ],
       "conservacion": "6 meses.",
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "caldo-lejia",
       "nombre": "Caldo lejía",
       "categoria": "insectos",
-      "etiquetas": ["insecticida", "fungicida", "cal"],
+      "etiquetas": [
+        "insecticida",
+        "fungicida",
+        "cal"
+      ],
       "resumen": "Jabón, ceniza y cal. Insecticida y fungicida de dos días de elaboración, con ingredientes que hay en cualquier chacra.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "5 % (1 litro por mochila de 20 L)"
+      },
       "rinde": "100 litros",
       "tiempo": "2 días",
       "ingredientes": [
@@ -717,20 +1030,35 @@
       ],
       "uso": "Insecticida y fungicida.",
       "dosis": [
-        { "cuando": "General", "cuanto": "5 % — 5 litros en 100 de agua, o 1 litro por mochila de 20 litros" }
+        {
+          "cuando": "General",
+          "cuanto": "5 % — 5 litros en 100 de agua, o 1 litro por mochila de 20 litros"
+        }
       ],
       "cuidados": [
         "La cal viva reacciona con el agua desprendiendo calor y salpica. Guantes y antiparras.",
         "Alcaliniza: no mezclar con preparados que dependan de microorganismos vivos, porque los desactiva."
       ],
-      "fuente": ["F3"]
+      "fuente": [
+        "F3"
+      ]
     },
     {
       "id": "caldo-ceniza",
       "nombre": "Caldo de ceniza",
       "categoria": "insectos",
-      "etiquetas": ["pulgones", "mosca blanca", "preventivo de hongos", "heladas"],
+      "etiquetas": [
+        "pulgones",
+        "mosca blanca",
+        "preventivo de hongos",
+        "heladas"
+      ],
       "resumen": "La versión chica y rápida del caldo lejía: un balde, tres ingredientes y sin cocción.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "2 % (400 ml por mochila de 20 L)",
+        "cada_dias": 15
+      },
       "rinde": "20 litros",
       "tiempo": "Inmediato",
       "ingredientes": [
@@ -746,18 +1074,32 @@
       ],
       "uso": "Controla enfermedades fúngicas y plagas como pulgón y mosca blanca. La fuente le atribuye además un efecto amortiguador frente a heladas, por el engrosamiento del tejido vegetal.",
       "dosis": [
-        { "cuando": "Foliar", "cuanto": "2 %, cada 15 días — unos 400 ml en una mochila de 20 litros" }
+        {
+          "cuando": "Foliar",
+          "cuanto": "2 %, cada 15 días — unos 400 ml en una mochila de 20 litros"
+        }
       ],
       "conservacion": "6 meses.",
       "revisar": "En el PDF original de la fuente las dosis del caldo de ceniza y del caldo frío mineral están en columnas contiguas y la extracción de texto pudo cruzarlas. Antes de recomendarla a un productor, verificar contra el documento impreso.",
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "caldo-frio-mineral",
       "nombre": "Caldo frío mineral",
       "categoria": "estres",
-      "etiquetas": ["repelente", "caracoles", "tucura", "sin cocción"],
+      "etiquetas": [
+        "repelente",
+        "caracoles",
+        "tucura",
+        "sin cocción"
+      ],
       "resumen": "Ceniza y cal con agua caliente y fría. Repelente de los bichos grandes que muerden y de los caracoles, y el único preparado de la lista con efecto declarado frente a heladas.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "Puro, por la tarde"
+      },
       "rinde": "20 litros",
       "tiempo": "24 horas de reposo",
       "ingredientes": [
@@ -776,22 +1118,40 @@
       ],
       "uso": "Repelente de bicho moro, langosta, chinche, tucura y caracol.",
       "dosis": [
-        { "cuando": "Aplicación", "cuanto": "Puro, por la tarde" },
-        { "cuando": "Ataques severos", "cuanto": "Repetir 2 o 3 días seguidos" }
+        {
+          "cuando": "Aplicación",
+          "cuanto": "Puro, por la tarde"
+        },
+        {
+          "cuando": "Ataques severos",
+          "cuanto": "Repetir 2 o 3 días seguidos"
+        }
       ],
       "conservacion": "6 meses.",
       "revisar": "Ver la nota del caldo de ceniza: en la fuente original las dosis de los dos preparados están en columnas contiguas y conviene verificarlas contra el impreso.",
       "cuidados": [
         "La cal viva desprende calor al contacto con el agua. Guantes y antiparras."
       ],
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "caldo-mineral-caliente",
       "nombre": "Caldo mineral caliente (sulfocálcico)",
       "categoria": "enfermedades",
-      "etiquetas": ["azufre", "insecticida", "fungicida", "cicatrizante de poda", "cuidado: vapores"],
+      "etiquetas": [
+        "azufre",
+        "insecticida",
+        "fungicida",
+        "cicatrizante de poda",
+        "cuidado: vapores"
+      ],
       "resumen": "El de mayor espectro y el que más precauciones pide: azufre, cal y minerales hervidos hasta que el líquido pasa de amarillo a rojo ladrillo.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "1 % en hortalizas"
+      },
       "rinde": "60 litros de caldo, más una pasta mineral reutilizable",
       "tiempo": "Una jornada, más 24 horas de reposo",
       "ingredientes": [
@@ -815,10 +1175,22 @@
       ],
       "uso": "Insecticida y fungicida que además aporta minerales. Sirve para cochinilla, mosca blanca, isocas, nematodos, ácaros, trips y pulgones, y previene enfermedades fúngicas como las causadas por Fusarium. Contra nematodos e insectos de suelo se aplica directo al suelo en la preparación de la cama de siembra.",
       "dosis": [
-        { "cuando": "Hortalizas, foliar", "cuanto": "Diluir al 1 %" },
-        { "cuando": "Frutales, foliar", "cuanto": "Diluir al 2 %, después de la poda" },
-        { "cuando": "Pasta mineral, cicatrizante de poda", "cuanto": "1 parte de pasta + 2 de agua, aplicada con brocha sobre el tronco y sobre las heridas de poda" },
-        { "cuando": "Variante foliar enriquecida", "cuanto": "100 litros de agua + 5 kg de pasta mineral + 100 g de sulfato de zinc" }
+        {
+          "cuando": "Hortalizas, foliar",
+          "cuanto": "Diluir al 1 %"
+        },
+        {
+          "cuando": "Frutales, foliar",
+          "cuanto": "Diluir al 2 %, después de la poda"
+        },
+        {
+          "cuando": "Pasta mineral, cicatrizante de poda",
+          "cuanto": "1 parte de pasta + 2 de agua, aplicada con brocha sobre el tronco y sobre las heridas de poda"
+        },
+        {
+          "cuando": "Variante foliar enriquecida",
+          "cuanto": "100 litros de agua + 5 kg de pasta mineral + 100 g de sulfato de zinc"
+        }
       ],
       "conservacion": "6 meses.",
       "carencia": "15 días.",
@@ -827,14 +1199,26 @@
         "Su uso prolongado afecta a los insectos benéficos. No es un preparado de calendario.",
         "La cal hidratada y el azufre caliente queman. Guantes, antiparras y ropa cubierta."
       ],
-      "fuente": ["F3", "F4"]
+      "fuente": [
+        "F3",
+        "F4"
+      ]
     },
     {
       "id": "caldo-bordeles",
       "nombre": "Caldo bordelés",
       "categoria": "enfermedades",
-      "etiquetas": ["cobre", "fungicida", "bactericida", "no admitido sin consulta"],
+      "etiquetas": [
+        "cobre",
+        "fungicida",
+        "bactericida",
+        "no admitido sin consulta"
+      ],
       "resumen": "El fungicida clásico de la agricultura orgánica: sulfato de cobre y cal. Muy efectivo y, por el cobre, el que más discusión genera dentro de un esquema agroecológico.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "25 % en plantas jóvenes"
+      },
       "rinde": "20 litros",
       "tiempo": "Se prepara y se usa el mismo día",
       "ingredientes": [
@@ -851,8 +1235,14 @@
       ],
       "uso": "Fungicida y bactericida de amplio espectro. Se aplica en estado vegetativo o en llenado de grano.",
       "dosis": [
-        { "cuando": "Plantas jóvenes recién trasplantadas", "cuanto": "Diluir al 25 %" },
-        { "cuando": "Estados fenológicos avanzados", "cuanto": "Aplicar puro, sin diluir" }
+        {
+          "cuando": "Plantas jóvenes recién trasplantadas",
+          "cuanto": "Diluir al 25 %"
+        },
+        {
+          "cuando": "Estados fenológicos avanzados",
+          "cuanto": "Aplicar puro, sin diluir"
+        }
       ],
       "conservacion": "No se almacena. Se prepara sólo lo que se va a usar en el día, porque pierde efectividad.",
       "carencia": "20 días.",
@@ -862,14 +1252,25 @@
         "Antes de usarlo en un establecimiento certificado, consultar si el sello lo admite y con qué límite anual. Está pendiente de definir contra el pliego ECOMARCAL.",
         "Evitar la exposición al sol durante la preparación."
       ],
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "caldo-visosa",
       "nombre": "Caldo Visosa",
       "categoria": "enfermedades",
-      "etiquetas": ["roya", "boro", "cobre", "no admitido sin consulta"],
+      "etiquetas": [
+        "roya",
+        "boro",
+        "cobre",
+        "no admitido sin consulta"
+      ],
       "resumen": "Un bordelés enriquecido con boro, magnesio y zinc. Apunta específicamente a la roya, corrigiendo la deficiencia de boro que la favorece.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "25 % desde pre-macollaje"
+      },
       "rinde": "100 litros",
       "tiempo": "Se prepara y se usa el mismo día",
       "ingredientes": [
@@ -889,9 +1290,18 @@
       ],
       "uso": "Fungicida, principalmente contra roya.",
       "dosis": [
-        { "cuando": "Desde pre-macollaje", "cuanto": "25 %" },
-        { "cuando": "Frutales jóvenes en formación, primavera", "cuanto": "50 %" },
-        { "cuando": "Frutales de más de 3 años", "cuanto": "Puro" }
+        {
+          "cuando": "Desde pre-macollaje",
+          "cuanto": "25 %"
+        },
+        {
+          "cuando": "Frutales jóvenes en formación, primavera",
+          "cuanto": "50 %"
+        },
+        {
+          "cuando": "Frutales de más de 3 años",
+          "cuanto": "Puro"
+        }
       ],
       "conservacion": "No se almacena.",
       "cuidados": [
@@ -899,14 +1309,25 @@
         "Lleva cobre: valen las mismas advertencias que el caldo bordelés, más la consulta al pliego ECOMARCAL.",
         "El bórax es tóxico por ingestión. Guardarlo fuera del alcance de chicos y animales."
       ],
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "caldo-bicarbonato",
       "nombre": "Caldo de bicarbonato de sodio",
       "categoria": "enfermedades",
-      "etiquetas": ["oídio", "mildiu", "cucurbitáceas", "fácil"],
+      "etiquetas": [
+        "oídio",
+        "mildiu",
+        "cucurbitáceas",
+        "fácil"
+      ],
       "resumen": "El más simple de todos: tres ingredientes de almacén y farmacia, sin fermentación ni cocción. Para oídio y mildiu, sobre todo en zapallos y pepinos.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "Se aplica puro"
+      },
       "rinde": "10 litros",
       "tiempo": "Inmediato",
       "ingredientes": [
@@ -921,22 +1342,38 @@
       ],
       "uso": "Fungicida, en especial para cucurbitáceas: oídio y mildiu. Aplicación foliar.",
       "dosis": [
-        { "cuando": "Hortalizas, ornamentales y frutales", "cuanto": "Se aplica puro" }
+        {
+          "cuando": "Hortalizas, ornamentales y frutales",
+          "cuanto": "Se aplica puro"
+        }
       ],
       "conservacion": "No se almacena: se prepara sólo lo que se va a usar en el día.",
       "cuidados": [
         "Aplicar temprano o al atardecer: con sol fuerte el bicarbonato puede quemar la hoja.",
         "Probar primero en unas pocas plantas."
       ],
-      "fuente": ["F4"]
+      "fuente": [
+        "F4"
+      ]
     },
     {
       "id": "cola-caballo",
       "nombre": "Decocción de cola de caballo",
       "categoria": "enfermedades",
-      "etiquetas": ["preventivo", "oídio", "mildiu", "roya", "curasemilla", "de la Comarca"],
+      "etiquetas": [
+        "preventivo",
+        "oídio",
+        "mildiu",
+        "roya",
+        "curasemilla",
+        "de la Comarca"
+      ],
       "comarca": true,
       "resumen": "Cocción de una planta que crece sola en los mallines de la Comarca. Aporta sílice, endurece los tejidos y previene hongos. Es preventivo: no cura lo ya instalado.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "10 % en posemergencia"
+      },
       "rinde": "10 litros",
       "tiempo": "12 horas de remojo y 30 minutos de hervor",
       "ingredientes": [
@@ -953,19 +1390,30 @@
       ],
       "uso": "Preventivo de enfermedades fúngicas: oídio, mildiu y roya.",
       "dosis": [
-        { "cuando": "Curasemilla", "cuanto": "Remojar las semillas en el preparado, dejar secar y sembrar" },
-        { "cuando": "Presiembra", "cuanto": "Pulverizar el suelo al 20 %" },
-        { "cuando": "Posemergencia", "cuanto": "Al 10 %, en días calurosos y húmedos. Evitar los días cálidos y secos. Con lluvias, cada 3 días." }
+        {
+          "cuando": "Curasemilla",
+          "cuanto": "Remojar las semillas en el preparado, dejar secar y sembrar"
+        },
+        {
+          "cuando": "Presiembra",
+          "cuanto": "Pulverizar el suelo al 20 %"
+        },
+        {
+          "cuando": "Posemergencia",
+          "cuanto": "Al 10 %, en días calurosos y húmedos. Evitar los días cálidos y secos. Con lluvias, cada 3 días."
+        }
       ],
       "conservacion": "15 días.",
       "cuidados": [
         "Es también un ingrediente del bioestimulante de ortiga, así que conviene preparar de más.",
         "En la versión para ese bioestimulante se infusiona 1 hora a fuego medio sin llegar a hervir; acá se hierve 30 minutos. Son dos preparaciones distintas para dos usos distintos."
       ],
-      "fuente": ["F2", "F4"]
+      "fuente": [
+        "F2",
+        "F4"
+      ]
     }
   ],
-
   "recomendaciones": {
     "titulo": "Recomendaciones generales para cualquier biopreparado",
     "puntos": [
@@ -980,7 +1428,6 @@
       "Que un producto sea natural no lo hace inofensivo: la cal viva quema, el azufre desprende vapores tóxicos, el cobre se acumula en el suelo y la soda cáustica es peligrosa. Leer los cuidados de cada ficha."
     ]
   },
-
   "pendiente": [
     "Compatibilidad de cada preparado con el pliego ECOMARCAL: falta el documento del sello para poder marcar cuáles se admiten y cuáles no.",
     "Los preparados con cobre (bordelés y Visosa) están marcados como 'a consultar' hasta tener esa definición.",

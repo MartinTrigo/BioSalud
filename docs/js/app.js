@@ -27,11 +27,7 @@
       titulo: "Registrar Plan de Salud",
       detalle: "Productos, dosis, frecuencia y sectores",
       subtitulo: "Plan de aplicaciones de la temporada",
-      fase: 2,
-      queVa: `Acá vas a armar el plan de la temporada: elegís de la lista los
-        bioinsumos, biopreparados o insumos que vas a aplicar, con su dosis,
-        el método (fertirriego, mochila, bomba), cada cuánto se repite y en qué
-        sectores. Con eso la app arma sola el calendario de aplicaciones.`,
+      listo: true,          // la atiende js/plan.js
     },
     seguimiento: {
       icono: "✅",
@@ -103,6 +99,12 @@
     // cabecera, que cambia según se esté viendo el índice o una ficha.
     if (base === "wiki") {
       const cabecera = await window.Wiki.render(vista, ruta, ir);
+      encabezado(cabecera.titulo, cabecera.subtitulo);
+      return;
+    }
+
+    if (base === "plan") {
+      const cabecera = await window.Plan.render(vista, ruta, ir);
       encabezado(cabecera.titulo, cabecera.subtitulo);
       return;
     }

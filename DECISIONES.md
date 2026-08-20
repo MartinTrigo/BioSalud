@@ -79,18 +79,47 @@ está obligado a usar una app que le esconde sus propios registros.
 
 ---
 
-## Por qué el plan se expande en ocurrencias fechadas
+## Por qué el plan se expande en ocurrencias fechadas, y por qué no se guardan
 
-**Decisión:** al guardar un renglón del plan, la app genera de una vez todas las
-aplicaciones fechadas que le corresponden.
+**Decisión:** las aplicaciones fechadas se **calculan** cada vez a partir de la
+regla del renglón. No se generan una vez y se guardan.
 
-Un renglón dice "biofertilizante, 2 L/100 L, fertirriego, sectores A y B, cada
-15 días, de octubre a marzo". Eso, tal cual, no sirve para el seguimiento: no se
-puede marcar como hecho, ni saber qué está pendiente, ni qué se atrasó.
+Un renglón dice "MM líquido, al 30 %, fertirriego, sector A, cada 14 días, de
+octubre a marzo". Eso, tal cual, no sirve para el seguimiento: no se puede
+marcar como hecho, ni saber qué está pendiente, ni qué se atrasó. Hay que
+expandirlo en once fechas concretas. Esa expansión es la pieza que sostiene el
+checklist, el semáforo de cumplimiento y los avisos.
 
-Expandirlo en fechas concretas es lo que sostiene el checklist, el semáforo de
-cumplimiento y los avisos. Es la pieza de diseño que decide si el resto de la
-app es posible.
+La primera versión de esta decisión decía que esas once fechas se generaban al
+guardar y quedaban almacenadas. **Al implementarlo quedó claro que era peor.**
+Si están guardadas, cada corrección del plan —cambiar la frecuencia, correr la
+fecha de inicio— obliga a regenerarlas cuidando de no pisar las que ya se
+aplicaron. Ahí es exactamente donde los datos se desincronizan y aparecen
+aplicaciones huérfanas.
+
+Calculándolas, editar un renglón no puede romper nada: cambia la regla y las
+fechas salen distintas la próxima vez que se miran.
+
+**Lo que sí se guarda es lo que se aplicó de verdad**, que es un hecho y no una
+previsión. Cada aplicación registrada lleva su fecha programada y su fecha real,
+así el historial queda intacto aunque el plan cambie después.
+
+La función vive en `docs/js/plan.js` como `Plan.ocurrencias(renglón)`, y la usan
+tanto el resumen del plan como el Seguimiento.
+
+---
+
+## Por qué cada renglón se guarda antes de tocar "Guardar plan"
+
+**Decisión:** el renglón se escribe en el teléfono apenas se agrega. El botón de
+abajo cierra el plan y lo manda a la planilla, pero no es lo que evita perderlo.
+
+Un botón de guardar al final es lo esperable, y por eso está. Pero en el campo
+la app se cierra sola, se acaba la batería o entra una llamada, y perder diez
+renglones cargados a mano es motivo suficiente para que alguien no la use más.
+
+Así que son dos cosas distintas: **guardar** pasa siempre y en silencio;
+**cerrar el plan** es una decisión del productor.
 
 ---
 

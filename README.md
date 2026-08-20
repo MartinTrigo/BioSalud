@@ -117,7 +117,7 @@ equipo técnico, y se escribe una sola vez.
 | Fase | Qué incluye | Estado |
 |---|---|---|
 | **1 · Base** | Armazón, identidad institucional, sin señal, Configuración del establecimiento, servicio con control de acceso escrito | ✅ **hecha** |
-| 2 · Catálogo y Plan | Bioinsumos y biopreparados + Registrar Plan de Salud | pendiente |
+| **2 · Catálogo y Plan** | Bioinsumos y biopreparados + Registrar Plan de Salud | ✅ **hecha** |
 | 3 · Seguimiento | Agenda Hoy / Semana / Atrasado + checklist | pendiente |
 | 4 · Sincronización | Despliegue del servicio, planillas por chacra, invitaciones | pendiente |
 | 5 · Monitoreo | Registro a campo + sugerencia de tratamiento | pendiente |
@@ -200,6 +200,7 @@ BioSalud/
         ├── db.js               base local del teléfono y cola de envío
         ├── config.js           sección Configuración
         ├── wiki.js             sección Info / Wiki
+        ├── plan.js             sección Registrar Plan de Salud
         └── app.js              menú, navegación y bloqueo de secciones
 ```
 

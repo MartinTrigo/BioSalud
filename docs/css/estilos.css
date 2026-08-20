@@ -445,6 +445,61 @@ input.mal, select.mal { border-color: var(--error); background: var(--error-suav
 .tarjeta--pendiente { border-style: dashed; }
 .tarjeta--pendiente .lista li { font-size: 14px; color: var(--texto-suave); }
 
+/* ---------- Plan de salud ---------- */
+
+.renglones { list-style: none; margin: 0 0 16px; padding: 0; }
+
+.renglon {
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-left: 5px solid var(--verde-claro);
+  border-radius: var(--radio);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.renglon__datos { display: block; }
+.renglon__producto { display: block; font-weight: 700; }
+.renglon__motivo { display: block; font-size: 14px; color: var(--verde); }
+.renglon__detalle { display: block; font-size: 14px; color: var(--texto-suave); margin-top: 2px; }
+.renglon__periodo { display: block; font-size: 14px; margin-top: 4px; }
+
+.renglon__acciones {
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  margin-top: 6px;
+  border-top: 1px solid var(--borde);
+  padding-top: 4px;
+}
+
+/* La ficha del producto dentro del formulario: se distingue de los campos
+   porque es información, no algo que haya que completar. */
+.tarjeta--info-producto { background: var(--verde-suave); border-color: var(--verde-claro); }
+.tarjeta--info-producto .nota { margin-top: 8px; }
+
+/* Casillas de sectores: el área tocable es toda la fila, no el cuadradito. */
+.opciones { list-style: none; margin: 0; padding: 0; }
+
+.opcion {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  font-weight: 400;
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.opcion input { width: 22px; height: 22px; min-height: 0; flex: none; margin-top: 1px; }
+.opcion span { font-size: 15px; }
+
+textarea { resize: vertical; min-height: 60px; }
+
 /* ---------- Espaciados sueltos ----------
    Van acá y no como atributo "style" en el HTML: la política de contenido no
    admite estilos sueltos en la página, justamente para que nada que se cuele
