@@ -53,7 +53,8 @@ window.Plan = (function () {
   let config = null;
   let renglones = [];    // lo guardado en el teléfono
   let editando = null;   // id del renglón en edición
-  let elegido = "";      // id del producto seleccionado en el formulario
+  let categoria = "";    // paso 1: para qué se va a usar
+  let elegido = "";      // paso 2: cuál producto
   let errores = {};
   let destino = null;
 
@@ -97,6 +98,7 @@ window.Plan = (function () {
     destino = contenedor;
     errores = {};
     editando = null;
+    categoria = "";
     elegido = "";
 
     destino.innerHTML = `<p class="cargando">Cargando…</p>`;
@@ -132,9 +134,10 @@ window.Plan = (function () {
 
       <div class="tarjeta">
         <h2>${enEdicion ? "Editar renglón" : "Agregar un producto al plan"}</h2>
-        ${selectorProducto(enEdicion)}
-        ${elegido ? formulario(enEdicion, sectores) : `<p class="nota">
-          Elegí un producto para completar sus datos.</p>`}
+        ${selectorProducto()}
+        ${(elegido || categoria === "__otro") ? formulario(enEdicion, sectores) : `<p class="nota">
+          ${categoria ? "Elegí cuál para completar sus datos."
+                      : "Empezá por la función: eso achica la lista."}</p>`}
       </div>
 
       ${renglones.length ? `<button class="boton boton--ancho" id="btn-guardar-plan">
@@ -196,37 +199,53 @@ window.Plan = (function () {
 
   // ---------- Selector de producto ----------
 
-  function selectorProducto(enEdicion) {
-    const actual = elegido || (enEdicion ? enEdicion.producto_id || "__otro" : "");
+  // Se elige en dos pasos y no en una sola lista: veinticuatro productos en un
+  // desplegable, en un celular, es una lista que no se puede leer. Primero para
+  // qué se va a usar, y eso deja entre tres y nueve opciones.
+  function selectorProducto() {
+    // Los preparados de base no se aplican solos: no se ofrecen.
+    const cats = (bio.categorias || []).filter((c) =>
+      c.id !== "base" && (bio.fichas || []).some((f) => f.categoria === c.id));
 
-    const grupos = (bio.categorias || []).map((c) => {
-      const fichas = (bio.fichas || []).filter((f) => f.categoria === c.id);
-      // Los preparados de base no se aplican solos: no se ofrecen.
-      if (!fichas.length || c.id === "base") return "";
-      return `<optgroup label="${esc(c.nombre)}">
-        ${fichas.map((f) => `<option value="${esc(f.id)}"${f.id === actual ? " selected" : ""}>
-          ${esc(f.nombre)}</option>`).join("")}
-      </optgroup>`;
-    }).join("");
+    const deLaCategoria = categoria && categoria !== "__otro"
+      ? (bio.fichas || []).filter((f) => f.categoria === categoria) : [];
+
+    const cat = cats.find((c) => c.id === categoria);
 
     return `
       <div class="campo">
-        <label for="f-producto">Producto</label>
-        <select id="f-producto" class="${mal("producto")}">
-          <option value="">Elegí un producto…</option>
-          ${grupos}
-          <optgroup label="Otro">
-            <option value="__otro"${actual === "__otro" ? " selected" : ""}>Otro producto (escribirlo)</option>
-          </optgroup>
+        <label for="f-categoria">Paso 1 · ¿Para qué lo vas a usar?</label>
+        <select id="f-categoria" class="${mal("categoria")}">
+          <option value="">Elegí una función…</option>
+          ${cats.map((c) => {
+            const n = (bio.fichas || []).filter((f) => f.categoria === c.id).length;
+            return `<option value="${esc(c.id)}"${c.id === categoria ? " selected" : ""}>
+              ${esc(c.icono + " " + c.nombre)} (${n})</option>`;
+          }).join("")}
+          <option value="__otro"${categoria === "__otro" ? " selected" : ""}>
+            ✍️ Otro producto que no está en la wiki</option>
         </select>
-        ${error("producto")}
-      </div>`;
+        ${cat ? `<p class="nota">${esc(cat.descripcion)}</p>` : ""}
+        ${error("categoria")}
+      </div>
+
+      ${categoria && categoria !== "__otro" ? `
+        <div class="campo">
+          <label for="f-producto">Paso 2 · ¿Cuál?</label>
+          <select id="f-producto" class="${mal("producto")}">
+            <option value="">${deLaCategoria.length === 1
+              ? "Hay uno solo…" : "Elegí entre los " + deLaCategoria.length + "…"}</option>
+            ${deLaCategoria.map((f) => `<option value="${esc(f.id)}"${f.id === elegido ? " selected" : ""}>
+              ${esc(f.nombre)}${f.comarca ? " · probado en la Comarca" : ""}</option>`).join("")}
+          </select>
+          ${error("producto")}
+        </div>` : ""}`;
   }
 
   // ---------- Formulario del renglón ----------
 
   function formulario(enEdicion, sectores) {
-    const f = elegido === "__otro" ? null : ficha(elegido);
+    const f = categoria === "__otro" ? null : ficha(elegido);
     const r = enEdicion || {};
     const sug = (f && f.sugerencia) || {};
     const marcados = new Set(r.sectores || []);
@@ -249,7 +268,7 @@ window.Plan = (function () {
         lleva cobre y todavía no está definido si el sello ECOMARCAL lo admite.
         Consultá con el equipo técnico antes de incluirlo en el plan.</p>` : ""}
 
-      ${elegido === "__otro" ? `
+      ${categoria === "__otro" ? `
         <div class="campo">
           <label for="f-otro">¿Qué producto?
             <span class="ayuda">Un insumo que no está en la wiki: un fertilizante comercial, un producto de banda verde, algo que preparás vos.</span></label>
@@ -339,6 +358,14 @@ window.Plan = (function () {
   // ---------- Eventos ----------
 
   function conectar() {
+    const cat = destino.querySelector("#f-categoria");
+    if (cat) cat.onchange = () => {
+      categoria = cat.value;
+      elegido = "";              // cambiar de función descarta el producto anterior
+      errores = {};
+      pintar();
+    };
+
     const sel = destino.querySelector("#f-producto");
     if (sel) sel.onchange = () => { elegido = sel.value; errores = {}; pintar(); };
 
@@ -346,7 +373,9 @@ window.Plan = (function () {
     if (btn) btn.onclick = guardarRenglon;
 
     const cancelar = destino.querySelector("#btn-cancelar");
-    if (cancelar) cancelar.onclick = () => { editando = null; elegido = ""; errores = {}; pintar(); };
+    if (cancelar) cancelar.onclick = () => {
+      editando = null; categoria = ""; elegido = ""; errores = {}; pintar();
+    };
 
     const guardar = destino.querySelector("#btn-guardar-plan");
     if (guardar) guardar.onclick = cerrarPlan;
@@ -358,10 +387,13 @@ window.Plan = (function () {
       b.onclick = () => {
         const r = renglones.find((x) => x.id === b.dataset.editar);
         editando = r.id;
-        elegido = r.producto_id || "__otro";
+        // Se reponen los dos pasos para que el formulario se abra igual que
+        // cuando se cargó.
+        categoria = r.producto_id ? (ficha(r.producto_id) || {}).categoria || "__otro" : "__otro";
+        elegido = r.producto_id || "";
         errores = {};
         pintar();
-        destino.querySelector("#f-producto").scrollIntoView({ behavior: "smooth", block: "center" });
+        destino.querySelector("#f-categoria").scrollIntoView({ behavior: "smooth", block: "center" });
       };
     });
 
@@ -434,7 +466,7 @@ window.Plan = (function () {
 
   async function guardarRenglon() {
     errores = {};
-    const f = elegido === "__otro" ? null : ficha(elegido);
+    const f = categoria === "__otro" ? null : ficha(elegido);
 
     const nombre = f ? f.nombre : valor("#f-otro").trim();
     const dosis = valor("#f-dosis").trim();
@@ -444,8 +476,9 @@ window.Plan = (function () {
     const hasta = valor("#f-hasta");
     const cada = aNumero(valor("#f-cada"));
 
-    if (!elegido) errores.producto = "Elegí un producto.";
-    if (elegido === "__otro" && !nombre) errores.otro = "Escribí el nombre del producto.";
+    if (!categoria) errores.categoria = "Elegí para qué lo vas a usar.";
+    else if (categoria !== "__otro" && !elegido) errores.producto = "Elegí cuál de la lista.";
+    if (categoria === "__otro" && !nombre) errores.otro = "Escribí el nombre del producto.";
     if (!dosis) errores.dosis = "Poné la dosis, aunque sea aproximada.";
     if (!metodo) errores.metodo = "Elegí con qué lo vas a aplicar.";
     if (!sectores.length) errores.sectores = "Marcá al menos un sector.";
@@ -490,6 +523,7 @@ window.Plan = (function () {
       brindis(`${nombre} agregado · ${ocurrencias(nuevo).length} aplicaciones`);
     }
 
+    categoria = "";
     elegido = "";
     pintar();
     window.scrollTo(0, 0);
