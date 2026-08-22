@@ -216,6 +216,17 @@ python tools/preparar-fotos.py
 
 Las deja en `docs/img/fichas/` a 900 px y unos 43 KB cada una, e imprime el
 fragmento JSON para pegar en la ficha. Los originales no se publican.
+
+**Para regenerar la cartilla en PDF** después de corregir una ficha:
+
+```bash
+python tools/generar-cartilla.py
+```
+
+Sale de los mismos JSON que la app, así que el papel y el celular no pueden
+decir cosas distintas. Deja `docs/cartilla-biopreparados.pdf` y su versión HTML,
+descargables desde la wiki. El PDF **no** está en la lista del service worker: es
+casi 1 MB y se baja cuando alguien lo pide, no con la app.
 Cada ficha lleva su cita bibliográfica y las plagas declaran qué biopreparados
 las tratan; el cruce inverso lo calcula la app sola.
 

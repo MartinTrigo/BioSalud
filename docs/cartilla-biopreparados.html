@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<title>Biopreparados para la Comarca Andina — BioSalud ECOMARCAL</title>
+<style>
+    @page { size: A4; margin: 18mm 16mm 16mm; }
+    * { box-sizing: border-box; }
+    body { font-family: Georgia, 'Times New Roman', serif; font-size: 10.5pt;
+           line-height: 1.45; color: #1b2620; margin: 0; }
+    h1, h2, h3, .sello, .idx-cat, .rapidos, .dosis th, th {
+           font-family: Helvetica, Arial, sans-serif; }
+
+    .portada { text-align: center; padding-top: 45mm; page-break-after: always; }
+    .portada img { height: 22mm; margin: 0 6mm; vertical-align: middle; }
+    .portada h1 { font-size: 30pt; color: #16632f; margin: 14mm 0 2mm; line-height: 1.1; }
+    .portada .bajada { font-size: 13pt; color: #5b6b62; margin: 0 0 18mm; }
+    .portada .inst { font-size: 11pt; line-height: 1.7; }
+    .portada .pie { margin-top: 22mm; font-size: 9pt; color: #5b6b62; }
+
+    .intro { page-break-after: always; }
+    h1.seccion { font-size: 17pt; color: #16632f; border-bottom: 2.5pt solid #16632f;
+                 padding-bottom: 2mm; margin: 0 0 5mm; page-break-before: always; }
+    .intro h1 { font-size: 19pt; color: #16632f; margin: 0 0 4mm; }
+
+    .ficha { page-break-inside: avoid; margin-bottom: 9mm;
+             border-bottom: 0.5pt solid #d3ddd6; padding-bottom: 6mm; }
+    .ficha__cat { font-size: 8.5pt; text-transform: uppercase; letter-spacing: .6pt; color: #5b6b62; }
+    .ficha h2 { font-size: 15pt; color: #16632f; margin: 1mm 0 2mm; }
+    .ficha__resumen { margin: 0 0 3mm; font-style: italic; color: #3c4a42; }
+
+    .sello { font-size: 7.5pt; font-style: normal; text-transform: uppercase;
+             letter-spacing: .5pt; background: #2e8b4a; color: #fff;
+             padding: 1pt 5pt; border-radius: 8pt; vertical-align: 2pt; }
+
+    .rapidos { display: flex; flex-wrap: wrap; gap: 1mm 8mm; margin: 0 0 4mm;
+               font-size: 9pt; padding: 2mm 3mm; background: #f0f5f1; }
+    .rapidos div { display: flex; gap: 2mm; }
+    /* Los dos puntos son para que al copiar el texto no quede "Rinde65 kg". */
+    .rapidos dt { color: #5b6b62; } .rapidos dt::after { content: ":"; }
+    .rapidos dd { margin: 0; font-weight: bold; }
+
+    h3 { font-size: 10.5pt; color: #16632f; margin: 4mm 0 1.5mm;
+         text-transform: uppercase; letter-spacing: .4pt; }
+    ul, ol { margin: 0; padding-left: 5mm; }
+    li { margin-bottom: 1.2mm; }
+    p { margin: 0 0 2mm; }
+
+    .dos-columnas { display: flex; gap: 7mm; }
+    .dos-columnas section { flex: 1; }
+
+    table { width: 100%; border-collapse: collapse; margin: 1mm 0 3mm; font-size: 9.5pt; }
+    th { text-align: left; vertical-align: top; padding: 1.4mm 3mm 1.4mm 0;
+         width: 38%; color: #16632f; border-bottom: 0.5pt solid #e3eae5; }
+    td { padding: 1.4mm 0; border-bottom: 0.5pt solid #e3eae5; }
+
+    .dato { font-size: 9.5pt; }
+    .cuidados { background: #fdfaf3; border-left: 2.5pt solid #d9a521;
+                padding: 2.5mm 4mm; margin: 4mm 0 0; page-break-inside: avoid; }
+    .cuidados h3 { margin-top: 0; color: #8a6512; }
+    .alerta { background: #fceceb; border-left: 2.5pt solid #b3261e;
+              padding: 2.5mm 4mm; margin: 0 0 4mm; font-size: 9.5pt; }
+    .fuente { font-size: 8pt; color: #5b6b62; margin-top: 3mm; }
+
+    .idx { list-style: none; padding: 0; }
+    .idx-cat { margin-bottom: 5mm; page-break-inside: avoid; }
+    .idx-cat > strong { display: block; color: #16632f; font-size: 11.5pt; }
+    .idx-cat > span { display: block; font-size: 9pt; color: #5b6b62; margin-bottom: 1.5mm; }
+    .idx-item { display: block; font-size: 10pt; padding-left: 5mm; }
+    .idx-item em { font-size: 7.5pt; font-style: normal; color: #2e8b4a;
+                   text-transform: uppercase; letter-spacing: .4pt; }
+
+    .aviso-general { background: #f0f5f1; border-left: 2.5pt solid #16632f;
+                     padding: 3mm 4mm; margin: 4mm 0; }
+    .cierre { page-break-before: always; }
+    </style></head><body>
+
+<div class="portada">
+  <div>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJkAAABkCAYAAACVUJJ9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+hpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDcuMS1jMDAwIDc5LmNjZjg0ZTAsIDIwMjIvMDYvMjItMjI6MTM6MjYgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIyLjUgKE1hY2ludG9zaCkiIHhtcDpDcmVhdGVEYXRlPSIyMDIzLTA0LTE3VDExOjI5LTAzOjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMy0wNC0xN1QxNDozMjo0Ny0wMzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMy0wNC0xN1QxNDozMjo0Ny0wMzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MUFFNzZBRTZDRUFDMTFFREEwOEZBQjU1MThEQjY4MjgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MUFFNzZBRTdDRUFDMTFFREEwOEZBQjU1MThEQjY4MjgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6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" alt="IFAB CONICET INTA">
+    <img src="data:image/jpeg;base64,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" alt="ECOMARCAL">
+  </div>
+  <h1>Biopreparados para la<br>Comarca Andina</h1>
+  <p class="bajada">Elaboración, uso y dosis · 27 recetas</p>
+  <p class="inst">
+    <strong>IFAB</strong> — Instituto de Investigaciones Forestales y Agropecuarias Bariloche<br>
+    CONICET / INTA · Agencia de Extensión Rural El Bolsón<br>
+    Sello agroecológico <strong>ECOMARCAL</strong>
+  </p>
+  <p class="pie">
+    Recopilado y redactado por el equipo del IFAB a partir de la bibliografía citada en cada ficha.<br>
+    Versión 2026-08-18 · Generado el 22 de agosto de 2026<br>
+    Este documento se genera desde la app BioSalud: martintrigo.github.io/BioSalud
+  </p>
+</div>
+
+<div class="intro">
+  <h1>Cómo usar esta cartilla</h1>
+  <p>Las recetas están ordenadas <strong>por función</strong>: qué se busca lograr,
+  antes que con qué. Cada ficha dice qué lleva, cómo se prepara, para qué sirve,
+  en qué dosis se aplica, cuánto dura y qué cuidados exige.</p>
+
+  <p>Las marcadas como <span class="sello">Comarca</span> se vienen elaborando y
+  probando acá, en talleres de la AER INTA El Bolsón. Las demás vienen de otras
+  regiones y todavía hay que ajustarlas a nuestras condiciones.</p>
+
+  <p><strong>Ninguna ficha es copia de su fuente.</strong> Todas están reescritas
+  por el equipo del IFAB, y cada una indica de dónde sale para que se pueda ir al
+  documento original.</p>
+
+  <div class="aviso-general">
+    <h3>Recomendaciones generales para cualquier biopreparado</h3>
+    <ul class=""><li>Usar siempre agua libre de cloro. El cloro mata los microorganismos que se quieren multiplicar.</li><li>El estiércol tiene que ser de rumiantes, no de caballo ni de otros monogástricos. Los animales no deben estar bajo tratamiento con antibióticos, y si el potrero se fumigó con herbicidas, el estiércol pierde calidad como insumo. Ante la duda, analizarlo.</li><li>Los envases no pueden tener restos de productos químicos. Lavar antes y después de cada uso.</li><li>Rotular todo con nombre del preparado y fecha de elaboración. Sin eso, en dos meses nadie sabe qué hay en el tambor.</li><li>Los tambores de fermentación anaeróbica generan gases. Usar tapa con salida de gases y nunca sellar a presión.</li><li>Evitar aplicar biopreparados en los 20 días previos a la cosecha.</li><li>Probar siempre en unas pocas plantas antes de aplicar a todo el lote. Las dosis publicadas varían mucho y dependen del cultivo.</li><li>Aplicar a la tarde o temprano a la mañana, evitando las horas de más sol.</li><li>Que un producto sea natural no lo hace inofensivo: la cal viva quema, el azufre desprende vapores tóxicos, el cobre se acumula en el suelo y la soda cáustica es peligrosa. Leer los cuidados de cada ficha.</li></ul>
+  </div>
+
+  <h1>Índice por función</h1>
+  <ul class="idx"><li class="idx-cat"><strong>🌱 Biofertilizantes</strong><span>Aportan nutrientes y microorganismos vivos. Alimentan al suelo antes que a la planta.</span><span class="idx-item">Microorganismos de montaña (MM) líquido <em>Comarca</em></span><span class="idx-item">Súpermagro sólido enriquecido <em>Comarca</em></span><span class="idx-item">Biopescado</span><span class="idx-item">Biofertilizante de calabaza</span><span class="idx-item">Té de compost</span><span class="idx-item">Bio lana</span><span class="idx-item">Fertilizante rico en fósforo</span><span class="idx-item">Bacterias ácido lácticas</span></li><li class="idx-cat"><strong>🌿 Bioestimulantes</strong><span>No nutren tanto como activan: estimulan el enraizamiento, el crecimiento y las defensas de la planta.</span><span class="idx-item">Bioestimulante de ortiga, consuelda y cola de caballo <em>Comarca</em></span><span class="idx-item">Adherente y bioestimulante de aloe</span></li><li class="idx-cat"><strong>🪱 Abonos y enmiendas sólidas</strong><span>Se incorporan al suelo y mejoran su estructura, su materia orgánica y su vida. Efecto lento y acumulativo.</span><span class="idx-item">Bocashi</span><span class="idx-item">Abono orgánico aeróbico de pozo</span><span class="idx-item">Abono orgánico anaeróbico</span></li><li class="idx-cat"><strong>🐞 Biocontroladores de insectos y ácaros</strong><span>Repelen o controlan plagas. Ninguno es selectivo del todo: usarlos cuando el monitoreo lo justifique, no por calendario.</span><span class="idx-item">Biorepelente picante <em>Comarca</em></span><span class="idx-item">Extracto botánico de ajo, ají y pimienta</span><span class="idx-item">Caldo lejía</span><span class="idx-item">Caldo de ceniza</span></li><li class="idx-cat"><strong>🍄 Biocontroladores de enfermedades</strong><span>Previenen y controlan hongos y bacterias. Casi todos son preventivos: aplicados con la enfermedad instalada rinden poco.</span><span class="idx-item">Caldo mineral caliente (sulfocálcico)</span><span class="idx-item">Caldo bordelés</span><span class="idx-item">Caldo Visosa</span><span class="idx-item">Caldo de bicarbonato de sodio</span><span class="idx-item">Decocción de cola de caballo <em>Comarca</em></span></li><li class="idx-cat"><strong>❄️ Reguladores de estrés</strong><span>Ayudan a la planta a soportar heladas, calor o sequía. Es la categoría con menos respaldo local: hay más experiencia de productores que ensayos publicados.</span><span class="idx-item">Caldo frío mineral</span></li><li class="idx-cat"><strong>🧪 Preparados de base</strong><span>No se aplican solos. Son la materia prima de los demás biopreparados, y conviene tenerlos hechos de antemano.</span><span class="idx-item">Microorganismos de montaña (MM) sólido <em>Comarca</em></span><span class="idx-item">Pasto fermentado</span><span class="idx-item">Microorganismos de silo de maíz</span><span class="idx-item">Lejía de ceniza</span></li></ul>
+</div>
+
+<h1 class="seccion">🌱 Biofertilizantes</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Microorganismos de montaña (MM) líquido <span class="sello">Comarca</span></h2>
+        <p class="ficha__resumen">La versión aplicable del MM sólido. Es el biofertilizante más usado en la Comarca y el que mejor se adapta al fertirriego por goteo.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>200 litros</dd></div><div><dt>Tiempo</dt><dd>15 días</dd></div><div><dt>Carencia</dt><dd>Evitar aplicar en los 20 días previos a la cosecha.</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>8 a 10 kg de MM sólido</li><li>5 kg de azúcar o melaza disuelta en agua</li><li>200 litros de agua sin cloro</li><li>1 tambor plástico de 200 litros</li><li>1 malla o bolsa limpia de tela</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Poner el MM sólido dentro de la bolsa y cerrarla bien, como un saquito de té.</li><li>Llenar el tambor con los 200 litros de agua y disolver el azúcar.</li><li>Sumergir la bolsa en el tambor.</li><li>Tapar con un sistema que deje salir los gases: la fermentación genera dióxido de carbono y un tambor sellado a presión es peligroso.</li><li>Dejar a la sombra unos 15 días.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Biofertilizante de suelo y foliar. También se usa contra hongos patógenos del suelo. Terminados los 200 litros, la misma bolsa con MM sólido sirve para preparar otra tanda.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Al suelo</th><td>Diluir al 30 %</td></tr><tr><th>Foliar</th><td>Diluir al 20 %</td></tr><tr><th>Contra hongos de suelo</th><td>Diluir al 50 % o aplicar puro, directo al suelo</td></tr><tr><th>Frecuencia en hortalizas</th><td>Semanal</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> Se usa fresco. No es un producto para guardar meses.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Usar siempre agua sin cloro: el cloro mata justamente lo que se quiere multiplicar.</li><li>La tapa tiene que dejar escapar los gases.</li></ul></div>
+
+      <p class="fuente">Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG. Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Súpermagro sólido enriquecido <span class="sello">Comarca</span></h2>
+        <p class="ficha__resumen">Biofertilizante fermentado a base de estiércol fresco y enriquecido con sales minerales. Es el más estudiado de todos y también el que más cuidado exige.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>Alrededor de 65 kg de preparado sólido</dd></div><div><dt>Tiempo</dt><dd>25 días de fermentación</dd></div><div><dt>Carencia</dt><dd>Evitar aplicar en los 20 días previos a la cosecha.</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>50 kg de estiércol de vaca fresco</li><li>8 kg de azúcar</li><li>5 litros de suero de leche sin sal</li><li>1 kg de MM sólido</li><li>1 kg de ceniza</li><li>1 kg de sulfato de magnesio</li><li>1,5 kg de sulfato de potasio</li><li>1 tambor plástico</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Armar la base mezclando el estiércol fresco con el azúcar y el suero de leche.</li><li>Agregar los demás ingredientes de a uno, mezclando bien antes de sumar el siguiente.</li><li>Dejar fermentar al menos 25 días. Esta fermentación es aeróbica: no se tapa de forma hermética.</li><li>Envasar en bolsas plásticas y guardar en un recipiente con tapa, en lugar fresco.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Se disuelve y se aplica al suelo, con mochila o por fertirriego.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Al suelo</th><td>1 kg cada 100 litros de agua. Mezclar, dejar disolver 20 minutos agitando, colar con lienzo y aplicar.</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> Hasta un año.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Ojo con la dosis. Una revisión del INTA sobre 14 trabajos científicos encontró que el súpermagro mejora el rendimiento en la mayoría de los casos, pero también registró fitotoxicidad —amarillamientos, necrosis foliar, menor crecimiento— en aromáticas tratadas al 5 y al 10 %. Conviene probar en pocas plantas antes de aplicarlo a todo el lote.</li><li>Ojo con la inocuidad. Se hace con estiércol fresco, así que hay riesgo de diseminar patógenos y parásitos. La misma revisión señala que falta trabajo de laboratorio para garantizarlo. No aplicarlo sobre la parte comestible de cultivos que se consumen crudos.</li><li>El estiércol tiene que ser de rumiantes, de animales sin tratamiento antibiótico y que no hayan pastoreado potreros fumigados con herbicidas.</li><li>Las dosis publicadas van del 0,1 % al 40 % según el cultivo y el trabajo. No hay todavía una recomendación única: la de acá es la que se usa en la Comarca.</li></ul></div>
+
+      <p class="fuente">Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón. Sánchez Miranda, M. (2025). Biopreparado Supermagro: análisis y comparación de distintos casos de estudio. INTA IPAF Región Pampeana.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Biopescado</h2>
+        <p class="ficha__resumen">Aprovecha los desechos de pescado y los convierte en un biofertilizante rico en nitrógeno y fósforo. Se hace en dos días y arranca con una cocción.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>100 litros</dd></div><div><dt>Tiempo</dt><dd>2 días de elaboración y 5 de fermentación</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>30 kg de restos de pescado fresco (cabezas, colas, vísceras)</li><li>60 litros de agua</li><li>6 kg de ceniza de madera tamizada</li><li>2 kg de jabón blanco en pan, rallado</li><li>20 litros de suero de quesería</li><li>10 kg de melaza o azúcar</li><li>1 tacho metálico de 100 litros y 1 tambor plástico de 100 litros</li><li>Leña para el fogón</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Día 1. Calentar los 60 litros de agua en el tacho metálico sobre el fuego. Cuando hierve, agregar el jabón rallado y revolver hasta disolver.</li><li>Sumar la ceniza tamizada y cocinar 15 minutos. Hasta acá ya se tiene un bioinsecticida usable por separado.</li><li>Agregar los 30 kg de pescado y cocinar 15 a 20 minutos más. Sacar del fuego y dejar reposar 24 horas.</li><li>Día 2. Colar y pasar el caldo al tambor plástico.</li><li>Agregar el azúcar y el suero: el azúcar da energía rápida y el suero aporta microorganismos y proteínas.</li><li>Completar con agua hasta 100 litros y dejar fermentar 5 días en condiciones aeróbicas, tapado pero sin ajustar, para que intercambie gases.</li><li>Filtrar con lienzo.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Biofertilizante foliar o por fertirriego. Se puede combinar con té de compost o biocalabaza para ampliar la diversidad de nutrientes.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas</th><td>Diluir al 3 %</td></tr><tr><th>Frutales</th><td>Diluir al 6 %</td></tr><tr><th>Frecuencia</th><td>Una aplicación foliar mensual</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> Hasta un año en envases oscuros y rotulados.</p>
+      <p class="dato"><strong>Se usa contra:</strong> Mosca blanca</p>
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>El pescado se puede tener congelado hasta el día de la elaboración.</li><li>Huele fuerte. Elegir un lugar alejado de la casa y de los vecinos.</li><li>El análisis de laboratorio del preparado patagónico dio pH 3,32, con 2,3 g/l de nitrógeno y 0,21 g/l de fósforo.</li></ul></div>
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11. Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Biofertilizante de calabaza</h2>
+        <p class="ficha__resumen">Fermento de calabaza y agua de mar. El tambor tiene que ser blanco: la luz es parte de la receta, porque favorece a las bacterias fototróficas.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>100 litros</dd></div><div><dt>Tiempo</dt><dd>30 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>65 litros de agua de mar</li><li>10 kg de calabaza picada (o zanahoria: interesan los carotenos)</li><li>15 litros de suero de quesería</li><li>5 kg de melaza o azúcar</li><li>1 kg de cáscara de camarones molida</li><li>1 kg de estiércol fresco de ternero</li><li>50 g de levadura de cerveza</li><li>1 tambor plástico blanco de 100 litros</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>En el tambor blanco poner el agua de mar, la calabaza picada, la cáscara de camarones molida y la bosta de ternero.</li><li>Revolver y agregar el azúcar y el suero.</li><li>Cubrir con tela para que no entren moscas: fermenta en condiciones aeróbicas durante 30 días.</li><li>Filtrar con lienzo y conservar en envase blanco.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Aporta nutrientes y microorganismos. Se aplica al suelo en la preparación, al trasplante y en estado vegetativo.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Al suelo</th><td>3 % — 3 litros en 100 de agua, o 600 cc en una mochila de 20 litros</td></tr></table>
+      
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>El tambor blanco no es un detalle estético: deja pasar luz y de eso dependen las bacterias fototróficas.</li><li>La cáscara de camarones aporta el efecto fungicida y la bosta de ternero, Bacillus subtilis.</li><li>El agua de mar es el ingrediente difícil en la Comarca. Es una receta pensada para el Valle Inferior; acá habría que probar reemplazos.</li></ul></div>
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Té de compost</h2>
+        <p class="ficha__resumen">Extrae en agua lo soluble del compost maduro. Rico en sustancias húmicas y pobre en nitrógeno, así que rinde mucho más combinado con otro preparado.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>50 litros</dd></div><div><dt>Tiempo</dt><dd>4 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>6 kg de compost maduro</li><li>10 litros de lejía de ceniza</li><li>Agua hasta completar 50 litros</li><li>1 recipiente plástico de 50 litros y un agitador de madera</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Mezclar el compost con la lejía en el recipiente.</li><li>Al día siguiente completar con agua hasta los 50 litros.</li><li>Revolver dos veces por día durante tres días.</li><li>Al cuarto día dejar reposar y filtrar.</li><li>Guardar en bidones oscuros, rotulados con nombre y fecha.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Fertilizante foliar.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Foliar</th><td>3 %</td></tr><tr><th>Combinado</th><td>3 % de té de compost + 3 % de bio lana, para compensar su bajo nitrógeno</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 12 meses.</p>
+      
+
+      
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Bio lana</h2>
+        <p class="ficha__resumen">Fertilizante nitrogenado a partir de lana de oveja, que en la región suele ser un descarte. Es el preparado más peligroso de elaborar de toda esta lista.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>50 litros</dd></div><div><dt>Tiempo</dt><dd>15 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>4 kg de lana de oveja</li><li>1,25 kg de hidróxido de sodio (soda cáustica)</li><li>45 litros de agua</li><li>1 balde plástico de 50 litros y un agitador de madera</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Colocar la lana en capas dentro del recipiente.</li><li>Espolvorear hidróxido de sodio entre capa y capa.</li><li>Cubrir con agua hasta tapar la lana y dejar reposar 12 horas.</li><li>Al día siguiente completar con agua hasta los 50 litros.</li><li>Revolver periódicamente durante 15 días.</li><li>Tapar y rotular con nombre y fecha.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Fertilizante nitrogenado foliar.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Foliar</th><td>Diluir al 3 %</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 1 año.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>El hidróxido de sodio quema la piel y los ojos, y desprende calor al contacto con el agua. Guantes, antiparras y ropa cubierta, sin excepción.</li><li>Nunca agregar agua sobre la soda: siempre la soda sobre el agua, y de a poco.</li><li>Preparar al aire libre y lejos de chicos y animales.</li><li>Es el único preparado de esta lista con un ingrediente peligroso de verdad. Si hay dudas, mejor no hacerlo.</li></ul></div>
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Fertilizante rico en fósforo</h2>
+        <p class="ficha__resumen">Fermento de fuentes minerales con microorganismos. Interesa especialmente en la Comarca, donde la alta retención de fosfatos es la carencia típica de los suelos.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>50 litros</dd></div><div><dt>Tiempo</dt><dd>12 a 15 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>10 litros de microorganismos líquidos (MM líquido)</li><li>40 litros de agua sin cloro</li><li>2,5 kg de fuentes de minerales: roca fosfórica, ceniza de fogón, ceniza de huesos, harina de roca o tierra de diatomeas. Se pueden mezclar.</li><li>1 recipiente plástico de 50 litros</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Mezclar en el tambor el agua, los microorganismos líquidos y las fuentes minerales.</li><li>Dejar fermentar 12 a 15 días. Puede ser en condiciones aeróbicas o anaeróbicas.</li><li>Filtrar con tela antes de usar.</li><li>Guardar en bidones oscuros y rotulados.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Fertilizante. Se puede aplicar junto con el preparado de microorganismos líquidos.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Vegetales</th><td>3 a 10 %, repartido en tres aplicaciones a lo largo del ciclo del cultivo</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 12 meses.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Los suelos de la Comarca vienen de desmontes y mallines: tienen buena materia orgánica pero retienen mucho el fósforo. Este preparado apunta justo ahí, aunque falta ensayarlo localmente.</li></ul></div>
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌱 Biofertilizantes</span>
+        <h2>Bacterias ácido lácticas</h2>
+        <p class="ficha__resumen">Multiplica bacterias lácticas a partir del pasto fermentado. Actúa como una protección biológica sobre la planta más que como un fertilizante.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>180 litros</dd></div><div><dt>Tiempo</dt><dd>1 semana</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>5 kg de pasto fermentado, en una bolsa de tela</li><li>5 kg de melaza o azúcar</li><li>10 litros de suero de quesería</li><li>200 g de sal marina, harina de rocas o tierra de diatomeas</li><li>Agua de buena calidad hasta 180 litros</li><li>1 tambor plástico de 200 litros con tapa y zuncho</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Llenar el tambor con 180 litros de agua y disolver el azúcar.</li><li>Agregar el suero o los microorganismos activados.</li><li>Poner los 5 kg de pasto fermentado en una bolsa tipo saquito de té y sumergirla.</li><li>Cerrar con zuncho y fermentar una semana en condiciones anaeróbicas.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Reduce la incidencia de plagas y patógenos. Se combina bien con el biopescado.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, foliar</th><td>20 %</td></tr><tr><th>Frutales, foliar</th><td>30 %</td></tr><tr><th>Al suelo</th><td>50 %</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 30 días. Pasado ese mes pierde sentido usarlo.</p>
+      
+
+      
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
+    </article><h1 class="seccion">🌿 Bioestimulantes</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌿 Bioestimulantes</span>
+        <h2>Bioestimulante de ortiga, consuelda y cola de caballo <span class="sello">Comarca</span></h2>
+        <p class="ficha__resumen">Tres plantas que crecen solas en la Comarca, fermentadas juntas. Estimula el crecimiento y de paso funciona contra pulgones y ácaros.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>100 litros</dd></div><div><dt>Tiempo</dt><dd>8 días</dd></div><div><dt>Carencia</dt><dd>Evitar aplicar en los 20 días previos a la cosecha.</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>10 kg de ortiga y/o consuelda bien picada</li><li>10 litros de decocción de cola de caballo</li><li>20 litros de MM líquido</li><li>2,5 kg de azúcar</li><li>Agua hasta completar 100 litros</li><li>1 tambor de 100 litros y una malla o bolsa de tela</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Primero la decocción de cola de caballo: infusionar 1 kg de tallos en 10 litros de agua durante 1 hora a fuego medio, sin dejar que hierva. Dejar enfriar.</li><li>Picar las hojas de ortiga y consuelda y colocarlas dentro de una malla.</li><li>Sumar el azúcar o melaza, el MM líquido y la decocción fría.</li><li>Completar con agua hasta los 100 litros.</li><li>Tapar y esperar 8 días.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Estimulante del crecimiento radicular y vegetativo. También controla pulgones, ácaros y áfidos en general.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, al inicio del cultivo</th><td>1 litro cada 20 litros de agua (5 %)</td></tr><tr><th>Hortalizas, después</th><td>300 cc cada 20 litros (1,5 %), foliar cada 15 días</td></tr><tr><th>Frutales</th><td>3 litros cada 20 litros (15 %), cada 3 meses</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> Hasta 2 meses en lugar fresco, seco y oscuro.</p>
+      <p class="dato"><strong>Se usa contra:</strong> Pulgones, Arañuela roja</p>
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>La ortiga aporta cerca de 52 minerales; es el ingrediente que hace el trabajo nutricional.</li><li>Cosechar la ortiga con guantes y antes de que semille, para no dispersarla donde no se la quiere.</li></ul></div>
+
+      <p class="fuente">Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🌿 Bioestimulantes</span>
+        <h2>Adherente y bioestimulante de aloe</h2>
+        <p class="ficha__resumen">El complemento que hace que los demás biopreparados se queden en la hoja en vez de escurrir. Cambiando un ingrediente pasa de adherente a bioestimulante.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>20 litros</dd></div><div><dt>Tiempo</dt><dd>1 semana</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>1 kg de Aloe vera picado (es lo que da el efecto adherente)</li><li>2 litros de suero o microorganismos líquidos</li><li>500 g de melaza o azúcar</li><li>1 balde plástico de 20 litros</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Mezclar los ingredientes picados en el balde.</li><li>Tapar con lienzo, para que la fermentación sea aeróbica.</li><li>Fermentar una semana y filtrar con lienzo.</li><li>Guardar en envase oscuro.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Se agrega a los demás biopreparados para que se adhieran mejor a la planta.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Junto a otros biopreparados</th><td>400 cc en 10 litros de agua</td></tr></table>
+      
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Cambiando el aloe por 1 kg de ortiga, el efecto pasa a ser bioestimulante. Con 500 g de cada uno se logran los dos a la vez.</li><li>Equivalencia útil: 1 kg de ortiga fresca ≈ 200 g de ortiga seca.</li><li>La fuente menciona una variante con flor de floripondio para efecto nematicida. No la incluimos: el floripondio (Brugmansia) es muy tóxico para las personas y no corresponde recomendarlo sin protocolo de manejo.</li></ul></div>
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
+    </article><h1 class="seccion">🪱 Abonos y enmiendas sólidas</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🪱 Abonos y enmiendas sólidas</span>
+        <h2>Bocashi</h2>
+        <p class="ficha__resumen">Compostaje acelerado: en lugar de meses, unos días. Aprovecha lo que sobra en la chacra y en la agroindustria de la zona, incluido el bagazo de cervecería.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>Unos 60 kg</dd></div><div><dt>Tiempo</dt><dd>De días a dos semanas, según la temperatura</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>2 baldes de guano de gallina compostado y molido (o estiércol de oveja, vaca, caballo o conejo)</li><li>2 baldes de residuo de cebada cervecera (o 2 tachos de afrecho de trigo, o 1 de semitín)</li><li>1 balde de hojarasca, o suelo de un lugar donde no se apliquen plaguicidas</li><li>1 balde de carbón vegetal molido (opcional)</li><li>Agua sin cloro</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Poner los ingredientes uno al lado del otro y dividir cada montón en tres partes.</li><li>Armar una pila con una parte de cada ingrediente, después la segunda encima y después la tercera.</li><li>Mezclar pasando todo el material para un lado y después para el otro. Repetir tres veces, regando hasta llegar al 40 % de humedad, hasta que quede homogéneo.</li><li>Amontonar y tapar con una malla permeable al aire, para protegerlo del viento y del sol.</li><li>Controlar la temperatura todos los días: no debe pasar de 55 °C. Remover a la mañana y a la tarde.</li><li>Cuando toma color gris ceniciento, está listo. Embolsar hasta el momento de usarlo.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Se aplica al suelo, evitando el contacto directo con las raíces: en camellones, surcos de trasplante o al costado de las plantas ya instaladas. También sirve mezclado en el sustrato de almácigos.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Por planta</th><td>Unos 200 g</td></tr><tr><th>Hortalizas</th><td>Aplicar 15 días antes de la siembra o el trasplante</td></tr></table>
+      
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Si pasa de 55 °C se mueren los microorganismos que se quieren conservar. Por eso se mide y se remueve.</li><li>Usar barbijo contra el polvo, guantes, pañuelo o gorra y botas de goma.</li></ul></div>
+
+      <p class="fuente">Barrionuevo, M. E.; Flores, L. B.; Dussi, M. C. Prácticas agroecológicas: preparación y uso de bocashi. INTA CR Patagonia Norte y FCA Universidad Nacional del Comahue.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🪱 Abonos y enmiendas sólidas</span>
+        <h2>Abono orgánico aeróbico de pozo</h2>
+        <p class="ficha__resumen">Bosta y minerales fermentando en un pozo revestido con madera, tres meses. Poco trabajo y mucha espera.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>Unos 50 kg</dd></div><div><dt>Tiempo</dt><dd>90 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>50 kg de bosta fresca de vaca</li><li>1 kg de harina de rocas, ceniza de madera o tierra de diatomeas</li><li>100 g de cáscara de huevo seca y molida</li><li>Un hoyo de 60 × 60 × 60 cm</li><li>Tablas de madera para revestir las paredes</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Cavar el pozo donde el suelo sea bueno, que no se inunde ni suba la napa.</li><li>Revestir con tablas solo las paredes laterales, nunca el fondo: el contacto con el suelo es parte del proceso.</li><li>Mezclar la bosta con la fuente de minerales y la cáscara de huevo molida, homogeneizar con pala y volcar en el pozo.</li><li>Tapar con una tapa de madera y cubrir con pasto para conservar la temperatura.</li><li>Dejar fermentar en condiciones aeróbicas durante 90 días.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Abono líquido, al suelo. No sirve como fertilizante foliar.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Al suelo</th><td>1 kg del preparado en 100 litros de agua. Agitar 10 minutos, filtrar con lienzo y aplicar puro, sin diluir de nuevo.</td></tr><tr><th>Frecuencia</th><td>Cada 15 días, en preparación de suelo, a la siembra y en estado vegetativo por fertirriego</td></tr></table>
+      
+      
+
+      
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🪱 Abonos y enmiendas sólidas</span>
+        <h2>Abono orgánico anaeróbico</h2>
+        <p class="ficha__resumen">Abono concentrado de afrechillo y harina de pescado, fermentado sin aire. Sirve sólido al suelo, disuelto como foliar y mezclado en el sustrato de trasplante.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>Alrededor de 100 kg</dd></div><div><dt>Tiempo</dt><dd>21 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>100 kg de afrechillo de trigo, maíz o arroz, o grano de maíz molido</li><li>5 kg de harina de pescado</li><li>5 kg de melaza o azúcar</li><li>30 litros de microorganismos activados o suero de quesería</li><li>1 tambor plástico de 200 litros, pisón de madera y lona</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Disolver el azúcar en agua.</li><li>Extender la lona y volcar el afrechillo y la harina de pescado.</li><li>Agregar el agua azucarada y los microorganismos o el suero. Humedecer y mezclar hasta el 30 % de humedad.</li><li>Cargar el tambor por capas, compactando con el pisón para sacar el oxígeno.</li><li>Tapar con zuncho, hermético, y dejar 21 días.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Abono sólido o líquido, y componente de sustrato.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Preparación del suelo</th><td>500 g por metro cuadrado</td></tr><tr><th>Al trasplante</th><td>Un puñado; reabonar a los 20 días al costado del cultivo</td></tr><tr><th>Foliar</th><td>1 kg en 100 litros de agua</td></tr><tr><th>Sustrato para trasplante</th><td>10 kg de este abono + 10 kg de bocashi + 80 kg de tierra negra</td></tr></table>
+      
+      
+
+      
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
+    </article><h1 class="seccion">🐞 Biocontroladores de insectos y ácaros</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🐞 Biocontroladores de insectos y ácaros</span>
+        <h2>Biorepelente picante <span class="sello">Comarca</span></h2>
+        <p class="ficha__resumen">El biocontrolador más probado en la Comarca. Ajo, ají, cebolla y jengibre macerados en alcohol, con buenos resultados locales contra pulgón y polilla de las coles.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>100 litros</dd></div><div><dt>Tiempo</dt><dd>15 días de maceración</dd></div><div><dt>Carencia</dt><dd>Evitar aplicar en los 20 días previos a la cosecha.</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>1 kg de ajo</li><li>1 kg de ají picante</li><li>1 kg de cebolla morada</li><li>1 kg de jengibre</li><li>2,5 litros de alcohol</li><li>2,5 litros de vinagre</li><li>2,5 litros de MM líquido</li><li>2,5 kg de azúcar</li><li>Plantas aromáticas: ajenjo, tomillo, salvia, romero</li><li>1 tacho plástico de 100 litros</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Picar el ajo, el ají, la cebolla y el jengibre.</li><li>Agregar el alcohol y dejar macerar 15 días.</li><li>Disolver el azúcar en 100 litros de agua.</li><li>Sumar el macerado, el MM líquido y las aromáticas.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Repele insectos y controla nematodos y hongos patógenos del suelo. En la Comarca dio buenos resultados con pulgones y con polilla de las coles (Plutella xylostella), y contra Fusarium, Rhizoctonia y Sclerotinia. Aporta minerales.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas</th><td>200 cc por mochila de 20 litros, foliar y al suelo, cada 15 a 20 días</td></tr><tr><th>Frutales</th><td>5 litros en 200 litros de agua (2,5 %)</td></tr><tr><th>Papa</th><td>Aplicar al suelo antes de sembrar</td></tr></table>
+      
+      <p class="dato"><strong>Se usa contra:</strong> Polilla de la col, Polilla del tomate, Mosca de la cebolla, Pulgones, Trips, Arañuela roja</p>
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>El ají y el alcohol irritan ojos y vías respiratorias al picarlos y al aplicar. Guantes, antiparras y aplicar a favor del viento.</li><li>Repele insectos en general, incluidos los benéficos. Aplicar cuando el monitoreo lo justifique, no por rutina.</li><li>Un ensayo del INTA en Córdoba comparando biopreparados encontró que el extracto de ajo y ají fue el que más redujo la presencia de insectos fitófagos en tomate.</li></ul></div>
+
+      <p class="fuente">Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón. Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🐞 Biocontroladores de insectos y ácaros</span>
+        <h2>Extracto botánico de ajo, ají y pimienta</h2>
+        <p class="ficha__resumen">Primo hermano del biorepelente picante, más concentrado y más simple. Sirve también para repeler pájaros.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>20 litros</dd></div><div><dt>Tiempo</dt><dd>15 a 21 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>200 g de ajo picado</li><li>200 g de ají picante molido</li><li>200 g de pimienta negra molida</li><li>200 cc de alcohol etílico de 96° o medicinal</li><li>4 litros de suero de quesería o microorganismos</li><li>1 kg de azúcar o melaza</li><li>1 recipiente plástico de 20 litros</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Mezclar el ajo y el ají picados, la pimienta y el alcohol.</li><li>Agregar el azúcar o melaza.</li><li>Sumar el suero y completar con agua hasta los 20 litros.</li><li>Tapar con tela y dejar fermentar 15 a 21 días a la sombra.</li><li>Filtrar con tela y envasar en recipiente oscuro, rotulado con nombre y fecha.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Repelente de mosca blanca, pulgones, ácaros, cochinillas y también de aves.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas</th><td>1 % — 1 litro en 99 de agua</td></tr><tr><th>Frutales</th><td>2 %</td></tr><tr><th>Repeler aves</th><td>1 %</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
+      <p class="dato"><strong>Se usa contra:</strong> Pulgones, Mosca blanca, Arañuela roja</p>
+
+      
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🐞 Biocontroladores de insectos y ácaros</span>
+        <h2>Caldo lejía</h2>
+        <p class="ficha__resumen">Jabón, ceniza y cal. Insecticida y fungicida de dos días de elaboración, con ingredientes que hay en cualquier chacra.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>100 litros</dd></div><div><dt>Tiempo</dt><dd>2 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>1 kg de jabón en pan, rallado</li><li>3 kg de ceniza de madera tamizada</li><li>3 kg de cal viva</li><li>100 litros de agua</li><li>1 tambor plástico de 100 litros y un agitador de madera</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Día 1. Disolver el jabón rallado en 10 a 15 litros de agua caliente.</li><li>Agregar la ceniza tamizada, mezclar y dejar en reposo 24 horas. Colar con lienzo.</li><li>Día 2. Sobre el filtrado, agregar los 3 kg de cal, mezclar y completar con agua hasta los 100 litros.</li><li>No necesita reposo: se puede usar enseguida. Filtrar con lienzo.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Insecticida y fungicida.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>General</th><td>5 % — 5 litros en 100 de agua, o 1 litro por mochila de 20 litros</td></tr></table>
+      
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>La cal viva reacciona con el agua desprendiendo calor y salpica. Guantes y antiparras.</li><li>Alcaliniza: no mezclar con preparados que dependan de microorganismos vivos, porque los desactiva.</li></ul></div>
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🐞 Biocontroladores de insectos y ácaros</span>
+        <h2>Caldo de ceniza</h2>
+        <p class="ficha__resumen">La versión chica y rápida del caldo lejía: un balde, tres ingredientes y sin cocción.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>20 litros</dd></div><div><dt>Tiempo</dt><dd>Inmediato</dd></div></dl>
+      </header>
+
+      <div class="alerta"><strong>Dato a verificar.</strong> En el PDF original de la fuente las dosis del caldo de ceniza y del caldo frío mineral están en columnas contiguas y la extracción de texto pudo cruzarlas. Antes de recomendarla a un productor, verificar contra el documento impreso.</div>
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>200 g de ceniza de madera tamizada</li><li>100 g de cal viva o apagada</li><li>20 litros de agua</li><li>1 balde plástico de 20 litros y un agitador de madera</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Mezclar la ceniza con la cal.</li><li>Agregar el agua y mezclar.</li><li>Filtrar con tela y envasar en bidones oscuros rotulados.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Controla enfermedades fúngicas y plagas como pulgón y mosca blanca. La fuente le atribuye además un efecto amortiguador frente a heladas, por el engrosamiento del tejido vegetal.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Foliar</th><td>2 %, cada 15 días — unos 400 ml en una mochila de 20 litros</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
+      <p class="dato"><strong>Se usa contra:</strong> Pulgones, Mosca blanca</p>
+
+      
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article><h1 class="seccion">🍄 Biocontroladores de enfermedades</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🍄 Biocontroladores de enfermedades</span>
+        <h2>Caldo mineral caliente (sulfocálcico)</h2>
+        <p class="ficha__resumen">El de mayor espectro y el que más precauciones pide: azufre, cal y minerales hervidos hasta que el líquido pasa de amarillo a rojo ladrillo.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>60 litros de caldo, más una pasta mineral reutilizable</dd></div><div><dt>Tiempo</dt><dd>Una jornada, más 24 horas de reposo</dd></div><div><dt>Carencia</dt><dd>15 días.</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>60 litros de agua</li><li>4 a 5 kg de azufre en polvo</li><li>4 a 5 kg de cal hidratada</li><li>4 a 5 kg de ceniza de madera tamizada</li><li>4 a 5 kg de roca fosfórica, sal marina, harina de roca o tierra de diatomeas (mejor mezclar dos o más)</li><li>1 tambor metálico de 100 litros con dos manijas</li><li>Leña para el fogón y ladrillos o bloques</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Apoyar el tambor metálico sobre los ladrillos y cargar los 60 litros de agua. Encender el fuego.</li><li>Mientras se calienta, mezclar en seco sobre una lona las fuentes de minerales: azufre, cal, ceniza y la mezcla de sal marina y diatomeas.</li><li>Cuando el agua rompe el hervor, agregar la mezcla de minerales.</li><li>Agitar sin parar 20 a 30 minutos con un bastón de madera, manteniendo el fuego fuerte para que se solubilice todo.</li><li>Si la espuma amenaza con rebalsar, salpicar agua fría por encima.</li><li>Mantener la cocción hasta que el color pase de amarillo a rojo ladrillo. Dejar enfriar.</li><li>A las 24 horas filtrar con tela y envasar en bidones oscuros rotulados.</li><li>La pasta mineral que queda en el fondo se extrae con espátula, se seca sobre una lona y se guarda aparte: se reutiliza.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Insecticida y fungicida que además aporta minerales. Sirve para cochinilla, mosca blanca, isocas, nematodos, ácaros, trips y pulgones, y previene enfermedades fúngicas como las causadas por Fusarium. Contra nematodos e insectos de suelo se aplica directo al suelo en la preparación de la cama de siembra.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, foliar</th><td>Diluir al 1 %</td></tr><tr><th>Frutales, foliar</th><td>Diluir al 2 %, después de la poda</td></tr><tr><th>Pasta mineral, cicatrizante de poda</th><td>1 parte de pasta + 2 de agua, aplicada con brocha sobre el tronco y sobre las heridas de poda</td></tr><tr><th>Variante foliar enriquecida</th><td>100 litros de agua + 5 kg de pasta mineral + 100 g de sulfato de zinc</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
+      <p class="dato"><strong>Se usa contra:</strong> Polilla del tomate, Mosca de la cebolla, Pulgones, Trips, Mosca blanca, Arañuela roja</p>
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Los vapores de azufre son tóxicos. Elaborar al aire libre, ubicarse a favor del viento y usar barbijo.</li><li>Su uso prolongado afecta a los insectos benéficos. No es un preparado de calendario.</li><li>La cal hidratada y el azufre caliente queman. Guantes, antiparras y ropa cubierta.</li></ul></div>
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11. Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🍄 Biocontroladores de enfermedades</span>
+        <h2>Caldo bordelés</h2>
+        <p class="ficha__resumen">El fungicida clásico de la agricultura orgánica: sulfato de cobre y cal. Muy efectivo y, por el cobre, el que más discusión genera dentro de un esquema agroecológico.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>20 litros</dd></div><div><dt>Tiempo</dt><dd>Se prepara y se usa el mismo día</dd></div><div><dt>Carencia</dt><dd>20 días.</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>20 litros de agua</li><li>200 g de sulfato de cobre</li><li>200 g de cal hidratada</li><li>2 baldes plásticos de 20 litros y un agitador de madera</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>En un balde, disolver la cal en 10 litros de agua, batiendo bien.</li><li>En otro balde, disolver el sulfato de cobre en los otros 10 litros. Nunca usar recipientes metálicos.</li><li>Volcar la solución de sulfato de cobre sobre la de cal. En ese orden y no al revés.</li><li>Mezclar y filtrar con tela antes de usar.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Fungicida y bactericida de amplio espectro. Se aplica en estado vegetativo o en llenado de grano.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Plantas jóvenes recién trasplantadas</th><td>Diluir al 25 %</td></tr><tr><th>Estados fenológicos avanzados</th><td>Aplicar puro, sin diluir</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> No se almacena. Se prepara sólo lo que se va a usar en el día, porque pierde efectividad.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>No aplicar en floración.</li><li>El cobre se acumula en el suelo y es tóxico para lombrices y microorganismos. No es inocuo por ser &#x27;natural&#x27;.</li><li>Antes de usarlo en un establecimiento certificado, consultar si el sello lo admite y con qué límite anual. Está pendiente de definir contra el pliego ECOMARCAL.</li><li>Evitar la exposición al sol durante la preparación.</li></ul></div>
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🍄 Biocontroladores de enfermedades</span>
+        <h2>Caldo Visosa</h2>
+        <p class="ficha__resumen">Un bordelés enriquecido con boro, magnesio y zinc. Apunta específicamente a la roya, corrigiendo la deficiencia de boro que la favorece.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>100 litros</dd></div><div><dt>Tiempo</dt><dd>Se prepara y se usa el mismo día</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>100 litros de agua</li><li>500 g de sulfato de cobre</li><li>500 g de cal</li><li>600 g de sulfato de zinc</li><li>400 g de bórax</li><li>400 g de sulfato de magnesio</li><li>1 recipiente plástico de 200 litros y un balde de 20</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Disolver primero la cal en 10 litros de agua.</li><li>En otro recipiente, disolver las demás sales minerales.</li><li>Agregar la mezcla de sales sobre la cal, nunca al revés.</li><li>Filtrar con lienzo y usar en el día.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Fungicida, principalmente contra roya.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Desde pre-macollaje</th><td>25 %</td></tr><tr><th>Frutales jóvenes en formación, primavera</th><td>50 %</td></tr><tr><th>Frutales de más de 3 años</th><td>Puro</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> No se almacena.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Nunca aplicar en floración.</li><li>Lleva cobre: valen las mismas advertencias que el caldo bordelés, más la consulta al pliego ECOMARCAL.</li><li>El bórax es tóxico por ingestión. Guardarlo fuera del alcance de chicos y animales.</li></ul></div>
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🍄 Biocontroladores de enfermedades</span>
+        <h2>Caldo de bicarbonato de sodio</h2>
+        <p class="ficha__resumen">El más simple de todos: tres ingredientes de almacén y farmacia, sin fermentación ni cocción. Para oídio y mildiu, sobre todo en zapallos y pepinos.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>10 litros</dd></div><div><dt>Tiempo</dt><dd>Inmediato</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>10 litros de agua</li><li>100 g de bicarbonato de sodio</li><li>20 cc de agua oxigenada de 20 o 30 volúmenes</li><li>1 balde plástico de 20 litros</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Disolver el bicarbonato en los líquidos.</li><li>Mezclar y filtrar con tela.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Fungicida, en especial para cucurbitáceas: oídio y mildiu. Aplicación foliar.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, ornamentales y frutales</th><td>Se aplica puro</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> No se almacena: se prepara sólo lo que se va a usar en el día.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Aplicar temprano o al atardecer: con sol fuerte el bicarbonato puede quemar la hoja.</li><li>Probar primero en unas pocas plantas.</li></ul></div>
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🍄 Biocontroladores de enfermedades</span>
+        <h2>Decocción de cola de caballo <span class="sello">Comarca</span></h2>
+        <p class="ficha__resumen">Cocción de una planta que crece sola en los mallines de la Comarca. Aporta sílice, endurece los tejidos y previene hongos. Es preventivo: no cura lo ya instalado.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>10 litros</dd></div><div><dt>Tiempo</dt><dd>12 horas de remojo y 30 minutos de hervor</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>1 kg de cola de caballo fresca, o 250 g seca</li><li>10 litros de agua</li><li>1 recipiente metálico de 20 litros</li><li>Envases de vidrio oscuro para guardar</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Dejar los tallos en remojo durante 12 horas.</li><li>Hervir a fuego directo durante 30 minutos.</li><li>Para que dure más, envasar en caliente en recipientes de vidrio.</li><li>Rotular con nombre y fecha.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Preventivo de enfermedades fúngicas: oídio, mildiu y roya.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Curasemilla</th><td>Remojar las semillas en el preparado, dejar secar y sembrar</td></tr><tr><th>Presiembra</th><td>Pulverizar el suelo al 20 %</td></tr><tr><th>Posemergencia</th><td>Al 10 %, en días calurosos y húmedos. Evitar los días cálidos y secos. Con lluvias, cada 3 días.</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 15 días.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Es también un ingrediente del bioestimulante de ortiga, así que conviene preparar de más.</li><li>En la versión para ese bioestimulante se infusiona 1 hora a fuego medio sin llegar a hervir; acá se hierve 30 minutos. Son dos preparaciones distintas para dos usos distintos.</li></ul></div>
+
+      <p class="fuente">Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón. Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article><h1 class="seccion">❄️ Reguladores de estrés</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">❄️ Reguladores de estrés</span>
+        <h2>Caldo frío mineral</h2>
+        <p class="ficha__resumen">Ceniza y cal con agua caliente y fría. Repelente de los bichos grandes que muerden y de los caracoles, y el único preparado de la lista con efecto declarado frente a heladas.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>20 litros</dd></div><div><dt>Tiempo</dt><dd>24 horas de reposo</dd></div></dl>
+      </header>
+
+      <div class="alerta"><strong>Dato a verificar.</strong> Ver la nota del caldo de ceniza: en la fuente original las dosis de los dos preparados están en columnas contiguas y conviene verificarlas contra el impreso.</div>
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>800 g de ceniza de madera tamizada</li><li>200 g de cal viva o apagada</li><li>2 litros de agua caliente</li><li>18 litros de agua fría</li><li>1 balde plástico de 20 litros y un agitador de madera</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Mezclar en seco la ceniza y la cal.</li><li>Agregar el agua caliente y mezclar para disolver.</li><li>Sumar los 18 litros de agua fría y volver a mezclar.</li><li>Dejar reposar 24 horas.</li><li>Filtrar con tela el líquido de arriba y guardar en bidones oscuros rotulados.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Repelente de bicho moro, langosta, chinche, tucura y caracol.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Aplicación</th><td>Puro, por la tarde</td></tr><tr><th>Ataques severos</th><td>Repetir 2 o 3 días seguidos</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>La cal viva desprende calor al contacto con el agua. Guantes y antiparras.</li></ul></div>
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article><h1 class="seccion">🧪 Preparados de base</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🧪 Preparados de base</span>
+        <h2>Microorganismos de montaña (MM) sólido <span class="sello">Comarca</span></h2>
+        <p class="ficha__resumen">La captura del bosque nativo: hojarasca con microorganismos locales, multiplicada sobre afrecho y azúcar. Es el punto de partida de casi todo lo demás.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>Un tambor de 200 litros de material sólido</dd></div><div><dt>Tiempo</dt><dd>30 a 50 días de fermentación</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>60 kg de hojarasca de suelo de bosque</li><li>30 kg de afrecho, salvado o molienda de cereales (trigo, avena, cebada, centeno)</li><li>5 kg de azúcar, melaza o miel de caña</li><li>Agua sin cloro</li><li>1 tambor plástico de 200 litros con tapa hermética</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Juntar la hojarasca del bosque, de los primeros 10 cm de suelo. Buscar donde haya especies de hoja caduca, sobre todo ñire. Sirve la hojarasca con manchas blancas y con hifas de hongos a la vista: eso indica que los microorganismos están ahí.</li><li>Conviene colectar en primavera: la humedad y la temperatura de esa época favorecen la reproducción.</li><li>Al aire libre, mezclar bien con pala la hojarasca y el afrecho.</li><li>Aparte, disolver el azúcar en un poco de agua y agregarla a la mezcla, sin dejar de revolver.</li><li>Ir sumando agua hasta llegar al 40 % de humedad. Se controla con la prueba del puño: al apretar un puñado no debe escurrir agua entre los dedos, pero el bollo tiene que quedar armado.</li><li>Cargar el tambor de a poco, apisonando cada capa para sacarle el aire.</li><li>Tapar herméticamente y dejar a la sombra 30 a 50 días, según la zona.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>No se aplica al cultivo. Es la reserva desde la que se prepara el MM líquido y varios de los demás biopreparados.</p>
+      
+      <p class="dato"><strong>Cuánto dura:</strong> Una vez fermentado se guarda 1 a 2 años.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Colectar sin arrasar: se saca hojarasca superficial de varios puntos, no un pozo en un solo lugar.</li><li>El tambor tiene que cerrar bien. Si entra aire, la fermentación se pudre en vez de conservarse.</li></ul></div>
+
+      <p class="fuente">Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG. Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🧪 Preparados de base</span>
+        <h2>Pasto fermentado</h2>
+        <p class="ficha__resumen">La alternativa a los microorganismos de montaña cuando no hay bosque cerca: se capturan del pasto y del compost del propio establecimiento.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>1 tambor de 200 litros</dd></div><div><dt>Tiempo</dt><dd>30 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>2 bolsas de pasto fresco recién picado (maíz, sorgo, moha, mijo, alfalfa o corte de césped)</li><li>4 bolsas de afrechillo de cereales o grano de maíz molido</li><li>5 kg de compost maduro, bocashi o mantillo de un ambiente natural</li><li>5 kg de melaza o azúcar</li><li>10 litros de suero de quesería</li><li>1 tambor plástico de 200 litros con tapa y zuncho</li><li>1 pisón de madera y una lona plástica</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Extender la lona e ir armando capas de unos 20 cm: pasto picado, afrechillo o maíz molido, y el compost distribuido encima. Homogeneizar con pala.</li><li>Aparte, disolver la melaza en el suero y agregarlo a la mezcla.</li><li>Sumar agua de a poco hasta llegar al 30 % de humedad.</li><li>Cargar el tambor por capas de 20 cm, apisonando cada una con el pisón de madera.</li><li>Cerrar con tapa y zuncho, hermético, y dejar 30 días de fermentación anaeróbica.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Fuente de microorganismos locales. Sirve para revitalizar suelos degradados por manejo convencional. Para aplicarlo hay que activarlo en fase líquida.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, foliar (una vez activado)</th><td>Diluir al 20 %</td></tr><tr><th>Frutales, foliar (una vez activado)</th><td>Diluir al 30 %</td></tr><tr><th>Desintoxicación de suelos</th><td>Diluir al 50 %, durante la preparación de la cama de siembra</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> El sólido se conserva bien. Una vez activado en fase líquida, la vida útil es de 30 días.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Para activarlo: 5 kg de pasto fermentado en una bolsa de tela, 5 kg de melaza y 10 litros de suero en el tambor, completar con agua y cerrar con zuncho. A partir del cuarto día se puede usar.</li></ul></div>
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11. Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🧪 Preparados de base</span>
+        <h2>Microorganismos de silo de maíz</h2>
+        <p class="ficha__resumen">La salida cuando no hay quesería cerca. Reemplaza al suero de leche en cualquiera de las otras recetas.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>100 litros</dd></div><div><dt>Tiempo</dt><dd>4 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>100 litros de agua</li><li>5 kg de silo de maíz picado fino</li><li>5 kg de melaza o azúcar</li><li>1 tambor plástico de 200 litros</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Poner el silo de maíz dentro de una bolsa de tela cerrada con hilo y meterla en el tambor.</li><li>Disolver la melaza en un balde con 20 litros de agua y volcarlo al tambor.</li><li>Agregar 80 litros más de agua de buena calidad.</li><li>Cerrar con tapa y zuncho y dejar fermentar 4 días.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Reemplaza al suero de quesería en las demás recetas.</p>
+      
+      
+      
+
+      
+
+      <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
+    </article>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🧪 Preparados de base</span>
+        <h2>Lejía de ceniza</h2>
+        <p class="ficha__resumen">Agua de ceniza. Es el ingrediente de arranque de varios caldos y, por sí sola, un insecticida suave y un desinfectante.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>50 litros</dd></div><div><dt>Tiempo</dt><dd>4 días</dd></div></dl>
+      </header>
+
+      
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>Ceniza de madera bien quemada, de color gris, tamizada: un tercio del recipiente</li><li>Agua de buena calidad: los dos tercios restantes</li><li>1 recipiente plástico de 50 litros y un agitador de madera</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Llenar un tercio del recipiente con ceniza tamizada.</li><li>Completar los otros dos tercios con agua.</li><li>Mezclar al menos dos veces por día durante dos días.</li><li>Dejar reposar 48 horas.</li><li>Retirar el líquido amarillo que queda arriba: esa es la lejía.</li><li>Guardar en bidones oscuros rotulados.</li></ol>
+        </section>
+      </div>
+
+      <h3>Para qué sirve</h3><p>Ingrediente del té de compost y de varios caldos. Sola sirve como insecticida y como desinfectante.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Insecticida (pulgones, mosca blanca)</th><td>5 % en agua</td></tr><tr><th>Mosca blanca, con mejor adherencia</th><td>5 % de lejía + 1 kg de harina de trigo</td></tr><tr><th>Desinfectante</th><td>Diluir al 10 %</td></tr></table>
+      
+      <p class="dato"><strong>Se usa contra:</strong> Pulgones, Mosca blanca</p>
+
+      
+
+      <p class="fuente">Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
+
+<div class="cierre">
+  <h1 class="seccion">Qué usar contra qué</h1>
+  <p>Resumen orientativo, armado a partir de las fichas de plagas de la app.
+  <strong>No reemplaza el monitoreo</strong>: antes de aplicar hay que confirmar
+  que la plaga esté presente y que supere el umbral de la ficha correspondiente.</p>
+  <table><tr><th>Polilla de la col<br><em>Plutella xylostella</em></th><td>Biorepelente picante</td></tr><tr><th>Polilla del tomate<br><em>Tuta absoluta</em></th><td>Biorepelente picante, Caldo mineral caliente (sulfocálcico)</td></tr><tr><th>Mosca de la cebolla<br><em>Delia antiqua y Delia platura</em></th><td>Biorepelente picante, Caldo mineral caliente (sulfocálcico)</td></tr><tr><th>Pulgones<br><em>Varias especies, familia Aphididae</em></th><td>Bioestimulante de ortiga, consuelda y cola de caballo, Biorepelente picante, Extracto botánico de ajo, ají y pimienta, Lejía de ceniza, Caldo de ceniza, Caldo mineral caliente (sulfocálcico)</td></tr><tr><th>Trips<br><em>Familia Thripidae</em></th><td>Caldo mineral caliente (sulfocálcico), Biorepelente picante</td></tr><tr><th>Mosca blanca<br><em>Bemisia tabaci</em></th><td>Lejía de ceniza, Extracto botánico de ajo, ají y pimienta, Biopescado, Caldo mineral caliente (sulfocálcico), Caldo de ceniza</td></tr><tr><th>Arañuela roja<br><em>Tetranychus urticae</em></th><td>Bioestimulante de ortiga, consuelda y cola de caballo, Biorepelente picante, Extracto botánico de ajo, ají y pimienta, Caldo mineral caliente (sulfocálcico)</td></tr></table>
+
+  <h1 class="seccion">Bibliografía</h1>
+  <ul class=""><li>Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.</li><li>Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón.</li><li>Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</li><li>Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</li><li>Barrionuevo, M. E.; Flores, L. B.; Dussi, M. C. Prácticas agroecológicas: preparación y uso de bocashi. INTA CR Patagonia Norte y FCA Universidad Nacional del Comahue.</li><li>Sánchez Miranda, M. (2025). Biopreparado Supermagro: análisis y comparación de distintos casos de estudio. INTA IPAF Región Pampeana.</li><li>Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP.</li></ul>
+
+  <h3>Lo que falta</h3>
+  <ul class=""><li>Compatibilidad de cada preparado con el pliego ECOMARCAL: falta el documento del sello para poder marcar cuáles se admiten y cuáles no.</li><li>Los preparados con cobre (bordelés y Visosa) están marcados como &#x27;a consultar&#x27; hasta tener esa definición.</li><li>Volúmenes por superficie: la bibliografía regional ajustó las diluciones, pero reconoce que cuánto aplicar por hectárea todavía no está definido.</li><li>Fotos propias de cada etapa de elaboración.</li></ul>
+
+  <p class="fuente">IFAB (CONICET / INTA El Bolsón) · Comarca Andina del Paralelo 42 ·
+  22 de agosto de 2026. Las condiciones de uso y las limitaciones de las recomendaciones están
+  en los términos de la app.</p>
+</div>
+
+</body></html>

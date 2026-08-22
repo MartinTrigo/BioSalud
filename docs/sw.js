@@ -1,4 +1,4 @@
-// ==========================================================================
+﻿// ==========================================================================
 // BioSalud ECOMARCAL — service worker
 //
 // Guarda la app en el teléfono para que funcione en el campo sin señal.
@@ -18,7 +18,7 @@
 // IMPORTANTE: al cambiar un archivo de la lista, subir el número de CACHE.
 // ==========================================================================
 
-const CACHE = "biosalud-v11";
+const CACHE = "biosalud-v12";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -119,3 +119,4 @@ self.addEventListener("fetch", (evento) => {
       .catch(() => caches.match(pedido).then((guardada) => guardada || caches.match("index.html")))
   );
 });
+

@@ -105,6 +105,17 @@ window.Wiki = (function () {
       </div>
 
       <div class="tarjeta separado">
+        <h2>📄 Llevate la cartilla</h2>
+        <p>Las ${bio.fichas.length} recetas en un solo documento, para imprimir
+          o pasar por mensaje. Sale de estas mismas fichas, así que dice lo mismo
+          que ves acá.</p>
+        <p class="nota">Pesa cerca de 1 MB y <strong>se descarga con señal</strong>:
+          no viaja con la app.</p>
+        <a class="boton boton--secundario boton--ancho" href="cartilla-biopreparados.pdf"
+           download>Descargar la cartilla en PDF</a>
+      </div>
+
+      <div class="tarjeta separado">
         <h2>${esc(bio.recomendaciones.titulo)}</h2>
         <ul class="lista">
           ${bio.recomendaciones.puntos.map((p) => `<li>${esc(p)}</li>`).join("")}
