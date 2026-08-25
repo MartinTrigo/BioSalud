@@ -27,15 +27,8 @@
 window.Plan = (function () {
   const { esc, brindis, aNumero, superficie } = window.Util;
 
-  const MOTIVOS = [
-    "Nutrición del suelo",
-    "Nutrición de la planta",
-    "Bioestimulación",
-    "Prevención sanitaria",
-    "Control de una plaga o enfermedad",
-    "Mejora de la materia orgánica",
-    "Otro",
-  ];
+  // El para qué no se pregunta: ya lo dice el tipo de bioinsumo elegido en el
+  // paso 1, y preguntarlo de nuevo abajo era pedir dos veces lo mismo.
 
   const METODOS = [
     "Fertirriego",
@@ -137,7 +130,7 @@ window.Plan = (function () {
         ${selectorProducto()}
         ${(elegido || categoria === "__otro") ? formulario(enEdicion, sectores) : `<p class="nota">
           ${categoria ? "Elegí cuál para completar sus datos."
-                      : "Empezá por la función: eso achica la lista."}</p>`}
+                      : "Empezá por el tipo: eso achica la lista."}</p>`}
       </div>
 
       ${renglones.length ? `<button class="boton boton--ancho" id="btn-guardar-plan">
@@ -200,8 +193,8 @@ window.Plan = (function () {
   // ---------- Selector de producto ----------
 
   // Se elige en dos pasos y no en una sola lista: veinticuatro productos en un
-  // desplegable, en un celular, es una lista que no se puede leer. Primero para
-  // qué se va a usar, y eso deja entre tres y nueve opciones.
+  // desplegable, en un celular, es una lista que no se puede leer. Primero el
+  // tipo de bioinsumo, y eso deja entre uno y ocho para elegir.
   function selectorProducto() {
     // Los preparados de base no se aplican solos: no se ofrecen.
     const cats = (bio.categorias || []).filter((c) =>
@@ -214,9 +207,9 @@ window.Plan = (function () {
 
     return `
       <div class="campo">
-        <label for="f-categoria">Paso 1 · ¿Para qué lo vas a usar?</label>
+        <label for="f-categoria">Paso 1 · Tipo de bioinsumo</label>
         <select id="f-categoria" class="${mal("categoria")}">
-          <option value="">Elegí una función…</option>
+          <option value="">Elegí el tipo…</option>
           ${cats.map((c) => {
             const n = (bio.fichas || []).filter((f) => f.categoria === c.id).length;
             return `<option value="${esc(c.id)}"${c.id === categoria ? " selected" : ""}>
@@ -276,11 +269,6 @@ window.Plan = (function () {
                  autocomplete="off" placeholder="Nombre del producto">
           ${error("otro")}
         </div>` : ""}
-
-      <div class="campo">
-        <label for="f-motivo">Para qué lo vas a aplicar</label>
-        <select id="f-motivo">${opciones(MOTIVOS, r.motivo, "Elegí…")}</select>
-      </div>
 
       <div class="fila">
         <div class="campo">
@@ -361,7 +349,7 @@ window.Plan = (function () {
     const cat = destino.querySelector("#f-categoria");
     if (cat) cat.onchange = () => {
       categoria = cat.value;
-      elegido = "";              // cambiar de función descarta el producto anterior
+      elegido = "";              // cambiar de tipo descarta el producto anterior
       errores = {};
       pintar();
     };
@@ -476,7 +464,7 @@ window.Plan = (function () {
     const hasta = valor("#f-hasta");
     const cada = aNumero(valor("#f-cada"));
 
-    if (!categoria) errores.categoria = "Elegí para qué lo vas a usar.";
+    if (!categoria) errores.categoria = "Elegí el tipo de bioinsumo.";
     else if (categoria !== "__otro" && !elegido) errores.producto = "Elegí cuál de la lista.";
     if (categoria === "__otro" && !nombre) errores.otro = "Escribí el nombre del producto.";
     if (!dosis) errores.dosis = "Poné la dosis, aunque sea aproximada.";
@@ -494,12 +482,16 @@ window.Plan = (function () {
       return;
     }
 
+    // El motivo sale del tipo elegido en el paso 1: es la misma información y
+    // así la planilla la sigue recibiendo sin preguntarla dos veces.
+    const tipo = (bio.categorias || []).find((c) => c.id === categoria);
+
     const datos = {
       temporada: temporadaActual(),
       producto_id: f ? f.id : null,
       producto: nombre,
       categoria: f ? f.categoria : "otro",
-      motivo: valor("#f-motivo"),
+      motivo: tipo ? tipo.nombre : "Otro bioinsumo",
       dosis: dosis,
       metodo: metodo,
       sectores: sectores,
