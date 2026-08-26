@@ -19,7 +19,7 @@ preguntá: es señal de que hay que reescribirlo.
 La desarrolla el **IFAB (CONICET / INTA El Bolsón)**, Agencia de Extensión Rural
 El Bolsón, en el marco del sello agroecológico **ECOMARCAL**.
 
-Referente: **Martín Trigo** (martinemilianotrigo@gmail.com), agente de extensión
+Referente: **Martín Trigo** (trigo.martin@inta.gob.ar), agente de extensión
 e investigador.
 
 ## Que su uso es obligatorio, y qué significa eso

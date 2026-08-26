@@ -15,7 +15,7 @@ establecimiento cuando hay conexión.
 **La app está publicada en <https://martintrigo.github.io/BioSalud/>**
 
 Contacto: Martín Trigo, IFAB (CONICET / INTA El Bolsón) —
-martinemilianotrigo@gmail.com
+trigo.martin@inta.gob.ar
 
 ---
 
