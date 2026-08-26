@@ -340,6 +340,55 @@ a.boton { text-decoration: none; }
 
 .resumen-ficha { font-size: 17px; margin: 0; }
 
+/* ---------- Categorías plegables ----------
+   Hechas con <details>, que ya sabe abrirse y cerrarse solo, responde al
+   teclado y funciona aunque algo del JavaScript falle. */
+
+.grupo {
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.grupo[open] { border-color: var(--verde-claro); }
+
+.grupo__cab {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 12px 14px;
+  cursor: pointer;
+  list-style: none;              /* saca el triangulito de Firefox */
+  user-select: none;
+}
+.grupo__cab::-webkit-details-marker { display: none; }   /* y el de Chrome */
+.grupo__cab:active { background: var(--verde-suave); }
+.grupo[open] .grupo__cab { border-bottom: 1px solid var(--borde); }
+
+.grupo__icono { font-size: 24px; flex: none; }
+.grupo__texto { flex: 1; min-width: 0; }
+.grupo__nombre { display: block; font-weight: 600; }
+.grupo__cuenta { display: block; font-size: 14px; color: var(--texto-suave); }
+
+/* La flecha gira al abrir, para que se vea que la sección tiene más adentro. */
+.grupo__flecha {
+  flex: none;
+  width: 11px;
+  height: 11px;
+  border-right: 2.5px solid var(--verde);
+  border-bottom: 2.5px solid var(--verde);
+  transform: rotate(45deg);
+  margin: -4px 4px 0 0;
+  transition: transform .15s ease;
+}
+.grupo[open] .grupo__flecha { transform: rotate(-135deg); margin-top: 4px; }
+
+.grupo__cuerpo { padding: 12px 14px 14px; }
+.grupo__cuerpo .indice { margin-top: 10px; }
+
 .indice { list-style: none; margin: 12px 0 0; padding: 0; }
 
 .indice__item {

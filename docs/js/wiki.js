@@ -22,6 +22,10 @@ window.Wiki = (function () {
   let destino = null;
   let irA = null;      // para navegar dentro de la wiki
 
+  // Qué categorías quedaron desplegadas. Se recuerda mientras dure la sesión,
+  // así entrar a una ficha y volver no obliga a buscar de nuevo dónde se estaba.
+  const abiertas = new Set();
+
   // Se leen una sola vez por sesión. El service worker ya los tiene guardados
   // en el teléfono, así que esto funciona sin señal.
   async function cargar() {
@@ -74,6 +78,13 @@ window.Wiki = (function () {
   function conectar() {
     destino.querySelectorAll("[data-wiki]").forEach((b) => {
       b.onclick = () => irA(b.dataset.wiki);
+    });
+
+    destino.querySelectorAll("details.grupo").forEach((d) => {
+      d.ontoggle = () => {
+        if (d.open) abiertas.add(d.dataset.cat);
+        else abiertas.delete(d.dataset.cat);
+      };
     });
   }
 
@@ -209,27 +220,39 @@ window.Wiki = (function () {
   // ---------- Eje 2: manejo y tratamientos ----------
 
   function listaBiopreparados() {
+    // Cada categoría se pliega. Con 27 recetas en seis grupos, tenerlas todas
+    // desplegadas obliga a recorrerlas enteras para llegar a la última.
     const porCategoria = bio.categorias.map((c) => {
       const fichas = bio.fichas.filter((f) => f.categoria === c.id);
       if (!fichas.length) return "";
       return `
-        <div class="tarjeta">
-          <h2>${c.icono} ${esc(c.nombre)}</h2>
-          <p class="nota">${esc(c.descripcion)}</p>
-          <ul class="indice">
-            ${fichas.map((f) => `
-              <li><button class="indice__item" data-wiki="wiki/manejo/${esc(f.id)}">
-                <span class="indice__nombre">${esc(f.nombre)}${f.comarca
-                  ? ` <span class="sello-comarca" title="Probado en la Comarca Andina">Comarca</span>` : ""}</span>
-                <span class="indice__cientifico">${esc(f.resumen)}</span>
-              </button></li>`).join("")}
-          </ul>
-        </div>`;
+        <details class="grupo" data-cat="${esc(c.id)}"${abiertas.has(c.id) ? " open" : ""}>
+          <summary class="grupo__cab">
+            <span class="grupo__icono">${c.icono}</span>
+            <span class="grupo__texto">
+              <span class="grupo__nombre">${esc(c.nombre)}</span>
+              <span class="grupo__cuenta">${fichas.length} ${fichas.length === 1 ? "receta" : "recetas"}</span>
+            </span>
+            <span class="grupo__flecha" aria-hidden="true"></span>
+          </summary>
+          <div class="grupo__cuerpo">
+            <p class="nota">${esc(c.descripcion)}</p>
+            <ul class="indice">
+              ${fichas.map((f) => `
+                <li><button class="indice__item" data-wiki="wiki/manejo/${esc(f.id)}">
+                  <span class="indice__nombre">${esc(f.nombre)}${f.comarca
+                    ? ` <span class="sello-comarca" title="Probado en la Comarca Andina">Comarca</span>` : ""}</span>
+                  <span class="indice__cientifico">${esc(f.resumen)}</span>
+                </button></li>`).join("")}
+            </ul>
+          </div>
+        </details>`;
     }).join("");
 
     destino.innerHTML = `
-      <p class="nota">Las marcadas como <span class="sello-comarca">Comarca</span>
-        se vienen elaborando y probando acá, en talleres de la AER INTA El Bolsón.</p>
+      <p class="nota">Tocá un tipo para ver sus recetas. Las marcadas como
+        <span class="sello-comarca">Comarca</span> se vienen elaborando y probando
+        acá, en talleres de la AER INTA El Bolsón.</p>
       ${porCategoria}
       ${pendientes(bio.pendiente)}
       <button class="boton boton--secundario boton--ancho" data-wiki="wiki">Volver a Info / Wiki</button>`;
@@ -243,6 +266,9 @@ window.Wiki = (function () {
 
     const categoria = bio.categorias.find((c) => c.id === f.categoria) || {};
     const contra = plagasQueTrata(f.id);
+
+    // Al volver de la ficha, su categoría queda desplegada: es de donde salió.
+    abiertas.add(f.categoria);
 
     destino.innerHTML = `
       <div class="tarjeta">

@@ -18,7 +18,7 @@
 // IMPORTANTE: al cambiar un archivo de la lista, subir el número de CACHE.
 // ==========================================================================
 
-const CACHE = "biosalud-v14";
+const CACHE = "biosalud-v15";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -119,6 +119,7 @@ self.addEventListener("fetch", (evento) => {
       .catch(() => caches.match(pedido).then((guardada) => guardada || caches.match("index.html")))
   );
 });
+
 
 
 
