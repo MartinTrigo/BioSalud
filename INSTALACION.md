@@ -1,4 +1,4 @@
-# Poner el servicio en funcionamiento
+﻿# Poner el servicio en funcionamiento
 
 Cómo se despliega el Apps Script que escribe en las planillas, y cómo se suma
 una chacra después.
@@ -55,7 +55,28 @@ agregar tres:
 código, ni en el repositorio, ni en un correo. Se guarda en un gestor de
 contraseñas.
 
-### 3. Armar la estructura de las planillas
+> El id de la planilla es lo que va en la dirección **entre `/d/` y `/edit`**. El
+> de la carpeta, lo que va **después de `folders/`**. Si quedó pegado algo como
+> `?usp=sharing`, hay que borrarlo.
+
+### 3. Revisar que esté bien cargado
+
+Antes de seguir, ejecutar la función **`revisarConfiguracion`**. No compara los
+identificadores: los usa. Abre cada cosa y dice cómo se llama.
+
+Tiene que contestar algo así:
+
+```
+ok       ACCESOS        →  planilla «BioSalud · Accesos»
+ok       CARPETA_DATOS  →  carpeta «BioSalud — Datos»
+ok       CLAVE_ADMIN    →  cargada (24 caracteres, no se muestra)
+ok       CHACRAS        →  vacía todavía. Usá altaDeChacra() para sumar la primera.
+```
+
+Si alguna línea dice **MAL**, ese identificador está mal copiado. Si dice
+**FALTA**, no se guardó la propiedad.
+
+### 4. Armar la estructura de las planillas
 
 En el editor, elegir la función **`prepararPlanillas`** y ejecutarla. Google va a
 pedir autorización la primera vez: hay que dársela, porque el script escribe en
@@ -68,7 +89,7 @@ Deja creadas, con sus encabezados:
 
 Se puede volver a ejecutar cuando se quiera: no duplica ni pisa nada.
 
-### 4. Publicar el servicio
+### 5. Publicar el servicio
 
 **Implementar → Nueva implementación**, tipo **Aplicación web**:
 
@@ -82,7 +103,7 @@ Copiar la URL que termina en `/exec` y anotarla en `IDS.txt`.
 > que un desconocido escriba **no es** el permiso de Google, es la credencial
 > del teléfono. Sin ella el servicio rechaza todo.
 
-### 5. Probar que responde
+### 6. Probar que responde
 
 Abrir la URL en el navegador. Tiene que contestar algo así:
 
@@ -173,3 +194,4 @@ ese momento la URL publicada sigue ejecutando el código anterior.
 Cada fila arranca con el `Id` que le puso el teléfono. Es lo que hace que un
 reintento no duplique, y lo que ata una aplicación con su renglón del plan o un
 tratamiento con el monitoreo que lo originó.
+

@@ -277,6 +277,64 @@ function carpetaDeChacras() {
 // Es idempotente: correrla dos veces no rompe ni duplica nada.
 // ==========================================================================
 
+// ==========================================================================
+// REVISAR QUE ESTÉ TODO BIEN CARGADO
+//
+// Se ejecuta desde el editor antes que nada. En vez de comparar los
+// identificadores a ojo, los usa: abre cada cosa y dice cómo se llama. Si un id
+// está mal escrito o le quedó pegado un "?usp=sharing", falla acá y no cuando
+// un productor esté cargando datos en el campo.
+// ==========================================================================
+
+function revisarConfiguracion() {
+  var lineas = [];
+
+  function probar(nombre, obligatoria, comprobar) {
+    var valor = propiedad(nombre);
+    if (!valor) {
+      lineas.push((obligatoria ? "FALTA    " : "opcional ") + nombre);
+      return;
+    }
+    try {
+      lineas.push("ok       " + nombre + "  →  " + comprobar(valor));
+    } catch (err) {
+      lineas.push("MAL      " + nombre + "  →  " + err.message);
+    }
+  }
+
+  probar("ACCESOS", true, function (id) {
+    return "planilla «" + SpreadsheetApp.openById(id).getName() + "»";
+  });
+
+  probar("CARPETA_DATOS", true, function (id) {
+    return "carpeta «" + DriveApp.getFolderById(id).getName() + "»";
+  });
+
+  probar("CLAVE_ADMIN", true, function (v) {
+    if (v.length < 12) return "cargada, pero es corta: conviene una de 20 o más caracteres";
+    return "cargada (" + v.length + " caracteres, no se muestra)";
+  });
+
+  probar("CHACRAS", true, function (v) {
+    var mapa = JSON.parse(v);
+    var codigos = Object.keys(mapa);
+    if (!codigos.length) return "vacía todavía. Usá altaDeChacra() para sumar la primera.";
+    return codigos.map(function (c) {
+      try {
+        return c + " = «" + SpreadsheetApp.openById(mapa[c]).getName() + "»";
+      } catch (err) {
+        return c + " = ID QUE NO ABRE";
+      }
+    }).join(" · ");
+  });
+
+  var resumen = "REVISIÓN DE LA CONFIGURACIÓN\n\n" + lineas.join("\n") +
+    "\n\nSi está todo en «ok», seguí con prepararPlanillas() y después Implementar.";
+  Logger.log(resumen);
+  return resumen;
+}
+
+
 function prepararPlanillas() {
   var hechas = [];
 
