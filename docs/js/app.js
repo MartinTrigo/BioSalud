@@ -164,10 +164,19 @@
       ${instalador ? `<button class="boton boton--secundario boton--ancho separado"
                         id="btn-instalar">Instalar en el celular</button>` : ""}
 
+      <p class="estado-inicio" id="estado-inicio"></p>
+
       <p class="nota nota--pie">
         Esta aplicación funciona sin señal: todo lo que cargues queda guardado en
         el teléfono y se envía a la planilla de tu chacra cuando haya conexión.
       </p>`;
+
+    // El estado del envío se consulta después de dibujar, para no demorar la
+    // pantalla por algo que es informativo.
+    window.Envio.estado().then((e) => {
+      const linea = document.getElementById("estado-inicio");
+      if (linea) linea.textContent = window.Envio.resumir(e);
+    });
 
     vista.querySelectorAll("[data-ir]").forEach((b) => {
       b.onclick = () => ir(b.dataset.ir);
@@ -234,7 +243,7 @@
   document.getElementById("pie-version").textContent = "versión " + VERSION;
 
   window.BioDB.abrir()
-    .then(mostrar)
+    .then(() => { window.Envio.arrancar(); return mostrar(); })
     .catch((err) => {
       vista.innerHTML = `<p class="aviso aviso--error">No se pudo abrir el almacenamiento
         del teléfono, así que la app no puede guardar nada. Suele pasar en modo

@@ -178,11 +178,88 @@ function crearInvitacion() {
   var chacra = "radal";              // ← editar antes de ejecutar
   var persona = "Marta Quilodrán";   // ← editar antes de ejecutar
 
+  return nuevaInvitacion(chacra, persona);
+}
+
+function nuevaInvitacion(chacra, persona) {
   var codigo = alAzar(4) + "-" + alAzar(4);
   hojaAccesos("Invitaciones", INVITACIONES_ENCABEZADOS)
     .appendRow([codigo, chacra, persona, "Nueva", new Date(), "", ""]);
   Logger.log("Código para " + persona + " (" + chacra + "): " + codigo);
   return codigo;
+}
+
+// ==========================================================================
+// SUMAR UNA CHACRA, DE UNA SOLA VEZ
+//
+// Antes había que crear la planilla a mano, copiar su id, pegarlo en la
+// propiedad CHACRAS y volver a ejecutar prepararPlanillas. Con diez chacras eso
+// son cuarenta pasos y una oportunidad de equivocarse en cada uno.
+//
+// Esta función hace todo: crea la planilla dentro de la carpeta Chacras, le
+// arma las hojas, la registra en CHACRAS y devuelve el código de invitación
+// para el productor.
+//
+// Se ejecuta A MANO desde el editor, editando las dos líneas de abajo.
+// ==========================================================================
+
+function altaDeChacra() {
+  var codigo = "radal";                     // ← el código corto, sin espacios
+  var nombre = "Chacra El Radal";           // ← como se va a llamar la planilla
+  var persona = "Marta Quilodrán";          // ← quién va a cargar desde el celular
+
+  return crearChacra(codigo, nombre, persona);
+}
+
+function crearChacra(codigo, nombre, persona) {
+  codigo = String(codigo || "").trim().toLowerCase().replace(/\s+/g, "");
+  if (!codigo) throw new Error("Falta el código corto de la chacra.");
+
+  var mapa = {};
+  try { mapa = JSON.parse(propiedad("CHACRAS") || "{}"); } catch (err) { mapa = {}; }
+  if (mapa[codigo]) throw new Error("Ya existe una chacra con el código " + codigo + ".");
+
+  var carpeta = carpetaDeChacras();
+  var libro = SpreadsheetApp.create("BioSalud · " + (nombre || codigo));
+
+  // create() la deja en la raíz del Drive; hay que moverla a su carpeta.
+  var archivo = DriveApp.getFileById(libro.getId());
+  carpeta.addFile(archivo);
+  DriveApp.getRootFolder().removeFile(archivo);
+
+  armarHojas(libro);
+
+  mapa[codigo] = libro.getId();
+  PropertiesService.getScriptProperties().setProperty("CHACRAS", JSON.stringify(mapa));
+
+  var invitacion = nuevaInvitacion(codigo, persona || "");
+
+  var resumen =
+    "Chacra dada de alta.\n\n" +
+    "  código      " + codigo + "\n" +
+    "  planilla    " + libro.getUrl() + "\n" +
+    "  invitación  " + invitacion + "\n\n" +
+    "Falta: Implementar → Administrar implementaciones → Nueva versión,\n" +
+    "y compartirle la planilla a la chacra como lectora.";
+  Logger.log(resumen);
+  return resumen;
+}
+
+// La carpeta "Chacras" dentro de la carpeta de datos. Si no existe, se crea.
+function carpetaDeChacras() {
+  var id = propiedad("CARPETA_CHACRAS");
+  if (id) return DriveApp.getFolderById(id);
+
+  var padre = propiedad("CARPETA_DATOS");
+  if (!padre) {
+    throw new Error("Falta la propiedad CARPETA_CHACRAS (o CARPETA_DATOS) " +
+                    "con el id de la carpeta de Drive donde van las planillas.");
+  }
+  var raiz = DriveApp.getFolderById(padre);
+  var busca = raiz.getFoldersByName("Chacras");
+  var carpeta = busca.hasNext() ? busca.next() : raiz.createFolder("Chacras");
+  PropertiesService.getScriptProperties().setProperty("CARPETA_CHACRAS", carpeta.getId());
+  return carpeta;
 }
 
 // ==========================================================================
@@ -217,24 +294,29 @@ function prepararPlanillas() {
 
   codigos.forEach(function (codigo) {
     var libro = planillaDe(codigo);
-
-    // La configuración: sin filas, solo el encabezado.
-    var config = libro.getSheetByName("Config") || libro.insertSheet("Config");
-    ponerEncabezados(config, CONFIG_ENCABEZADOS);
-    config.autoResizeColumns(1, CONFIG_ENCABEZADOS.length);
-
-    // Las hojas que se acumulan.
-    Object.keys(HOJAS).forEach(function (tipo) {
-      obtenerHoja(libro, HOJAS[tipo]);
-    });
-
-    limpiarHojaSobrante(libro);
+    armarHojas(libro);
     hechas.push(codigo + " → " + libro.getName());
   });
 
   var resumen = hechas.join("\n");
   Logger.log(resumen);
   return resumen;
+}
+
+// Deja una planilla de chacra con todas sus hojas y encabezados.
+function armarHojas(libro) {
+  // La configuración: sin filas, solo el encabezado, porque no se acumula.
+  var config = libro.getSheetByName("Config") || libro.insertSheet("Config");
+  ponerEncabezados(config, CONFIG_ENCABEZADOS);
+  config.autoResizeColumns(1, CONFIG_ENCABEZADOS.length);
+
+  // Las que sí se acumulan, una fila por registro.
+  Object.keys(HOJAS).forEach(function (tipo) {
+    obtenerHoja(libro, HOJAS[tipo]);
+  });
+
+  limpiarHojaSobrante(libro);
+  return libro;
 }
 
 // La hoja vacía que Google crea sola con cada planilla nueva.

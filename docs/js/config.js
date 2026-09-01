@@ -190,9 +190,12 @@ window.Config = (function () {
       </div>
 
       <button class="boton boton--ancho" id="btn-guardar">Guardar configuración</button>
+
+      ${completa(c) ? conexion() : ""}
     `;
 
     conectar();
+    pintarConexion();
   }
 
   function filaSector(s) {
@@ -225,9 +228,123 @@ window.Config = (function () {
     return "";
   }
 
+  // ---------- Conexión con la planilla de la chacra ----------
+  //
+  // Va al final y solo cuando la configuración está completa: antes de tener
+  // establecimiento y sectores no hay nada que enviar, y el código de chacra es
+  // justamente uno de los datos de arriba.
+
+  function conexion() {
+    return `
+      <div class="tarjeta separado" id="caja-conexion">
+        <h2>Conexión con el equipo técnico</h2>
+        <p class="estado-envio" id="estado-envio">Verificando…</p>
+
+        <div id="zona-activar"></div>
+
+        <details class="grupo separado" id="avanzado">
+          <summary class="grupo__cab">
+            <span class="grupo__icono">🔧</span>
+            <span class="grupo__texto">
+              <span class="grupo__nombre">Dirección del servicio</span>
+              <span class="grupo__cuenta">La carga el equipo técnico, una sola vez</span>
+            </span>
+            <span class="grupo__flecha" aria-hidden="true"></span>
+          </summary>
+          <div class="grupo__cuerpo">
+            <div class="campo">
+              <label for="f-servicio">Dirección que termina en /exec
+                <span class="ayuda">Sale de publicar el Apps Script. Si la app ya la trae puesta, no hace falta tocar nada.</span></label>
+              <input id="f-servicio" type="url" autocomplete="off" spellcheck="false"
+                     value="${esc(window.Envio.leerUrl())}"
+                     placeholder="https://script.google.com/macros/s/…/exec">
+            </div>
+            <button class="boton boton--secundario boton--ancho" id="btn-servicio">Guardar dirección</button>
+          </div>
+        </details>
+      </div>`;
+  }
+
+  async function pintarConexion() {
+    const caja = destino.querySelector("#estado-envio");
+    if (!caja) return;
+
+    const e = await window.Envio.estado();
+    caja.textContent = window.Envio.resumir(e);
+    caja.className = "estado-envio " + (e.activado && e.conServicio ? "estado-envio--ok" : "estado-envio--espera");
+
+    const zona = destino.querySelector("#zona-activar");
+    if (!zona) return;
+
+    if (!e.conServicio) {
+      zona.innerHTML = `<p class="nota">Cuando el servicio esté publicado, acá vas a
+        poder activar este teléfono con el código que te dé el equipo técnico.
+        Mientras tanto todo se guarda igual y se envía después.</p>`;
+      return;
+    }
+
+    if (e.activado) {
+      zona.innerHTML = `
+        <p class="nota">Este teléfono está activado. Si lo perdés, avisale al
+          equipo para darlo de baja.</p>
+        ${e.pendientes ? `<button class="boton boton--secundario boton--ancho" id="btn-enviar">
+          Enviar ahora los ${e.pendientes} pendientes</button>` : ""}`;
+    } else {
+      zona.innerHTML = `
+        <div class="campo">
+          <label for="f-invitacion">Código de invitación
+            <span class="ayuda">Te lo da el equipo de extensión. Se usa una sola vez, en este teléfono.</span></label>
+          <input id="f-invitacion" type="text" autocomplete="off" spellcheck="false"
+                 maxlength="12" placeholder="XXXX-XXXX">
+          <span class="campo__error" id="error-invitacion"></span>
+        </div>
+        <button class="boton boton--ancho" id="btn-activar">Activar este teléfono</button>`;
+    }
+
+    conectarConexion();
+  }
+
+  function conectarConexion() {
+    const activar = destino.querySelector("#btn-activar");
+    if (activar) activar.onclick = async () => {
+      const campo = destino.querySelector("#f-invitacion");
+      const aviso = destino.querySelector("#error-invitacion");
+      aviso.textContent = "";
+      activar.disabled = true;
+      activar.textContent = "Activando…";
+
+      const r = await window.Envio.canjear(campo.value);
+
+      if (r.ok) {
+        brindis(`Teléfono activado${r.persona ? " · " + r.persona : ""}`);
+        await window.Envio.sincronizar(false);
+        pintarConexion();
+        return;
+      }
+      aviso.textContent = r.error;
+      activar.disabled = false;
+      activar.textContent = "Activar este teléfono";
+    };
+
+    const enviar = destino.querySelector("#btn-enviar");
+    if (enviar) enviar.onclick = async () => {
+      enviar.disabled = true;
+      enviar.textContent = "Enviando…";
+      await window.Envio.sincronizar(false);
+      pintarConexion();
+    };
+  }
+
   // ---------- Eventos ----------
 
   function conectar() {
+    const guardarServicio = destino.querySelector("#btn-servicio");
+    if (guardarServicio) guardarServicio.onclick = () => {
+      window.Envio.guardarUrl(valor("#f-servicio"));
+      brindis("Dirección guardada");
+      pintarConexion();
+    };
+
     destino.querySelector("#btn-sector").onclick = guardarSector;
     destino.querySelector("#btn-guardar").onclick = guardarTodo;
 

@@ -47,7 +47,8 @@ agregar tres:
 | Propiedad | Valor |
 |---|---|
 | `ACCESOS` | El id de la planilla *BioSalud · Accesos* (está en `IDS.txt`) |
-| `CHACRAS` | `{"modelo":"id de la planilla modelo"}` |
+| `CARPETA_DATOS` | El id de la carpeta *BioSalud — Datos* (está en `IDS.txt`) |
+| `CHACRAS` | `{}` — se completa sola al dar de alta cada chacra |
 | `CLAVE_ADMIN` | Una clave larga y al azar, inventada en el momento |
 
 **La clave de administración abre cualquier chacra sin credencial.** No va en el
@@ -96,23 +97,58 @@ siquiera qué chacras existen.
 
 ## Sumar una chacra
 
-1. Duplicar **BioSalud · Chacra modelo** dentro de la carpeta `Chacras` y
-   renombrarla, por ejemplo *BioSalud · Chacra El Radal*.
-2. Copiar su id de la barra de direcciones y agregarlo a la propiedad `CHACRAS`:
-   `{"modelo":"1Sgy…","radal":"1AbC…"}`
-   El código corto de la izquierda es el que va a cargar el productor en su
-   configuración. Lo elige el equipo técnico, no el productor.
-3. Ejecutar **`prepararPlanillas`** otra vez.
-4. **Implementar → Administrar implementaciones → lápiz → Nueva versión.**
-   Sin este paso, el servicio publicado sigue siendo el viejo.
-5. Crear la invitación para esa chacra: editar `crearInvitacion()` con el código
-   y el nombre de la persona, y ejecutarla. El código aparece en el registro de
-   ejecución y queda anotado en la hoja `Invitaciones`.
-6. Compartir la planilla de la chacra **con esa chacra**, como lector o editor,
-   para que pueda ver sus propios datos.
+En el editor, abrir la función **`altaDeChacra`**, editar las tres líneas de
+arriba y ejecutarla:
+
+```javascript
+var codigo  = "radal";                 // código corto, sin espacios ni acentos
+var nombre  = "Chacra El Radal";       // cómo se va a llamar la planilla
+var persona = "Marta Quilodrán";       // quién va a cargar desde el celular
+```
+
+Eso hace todo de una vez:
+
+- Crea la planilla dentro de la carpeta `Chacras`.
+- Le arma las cinco hojas con sus encabezados.
+- La registra en la propiedad `CHACRAS`.
+- Genera el código de invitación.
+
+En el registro de ejecución quedan el enlace a la planilla y el código. Después
+faltan dos cosas a mano:
+
+1. **Implementar → Administrar implementaciones → lápiz → Nueva versión.**
+   Sin esto el servicio publicado sigue siendo el anterior y no conoce la chacra
+   nueva.
+2. **Compartir la planilla de esa chacra con esa chacra**, como lectora, para
+   que pueda ver sus propios datos.
+
+El **código corto** lo elige el equipo técnico, no el productor: si cada uno
+eligiera el suyo, dos podrían elegir el mismo y sus registros terminarían en la
+misma planilla. Es lo que el productor carga en su configuración.
 
 **No compartas nunca la planilla de Accesos con nadie.** Ahí están las huellas
 de todos los dispositivos de todas las chacras.
+
+---
+
+## Activar el teléfono de un productor
+
+Con el servicio publicado y la chacra dada de alta:
+
+1. El productor completa su **Configuración**, incluido el **código de chacra**.
+2. En esa misma pantalla, abajo, aparece **Conexión con el equipo técnico**.
+3. Escribe ahí el **código de invitación** y toca *Activar este teléfono*.
+4. Desde ese momento, todo lo que tenía guardado se sube solo, y lo nuevo
+   también, cada vez que haya señal.
+
+Si el teléfono se pierde, se pone `NO` en la columna **Activo** de su fila en la
+hoja `Dispositivos`. Deja de poder cargar al instante. Lo que ese teléfono tenía
+sin enviar **no se pierde**: queda en el aparato hasta que se lo active de nuevo.
+
+> Mientras la app no traiga la dirección del servicio escrita en el código, hay
+> que pegarla una vez por teléfono, en *Conexión → Dirección del servicio*. Una
+> vez que la dirección esté confirmada se pone en el código y ese paso
+> desaparece para todos.
 
 ---
 

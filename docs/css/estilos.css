@@ -222,6 +222,27 @@ h2 {
 .resumen dd { margin: 0 0 0 6px; font-weight: 600; }
 .resumen div { display: flex; }
 
+/* ---------- Estado del envío ---------- */
+
+.estado-envio {
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 0 0 12px;
+}
+.estado-envio--ok { color: var(--verde); background: var(--verde-suave); }
+.estado-envio--espera { color: #7a5a10; background: #fdf4e3; }
+
+/* En el inicio va como una línea discreta, no como un cartel. */
+.estado-inicio {
+  display: block;
+  font-size: 14px;
+  color: var(--texto-suave);
+  text-align: center;
+  margin: 0 0 12px;
+}
+
 /* ---------- Avisos ---------- */
 
 .aviso {
