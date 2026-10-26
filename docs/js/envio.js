@@ -19,8 +19,12 @@ window.Envio = (function () {
   // La dirección del servicio publicado. Va en el código porque tiene que
   // funcionar sin que cada productor configure nada; lo que impide que un
   // desconocido escriba no es esconder esta dirección, es la credencial.
-  // Mientras esté vacía, la app deja todo en la cola y lo dice en pantalla.
-  const SERVICIO = "";
+  //
+  // Publicada el 26/10/2026. Si se vuelve a implementar desde cero cambia, y
+  // hay que actualizarla acá (una nueva VERSIÓN de la misma implementación, en
+  // cambio, conserva la dirección).
+  const SERVICIO =
+    "https://script.google.com/macros/s/AKfycbxbVIBQj9ilOpFCfHHZcFRf0MQrze8KubLpAuHaY0s_EGY4K1jC3BfCco6F_XJ-u6gs/exec";
 
   const LS_URL = "biosalud_servicio";
 
