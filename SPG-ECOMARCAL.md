@@ -218,8 +218,9 @@ Por orden de lo que más sirve:
    por qué queda afuera cada uno y qué poner en su lugar. Sale de
    `docs/datos/no-permitidos.json` y también va en la cartilla impresa.
 3. ~~**Acumulado de cobre por chacra y temporada**, con aviso al acercarse a los
-   6 kg/ha/año.~~ Hecho: está en el Plan de Salud, sector por sector. Hoy sale
-   de lo planificado; cuando esté la fase 3 va a salir de lo aplicado.
+   6 kg/ha/año.~~ Hecho, sector por sector y por duplicado: el Plan proyecta lo
+   que daría cumplirlo entero, y el Seguimiento suma lo efectivamente aplicado,
+   que es el número que el Consejo necesita.
 4. **Registro de elaboración por lote** con los campos del Anexo I, para que el
    productor llegue a la visita con el papel hecho.
 5. **Autorización del Consejo por bioinsumo y por chacra**: fecha y estado, para

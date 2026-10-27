@@ -32,7 +32,7 @@
 // ==========================================================================
 
 window.Seguimiento = (function () {
-  const { esc, brindis, aNumero, superficie, hoy } = window.Util;
+  const { esc, brindis, numero, aNumero, superficie, hoy } = window.Util;
 
   // Qué se considera "esta semana". Siete días es lo que entra en una vista sin
   // que haya que hacer scroll hasta perder el hilo.
@@ -40,6 +40,7 @@ window.Seguimiento = (function () {
 
   const CLIMAS = ["Seco", "Nublado", "Ventoso", "Después de lluvia", "Con calor fuerte"];
 
+  let bio = null;          // datos/biopreparados.json, para la cuenta del cobre
   let config = null;
   let renglones = [];      // los renglones del plan de la temporada
   let registradas = [];    // lo que ya se marcó, de la base local
@@ -62,6 +63,7 @@ window.Seguimiento = (function () {
 
     destino.innerHTML = `<p class="cargando">Cargando el plan…</p>`;
     try {
+      if (!bio) bio = await (await fetch("datos/biopreparados.json")).json();
       config = await window.BioDB.leerConfig();
       renglones = (await window.BioDB.todos("planes"))
         .filter((r) => r.temporada === window.Plan.temporadaActual());
@@ -142,6 +144,8 @@ window.Seguimiento = (function () {
     destino.innerHTML = `
       ${semaforo(lista, h)}
 
+      ${cobreAplicado()}
+
       ${grupo("Atrasado", atrasadas, "grupo-agenda--atrasado",
         "Pasó la fecha y no está marcado. Si no se aplicó, conviene decirlo igual.")}
 
@@ -206,6 +210,79 @@ window.Seguimiento = (function () {
           noAplicadas ? ` · ${noAplicadas} marcada${noAplicadas === 1 ? "" : "s"} como no aplicada${noAplicadas === 1 ? "" : "s"}` : ""
         }${vencidas.length - resueltas.length ? ` · ${vencidas.length - resueltas.length} sin marcar` : ""}.</p>
       </div>`;
+  }
+
+  // ---------- Cobre efectivamente aplicado ----------
+  //
+  // Acá la cuenta sale de lo aplicado y no de lo previsto, que es la diferencia
+  // que importa: el tope del Anexo III se mide sobre lo que entró al suelo. El
+  // plan sigue mostrando su proyección, porque enterarse en febrero de que el
+  // plan se pasaba no sirve de nada.
+  //
+  // Solo aparece si hay cobre registrado. Una tarjeta que dice "0 kg" en una
+  // chacra que no usa cobre es ruido en una pantalla que se mira con una mano.
+
+  function cobreAplicado() {
+    const ficha = (id) => (bio.fichas || []).find((f) => f.id === id);
+
+    // Si no se anotó el volumen, se cae al previsto del renglón del plan.
+    const litrosDelPlan = (r) => {
+      const renglon = renglones.find((x) => x.id === r.plan_id);
+      return renglon ? renglon.litros_por_aplicacion : 0;
+    };
+
+    const { aplicaciones, estimados, sinDato } =
+      window.Cobre.aplicacionesRegistradas(registradas, litrosDelPlan);
+
+    const tope = window.Cobre.limite(bio);
+    const filas = window.Cobre.porSector(aplicaciones, config.sectores || [], ficha, tope);
+    if (!filas.length) return "";
+
+    const peor = window.Cobre.peor(filas);
+    const clase = peor.estado === "pasado" ? "aviso--error"
+                : peor.estado === "ok" ? "aviso--ok" : "aviso--info";
+    const titulo = peor.estado === "pasado"
+      ? `Ya se pasó el tope de cobre en ${peor.nombre}.`
+      : peor.estado === "cerca"
+      ? `En ${peor.nombre} vas por el ${Math.round(peor.porcentaje)} % del tope de cobre.`
+      : peor.estado === "sin-superficie"
+      ? `Falta la superficie de ${peor.nombre} para saber cuánto es por hectárea.`
+      : "El cobre aplicado está dentro del tope.";
+
+    return `
+      <div class="tarjeta cobre">
+        <h2>Cobre aplicado</h2>
+        <p class="aviso ${clase}">${esc(titulo)}</p>
+        <ul class="cobre__sectores">${filas.map(filaCobre).join("")}</ul>
+        <p class="nota">Sale de las aplicaciones que marcaste, no del plan.
+          ${estimados ? `En ${estimados} ${estimados === 1 ? "aplicación" : "aplicaciones"}
+            no anotaste el volumen, así que se usó el previsto del plan.` : ""}
+          ${sinDato ? `Hay ${sinDato} ${sinDato === 1 ? "aplicación" : "aplicaciones"}
+            sin volumen ni previsto, que ${sinDato === 1 ? "quedó" : "quedaron"} afuera
+            de la cuenta.` : ""}</p>
+      </div>`;
+  }
+
+  // Se dibuja igual que en el plan: el número contra el tope y la barra, que es
+  // lo que deja ver de un vistazo si está cerca.
+  function filaCobre(f) {
+    const tope = window.Cobre.limite(bio);
+    return `
+      <li class="cobre__sector cobre__sector--${esc(f.estado)}">
+        <div class="cobre__linea">
+          <strong>${esc(f.nombre)}</strong>
+          <span>${f.kg_por_ha === null
+            ? numero(Math.round(f.gramos)) + " g en total"
+            : numero(Math.round(f.kg_por_ha * 100) / 100) + " de "
+              + numero(tope) + " kg/ha"}</span>
+        </div>
+        ${f.kg_por_ha === null ? "" : `<progress class="cobre__barra" max="${esc(String(tope))}"
+          value="${esc(String(Math.min(tope, f.kg_por_ha)))}"></progress>`}
+        <span class="cobre__detalle">${f.kg_por_ha === null
+          ? "Este sector no tiene superficie cargada, así que no se puede saber cuánto es por hectárea."
+          : esc(superficie(f.superficie) + " · " + numero(Math.round(f.gramos)) +
+                " g de cobre aplicados · " + f.productos.map((p) => p.nombre).join(", "))}</span>
+      </li>`;
   }
 
   // ---------- Grupos de la agenda ----------

@@ -26,11 +26,16 @@
 //
 // DE DÓNDE SALEN LAS APLICACIONES
 //
-// Hoy salen del plan de la temporada, que es lo que hay cargado: de la regla
-// de cada renglón se calculan sus fechas y se multiplican por los sectores
-// marcados. Cuando esté la fase 3 va a poder alimentarse de lo aplicado de
-// verdad, y para eso `porSector` recibe una lista plana de aplicaciones: lo
-// único que hay que cambiar es de dónde sale esa lista.
+// De dos lados, y las dos cuentas hacen falta:
+//
+//   · Del PLAN, expandiendo la recurrencia de cada renglón por sus sectores.
+//     Es una proyección: responde "si cumplo este plan, ¿me paso?", que es la
+//     pregunta que hay que hacerse en octubre y no en febrero.
+//   · De lo APLICADO, un registro por aplicación marcada. Es el dato real, el
+//     que el Consejo de Garantía necesita para firmar.
+//
+// Por eso `porSector` recibe una lista plana de aplicaciones y no sabe de dónde
+// salió: las dos cuentas son la misma aritmética sobre orígenes distintos.
 // ==========================================================================
 
 window.Cobre = (function () {
@@ -51,6 +56,43 @@ window.Cobre = (function () {
     const l = Number(litros);
     if (!(l > 0)) return 0;
     return l * Number(ficha.cobre.gramos_por_litro);
+  }
+
+  // De lo aplicado de verdad, que es lo que el Consejo de Garantía necesita
+  // firmar. Cada registro es una aplicación y nada más: acá no hay recurrencia
+  // que expandir, porque ya pasó.
+  //
+  // El volumen aplicado es un campo opcional del registro. Si no se anotó se usa
+  // el previsto del renglón del plan, pero se devuelve la cuenta de cuántas
+  // veces hizo falta hacerlo: un número que mezcla medido con supuesto sin
+  // decirlo es peor que un número con menos precisión.
+  //
+  // Las marcadas como no aplicadas no suman: no entró cobre al suelo.
+  function aplicacionesRegistradas(registros, litrosDelPlan) {
+    const lista = [];
+    let estimados = 0;
+    let sinDato = 0;
+
+    (registros || []).forEach((r) => {
+      if (r.estado !== "Aplicada") return;
+
+      const medido = window.Util.aNumero(r.volumen);
+      const previsto = Number(litrosDelPlan ? litrosDelPlan(r) : 0);
+      const litros = medido > 0 ? medido : (previsto > 0 ? previsto : 0);
+
+      if (!(litros > 0)) { sinDato++; return; }
+      if (!(medido > 0)) estimados++;
+
+      lista.push({
+        producto_id: r.producto_id,
+        producto: r.producto,
+        sector: r.sector_id,
+        litros: litros,
+        veces: 1,
+      });
+    });
+
+    return { aplicaciones: lista, estimados: estimados, sinDato: sinDato };
   }
 
   // Un renglón del plan vale por muchas aplicaciones: una por cada fecha de su
@@ -135,7 +177,9 @@ window.Cobre = (function () {
   }
 
   return {
-    lleva, limite, gramosDeUnaTanda, aplicacionesDelPlan, porSector, peor,
+    lleva, limite, gramosDeUnaTanda,
+    aplicacionesDelPlan, aplicacionesRegistradas,
+    porSector, peor,
     LIMITE, CERCA,
   };
 })();

@@ -350,11 +350,18 @@ porque el cobre se acumula donde cae. Trescientos gramos son 15 kg por hectárea
 en un invernadero de 200 m² y 600 g por hectárea en media hectárea de frutal: el
 mismo número de un lado es un problema y del otro no.
 
-**Hoy sale del plan y no de lo aplicado**, porque la fase 3 todavía no existe y
-el plan es lo único cargado. Igual es lo que conviene mirar: el tope es anual, y
-enterarse en febrero de que se pasó no sirve de nada. Por eso `js/cobre.js`
-recibe una lista plana de aplicaciones y no el plan: cuando esté el registro de
-lo aplicado de verdad, cambia de dónde sale la lista y nada más.
+**Se cuenta dos veces, y las dos hacen falta.** En el Plan, expandiendo la
+recurrencia de cada renglón: es una proyección, y responde "si cumplo este plan,
+¿me paso?", que es la pregunta que hay que hacerse en octubre y no en febrero. En
+el Seguimiento, sumando lo que se marcó como aplicado: es el dato real, el que el
+Consejo de Garantía necesita para firmar. Por eso `js/cobre.js` recibe una lista
+plana de aplicaciones y no sabe de dónde salió: las dos cuentas son la misma
+aritmética sobre orígenes distintos.
+
+**Cuando el volumen no se anotó, se usa el previsto del plan y se avisa.** El
+volumen aplicado es un campo opcional del registro, así que la cuenta real puede
+quedar incompleta. Mezclar medido con supuesto sin decirlo sería peor que tener
+menos precisión: la tarjeta dice en cuántas aplicaciones hizo falta suponer.
 
 **Lo que esta cuenta todavía no ve:** un producto comercial con cobre cargado
 como "otro producto que no está en la wiki". No tiene ficha, así que no tiene

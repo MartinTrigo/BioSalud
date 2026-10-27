@@ -255,13 +255,13 @@ window.Plan = (function () {
 
     return `
       <div class="tarjeta cobre">
-        <h2>Cobre de la temporada</h2>
+        <h2>Cobre que proyecta este plan</h2>
         <p class="aviso ${clase}">${esc(titulo)}</p>
         <ul class="cobre__sectores">${filas.map(filaCobre).join("")}</ul>
         <p class="nota">Son ${esc(String(limiteCobre()))} kg de cobre por hectárea y
-        por año, contando bordelés, Visosa y cualquier otro preparado con cobre. Sale
-        de lo que tenés planificado: cuando registres lo aplicado de verdad, la cuenta
-        va a salir de ahí.</p>
+        por año, contando bordelés, Visosa y cualquier otro preparado con cobre.
+        Esto es lo que daría <strong>si se cumple el plan entero</strong>. Lo que
+        llevás aplicado de verdad está en Seguimiento de plan.</p>
       </div>`;
   }
 
