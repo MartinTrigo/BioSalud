@@ -85,7 +85,16 @@ haya cambiado. Sin términos aceptados, el servicio no entrega credencial.
 
 Van al final de la fila a propósito: `permitido()` busca la huella por su
 posición, así que correrla de lugar dejaría a todos los teléfonos sin acceso de
-golpe.
+golpe. Por lo mismo, `hojaSuelta()` solo agrega columnas al final y únicamente si
+el encabezado que ya está es el principio del nuevo: ante cualquier otra
+diferencia no toca nada, en vez de adivinar.
+
+**Los teléfonos activados antes del 27/10/2026 no tienen versión de términos**,
+porque se activaron cuando la app todavía no los mostraba. La app se los avisa y
+les ofrece aceptarlos, pero esa aceptación queda **solo en el teléfono**: el
+registro en la planilla se escribe durante el canje, y el canje de esos teléfonos
+ya pasó. Para que quede constancia hay que darlos de baja y volver a activarlos
+con un código nuevo.
 
 ---
 

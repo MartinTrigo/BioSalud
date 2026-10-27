@@ -18,7 +18,7 @@
 // IMPORTANTE: al cambiar un archivo de la lista, subir el número de CACHE.
 // ==========================================================================
 
-const CACHE = "biosalud-v24";
+const CACHE = "biosalud-v25";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;

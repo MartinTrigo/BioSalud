@@ -778,18 +778,36 @@ function hojaSuelta(planillaId, nombre, encabezados) {
     return hoja;
   }
 
-  // Igual que las hojas de cada chacra: si las columnas cambiaron y todavía no
-  // hay datos, se rehace el encabezado. Sin esto, sumar una columna a Accesos
-  // obligaba a corregir el encabezado a mano, y mientras tanto los valores
-  // nuevos entraban en una columna sin nombre.
+  var actuales = hoja.getLastColumn()
+    ? hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].map(String) : [];
+
+  if (actuales.join("|") === encabezados.join("|")) return hoja;
+
+  // Sin datos, el encabezado se rehace entero.
   if (hoja.getLastRow() <= 1) {
-    var actuales = hoja.getLastColumn()
-      ? hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].join("|") : "";
-    if (actuales !== encabezados.join("|")) {
-      hoja.clear();
-      ponerEncabezados(hoja, encabezados);
-      hoja.autoResizeColumns(1, encabezados.length);
-    }
+    hoja.clear();
+    ponerEncabezados(hoja, encabezados);
+    hoja.autoResizeColumns(1, encabezados.length);
+    return hoja;
+  }
+
+  // CON datos, solo se agregan las columnas que faltan AL FINAL, y únicamente si
+  // lo que ya está es el principio de lo nuevo. Nada se mueve de lugar.
+  //
+  // Pasó de verdad: a Dispositivos se le sumaron las columnas de los términos
+  // aceptados cuando ya había dos teléfonos activados, así que la regla de "sin
+  // datos" no alcanzaba y los valores nuevos iban a entrar en columnas sin
+  // nombre. Corregirlo a mano cada vez que se suma una columna es una tarea que
+  // alguien se va a olvidar de hacer.
+  var esPrefijo = actuales.length < encabezados.length;
+  for (var i = 0; i < actuales.length && esPrefijo; i++) {
+    if (actuales[i] !== encabezados[i]) esPrefijo = false;
+  }
+  if (esPrefijo) {
+    var faltan = encabezados.slice(actuales.length);
+    hoja.getRange(1, actuales.length + 1, 1, faltan.length).setValues([faltan])
+        .setFontWeight("bold").setBackground("#16632F").setFontColor("#FFFFFF");
+    hoja.autoResizeColumns(1, encabezados.length);
   }
   return hoja;
 }

@@ -310,8 +310,12 @@ window.Config = (function () {
           Enviar ahora ${e.pendientes === 1 ? "el registro pendiente"
             : "los " + e.pendientes + " pendientes"}</button>` : ""}
         <button class="boton--peligro centrado" id="btn-terminos">
-          ${aceptado.desactualizados ? "Los términos cambiaron: leerlos"
-            : "Ver los términos que aceptaste"}</button>`;
+          ${!aceptado.aceptados ? "Leer y aceptar los términos de uso"
+            : aceptado.desactualizados ? "Los términos cambiaron: leerlos"
+            : "Ver los términos que aceptaste"}</button>
+        ${!aceptado.aceptados ? `<p class="nota">Este teléfono se activó antes de
+          que la app mostrara los términos de uso, así que no quedó registrada tu
+          aceptación. Conviene leerlos y aceptarlos.</p>` : ""}`;
       conectarConexion();
       return;
     }
