@@ -121,12 +121,6 @@ window.Config = (function () {
           <label for="f-situacion">Situación ante el sello ECOMARCAL</label>
           <select id="f-situacion">${opciones(SITUACIONES, c.situacion, "Elegí una opción…")}</select>
         </div>
-
-        <div class="campo">
-          <label for="f-codigo">Código de chacra <span class="ayuda">Te lo da el equipo de extensión del IFAB. Es lo que dirige tus registros a la planilla de tu chacra. Si todavía no lo tenés, dejalo vacío.</span></label>
-          <input id="f-codigo" type="text" value="${esc(c.codigo)}" autocomplete="off"
-                 spellcheck="false" placeholder="por ejemplo: laesperanza">
-        </div>
       </div>
 
       <div class="tarjeta">
@@ -231,37 +225,61 @@ window.Config = (function () {
   // ---------- Conexión con la planilla de la chacra ----------
   //
   // Va al final y solo cuando la configuración está completa: antes de tener
-  // establecimiento y sectores no hay nada que enviar, y el código de chacra es
-  // justamente uno de los datos de arriba.
+  // establecimiento y sectores no hay nada que enviar.
+  //
+  // LOS DOS CÓDIGOS VAN JUNTOS, ACÁ.
+  //
+  // El de chacra estaba arriba, entre los datos del establecimiento, y el de
+  // invitación acá abajo, separados por toda la carga de sectores. Son las dos
+  // mitades de la misma credencial y se entregan juntos en la visita, así que
+  // tenerlos en puntas opuestas de la pantalla no ayudaba a nadie: mezclaba lo
+  // que carga el productor con lo que le da el equipo técnico, y hacía fácil
+  // escribir uno y creer que ya estaba.
+  //
+  // La dirección del servicio solo aparece si la app no la trae cargada. Viaja
+  // escrita en js/envio.js, así que el campo no le sirve al productor y dejarlo
+  // a la vista solo invita a que alguien lo borre y se quede sin sincronizar
+  // sin entender por qué.
 
   function conexion() {
+    const c = borrador;
     return `
       <div class="tarjeta separado" id="caja-conexion">
         <h2>Conexión con el equipo técnico</h2>
+        <p class="nota">Estos dos códigos te los da el equipo de extensión del
+          IFAB, normalmente en la visita.</p>
         <p class="estado-envio" id="estado-envio">Verificando…</p>
+
+        <div class="campo">
+          <label for="f-codigo">Código de chacra
+            <span class="ayuda">Dirige tus registros a la planilla de tu chacra. Es siempre el mismo y no cambia.</span></label>
+          <input id="f-codigo" type="text" value="${esc(c.codigo)}" autocomplete="off"
+                 spellcheck="false" placeholder="por ejemplo: laesperanza">
+        </div>
 
         <div id="zona-activar"></div>
 
-        <details class="grupo separado" id="avanzado">
-          <summary class="grupo__cab">
-            <span class="grupo__icono">🔧</span>
-            <span class="grupo__texto">
-              <span class="grupo__nombre">Dirección del servicio</span>
-              <span class="grupo__cuenta">La carga el equipo técnico, una sola vez</span>
-            </span>
-            <span class="grupo__flecha" aria-hidden="true"></span>
-          </summary>
-          <div class="grupo__cuerpo">
-            <div class="campo">
-              <label for="f-servicio">Dirección que termina en /exec
-                <span class="ayuda">Sale de publicar el Apps Script. Si la app ya la trae puesta, no hace falta tocar nada.</span></label>
-              <input id="f-servicio" type="url" autocomplete="off" spellcheck="false"
-                     value="${esc(window.Envio.leerUrl())}"
-                     placeholder="https://script.google.com/macros/s/…/exec">
+        ${window.Envio.hayServicio() ? "" : `
+          <details class="grupo separado" id="avanzado">
+            <summary class="grupo__cab">
+              <span class="grupo__icono">🔧</span>
+              <span class="grupo__texto">
+                <span class="grupo__nombre">Dirección del servicio</span>
+                <span class="grupo__cuenta">La carga el equipo técnico, una sola vez</span>
+              </span>
+              <span class="grupo__flecha" aria-hidden="true"></span>
+            </summary>
+            <div class="grupo__cuerpo">
+              <div class="campo">
+                <label for="f-servicio">Dirección que termina en /exec
+                  <span class="ayuda">Sale de publicar el Apps Script.</span></label>
+                <input id="f-servicio" type="url" autocomplete="off" spellcheck="false"
+                       value="${esc(window.Envio.leerUrl())}"
+                       placeholder="https://script.google.com/macros/s/…/exec">
+              </div>
+              <button class="boton boton--secundario boton--ancho" id="btn-servicio">Guardar dirección</button>
             </div>
-            <button class="boton boton--secundario boton--ancho" id="btn-servicio">Guardar dirección</button>
-          </div>
-        </details>
+          </details>`}
       </div>`;
   }
 
@@ -288,7 +306,8 @@ window.Config = (function () {
         <p class="nota">Este teléfono está activado. Si lo perdés, avisale al
           equipo para darlo de baja.</p>
         ${e.pendientes ? `<button class="boton boton--secundario boton--ancho" id="btn-enviar">
-          Enviar ahora los ${e.pendientes} pendientes</button>` : ""}`;
+          Enviar ahora ${e.pendientes === 1 ? "el registro pendiente"
+            : "los " + e.pendientes + " pendientes"}</button>` : ""}`;
     } else {
       zona.innerHTML = `
         <div class="campo">
@@ -304,6 +323,22 @@ window.Config = (function () {
     conectarConexion();
   }
 
+  // El código de chacra se escribe arriba, entre los datos del establecimiento,
+  // y el canje lo lee de lo GUARDADO, no de lo que hay en pantalla. Si alguien
+  // lo tipea y baja derecho a activar —que es lo natural, porque los dos campos
+  // están en la misma pantalla— el servicio recibía la chacra vacía y contestaba
+  // "antes hay que cargar el código de chacra en la configuración", que es
+  // justo lo que la persona acababa de hacer. Así que antes de canjear se
+  // guarda lo tipeado.
+  async function guardarLoTipeado() {
+    leerCabecera();
+    if (!completa(borrador)) return false;
+    borrador.actualizado = new Date().toISOString();
+    await window.BioDB.guardarConfig(borrador);
+    await window.BioDB.encolarUnico("config", borrador);
+    return true;
+  }
+
   function conectarConexion() {
     const activar = destino.querySelector("#btn-activar");
     if (activar) activar.onclick = async () => {
@@ -312,6 +347,20 @@ window.Config = (function () {
       aviso.textContent = "";
       activar.disabled = true;
       activar.textContent = "Activando…";
+
+      await guardarLoTipeado();
+
+      // Si de verdad falta, se dice dónde está el campo en vez de mandar a
+      // "la configuración", que es esta misma pantalla.
+      if (!borrador.codigo) {
+        aviso.textContent = "Falta el código de chacra, más arriba en esta misma "
+          + "pantalla. Escribilo y volvé a intentar.";
+        activar.disabled = false;
+        activar.textContent = "Activar este teléfono";
+        const campoCodigo = destino.querySelector("#f-codigo");
+        if (campoCodigo) campoCodigo.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
 
       const r = await window.Envio.canjear(campo.value);
 
@@ -377,7 +426,15 @@ window.Config = (function () {
     borrador.responsable = valor("#f-responsable").trim();
     borrador.contacto = valor("#f-contacto").trim();
     borrador.situacion = valor("#f-situacion");
-    borrador.codigo = valor("#f-codigo").trim().toLowerCase().replace(/\s+/g, "");
+
+    // El código de chacra vive en el bloque de conexión, que solo se dibuja
+    // cuando la configuración está completa. Si el campo no está en pantalla hay
+    // que dejar el guardado como está: leerlo igual lo borraría cada vez que se
+    // agrega un sector con la configuración todavía a medio cargar.
+    const campoCodigo = destino.querySelector("#f-codigo");
+    if (campoCodigo) {
+      borrador.codigo = String(campoCodigo.value || "").trim().toLowerCase().replace(/\s+/g, "");
+    }
   }
 
   function guardarSector() {
