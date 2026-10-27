@@ -573,6 +573,14 @@ a.boton { text-decoration: none; }
 .terminos p, .terminos .lista li, .terminos .pasos li { font-size: 17px; line-height: 1.6; }
 .terminos p:last-child { margin-bottom: 0; }
 
+/* El aviso al técnico va destacado y arriba de los tratamientos: es un
+   compromiso de los términos de uso, no un detalle de diseño. */
+.tarjeta--aviso-tecnico { background: #fdf4e3; border-color: var(--dorado); border-left: 5px solid var(--dorado); }
+.tarjeta--aviso-tecnico .boton { margin-top: 10px; }
+
+/* Una etiqueta que no felicita: marca el preparado que hay que mirar dos veces. */
+.sello-comarca--cuidado { background: var(--error); }
+
 /* ---------- Seguimiento ----------
    La agenda del día. Cada grupo se distingue por una franja al costado, porque
    en el campo se mira de reojo y lo primero que hay que ver es si hay algo

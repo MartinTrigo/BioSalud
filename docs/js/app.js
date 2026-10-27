@@ -41,11 +41,7 @@
       titulo: "Monitoreo de campo",
       detalle: "Síntomas, plagas, incidencia y severidad",
       subtitulo: "Observación a campo",
-      fase: 5,
-      queVa: `Caminás la chacra y registrás lo que ves: síntoma, signo o
-        presencia de plaga, en qué sector y bancal, con su incidencia y
-        severidad. La app te sugiere un tratamiento posible y te ofrece avisar
-        al equipo de extensión para armarlo juntos.`,
+      listo: true,          // la atiende js/monitoreo.js
     },
     wiki: {
       icono: "📖",
@@ -110,6 +106,12 @@
 
     if (base === "plan") {
       const cabecera = await window.Plan.render(vista, ruta, ir);
+      encabezado(cabecera.titulo, cabecera.subtitulo);
+      return;
+    }
+
+    if (base === "monitoreo") {
+      const cabecera = await window.Monitoreo.render(vista, ruta, ir);
       encabezado(cabecera.titulo, cabecera.subtitulo);
       return;
     }

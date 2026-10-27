@@ -1,0 +1,9 @@
+{
+  "version": "2026-10-27",
+  "nota": "Con quién se comunica el productor cuando detecta algo en el campo. Está acá y no en el código para que se corrija sin volver a publicar la app. Si cambia el referente, se cambia este archivo.",
+  "nombre": "Equipo de extensión · IFAB (CONICET / INTA El Bolsón)",
+  "referente": "Martín Trigo",
+  "correo": "trigo.martin@inta.gob.ar",
+  "agencia": "Agencia de Extensión Rural El Bolsón",
+  "cuando_avisar": "Ante cualquier detección que te genere dudas, y siempre antes de aplicar algo que no venga en tu plan de la temporada. La sugerencia de la app es orientativa: no reemplaza a alguien que vea tu campo."
+}

@@ -156,6 +156,27 @@ Cualquier técnico del equipo puede leer una regla, discutirla y corregirla sin
 tocar código, y siempre queda claro **por qué** la app sugirió lo que sugirió.
 Con un modelo que "recomienda" sin poder explicarse, eso se pierde.
 
+**Al programarlo, el esquema de arriba no se pudo cumplir tal cual, y está
+bien.** La primera línea —comparar lo observado contra un umbral— supone que los
+umbrales son números, y los de `datos/plagas.json` son frases. En varios casos la
+frase dice justamente que no hay número: la mosca de la cebolla, *"no hay umbral
+numérico estandarizado"*; los pulgones, *"no hay un número único para todas las
+especies"*. Inventarlos para que el motor pudiera compararlos habría sido
+fabricar precisión en una recomendación fitosanitaria, que es contra lo que
+advierten los propios términos de uso.
+
+Así que el Monitoreo hace algo más modesto: pone lo observado **al lado** del
+umbral de la ficha, con sus mismas palabras, y deja la comparación donde puede
+hacerse bien, que es en quien está parado en el cultivo. Lo que la app aporta no
+es el fallo: es traer la ficha correcta al momento exacto, con la prevención
+antes que el tratamiento —el orden que pide el protocolo del SPG—, con el estado
+de cada preparado frente al sello, y con el registro ya hecho.
+
+Si más adelante el equipo quiere umbrales numéricos propios, salidos de su
+experiencia en la Comarca y no de la bibliografía, se agregan al catálogo y el
+motor puede empezar a compararlos. Pero tienen que venir de alguien que los
+sostenga, no del programa.
+
 Y hay una razón más fuerte: una recomendación fitosanitaria equivocada tiene
 consecuencias productivas y sanitarias reales. Por eso la app además:
 
