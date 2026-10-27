@@ -778,38 +778,7 @@ function hojaSuelta(planillaId, nombre, encabezados) {
     return hoja;
   }
 
-  var actuales = hoja.getLastColumn()
-    ? hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].map(String) : [];
-
-  if (actuales.join("|") === encabezados.join("|")) return hoja;
-
-  // Sin datos, el encabezado se rehace entero.
-  if (hoja.getLastRow() <= 1) {
-    hoja.clear();
-    ponerEncabezados(hoja, encabezados);
-    hoja.autoResizeColumns(1, encabezados.length);
-    return hoja;
-  }
-
-  // CON datos, solo se agregan las columnas que faltan AL FINAL, y únicamente si
-  // lo que ya está es el principio de lo nuevo. Nada se mueve de lugar.
-  //
-  // Pasó de verdad: a Dispositivos se le sumaron las columnas de los términos
-  // aceptados cuando ya había dos teléfonos activados, así que la regla de "sin
-  // datos" no alcanzaba y los valores nuevos iban a entrar en columnas sin
-  // nombre. Corregirlo a mano cada vez que se suma una columna es una tarea que
-  // alguien se va a olvidar de hacer.
-  var esPrefijo = actuales.length < encabezados.length;
-  for (var i = 0; i < actuales.length && esPrefijo; i++) {
-    if (actuales[i] !== encabezados[i]) esPrefijo = false;
-  }
-  if (esPrefijo) {
-    var faltan = encabezados.slice(actuales.length);
-    hoja.getRange(1, actuales.length + 1, 1, faltan.length).setValues([faltan])
-        .setFontWeight("bold").setBackground("#16632F").setFontColor("#FFFFFF");
-    hoja.autoResizeColumns(1, encabezados.length);
-  }
-  return hoja;
+  return asegurarEncabezados(hoja, encabezados);
 }
 
 function obtenerHoja(libro, def) {
@@ -820,15 +789,54 @@ function obtenerHoja(libro, def) {
     hoja.autoResizeColumns(1, def.encabezados.length);
     return hoja;
   }
-  // Si las columnas cambiaron y la hoja todavía no tiene datos, se rehace el
-  // encabezado: si no, las filas nuevas entrarían corridas de lugar.
+  asegurarEncabezados(hoja, def.encabezados);
+  return hoja;
+}
+
+// ==========================================================================
+// PONER EL ENCABEZADO AL DÍA SIN ROMPER LO QUE YA ESTÁ
+//
+// Una sola función para las hojas de cada chacra y para las de accesos, porque
+// el problema es el mismo y la primera versión lo resolvió a medias: rehacía el
+// encabezado solo si la hoja estaba vacía. Cuando se sumaron las columnas de los
+// términos aceptados, Dispositivos ya tenía dos teléfonos, así que las columnas
+// nuevas se quedaban sin nombre y los valores de los canjes siguientes entraban
+// ahí, en silencio.
+//
+// Las tres situaciones, en orden:
+//
+//   · El encabezado ya coincide          → no se toca nada.
+//   · La hoja no tiene datos             → se rehace entero.
+//   · La hoja tiene datos y lo que está
+//     es el PRINCIPIO de lo nuevo        → se agregan las que faltan, al final.
+//   · Cualquier otra diferencia          → no se toca nada.
+//
+// Lo último es a propósito: con filas cargadas, mover una columna desalinea
+// datos que ya no se pueden recuperar. Es mejor que quede un encabezado viejo y
+// se note, a que la función adivine.
+// ==========================================================================
+function asegurarEncabezados(hoja, encabezados) {
+  var actuales = hoja.getLastColumn()
+    ? hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].map(String) : [];
+
+  if (actuales.join("|") === encabezados.join("|")) return hoja;
+
   if (hoja.getLastRow() <= 1) {
-    var actuales = hoja.getLastColumn()
-      ? hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].join("|") : "";
-    if (actuales !== def.encabezados.join("|")) {
-      hoja.clear();
-      ponerEncabezados(hoja, def.encabezados);
-    }
+    hoja.clear();
+    ponerEncabezados(hoja, encabezados);
+    hoja.autoResizeColumns(1, encabezados.length);
+    return hoja;
+  }
+
+  var esPrefijo = actuales.length < encabezados.length;
+  for (var i = 0; i < actuales.length && esPrefijo; i++) {
+    if (actuales[i] !== encabezados[i]) esPrefijo = false;
+  }
+  if (esPrefijo) {
+    var faltan = encabezados.slice(actuales.length);
+    hoja.getRange(1, actuales.length + 1, 1, faltan.length).setValues([faltan])
+        .setFontWeight("bold").setBackground("#16632F").setFontColor("#FFFFFF");
+    hoja.autoResizeColumns(1, encabezados.length);
   }
   return hoja;
 }
