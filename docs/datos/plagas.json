@@ -229,7 +229,7 @@
       ],
       "enemigos": "Ácaros y chinches depredadores, y parasitoides. Conviene implantar islas con plantas nectaríferas de floración extendida dentro de los invernaderos.",
       "entomopatogenos": "Beauveria bassiana e Isaria fumosorosea. Todos rinden mejor con humedad relativa alta, lo que es una limitación real en el clima seco patagónico: puede hacer falta más frecuencia de aplicación, o riego por microaspersión para sostener la humedad.",
-      "tratamientos": ["lejia-ceniza", "extracto-botanico", "biopescado", "caldo-mineral-caliente", "caldo-ceniza"],
+      "tratamientos": ["lejia-ceniza", "extracto-botanico", "caldo-mineral-caliente", "caldo-ceniza"],
       "cuidados": [
         "Para mosca blanca, mezclar la lejía al 5 % con 1 kg de harina de trigo mejora la adherencia.",
         "El jabón potásico sigue siendo la opción más compatible con los enemigos naturales."

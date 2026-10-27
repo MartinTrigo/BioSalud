@@ -1,7 +1,7 @@
 """
 BioSalud ECOMARCAL — generar la cartilla de biopreparados
 
-Arma un documento imprimible con las 27 recetas, a partir de los MISMOS archivos
+Arma un documento imprimible con todas las recetas, a partir de los MISMOS archivos
 que usa la app. Eso es lo importante: la cartilla no es una copia que haya que
 mantener aparte. Se corrige la ficha en docs/datos/biopreparados.json, se vuelve
 a correr esto, y el papel y el celular vuelven a decir lo mismo.

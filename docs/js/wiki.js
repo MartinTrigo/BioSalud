@@ -220,7 +220,7 @@ window.Wiki = (function () {
   // ---------- Eje 2: manejo y tratamientos ----------
 
   function listaBiopreparados() {
-    // Cada categoría se pliega. Con 27 recetas en seis grupos, tenerlas todas
+    // Cada categoría se pliega. Con dos docenas de recetas en siete grupos, tenerlas todas
     // desplegadas obliga a recorrerlas enteras para llegar a la última.
     const porCategoria = bio.categorias.map((c) => {
       const fichas = bio.fichas.filter((f) => f.categoria === c.id);

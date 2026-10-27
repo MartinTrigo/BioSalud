@@ -1,5 +1,5 @@
 {
-  "version": "2026-08-18",
+  "version": "2026-10-26",
   "nota": "Fichas redactadas por el equipo del IFAB a partir de la bibliografía citada en cada una. No son copia de las fuentes: cada texto está reescrito y cada receta indica de dónde sale, para que el productor pueda ir al original.",
   "fuentes": {
     "F1": "Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.",
@@ -214,116 +214,6 @@
       ]
     },
     {
-      "id": "biopescado",
-      "nombre": "Biopescado",
-      "categoria": "biofertilizantes",
-      "etiquetas": [
-        "nitrógeno",
-        "fósforo",
-        "foliar",
-        "fertirriego"
-      ],
-      "resumen": "Aprovecha los desechos de pescado y los convierte en un biofertilizante rico en nitrógeno y fósforo. Se hace en dos días y arranca con una cocción.",
-      "sugerencia": {
-        "metodo": "Mochila (foliar)",
-        "dosis": "Diluir al 3 % en hortalizas",
-        "cada_dias": 30
-      },
-      "rinde": "100 litros",
-      "tiempo": "2 días de elaboración y 5 de fermentación",
-      "ingredientes": [
-        "30 kg de restos de pescado fresco (cabezas, colas, vísceras)",
-        "60 litros de agua",
-        "6 kg de ceniza de madera tamizada",
-        "2 kg de jabón blanco en pan, rallado",
-        "20 litros de suero de quesería",
-        "10 kg de melaza o azúcar",
-        "1 tacho metálico de 100 litros y 1 tambor plástico de 100 litros",
-        "Leña para el fogón"
-      ],
-      "preparacion": [
-        "Día 1. Calentar los 60 litros de agua en el tacho metálico sobre el fuego. Cuando hierve, agregar el jabón rallado y revolver hasta disolver.",
-        "Sumar la ceniza tamizada y cocinar 15 minutos. Hasta acá ya se tiene un bioinsecticida usable por separado.",
-        "Agregar los 30 kg de pescado y cocinar 15 a 20 minutos más. Sacar del fuego y dejar reposar 24 horas.",
-        "Día 2. Colar y pasar el caldo al tambor plástico.",
-        "Agregar el azúcar y el suero: el azúcar da energía rápida y el suero aporta microorganismos y proteínas.",
-        "Completar con agua hasta 100 litros y dejar fermentar 5 días en condiciones aeróbicas, tapado pero sin ajustar, para que intercambie gases.",
-        "Filtrar con lienzo."
-      ],
-      "uso": "Biofertilizante foliar o por fertirriego. Se puede combinar con té de compost o biocalabaza para ampliar la diversidad de nutrientes.",
-      "dosis": [
-        {
-          "cuando": "Hortalizas",
-          "cuanto": "Diluir al 3 %"
-        },
-        {
-          "cuando": "Frutales",
-          "cuanto": "Diluir al 6 %"
-        },
-        {
-          "cuando": "Frecuencia",
-          "cuanto": "Una aplicación foliar mensual"
-        }
-      ],
-      "conservacion": "Hasta un año en envases oscuros y rotulados.",
-      "cuidados": [
-        "El pescado se puede tener congelado hasta el día de la elaboración.",
-        "Huele fuerte. Elegir un lugar alejado de la casa y de los vecinos.",
-        "El análisis de laboratorio del preparado patagónico dio pH 3,32, con 2,3 g/l de nitrógeno y 0,21 g/l de fósforo."
-      ],
-      "fuente": [
-        "F3",
-        "F4"
-      ]
-    },
-    {
-      "id": "biocalabaza",
-      "nombre": "Biofertilizante de calabaza",
-      "categoria": "biofertilizantes",
-      "etiquetas": [
-        "microorganismos",
-        "desintoxicante de suelo"
-      ],
-      "resumen": "Fermento de calabaza y agua de mar. El tambor tiene que ser blanco: la luz es parte de la receta, porque favorece a las bacterias fototróficas.",
-      "sugerencia": {
-        "metodo": "Al suelo",
-        "dosis": "3 % (600 cc por mochila de 20 L)"
-      },
-      "rinde": "100 litros",
-      "tiempo": "30 días",
-      "ingredientes": [
-        "65 litros de agua de mar",
-        "10 kg de calabaza picada (o zanahoria: interesan los carotenos)",
-        "15 litros de suero de quesería",
-        "5 kg de melaza o azúcar",
-        "1 kg de cáscara de camarones molida",
-        "1 kg de estiércol fresco de ternero",
-        "50 g de levadura de cerveza",
-        "1 tambor plástico blanco de 100 litros"
-      ],
-      "preparacion": [
-        "En el tambor blanco poner el agua de mar, la calabaza picada, la cáscara de camarones molida y la bosta de ternero.",
-        "Revolver y agregar el azúcar y el suero.",
-        "Cubrir con tela para que no entren moscas: fermenta en condiciones aeróbicas durante 30 días.",
-        "Filtrar con lienzo y conservar en envase blanco."
-      ],
-      "uso": "Aporta nutrientes y microorganismos. Se aplica al suelo en la preparación, al trasplante y en estado vegetativo.",
-      "dosis": [
-        {
-          "cuando": "Al suelo",
-          "cuanto": "3 % — 3 litros en 100 de agua, o 600 cc en una mochila de 20 litros"
-        }
-      ],
-      "cuidados": [
-        "El tambor blanco no es un detalle estético: deja pasar luz y de eso dependen las bacterias fototróficas.",
-        "La cáscara de camarones aporta el efecto fungicida y la bosta de ternero, Bacillus subtilis.",
-        "El agua de mar es el ingrediente difícil en la Comarca. Es una receta pensada para el Valle Inferior; acá habría que probar reemplazos."
-      ],
-      "fuente": [
-        "F3"
-      ]
-    },
-    {
       "id": "te-compost",
       "nombre": "Té de compost",
       "categoria": "biofertilizantes",
@@ -487,7 +377,7 @@
         "Poner los 5 kg de pasto fermentado en una bolsa tipo saquito de té y sumergirla.",
         "Cerrar con zuncho y fermentar una semana en condiciones anaeróbicas."
       ],
-      "uso": "Reduce la incidencia de plagas y patógenos. Se combina bien con el biopescado.",
+      "uso": "Reduce la incidencia de plagas y patógenos. Se combina bien con el té de compost.",
       "dosis": [
         {
           "cuando": "Hortalizas, foliar",
@@ -678,52 +568,6 @@
       ],
       "fuente": [
         "F5"
-      ]
-    },
-    {
-      "id": "abono-aerobico",
-      "nombre": "Abono orgánico aeróbico de pozo",
-      "categoria": "abonos",
-      "etiquetas": [
-        "estiércol",
-        "minerales",
-        "fertirriego"
-      ],
-      "resumen": "Bosta y minerales fermentando en un pozo revestido con madera, tres meses. Poco trabajo y mucha espera.",
-      "sugerencia": {
-        "metodo": "Fertirriego",
-        "dosis": "1 kg en 100 litros, se aplica puro",
-        "cada_dias": 15
-      },
-      "rinde": "Unos 50 kg",
-      "tiempo": "90 días",
-      "ingredientes": [
-        "50 kg de bosta fresca de vaca",
-        "1 kg de harina de rocas, ceniza de madera o tierra de diatomeas",
-        "100 g de cáscara de huevo seca y molida",
-        "Un hoyo de 60 × 60 × 60 cm",
-        "Tablas de madera para revestir las paredes"
-      ],
-      "preparacion": [
-        "Cavar el pozo donde el suelo sea bueno, que no se inunde ni suba la napa.",
-        "Revestir con tablas solo las paredes laterales, nunca el fondo: el contacto con el suelo es parte del proceso.",
-        "Mezclar la bosta con la fuente de minerales y la cáscara de huevo molida, homogeneizar con pala y volcar en el pozo.",
-        "Tapar con una tapa de madera y cubrir con pasto para conservar la temperatura.",
-        "Dejar fermentar en condiciones aeróbicas durante 90 días."
-      ],
-      "uso": "Abono líquido, al suelo. No sirve como fertilizante foliar.",
-      "dosis": [
-        {
-          "cuando": "Al suelo",
-          "cuanto": "1 kg del preparado en 100 litros de agua. Agitar 10 minutos, filtrar con lienzo y aplicar puro, sin diluir de nuevo."
-        },
-        {
-          "cuando": "Frecuencia",
-          "cuanto": "Cada 15 días, en preparación de suelo, a la siembra y en estado vegetativo por fertirriego"
-        }
-      ],
-      "fuente": [
-        "F3"
       ]
     },
     {
@@ -1429,8 +1273,10 @@
     ]
   },
   "pendiente": [
-    "Compatibilidad de cada preparado con el pliego ECOMARCAL: falta el documento del sello para poder marcar cuáles se admiten y cuáles no.",
-    "Los preparados con cobre (bordelés y Visosa) están marcados como 'a consultar' hasta tener esa definición.",
+    "Compatibilidad de cada preparado con el pliego ECOMARCAL: ya hay un borrador del Protocolo de Elaboración de Bioinsumos del SPG (versión agosto de 2026), todavía en discusión en el Consejo de Garantía y la Asamblea General. Hasta que se apruebe no se puede marcar ficha por ficha qué admite el sello.",
+    "Todo bioinsumo de elaboración casera necesita autorización previa del Consejo de Garantía, que evalúa origen de las materias primas, modo de preparación, conservación, forma de uso y período de carencia.",
+    "Los preparados con cobre (bordelés y Visosa) están marcados como 'a consultar': el Anexo III de la Resolución 374/2016 los admite, pero con un tope de 6 kg de cobre por hectárea y por año, prescripción y zonas de amortiguación.",
+    "Falta el texto completo del Anexo II de la Resolución 374/2016 (abonos y nutrientes permitidos). Sin eso quedan sin confirmar los sulfatos de zinc, magnesio y potasio, el bórax y la harina de roca que usan el Súpermagro, el caldo Visosa, el sulfocálcico enriquecido y el fertilizante rico en fósforo.",
     "Volúmenes por superficie: la bibliografía regional ajustó las diluciones, pero reconoce que cuánto aplicar por hectárea todavía no está definido.",
     "Fotos propias de cada etapa de elaboración."
   ]
