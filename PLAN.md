@@ -39,13 +39,19 @@ app y cómo se usa, en el [README](README.md).
 | **1 · Base** | Armazón, identidad, funcionamiento sin señal, **Configuración** del establecimiento, servicio con control de acceso escrito | ✅ hecha |
 | **2 · Catálogo y Plan** | Lista de bioinsumos, biopreparados y banda verde + **Registrar Plan de Salud** con recurrencias y cuenta del cobre contra el tope de 6 kg/ha/año | ✅ hecha |
 | **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | pendiente |
-| **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 planillas creadas y servicio escrito; falta desplegarlo y programar el envío |
+| **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 casi — servicio publicado y respondiendo, alta de chacras desde el menú de la planilla de accesos, canje arreglado; falta activar el primer teléfono y mostrar los términos en la app |
 | **5 · Monitoreo** | Registro a campo + motor de sugerencia + aviso al técnico + plan de tratamiento | pendiente |
-| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 24 biopreparados y 7 plagas cargados; faltan las enfermedades fúngicas y las fotos |
+| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 24 biopreparados, 7 plagas y los no permitidos del sello; faltan las enfermedades fúngicas y las fotos propias |
 | **7 · Avisos** | Correo automático de aplicaciones pendientes | pendiente |
 | **8 · Piloto** | Prueba con 2 chacras, ajustes y despliegue a las 10 | pendiente |
 
 Cada fase deja algo **usable y mostrable**.
+
+**Dónde estamos, dicho en lo que un productor puede hacer hoy:** configurar su
+establecimiento y sus sectores, consultar la wiki entera sin señal, armar el plan
+de la temporada con el control de cobre, y sincronizar con la planilla de su
+chacra. Lo que todavía no puede: marcar lo que efectivamente aplicó, registrar lo
+que ve caminando la chacra, ni recibir recordatorios.
 
 **Dependencias que importan:** la 3 necesita la 2; la 5 necesita la 2 y la 4; la
 7 necesita la 4. La 6 es independiente y puede adelantarse en cualquier momento
@@ -59,11 +65,21 @@ si hay tiempo para redactar fichas.
 
 | # | Qué | Bloquea |
 |---|---|---|
-| 1 | **Pliego ECOMARCAL**: qué productos admite el sello, cuáles no, y qué registros exige | Fase 2 |
-| 2 | **Bioinsumos que promueve el INTA**, con dosis, método y frecuencia recomendada | Fase 2 |
-| 3 | **Cuenta institucional de Drive**. Por ahora las planillas están en el Drive personal, que es lo acordado mientras dure el desarrollo | Antes del piloto |
-| 4 | **Códigos y nombres de las chacras** del piloto | Fase 4 |
-| 5 | **Correo de contacto del equipo** para el botón "contactar al técnico" | Fase 5 |
+| 1 | **Cuenta institucional de Drive**, y antes de eso saber **si incluye Google Workspace**: el backend es Apps Script sobre Google Sheets, y en Microsoft no existe Apps Script. Hoy las planillas están en el Drive personal, que es lo acordado mientras dure el desarrollo | Antes del piloto |
+| 2 | **Códigos y nombres del resto de las chacras** del piloto. Ya están `radal` y `tika` | Fase 8 |
+
+### Bloqueantes que se cayeron
+
+- **Pliego ECOMARCAL.** Existe el borrador del Protocolo de Elaboración de
+  Bioinsumos del SPG, revisado ficha por ficha en
+  [SPG-ECOMARCAL.md](SPG-ECOMARCAL.md). De ahí salieron la cuenta del cobre
+  contra el tope de 6 kg/ha/año y la pantalla de no permitidos. Sigue en
+  discusión en el Consejo de Garantía y la Asamblea, así que la app dice que es
+  un borrador en vez de afirmar que algo está permitido.
+- **Bioinsumos del INTA.** Las 24 fichas están cargadas, cada una con su fuente
+  (siete publicaciones, cinco de la Patagonia Norte).
+- **Correo de contacto del equipo.** Es `trigo.martin@inta.gob.ar`. Falta
+  cablearlo al botón, que es trabajo de la fase 5.
 
 ### Mejoran el resultado
 

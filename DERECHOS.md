@@ -160,7 +160,7 @@ De más urgente a menos, y de más fácil a más lento:
 
 | # | Qué | Quién | Cuándo |
 |---|---|---|---|
-| 1 | Mover las planillas a una cuenta institucional | Martín | Antes de la fase 4 |
+| 1 | Mover las planillas a una cuenta institucional, y antes averiguar si la cuenta incluye Google Workspace | Martín | Antes del piloto. La fase 4 ya pasó con las planillas en el Drive personal |
 | 2 | Escribir `AUTORES.md` | Martín | Ya |
 | 3 | Revisar y aprobar [TERMINOS.md](TERMINOS.md) | Equipo IFAB | Antes del piloto |
 | 4 | Acuerdo por escrito con ECOMARCAL sobre el uso de la marca | IFAB + ECOMARCAL | Antes del piloto |
