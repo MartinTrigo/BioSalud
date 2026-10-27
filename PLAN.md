@@ -38,7 +38,7 @@ app y cómo se usa, en el [README](README.md).
 | **0 · Definiciones** | Nombre, logos, paleta institucional | ✅ hecha |
 | **1 · Base** | Armazón, identidad, funcionamiento sin señal, **Configuración** del establecimiento, servicio con control de acceso escrito | ✅ hecha |
 | **2 · Catálogo y Plan** | Lista de bioinsumos, biopreparados y banda verde + **Registrar Plan de Salud** con recurrencias y cuenta del cobre contra el tope de 6 kg/ha/año | ✅ hecha |
-| **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | pendiente |
+| **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | ✅ hecha |
 | **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 casi — servicio publicado y respondiendo, alta de chacras desde el menú de la planilla de accesos, canje arreglado; falta activar el primer teléfono y mostrar los términos en la app |
 | **5 · Monitoreo** | Registro a campo + motor de sugerencia + aviso al técnico + plan de tratamiento | pendiente |
 | **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 24 biopreparados, 7 plagas y los no permitidos del sello; faltan las enfermedades fúngicas y las fotos propias |
@@ -49,9 +49,9 @@ Cada fase deja algo **usable y mostrable**.
 
 **Dónde estamos, dicho en lo que un productor puede hacer hoy:** configurar su
 establecimiento y sus sectores, consultar la wiki entera sin señal, armar el plan
-de la temporada con el control de cobre, y sincronizar con la planilla de su
-chacra. Lo que todavía no puede: marcar lo que efectivamente aplicó, registrar lo
-que ve caminando la chacra, ni recibir recordatorios.
+de la temporada con el control de cobre, ver qué le toca hoy y marcar lo que
+aplicó, y sincronizar con la planilla de su chacra. Lo que todavía no puede:
+registrar lo que ve caminando la chacra, ni recibir recordatorios.
 
 **Dependencias que importan:** la 3 necesita la 2; la 5 necesita la 2 y la 4; la
 7 necesita la 4. La 6 es independiente y puede adelantarse en cualquier momento
