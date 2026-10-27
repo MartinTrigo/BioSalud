@@ -9,9 +9,14 @@
 // Los dos ejes están cruzados: desde una plaga se llega a los tratamientos que
 // la controlan, y desde un biopreparado se ve contra qué plagas se usa.
 //
-// El contenido no está en el código: vive en datos/plagas.json y en
-// datos/biopreparados.json, para que una ficha se corrija sin tocar
-// programación y sin volver a publicar la app entera.
+// Y una tercera entrada, que no es un eje sino un límite: qué NO entra en la
+// chacra. Va acá y no en el plan porque la pregunta aparece antes, cuando el
+// productor está por conseguir un insumo, y porque el sello se pierde por lo que
+// se usa, no por lo que se planifica.
+//
+// El contenido no está en el código: vive en datos/plagas.json,
+// datos/biopreparados.json y datos/no-permitidos.json, para que una ficha se
+// corrija sin tocar programación y sin volver a publicar la app entera.
 // ==========================================================================
 
 window.Wiki = (function () {
@@ -19,6 +24,7 @@ window.Wiki = (function () {
 
   let bio = null;      // datos/biopreparados.json
   let plagas = null;   // datos/plagas.json
+  let veda = null;     // datos/no-permitidos.json
   let destino = null;
   let irA = null;      // para navegar dentro de la wiki
 
@@ -29,13 +35,15 @@ window.Wiki = (function () {
   // Se leen una sola vez por sesión. El service worker ya los tiene guardados
   // en el teléfono, así que esto funciona sin señal.
   async function cargar() {
-    if (bio && plagas) return true;
-    const [a, b] = await Promise.all([
+    if (bio && plagas && veda) return true;
+    const [a, b, c] = await Promise.all([
       fetch("datos/biopreparados.json").then((r) => r.json()),
       fetch("datos/plagas.json").then((r) => r.json()),
+      fetch("datos/no-permitidos.json").then((r) => r.json()),
     ]);
     bio = a;
     plagas = b;
+    veda = c;
     return true;
   }
 
@@ -72,6 +80,7 @@ window.Wiki = (function () {
     if (eje === "plagas") return listaPlagas();
     if (eje === "manejo" && id) return verBiopreparado(id);
     if (eje === "manejo") return listaBiopreparados();
+    if (eje === "no-permitidos") return noPermitidos();
     return portada();
   }
 
@@ -111,6 +120,14 @@ window.Wiki = (function () {
             <span class="menu__titulo">Manejo y tratamientos</span>
             <span class="menu__detalle">Biopreparados: qué lleva, cómo se hace,
               cómo se aplica y qué cuidados tiene · ${bio.fichas.length} recetas</span>
+          </span>
+        </button>
+
+        <button class="menu__boton" data-wiki="wiki/no-permitidos">
+          <span class="menu__icono">⛔</span>
+          <span>
+            <span class="menu__titulo">${esc(veda.titulo)}</span>
+            <span class="menu__detalle">${esc(veda.bajada)} · ${veda.grupos.length} insumos</span>
           </span>
         </button>
       </div>
@@ -316,6 +333,60 @@ window.Wiki = (function () {
       <button class="boton boton--secundario boton--ancho" data-wiki="wiki/manejo">Volver a la lista</button>`;
     conectar();
     return { titulo: f.nombre, subtitulo: categoria.nombre || "Biopreparado" };
+  }
+
+  // ---------- El límite: qué no entra ----------
+  //
+  // Cada insumo se pliega, igual que las categorías de recetas: desplegados
+  // todos es una pared de texto, y el productor viene a buscar uno. Los títulos
+  // solos ya dicen de qué se trata, así que plegado se lee de un vistazo.
+  //
+  // Lo importante acá no es la prohibición sino las dos líneas que la rodean:
+  // por qué está afuera, y qué poner en su lugar. Una lista de "no" sin la
+  // segunda mitad no sirve para trabajar.
+  function noPermitidos() {
+    const grupos = veda.grupos.map((g) => {
+      const clave = "veda-" + g.id;
+      return `
+        <details class="grupo grupo--veda" data-cat="${esc(clave)}"${abiertas.has(clave) ? " open" : ""}>
+          <summary class="grupo__cab">
+            <span class="grupo__icono">${g.icono}</span>
+            <span class="grupo__texto">
+              <span class="grupo__nombre">${esc(g.titulo)}</span>
+            </span>
+            <span class="grupo__flecha" aria-hidden="true"></span>
+          </summary>
+          <div class="grupo__cuerpo">
+            <p class="nota">${esc(g.que_es)}</p>
+            <p><strong>Por qué.</strong> ${esc(g.porque)}</p>
+            ${g.abierto ? `<p class="aviso aviso--info"><strong>Todavía en discusión.</strong>
+              ${esc(g.abierto)}</p>` : ""}
+            <p class="en-su-lugar"><strong>En su lugar.</strong> ${esc(g.en_su_lugar)}</p>
+          </div>
+        </details>`;
+    }).join("");
+
+    const condicionales = (veda.condicionales || []).map((c) => `
+      <div class="tarjeta tarjeta--cuidado">
+        <h2>${esc(c.titulo)}</h2>
+        <p>${esc(c.regla)}</p>
+        <p class="nota">${esc(c.porque)}</p>
+      </div>`).join("");
+
+    destino.innerHTML = `
+      <p class="aviso aviso--info">${esc(veda.estado)}</p>
+      <p class="nota">${esc(veda.intro)}</p>
+      ${grupos}
+      ${condicionales}
+      ${veda.cierre ? bloque(veda.cierre.titulo, `<p>${esc(veda.cierre.texto)}</p>`) : ""}
+      ${pendientes(veda.pendiente)}
+      <div class="tarjeta tarjeta--fuente">
+        <h2>De dónde sale</h2>
+        <ul class="lista"><li>${esc(veda.fuente)}</li></ul>
+      </div>
+      <button class="boton boton--secundario boton--ancho" data-wiki="wiki">Volver a Info / Wiki</button>`;
+    conectar();
+    return { titulo: veda.titulo, subtitulo: "Lo que el sello no admite" };
   }
 
   // ---------- Piezas comunes ----------

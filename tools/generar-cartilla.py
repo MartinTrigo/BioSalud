@@ -124,6 +124,7 @@ def ficha_html(f, categorias, fuentes, plagas):
 def main():
     bio = json.loads((DATOS / "biopreparados.json").read_text(encoding="utf-8"))
     plagas = json.loads((DATOS / "plagas.json").read_text(encoding="utf-8"))
+    veda = json.loads((DATOS / "no-permitidos.json").read_text(encoding="utf-8"))
 
     hoy = datetime.date.today()
     fecha = f"{hoy.day} de {MESES[hoy.month - 1]} de {hoy.year}"
@@ -147,6 +148,35 @@ def main():
             + "</li>")
         cuerpo.append(f'<h1 class="seccion">{e(c["icono"])} {e(c["nombre"])}</h1>')
         cuerpo += [ficha_html(f, categorias, fuentes, plagas) for f in de_la_cat]
+
+    # Lo que el sello no admite. En papel va entero y desplegado: no hay dónde
+    # tocar para abrir, y es la parte que conviene leer antes de ir a buscar un
+    # insumo prestado.
+    #
+    # Los iconos quedan afuera del papel: en la app ayudan a encontrar el que se
+    # busca, pero acá no hacen falta y cada emoji nuevo obliga a Chrome a
+    # embeber más fuente de color. Los seis de esta sección engordaban el PDF
+    # 400 KB, en un documento que el productor baja con la señal que tenga.
+    veda_html = ""
+    for g in veda.get("grupos", []):
+        veda_html += (
+            f'<div class="veda"><h3>{e(g["titulo"])}</h3>'
+            f'<p class="veda__que">{e(g["que_es"])}</p>'
+            f'<p><strong>Por qué.</strong> {e(g["porque"])}</p>'
+            + (f'<p class="veda__abierto"><strong>Todavía en discusión.</strong> '
+               f'{e(g["abierto"])}</p>' if g.get("abierto") else "")
+            + f'<p class="veda__lugar"><strong>En su lugar.</strong> '
+              f'{e(g["en_su_lugar"])}</p></div>'
+        )
+    for c in veda.get("condicionales", []):
+        veda_html += (
+            f'<div class="veda veda--condicional"><h3>{e(c["titulo"])}</h3>'
+            f'<p>{e(c["regla"])}</p>'
+            f'<p class="veda__que">{e(c["porque"])}</p></div>'
+        )
+    if veda.get("cierre"):
+        veda_html += (f'<div class="aviso-general"><h3>{e(veda["cierre"]["titulo"])}</h3>'
+                      f'<p>{e(veda["cierre"]["texto"])}</p></div>')
 
     # Tabla de qué usar contra qué, derivada de las fichas de plagas.
     filas_plagas = ""
@@ -227,6 +257,14 @@ def main():
     .aviso-general { background: #f0f5f1; border-left: 2.5pt solid #16632f;
                      padding: 3mm 4mm; margin: 4mm 0; }
     .cierre { page-break-before: always; }
+
+    .veda { border-left: 2.5pt solid #b3261e; padding: 2mm 4mm; margin: 0 0 4mm;
+            page-break-inside: avoid; }
+    .veda h3 { margin: 0 0 1mm; }
+    .veda__que { color: #5b6b62; margin: 0 0 2mm; }
+    .veda__lugar { background: #f0f5f1; padding: 2mm 3mm; margin: 2mm 0 0; }
+    .veda__abierto { background: #fdf4e3; padding: 2mm 3mm; margin: 2mm 0 0; }
+    .veda--condicional { border-left-color: #d9a521; }
     """
 
     doc = f"""<!DOCTYPE html>
@@ -279,6 +317,11 @@ def main():
 {''.join(cuerpo)}
 
 <div class="cierre">
+  <h1 class="seccion">{e(veda['titulo'])}</h1>
+  <p>{e(veda['bajada'])} {e(veda['intro'])}</p>
+  <p class="fuente">{e(veda['estado'])}</p>
+  {veda_html}
+
   <h1 class="seccion">Qué usar contra qué</h1>
   <p>Resumen orientativo, armado a partir de las fichas de plagas de la app.
   <strong>No reemplaza el monitoreo</strong>: antes de aplicar hay que confirmar

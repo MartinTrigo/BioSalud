@@ -213,9 +213,10 @@ Por orden de lo que más sirve:
 1. **Estado SPG en cada ficha**: permitido / permitido con condiciones / a
    evaluar por el Consejo, con la condición escrita y la cita al protocolo.
    Mientras el documento sea borrador, el rótulo tiene que decirlo.
-2. **Pantalla de no permitidos**, con el porqué de cada uno. Es lo que hoy no
-   está en ningún lado y lo que el productor necesita antes de salir a buscar
-   estiércol.
+2. ~~**Pantalla de no permitidos**, con el porqué de cada uno.~~ Hecho: está en
+   la wiki como "Qué no entra en la chacra", con los seis insumos del acuerdo,
+   por qué queda afuera cada uno y qué poner en su lugar. Sale de
+   `docs/datos/no-permitidos.json` y también va en la cartilla impresa.
 3. ~~**Acumulado de cobre por chacra y temporada**, con aviso al acercarse a los
    6 kg/ha/año.~~ Hecho: está en el Plan de Salud, sector por sector. Hoy sale
    de lo planificado; cuando esté la fase 3 va a salir de lo aplicado.

@@ -41,7 +41,7 @@ app y cómo se usa, en el [README](README.md).
 | **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | pendiente |
 | **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 planillas creadas y servicio escrito; falta desplegarlo y programar el envío |
 | **5 · Monitoreo** | Registro a campo + motor de sugerencia + aviso al técnico + plan de tratamiento | pendiente |
-| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales, consultables sin señal | 🔄 en curso — 24 biopreparados y 7 plagas cargados; faltan las enfermedades fúngicas y las fotos |
+| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 24 biopreparados y 7 plagas cargados; faltan las enfermedades fúngicas y las fotos |
 | **7 · Avisos** | Correo automático de aplicaciones pendientes | pendiente |
 | **8 · Piloto** | Prueba con 2 chacras, ajustes y despliegue a las 10 | pendiente |
 

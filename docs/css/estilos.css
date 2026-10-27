@@ -375,6 +375,22 @@ a.boton { text-decoration: none; }
 
 .grupo[open] { border-color: var(--verde-claro); }
 
+/* Los insumos que el sello no admite se distinguen de las categorías de recetas
+   por una franja al costado: el icono y el título ya dicen qué son, pero en una
+   lista plegada conviene que se vea de lejos que estas no son recetas. */
+.grupo--veda { border-left: 5px solid var(--error); }
+.grupo--veda[open] { border-color: var(--borde); border-left-color: var(--error); }
+.grupo--veda .grupo__flecha { border-right-color: var(--error); border-bottom-color: var(--error); }
+.grupo--veda .grupo__cab:active { background: var(--error-suave); }
+
+/* El reemplazo cierra cada ficha: es lo que el productor se lleva. */
+.en-su-lugar {
+  margin-bottom: 0;
+  padding: 10px 12px;
+  background: var(--verde-suave);
+  border-radius: var(--radio);
+}
+
 .grupo__cab {
   display: flex;
   align-items: center;
