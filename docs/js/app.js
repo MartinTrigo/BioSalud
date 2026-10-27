@@ -34,10 +34,7 @@
       titulo: "Seguimiento de plan",
       detalle: "Qué toca aplicar hoy y qué quedó pendiente",
       subtitulo: "Checklist de aplicaciones",
-      fase: 3,
-      queVa: `Acá vas a ver qué te toca aplicar hoy, esta semana y qué quedó
-        atrasado. Marcás lo que fuiste haciendo, anotás la fecha real y las
-        condiciones, y queda registrado en la planilla de tu chacra.`,
+      listo: true,          // la atiende js/seguimiento.js
     },
     monitoreo: {
       icono: "🔍",
@@ -105,6 +102,12 @@
 
     if (base === "plan") {
       const cabecera = await window.Plan.render(vista, ruta, ir);
+      encabezado(cabecera.titulo, cabecera.subtitulo);
+      return;
+    }
+
+    if (base === "seguimiento") {
+      const cabecera = await window.Seguimiento.render(vista, ruta, ir);
       encabezado(cabecera.titulo, cabecera.subtitulo);
       return;
     }

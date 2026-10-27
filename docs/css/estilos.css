@@ -567,6 +567,96 @@ a.boton { text-decoration: none; }
 .tarjeta--info-producto { background: var(--verde-suave); border-color: var(--verde-claro); }
 .tarjeta--info-producto .nota { margin-top: 8px; }
 
+/* ---------- Seguimiento ----------
+   La agenda del día. Cada grupo se distingue por una franja al costado, porque
+   en el campo se mira de reojo y lo primero que hay que ver es si hay algo
+   atrasado, no leer los títulos. */
+.grupo-agenda { border-left: 5px solid var(--borde); }
+.grupo-agenda--atrasado { border-left-color: var(--error); }
+.grupo-agenda--hoy { border-left-color: var(--verde-claro); }
+.grupo-agenda--semana { border-left-color: var(--celeste); }
+
+.grupo-agenda__cuenta {
+  display: inline-block;
+  min-width: 26px;
+  padding: 1px 8px;
+  margin-left: 4px;
+  font-size: 15px;
+  text-align: center;
+  background: var(--fondo);
+  border-radius: 12px;
+}
+
+.agenda { list-style: none; margin: 10px 0 0; padding: 0; }
+
+.agenda__item {
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+.agenda__item--abierto { border-color: var(--verde-claro); }
+.agenda__item--hecho { background: var(--fondo); }
+
+.agenda__cab { display: flex; align-items: baseline; gap: 10px; }
+
+/* La fecha va en ancho fijo para que las filas queden alineadas aunque los
+   nombres de los productos midan distinto. */
+.agenda__fecha {
+  flex: none;
+  width: 46px;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+
+.agenda__texto { flex: 1; min-width: 0; }
+.agenda__detalle { display: block; font-size: 14px; color: var(--texto-suave); }
+.agenda__subido { display: block; margin-top: 6px; font-size: 14px; color: var(--texto-suave); }
+
+.agenda__form { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--borde); }
+.agenda__form .campo { margin-bottom: 10px; }
+
+/* El semáforo de cumplimiento: el número grande primero, porque es lo único
+   que se mira, y la barra abajo para dar la proporción de un vistazo. */
+.semaforo { border-left: 5px solid var(--borde); }
+.semaforo--ok { border-left-color: var(--verde-claro); }
+.semaforo--medio { border-left-color: var(--dorado); }
+.semaforo--bajo { border-left-color: var(--error); }
+
+.semaforo__cifra { display: flex; align-items: baseline; gap: 10px; margin-top: 6px; }
+/* El "20 %" no se parte en dos líneas: en 375 px, con el número en 30 px, el
+   espacio antes del signo era suficiente para que el navegador lo cortara. */
+.semaforo__cifra strong { font-size: 30px; line-height: 1; white-space: nowrap; }
+.semaforo__cifra span { font-size: 14px; color: var(--texto-suave); }
+
+.semaforo__barra {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  height: 8px;
+  margin: 10px 0 6px;
+  border: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--fondo);
+  color: var(--verde-claro);
+}
+
+.semaforo__barra::-webkit-progress-bar { background: var(--fondo); }
+.semaforo__barra::-webkit-progress-value { background: var(--verde-claro); }
+.semaforo__barra::-moz-progress-bar { background: var(--verde-claro); }
+
+.semaforo--medio .semaforo__barra { color: var(--dorado); }
+.semaforo--medio .semaforo__barra::-webkit-progress-value { background: var(--dorado); }
+.semaforo--medio .semaforo__barra::-moz-progress-bar { background: var(--dorado); }
+
+.semaforo--bajo .semaforo__barra { color: var(--error); }
+.semaforo--bajo .semaforo__barra::-webkit-progress-value { background: var(--error); }
+.semaforo--bajo .semaforo__barra::-moz-progress-bar { background: var(--error); }
+
 /* La cuenta del cobre. Cada sector lleva una barra contra el tope de 6 kg/ha
    al año: el número solo no dice si está cerca, y la barra sí. El color no es
    el único indicio —el texto dice siempre cuánto de cuánto— porque al sol, en
