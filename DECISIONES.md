@@ -327,6 +327,41 @@ decidió pero quiere leer cómo se hace un biofertilizante.
 
 ---
 
+## Por qué la cuenta del cobre mira los litros de caldo y no la dosis
+
+**Decisión:** para calcular cuánto cobre recibe un sector se pregunta cuántos
+litros de caldo se preparan por aplicación, y no se interpreta la dosis.
+
+El Anexo III de la Resolución 374/2016 admite los compuestos de cobre hasta 6 kg
+de cobre por hectárea y por año, y el protocolo del SPG pide que el Consejo de
+Garantía lleve ese acumulado por chacra y por temporada (ver
+[SPG-ECOMARCAL.md](SPG-ECOMARCAL.md)). La app ya sabe qué se va a aplicar, dónde
+y cada cuánto, así que estaba a un dato de poder llevar la cuenta sola.
+
+Ese dato no podía ser la dosis. La dosis se escribe a mano —"25 %", "200 cc por
+mochila", "puro"— y de ahí no sale un número confiable. Pero además no hace
+falta: **el cobre entra una sola vez, con el sulfato, al preparar la tanda.**
+Diluir después reparte el mismo cobre en más agua, no agrega ni saca un gramo.
+Los litros de caldo preparados, en cambio, son un dato que el productor sabe
+seguro, porque es el tamaño del tambor que llena.
+
+**La cuenta es por sector y no por chacra**, porque el tope es por hectárea y
+porque el cobre se acumula donde cae. Trescientos gramos son 15 kg por hectárea
+en un invernadero de 200 m² y 600 g por hectárea en media hectárea de frutal: el
+mismo número de un lado es un problema y del otro no.
+
+**Hoy sale del plan y no de lo aplicado**, porque la fase 3 todavía no existe y
+el plan es lo único cargado. Igual es lo que conviene mirar: el tope es anual, y
+enterarse en febrero de que se pasó no sirve de nada. Por eso `js/cobre.js`
+recibe una lista plana de aplicaciones y no el plan: cuando esté el registro de
+lo aplicado de verdad, cambia de dónde sale la lista y nada más.
+
+**Lo que esta cuenta todavía no ve:** un producto comercial con cobre cargado
+como "otro producto que no está en la wiki". No tiene ficha, así que no tiene
+cuánto cobre lleva.
+
+---
+
 ## Decisiones menores que conviene recordar
 
 **El código de chacra lo asigna el equipo, no el productor.** Si cada uno

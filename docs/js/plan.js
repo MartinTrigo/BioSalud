@@ -25,7 +25,7 @@
 // ==========================================================================
 
 window.Plan = (function () {
-  const { esc, brindis, aNumero, superficie } = window.Util;
+  const { esc, brindis, numero, aNumero, superficie } = window.Util;
 
   // El para qué no se pregunta: ya lo dice el tipo de bioinsumo elegido en el
   // paso 1, y preguntarlo de nuevo abajo era pedir dos veces lo mismo.
@@ -125,6 +125,8 @@ window.Plan = (function () {
 
       ${renglones.length ? `<ul class="renglones">${renglones.map(filaRenglon).join("")}</ul>` : ""}
 
+      ${avisoCobre()}
+
       <div class="tarjeta">
         <h2>${enEdicion ? "Editar renglón" : "Agregar un producto al plan"}</h2>
         ${selectorProducto()}
@@ -190,6 +192,79 @@ window.Plan = (function () {
     return `${d}/${m}`;
   }
 
+  // ---------- Cobre ----------
+  //
+  // La cuenta la hace js/cobre.js; acá solo se la alimenta con el plan y se la
+  // dibuja. Se muestra dos veces a propósito: arriba el acumulado de toda la
+  // temporada, y abajo, mientras se completa el renglón, cómo queda si se
+  // agrega. Es la diferencia entre enterarse y poder decidir.
+
+  const limiteCobre = () => window.Cobre.limite(bio);
+
+  function cobreDe(lista) {
+    return window.Cobre.porSector(
+      window.Cobre.aplicacionesDelPlan(lista, (r) => ocurrencias(r).length),
+      config.sectores || [], ficha, limiteCobre());
+  }
+
+  // Dos decimales: con 6 kg de tope, el tercero no cambia ninguna decisión y
+  // hace más difícil de leer el número en el campo.
+  const kg = (n) => numero(Math.round(n * 100) / 100);
+
+  // La barra va con <progress> y no con un div al que se le calcula el ancho:
+  // la app tiene una CSP que prohíbe los estilos en línea —y está bien que la
+  // tenga—, así que un style="width:…" quedaría bloqueado por el navegador y
+  // la barra no se vería. Además <progress> se anuncia solo en los lectores de
+  // pantalla.
+  function filaCobre(f) {
+    const tope = limiteCobre();
+
+    return `
+      <li class="cobre__sector cobre__sector--${esc(f.estado)}">
+        <div class="cobre__linea">
+          <strong>${esc(f.nombre)}</strong>
+          <span>${f.kg_por_ha === null
+            ? numero(Math.round(f.gramos)) + " g en total"
+            : kg(f.kg_por_ha) + " de " + numero(tope) + " kg/ha"}</span>
+        </div>
+        ${f.kg_por_ha === null ? "" : `<progress class="cobre__barra" max="${esc(String(tope))}"
+          value="${esc(String(Math.min(tope, f.kg_por_ha)))}"></progress>`}
+        <span class="cobre__detalle">${f.kg_por_ha === null
+          ? "Este sector no tiene superficie cargada, así que no se puede saber cuánto es por hectárea."
+          : esc(superficie(f.superficie) + " · " + numero(Math.round(f.gramos)) +
+                " g de cobre en la temporada · " +
+                f.productos.map((p) => p.nombre).join(", "))}</span>
+      </li>`;
+  }
+
+  function avisoCobre() {
+    const filas = cobreDe(renglones);
+    if (!filas.length) return "";
+
+    const peor = window.Cobre.peor(filas);
+    const clase = peor.estado === "pasado" ? "aviso--error"
+                : peor.estado === "ok" ? "aviso--ok" : "aviso--info";
+
+    const titulo = peor.estado === "pasado"
+      ? `Este plan se pasa del tope de cobre en ${peor.nombre}.`
+      : peor.estado === "cerca"
+      ? `En ${peor.nombre} el plan llega al ${Math.round(peor.porcentaje)} % del tope de cobre.`
+      : peor.estado === "sin-superficie"
+      ? "Falta la superficie de un sector para poder calcular el cobre por hectárea."
+      : "El cobre del plan queda dentro del tope.";
+
+    return `
+      <div class="tarjeta cobre">
+        <h2>Cobre de la temporada</h2>
+        <p class="aviso ${clase}">${esc(titulo)}</p>
+        <ul class="cobre__sectores">${filas.map(filaCobre).join("")}</ul>
+        <p class="nota">Son ${esc(String(limiteCobre()))} kg de cobre por hectárea y
+        por año, contando bordelés, Visosa y cualquier otro preparado con cobre. Sale
+        de lo que tenés planificado: cuando registres lo aplicado de verdad, la cuenta
+        va a salir de ahí.</p>
+      </div>`;
+  }
+
   // ---------- Selector de producto ----------
 
   // Se elige en dos pasos y no en una sola lista: veinticuatro productos en un
@@ -243,9 +318,10 @@ window.Plan = (function () {
     const sug = (f && f.sugerencia) || {};
     const marcados = new Set(r.sectores || []);
 
-    // Si el producto está señalado como no admitido sin consulta, se avisa acá
-    // y no cuando ya lo aplicó.
-    const dudoso = f && (f.etiquetas || []).some((e) => e.indexOf("no admitido") === 0);
+    // Los preparados con cobre se avisan acá, al armar el plan, y no cuando ya
+    // se aplicaron: el tope es anual, así que la única forma de no pasarse es
+    // verlo antes.
+    const cobre = window.Cobre.lleva(f) ? f.cobre : null;
 
     return `
       ${f ? `<div class="tarjeta tarjeta--info-producto">
@@ -257,9 +333,10 @@ window.Plan = (function () {
         <button class="boton--peligro boton--editar" data-ficha="${esc(f.id)}">Ver la ficha completa</button>
       </div>` : ""}
 
-      ${dudoso ? `<p class="aviso aviso--error"><strong>Cuidado.</strong> Este producto
-        lleva cobre y todavía no está definido si el sello ECOMARCAL lo admite.
-        Consultá con el equipo técnico antes de incluirlo en el plan.</p>` : ""}
+      ${cobre ? `<p class="aviso aviso--error"><strong>Lleva cobre.</strong> El sello
+        lo admite, pero hasta <strong>${esc(String(limiteCobre()))} kg de cobre por
+        hectárea y por año</strong>, sumando todos los preparados con cobre.
+        ${esc(cobre.detalle)}</p>` : ""}
 
       ${categoria === "__otro" ? `
         <div class="campo">
@@ -323,6 +400,19 @@ window.Plan = (function () {
       </div>
 
       <p class="aviso aviso--ok" id="cuenta-aplicaciones">Completá las fechas para ver cuántas aplicaciones son.</p>
+
+      ${cobre ? `
+        <div class="campo">
+          <label for="f-litros">Litros de caldo por aplicación, en cada sector
+            <span class="ayuda">Cuánto preparás cada vez. La receta rinde
+              ${esc(String(cobre.litros_receta))} litros. De acá sale la cuenta del
+              cobre: diluirlo después no cambia cuánto cobre hay.</span></label>
+          <input id="f-litros" class="${mal("litros")}" type="text" inputmode="decimal"
+                 value="${esc(String(r.litros_por_aplicacion || cobre.litros_receta))}"
+                 placeholder="${esc(String(cobre.litros_receta))}">
+          ${error("litros")}
+        </div>
+        <div id="cuenta-cobre"></div>` : ""}
 
       <div class="campo">
         <label for="f-obs">Observaciones <span class="ayuda">Opcional</span></label>
@@ -399,7 +489,7 @@ window.Plan = (function () {
 
     // La cuenta de aplicaciones y el aviso de riego se actualizan mientras se
     // completa, no al guardar: es lo que hace que el plan se vuelva concreto.
-    ["#f-desde", "#f-hasta", "#f-cada"].forEach((id) => {
+    ["#f-desde", "#f-hasta", "#f-cada", "#f-litros"].forEach((id) => {
       const el = destino.querySelector(id);
       if (el) el.oninput = actualizarCuenta;
     });
@@ -427,12 +517,56 @@ window.Plan = (function () {
     if (!n) {
       caja.textContent = "Completá desde, hasta y cada cuántos días para ver cuántas aplicaciones son.";
       caja.className = "aviso aviso--info";
+      actualizarCobre();
       return;
     }
     const porSector = sectoresMarcados().length || 1;
     caja.innerHTML = `Son <strong>${n} ${n === 1 ? "aplicación" : "aplicaciones"}</strong>` +
       (porSector > 1 ? ` en cada uno de los ${porSector} sectores` : "") + ".";
     caja.className = "aviso aviso--ok";
+    actualizarCobre();
+  }
+
+  // Mientras se completa el renglón: cómo queda el cobre de la temporada si se
+  // agrega. Se suma lo ya guardado más este borrador, porque el tope es de la
+  // temporada entera y el número de un renglón suelto no dice nada.
+  function actualizarCobre() {
+    const caja = destino.querySelector("#cuenta-cobre");
+    if (!caja) return;
+
+    const borrador = {
+      id: editando || "__borrador",
+      producto_id: elegido,
+      producto: (ficha(elegido) || {}).nombre || "",
+      sectores: sectoresMarcados(),
+      litros_por_aplicacion: aNumero(valor("#f-litros")),
+      desde: valor("#f-desde"),
+      hasta: valor("#f-hasta"),
+      cada_dias: aNumero(valor("#f-cada")),
+    };
+
+    const filas = cobreDe(
+      renglones.filter((r) => r.id !== borrador.id).concat([borrador]))
+      .filter((f) => borrador.sectores.indexOf(f.sector) >= 0);
+
+    if (!filas.length) {
+      caja.innerHTML = `<p class="nota">Completá los litros, los sectores y las
+        fechas para ver cuánto cobre suma.</p>`;
+      return;
+    }
+
+    const peor = window.Cobre.peor(filas);
+    const clase = peor.estado === "pasado" ? "aviso--error"
+                : peor.estado === "ok" ? "aviso--ok" : "aviso--info";
+    const titulo = peor.estado === "pasado"
+      ? `Así la temporada se pasa del tope en ${peor.nombre}.`
+      : peor.estado === "sin-superficie"
+      ? `Falta la superficie de ${peor.nombre} para saber cuánto es por hectárea.`
+      : `Con este renglón, el sector más cargado queda en ${Math.round(peor.porcentaje)} % del tope.`;
+
+    caja.innerHTML = `
+      <p class="aviso ${clase}">${esc(titulo)}</p>
+      <ul class="cobre__sectores">${filas.map(filaCobre).join("")}</ul>`;
   }
 
   // Fertirriego en un sector sin cañería no se puede hacer. Se avisa, no se
@@ -456,6 +590,9 @@ window.Plan = (function () {
     errores = {};
     const f = categoria === "__otro" ? null : ficha(elegido);
 
+    const cobre = window.Cobre.lleva(f) ? f.cobre : null;
+    const litros = cobre ? aNumero(valor("#f-litros")) : null;
+
     const nombre = f ? f.nombre : valor("#f-otro").trim();
     const dosis = valor("#f-dosis").trim();
     const metodo = valor("#f-metodo");
@@ -474,6 +611,12 @@ window.Plan = (function () {
     if (!hasta) errores.hasta = "Falta la fecha de fin.";
     if (desde && hasta && hasta < desde) errores.hasta = "La fecha de fin es anterior a la de inicio.";
     if (Number.isNaN(cada) || cada <= 0) errores.cada = "Poné cada cuántos días se repite. Por ejemplo: 15";
+    // Sin los litros no hay cuenta de cobre posible, y es justo el producto en
+    // el que no se puede dejar pasar.
+    if (cobre && (Number.isNaN(litros) || litros <= 0)) {
+      errores.litros = "Poné cuántos litros de caldo preparás por aplicación. Por ejemplo: "
+        + cobre.litros_receta;
+    }
 
     if (Object.keys(errores).length) {
       pintar();
@@ -493,6 +636,7 @@ window.Plan = (function () {
       categoria: f ? f.categoria : "otro",
       motivo: tipo ? tipo.nombre : "Otro bioinsumo",
       dosis: dosis,
+      litros_por_aplicacion: cobre ? litros : null,
       metodo: metodo,
       sectores: sectores,
       desde: desde,

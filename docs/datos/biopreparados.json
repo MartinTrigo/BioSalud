@@ -1053,10 +1053,9 @@
       "nombre": "Caldo bordelés",
       "categoria": "enfermedades",
       "etiquetas": [
-        "cobre",
         "fungicida",
         "bactericida",
-        "no admitido sin consulta"
+        "cobre con tope anual"
       ],
       "resumen": "El fungicida clásico de la agricultura orgánica: sulfato de cobre y cal. Muy efectivo y, por el cobre, el que más discusión genera dentro de un esquema agroecológico.",
       "sugerencia": {
@@ -1093,12 +1092,18 @@
       "cuidados": [
         "No aplicar en floración.",
         "El cobre se acumula en el suelo y es tóxico para lombrices y microorganismos. No es inocuo por ser 'natural'.",
-        "Antes de usarlo en un establecimiento certificado, consultar si el sello lo admite y con qué límite anual. Está pendiente de definir contra el pliego ECOMARCAL.",
+        "El Anexo III de la Resolución 374/2016 lo admite, pero hasta 6 kg de cobre por hectárea y por año, sumando todos los preparados con cobre. La app lleva esa cuenta a partir de tu plan.",
         "Evitar la exposición al sol durante la preparación."
       ],
       "fuente": [
         "F4"
-      ]
+      ],
+      "cobre": {
+        "gramos_por_litro": 2.54,
+        "litros_receta": 20,
+        "gramos_por_receta": 50.8,
+        "detalle": "200 g de sulfato de cobre en 20 litros de caldo, que son unos 50,8 g de cobre metálico por tanda."
+      }
     },
     {
       "id": "caldo-visosa",
@@ -1107,8 +1112,7 @@
       "etiquetas": [
         "roya",
         "boro",
-        "cobre",
-        "no admitido sin consulta"
+        "cobre con tope anual"
       ],
       "resumen": "Un bordelés enriquecido con boro, magnesio y zinc. Apunta específicamente a la roya, corrigiendo la deficiencia de boro que la favorece.",
       "sugerencia": {
@@ -1150,12 +1154,18 @@
       "conservacion": "No se almacena.",
       "cuidados": [
         "Nunca aplicar en floración.",
-        "Lleva cobre: valen las mismas advertencias que el caldo bordelés, más la consulta al pliego ECOMARCAL.",
+        "El Anexo III de la Resolución 374/2016 lo admite, pero hasta 6 kg de cobre por hectárea y por año, sumando todos los preparados con cobre. La app lleva esa cuenta a partir de tu plan.",
         "El bórax es tóxico por ingestión. Guardarlo fuera del alcance de chicos y animales."
       ],
       "fuente": [
         "F4"
-      ]
+      ],
+      "cobre": {
+        "gramos_por_litro": 1.27,
+        "litros_receta": 100,
+        "gramos_por_receta": 127.0,
+        "detalle": "500 g de sulfato de cobre en 100 litros de caldo, que son unos 127 g de cobre metálico por tanda."
+      }
     },
     {
       "id": "caldo-bicarbonato",
@@ -1279,5 +1289,11 @@
     "Falta el texto completo del Anexo II de la Resolución 374/2016 (abonos y nutrientes permitidos). Sin eso quedan sin confirmar los sulfatos de zinc, magnesio y potasio, el bórax y la harina de roca que usan el Súpermagro, el caldo Visosa, el sulfocálcico enriquecido y el fertilizante rico en fósforo.",
     "Volúmenes por superficie: la bibliografía regional ajustó las diluciones, pero reconoce que cuánto aplicar por hectárea todavía no está definido.",
     "Fotos propias de cada etapa de elaboración."
-  ]
+  ],
+  "cobre": {
+    "limite_kg_ha_anio": 6,
+    "titulo": "Tope de cobre del Anexo III",
+    "detalle": "El Anexo III de la Resolución 374/2016 de SENASA admite los compuestos de cobre hasta 6 kg de cobre por hectárea y por año, con prescripción y medidas de reducción de riesgo como zonas de amortiguación. El protocolo del SPG Ecomarcal pide que el Consejo de Garantía lleve el acumulado por chacra y por temporada.",
+    "sulfato_de_cobre_por_ciento": 25.4
+  }
 }

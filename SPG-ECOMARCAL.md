@@ -123,8 +123,10 @@ cobre metálico por mochila**. El tope de 6 kg por hectárea y por año da unas 
 mochilas por hectárea al año: en una huerta de 1000 m², unas 12 mochilas.
 
 No es mucho, y el protocolo pide que el Consejo lleve el acumulado **por chacra
-y por temporada**. La app ya registra cada aplicación, así que puede llevar esa
-cuenta sola. Es el aporte más concreto que puede hacer al trabajo del Consejo.
+y por temporada**. La app ya lleva esa cuenta: al armar el Plan de Salud muestra,
+sector por sector, cuántos kg de cobre por hectárea suma la temporada y avisa
+cuando se acerca al tope. Es el aporte más concreto que puede hacer al trabajo
+del Consejo.
 
 ### 4. La cal fuera del bordelés y del sulfocálcico
 
@@ -214,8 +216,9 @@ Por orden de lo que más sirve:
 2. **Pantalla de no permitidos**, con el porqué de cada uno. Es lo que hoy no
    está en ningún lado y lo que el productor necesita antes de salir a buscar
    estiércol.
-3. **Acumulado de cobre por chacra y temporada**, calculado de las aplicaciones
-   que ya se registran, con aviso al acercarse a los 6 kg/ha/año.
+3. ~~**Acumulado de cobre por chacra y temporada**, con aviso al acercarse a los
+   6 kg/ha/año.~~ Hecho: está en el Plan de Salud, sector por sector. Hoy sale
+   de lo planificado; cuando esté la fase 3 va a salir de lo aplicado.
 4. **Registro de elaboración por lote** con los campos del Anexo I, para que el
    productor llegue a la visita con el papel hecho.
 5. **Autorización del Consejo por bioinsumo y por chacra**: fecha y estado, para

@@ -70,13 +70,15 @@ var HOJAS = {
   // Fase 2 — los renglones del plan de salud de la temporada.
   plan: {
     nombre: "Plan",
-    encabezados: ["Id", "Temporada", "Producto", "Categoría", "Dosis", "Método",
+    encabezados: ["Id", "Temporada", "Producto", "Categoría", "Dosis",
+                  "Litros por aplicación", "Método",
                   "Sectores", "Desde", "Hasta", "Cada (días)", "Motivo",
                   "Estado", "Observaciones", "Cargado por", "Recibido"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.temporada), comoTexto(d.producto), comoTexto(d.categoria),
-              comoTexto(d.dosis), comoTexto(d.metodo), comoTexto(d.sectores),
+              comoTexto(d.dosis), d.litros_por_aplicacion || "", comoTexto(d.metodo),
+              comoTexto(d.sectores),
               comoTexto(d.desde), comoTexto(d.hasta), d.cada_dias || "",
               comoTexto(d.motivo), comoTexto(d.estado) || "Activo",
               comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date()];
