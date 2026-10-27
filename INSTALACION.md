@@ -70,7 +70,7 @@ Tiene que contestar algo así:
 ok       ACCESOS        →  planilla «BioSalud · Accesos»
 ok       CARPETA_DATOS  →  carpeta «BioSalud — Datos»
 ok       CLAVE_ADMIN    →  cargada (24 caracteres, no se muestra)
-ok       CHACRAS        →  vacía todavía. Usá altaDeChacra() para sumar la primera.
+ok       CHACRAS        →  vacía todavía. Menú BioSalud → Dar de alta una chacra.
 ```
 
 Si alguna línea dice **MAL**, ese identificador está mal copiado. Si dice
@@ -118,30 +118,33 @@ siquiera qué chacras existen.
 
 ## Sumar una chacra
 
-En el editor, abrir la función **`altaDeChacra`**, editar las tres líneas de
-arriba y ejecutarla:
+**No hace falta abrir el editor ni tocar código.** En la planilla
+**BioSalud · Accesos**, menú **BioSalud → Dar de alta una chacra**. Pregunta tres
+cosas, una por vez:
 
-```javascript
-var codigo  = "radal";                 // código corto, sin espacios ni acentos
-var nombre  = "Chacra El Radal";       // cómo se va a llamar la planilla
-var persona = "Marta Quilodrán";       // quién va a cargar desde el celular
-```
+| Pregunta | Ejemplo |
+|---|---|
+| Código corto, sin espacios ni acentos | `radal` |
+| Nombre, como va a figurar en la planilla | `Chacra El Radal` |
+| Quién va a cargar desde el celular | `Marta Quilodrán` |
 
 Eso hace todo de una vez:
 
 - Crea la planilla dentro de la carpeta `Chacras`.
 - Le arma las cinco hojas con sus encabezados.
 - La registra en la propiedad `CHACRAS`.
-- Genera el código de invitación.
+- Genera la primera invitación, que queda en la hoja `Invitaciones`.
 
-En el registro de ejecución quedan el enlace a la planilla y el código. Después
-faltan dos cosas a mano:
+Al terminar muestra el enlace a la planilla y el código de invitación. Si el
+menú no aparece, recargá la planilla: se arma al abrirla.
 
-1. **Implementar → Administrar implementaciones → lápiz → Nueva versión.**
-   Sin esto el servicio publicado sigue siendo el anterior y no conoce la chacra
-   nueva.
-2. **Compartir la planilla de esa chacra con esa chacra**, como lectora, para
-   que pueda ver sus propios datos.
+> **No hace falta implementar una versión nueva.** `CHACRAS` es una propiedad
+> del script y se lee en cada pedido, así que la chacra nueva funciona enseguida.
+> Implementar hace falta solo cuando cambia el código, no cuando se suma una
+> chacra.
+
+Lo único que queda a mano: **compartir la planilla de esa chacra con esa
+chacra**, como lectora, para que pueda ver sus propios datos.
 
 El **código corto** lo elige el equipo técnico, no el productor: si cada uno
 eligiera el suyo, dos podrían elegir el mismo y sus registros terminarían en la

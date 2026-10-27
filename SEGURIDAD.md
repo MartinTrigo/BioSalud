@@ -82,12 +82,21 @@ abrirla, vería las huellas de todas las demás.
 
 ### Dar de alta a un productor
 
-1. En el editor de Apps Script, abrir `crearInvitacion()`, poner el código de
-   chacra y el nombre de la persona, y ejecutar.
-2. El código queda en la hoja `Invitaciones` y aparece en el registro de
-   ejecución.
+1. En la planilla `BioSalud · Accesos`, menú **BioSalud → Nueva invitación para
+   una chacra**. Pide el código de la chacra y el nombre de la persona.
+2. El código queda en la hoja `Invitaciones` y se muestra en pantalla.
 3. Dárselo **en persona o por un canal directo**, no en un grupo de WhatsApp.
 4. La persona lo escribe una vez en la app y no vuelve a necesitarlo.
+
+La primera invitación de una chacra ya la crea el alta, así que esto es para
+sumar a una segunda persona.
+
+**No escribas filas a mano en `Invitaciones`.** El menú se niega a crear una
+invitación para una chacra que no esté dada de alta, pero una fila escrita a mano
+se saltea ese control: el canje la aceptaría igual —solo compara el código y la
+chacra de esa fila— y el teléfono quedaría con una credencial válida para una
+chacra sin planilla. Todo lo que cargue en el campo se queda en la cola, y nadie
+se entera hasta preguntarse por qué esa chacra nunca subió nada.
 
 Lo natural es hacerlo en la visita de instalación: uno se sienta al lado del
 productor, le muestra la app y escribe el código ahí mismo.

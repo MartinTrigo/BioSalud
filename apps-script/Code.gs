@@ -15,13 +15,10 @@
 //
 // El detalle del modelo de acceso y cómo operarlo está en SEGURIDAD.md.
 //
-// PARA SUMAR UNA CHACRA (no hace falta tocar este código):
-//   1. Crear una planilla nueva en Drive: "BioSalud · Chacra X".
-//   2. En el editor: Configuración del proyecto (engranaje) → Propiedades del
-//      script → propiedad CHACRAS con un JSON así:
-//        {"radal":"1PrP0F…","esperanza":"1AbC…"}
-//   3. Implementar → Administrar implementaciones → lápiz → Nueva versión.
-//   4. Crear las invitaciones con crearInvitacion() (ver más abajo).
+// PARA SUMAR UNA CHACRA no hace falta tocar este código ni abrir el editor:
+// en la planilla "BioSalud · Accesos", menú BioSalud → Dar de alta una chacra.
+// Eso crea la planilla, le arma las hojas, la registra y devuelve el código de
+// invitación. Ver el apartado del menú, más abajo.
 // ==========================================================================
 
 // ---------- Lo que se configura sin tocar el código ----------
@@ -173,17 +170,28 @@ function esAdmin(clave) {
   return !!guardada && String(clave || "") === guardada;
 }
 
-// Se ejecuta A MANO desde el editor de Apps Script para crear el código que se
-// le da a cada productor. No se expone como entrada del servicio: si cualquiera
-// pudiera pedir invitaciones, no habría control de acceso.
-function crearInvitacion() {
-  var chacra = "radal";              // ← editar antes de ejecutar
-  var persona = "Marta Quilodrán";   // ← editar antes de ejecutar
-
-  return nuevaInvitacion(chacra, persona);
-}
-
+// Crea el código que se le da a cada productor. No se expone como entrada del
+// servicio: si cualquiera pudiera pedir invitaciones, no habría control de
+// acceso. Se llama desde el menú de la planilla (ver más abajo).
+//
+// Se niega a inventar una invitación para una chacra que no existe. Pasó una
+// vez: una fila escrita a mano en la hoja Invitaciones, para una chacra que
+// todavía no estaba dada de alta. El canje la habría aceptado igual —solo
+// compara el código y la chacra de esa fila— y el teléfono se habría quedado
+// con una credencial válida para una chacra sin planilla: todo lo que cargara
+// en el campo se iba a quedar en la cola, sin que nadie se enterara hasta
+// revisar por qué esa chacra nunca subía nada.
 function nuevaInvitacion(chacra, persona) {
+  chacra = String(chacra || "").trim().toLowerCase();
+  if (!chacra) throw new Error("Falta el código de la chacra.");
+
+  var mapa = {};
+  try { mapa = JSON.parse(propiedad("CHACRAS") || "{}"); } catch (err) { mapa = {}; }
+  if (!mapa[chacra]) {
+    throw new Error("No hay ninguna chacra con el código «" + chacra + "». " +
+                    "Primero hay que darla de alta.");
+  }
+
   var codigo = alAzar(4) + "-" + alAzar(4);
   hojaAccesos("Invitaciones", INVITACIONES_ENCABEZADOS)
     .appendRow([codigo, chacra, persona, "Nueva", new Date(), "", ""]);
@@ -192,25 +200,98 @@ function nuevaInvitacion(chacra, persona) {
 }
 
 // ==========================================================================
-// SUMAR UNA CHACRA, DE UNA SOLA VEZ
+// SUMAR UNA CHACRA, DESDE EL MENÚ DE LA PLANILLA
 //
 // Antes había que crear la planilla a mano, copiar su id, pegarlo en la
 // propiedad CHACRAS y volver a ejecutar prepararPlanillas. Con diez chacras eso
 // son cuarenta pasos y una oportunidad de equivocarse en cada uno.
 //
-// Esta función hace todo: crea la planilla dentro de la carpeta Chacras, le
-// arma las hojas, la registra en CHACRAS y devuelve el código de invitación
+// crearChacra() hace todo junto: crea la planilla dentro de la carpeta Chacras,
+// le arma las hojas, la registra en CHACRAS y devuelve el código de invitación
 // para el productor.
 //
-// Se ejecuta A MANO desde el editor, editando las dos líneas de abajo.
+// POR QUÉ UN MENÚ Y NO UN FORMULARIO EN LA APP
+//
+// La app está publicada en una URL pública: un formulario de alta ahí dentro
+// dejaría que cualquiera cree planillas en el Drive del equipo y registre
+// chacras. El menú va en la planilla de accesos, que es donde ya se administran
+// las invitaciones y los dispositivos, y la autorización la da Google: solo
+// quien puede abrir esa planilla ve el menú. Así no hace falta inventar un
+// segundo mecanismo de acceso ni que una clave de administración ande dando
+// vueltas en un teléfono.
+//
+// Y sobre todo: nadie tiene que editar código para sumar una chacra. Los datos
+// se escriben en las ventanitas del menú, no en estas líneas, así que tampoco
+// quedan datos de chacras reales en un repositorio público.
 // ==========================================================================
 
-function altaDeChacra() {
-  var codigo = "radal";                     // ← el código corto, sin espacios
-  var nombre = "Chacra El Radal";           // ← como se va a llamar la planilla
-  var persona = "Marta Quilodrán";          // ← quién va a cargar desde el celular
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu("BioSalud")
+    .addItem("Dar de alta una chacra", "menuAltaDeChacra")
+    .addItem("Nueva invitación para una chacra", "menuNuevaInvitacion")
+    .addSeparator()
+    .addItem("Revisar la configuración del servicio", "revisarConfiguracion")
+    .addToUi();
+}
 
-  return crearChacra(codigo, nombre, persona);
+// Pregunta una cosa por vez. Devuelve null si cancelan, para poder cortar sin
+// dejar nada a medio crear.
+function preguntar(titulo, texto) {
+  var ui = SpreadsheetApp.getUi();
+  var r = ui.prompt(titulo, texto, ui.ButtonSet.OK_CANCEL);
+  if (r.getSelectedButton() !== ui.Button.OK) return null;
+  return String(r.getResponseText() || "").trim();
+}
+
+function menuAltaDeChacra() {
+  var ui = SpreadsheetApp.getUi();
+
+  var codigo = preguntar("Dar de alta una chacra (1 de 3)",
+    "Código corto de la chacra, sin espacios ni acentos.\n\n" +
+    "Es lo que el productor escribe en la app. Por ejemplo: radal");
+  if (codigo === null) return;
+  if (!codigo) { ui.alert("Sin código corto no se puede dar de alta."); return; }
+
+  var nombre = preguntar("Dar de alta una chacra (2 de 3)",
+    "Nombre de la chacra, como va a figurar en la planilla.\n\n" +
+    "Por ejemplo: Chacra El Radal");
+  if (nombre === null) return;
+
+  var persona = preguntar("Dar de alta una chacra (3 de 3)",
+    "Quién va a cargar desde el celular.\n\n" +
+    "Con este nombre se crea la primera invitación.");
+  if (persona === null) return;
+
+  try {
+    ui.alert("Chacra dada de alta", crearChacra(codigo, nombre, persona), ui.ButtonSet.OK);
+  } catch (err) {
+    ui.alert("No se pudo dar de alta", String(err.message || err), ui.ButtonSet.OK);
+  }
+}
+
+function menuNuevaInvitacion() {
+  var ui = SpreadsheetApp.getUi();
+
+  var chacra = preguntar("Nueva invitación (1 de 2)",
+    "Código corto de la chacra que ya está dada de alta.\n\n" +
+    "Tiene que ser una de las que figuran en la hoja Invitaciones.");
+  if (chacra === null) return;
+
+  var persona = preguntar("Nueva invitación (2 de 2)",
+    "Para quién es. Queda anotado en la hoja Invitaciones.");
+  if (persona === null) return;
+
+  try {
+    var codigo = nuevaInvitacion(chacra, persona);
+    ui.alert("Invitación creada",
+      "Código para " + (persona || "esa persona") + ", chacra " + chacra + ":\n\n" +
+      "        " + codigo + "\n\n" +
+      "Vale para un solo teléfono. En la app se escribe junto con el código de " +
+      "la chacra.", ui.ButtonSet.OK);
+  } catch (err) {
+    ui.alert("No se pudo crear la invitación", String(err.message || err), ui.ButtonSet.OK);
+  }
 }
 
 function crearChacra(codigo, nombre, persona) {
@@ -241,8 +322,10 @@ function crearChacra(codigo, nombre, persona) {
     "  código      " + codigo + "\n" +
     "  planilla    " + libro.getUrl() + "\n" +
     "  invitación  " + invitacion + "\n\n" +
-    "Falta: Implementar → Administrar implementaciones → Nueva versión,\n" +
-    "y compartirle la planilla a la chacra como lectora.";
+    "Ya funciona: CHACRAS es una propiedad del script y se lee en cada pedido,\n" +
+    "así que no hace falta implementar una versión nueva.\n\n" +
+    "Falta compartirle la planilla a la chacra como lectora, para que pueda\n" +
+    "mirar sus propios datos.";
   Logger.log(resumen);
   return resumen;
 }
@@ -320,7 +403,7 @@ function revisarConfiguracion() {
   probar("CHACRAS", true, function (v) {
     var mapa = JSON.parse(v);
     var codigos = Object.keys(mapa);
-    if (!codigos.length) return "vacía todavía. Usá altaDeChacra() para sumar la primera.";
+    if (!codigos.length) return "vacía todavía. Menú BioSalud → Dar de alta una chacra.";
     return codigos.map(function (c) {
       try {
         return c + " = «" + SpreadsheetApp.openById(mapa[c]).getName() + "»";
