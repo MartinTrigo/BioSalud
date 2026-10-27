@@ -790,3 +790,29 @@ textarea { resize: vertical; min-height: 60px; }
   box-shadow: 0 3px 12px rgba(0, 0, 0, .3);
   z-index: 50;
 }
+
+/* Las miniaturas de las fotos del monitoreo. Van chicas y en fila: son para
+   confirmar que la foto salió, no para mirarla. La que importa se mira después,
+   en grande, desde la planilla. */
+.fotos-tomadas { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; padding: 0; }
+
+.fotos-tomadas li {
+  width: 104px;
+  padding: 6px;
+  text-align: center;
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+
+.fotos-tomadas img {
+  display: block;
+  width: 100%;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--fondo);
+}
+
+.fotos-tomadas__peso { display: block; font-size: 13px; color: var(--texto-suave); margin: 4px 0 2px; }
+.fotos-tomadas .boton--peligro { min-height: 32px; font-size: 14px; padding: 2px 6px; }

@@ -127,41 +127,76 @@ window.Envio = (function () {
     const config = await window.BioDB.leerConfig();
     enviando = true;
     try {
-      const respuesta = await fetch(leerUrl(), {
-        method: "POST",
-        // texto plano a propósito: evita la consulta previa de CORS, que
-        // Apps Script no contesta.
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(Object.assign(
-          window.Acceso.identificacion(config.codigo), { registros: cola })),
-      });
-      const datos = await respuesta.json();
+      // LAS FOTOS VIAJAN DE A UNA, APARTE DEL RESTO.
+      //
+      // Todo lo demás son unos pocos kilobytes y va junto, en un solo pedido.
+      // Una foto pesa cien veces más, y mandarlas todas en el mismo cuerpo
+      // tiene dos problemas: el pedido se vuelve de varios megas sobre la señal
+      // que haya en la chacra, y si falla se reintenta TODO, fotos incluidas.
+      // De a una, lo que entra queda guardado y lo que falla vuelve a intentarse
+      // solo.
+      const fotos = cola.filter((r) => r.tipo === "foto");
+      const resto = cola.filter((r) => r.tipo !== "foto");
 
-      // Dado de baja: se corta el acceso, pero la cola queda intacta.
-      if (datos.sin_permiso) {
-        window.Acceso.borrarCredencial();
-        if (!silencioso) window.Util.brindis(datos.error || "Este teléfono ya no tiene acceso.");
-        return { ok: false, motivo: "sin-permiso", error: datos.error };
+      let guardados = 0;
+      let enviados = 0;
+
+      if (resto.length) {
+        const r = await mandar(config.codigo, resto, silencioso);
+        if (!r.ok) return r;
+        guardados += r.guardados || 0;
+        enviados += resto.length;
+        for (const x of resto) await window.BioDB.borrar("salida", x.id);
       }
 
-      if (!datos.ok) {
-        if (!silencioso) window.Util.brindis("No se pudo enviar: " + (datos.error || "error del servicio"));
-        return { ok: false, motivo: "error", error: datos.error };
+      for (const foto of fotos) {
+        const r = await mandar(config.codigo, [foto], silencioso);
+        // Si una foto no entra, se corta acá: lo anterior ya quedó guardado y
+        // esta sigue en la cola para el próximo intento.
+        if (!r.ok) return Object.assign(r, { enviados: enviados, guardados: guardados });
+        guardados += r.guardados || 0;
+        enviados += 1;
+        await window.BioDB.borrar("salida", foto.id);
       }
-
-      // Recién ahora se saca de la cola, y solo lo que se mandó en este lote.
-      for (const r of cola) await window.BioDB.borrar("salida", r.id);
 
       if (!silencioso) {
-        window.Util.brindis(`${datos.guardados || cola.length} registro(s) enviado(s) ✓`);
+        window.Util.brindis(`${guardados || enviados} registro(s) enviado(s) ✓`);
       }
-      return { ok: true, enviados: cola.length, guardados: datos.guardados };
+      return { ok: true, enviados: enviados, guardados: guardados };
     } catch (err) {
       if (!silencioso) window.Util.brindis("No se pudo enviar. Revisá la señal.");
       return { ok: false, motivo: "sin-red" };
     } finally {
       enviando = false;
     }
+  }
+
+  // Un pedido al servicio con un lote de registros. No saca nada de la cola:
+  // eso lo decide quien lo llama, cuando ya sabe que el lote entró.
+  async function mandar(chacra, registros, silencioso) {
+    const respuesta = await fetch(leerUrl(), {
+      method: "POST",
+      // texto plano a propósito: evita la consulta previa de CORS, que
+      // Apps Script no contesta.
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(Object.assign(
+        window.Acceso.identificacion(chacra), { registros: registros })),
+    });
+    const datos = await respuesta.json();
+
+    // Dado de baja: se corta el acceso, pero la cola queda intacta.
+    if (datos.sin_permiso) {
+      window.Acceso.borrarCredencial();
+      if (!silencioso) window.Util.brindis(datos.error || "Este teléfono ya no tiene acceso.");
+      return { ok: false, motivo: "sin-permiso", error: datos.error };
+    }
+
+    if (!datos.ok) {
+      if (!silencioso) window.Util.brindis("No se pudo enviar: " + (datos.error || "error del servicio"));
+      return { ok: false, motivo: "error", error: datos.error };
+    }
+
+    return { ok: true, guardados: datos.guardados };
   }
 
   // Se intenta al abrir la app y cada vez que vuelve la señal. Nunca molesta:

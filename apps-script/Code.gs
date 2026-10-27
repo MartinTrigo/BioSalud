@@ -104,6 +104,23 @@ var HOJAS = {
     },
   },
 
+  // Fase 5 — las fotos del monitoreo. La imagen va a Drive y acá queda el
+  // enlace: una planilla no guarda archivos, y además así el técnico puede
+  // abrir la foto desde la fila sin descargar nada pesado.
+  fotos: {
+    nombre: "Fotos",
+    encabezados: ["Id", "Monitoreo Id", "Fecha", "Sector", "Qué se observó",
+                  "Archivo", "Enlace", "Tamaño (KB)", "Medidas", "Cargado por", "Recibido"],
+    fila: function (r) {
+      var d = r.datos;
+      return [r.id, comoTexto(d.monitoreo_id), comoTexto(d.fecha), comoTexto(d.sector),
+              comoTexto(d.deteccion), comoTexto(d.archivo), comoTexto(d.enlace),
+              d.bytes ? Math.round(d.bytes / 1024) : "",
+              (d.ancho && d.alto) ? d.ancho + " × " + d.alto : "",
+              comoTexto(r.dispositivo), new Date()];
+    },
+  },
+
   // Fase 5 — lo que se ve caminando el campo.
   monitoreos: {
     nombre: "Monitoreos",
@@ -335,6 +352,50 @@ function crearChacra(codigo, nombre, persona) {
 }
 
 // La carpeta "Chacras" dentro de la carpeta de datos. Si no existe, se crea.
+// ==========================================================================
+// LAS FOTOS DEL MONITOREO
+//
+// La app las achica a 1280 px antes de mandarlas, así que lo que llega acá pesa
+// entre 100 y 200 KB. Se guardan en Drive, una carpeta por chacra, y en la
+// planilla queda el enlace.
+//
+// NO SE COMPARTEN SOLAS. El archivo queda con los permisos que tenga la carpeta,
+// que hoy es el Drive del equipo: el técnico las abre, el productor ve el enlace
+// en su planilla pero no el contenido. Darles acceso es una decisión de quién
+// puede ver las fotos de la chacra de otro, y esa no la toma el código.
+// ==========================================================================
+
+function carpetaDeFotos(chacra) {
+  var padre = propiedad("CARPETA_DATOS");
+  if (!padre) throw new Error("Falta la propiedad CARPETA_DATOS para guardar las fotos.");
+
+  var raiz = DriveApp.getFolderById(padre);
+  var busca = raiz.getFoldersByName("Fotos");
+  var fotos = busca.hasNext() ? busca.next() : raiz.createFolder("Fotos");
+
+  var codigo = String(chacra || "sin-chacra").toLowerCase();
+  var suya = fotos.getFoldersByName(codigo);
+  return suya.hasNext() ? suya.next() : fotos.createFolder(codigo);
+}
+
+// Escribe la imagen en Drive y devuelve con qué nombre quedó y dónde. El nombre
+// lleva fecha, chacra y monitoreo para que la carpeta se pueda mirar de frente,
+// sin tener que cruzarla con la planilla.
+function guardarFoto(chacra, datos) {
+  if (!datos || !datos.contenido) throw new Error("La foto llegó sin contenido.");
+
+  var tipo = String(datos.tipo_imagen || "image/jpeg");
+  var extension = tipo.indexOf("webp") >= 0 ? "webp" : "jpg";
+  var corto = String(datos.monitoreo_id || "").slice(0, 8);
+  var nombre = [String(datos.fecha || "sin-fecha"), String(chacra || "chacra"),
+                corto, String(datos.numero || 1)].join("-") + "." + extension;
+
+  var blob = Utilities.newBlob(Utilities.base64Decode(datos.contenido), tipo, nombre);
+  var archivo = carpetaDeFotos(chacra).createFile(blob);
+
+  return { archivo: nombre, enlace: archivo.getUrl() };
+}
+
 function carpetaDeChacras() {
   var id = propiedad("CARPETA_CHACRAS");
   if (id) return DriveApp.getFolderById(id);
@@ -645,6 +706,17 @@ function doPost(e) {
     try {
       registros.forEach(function (r) {
         if (r.tipo === "config") { guardarConfig(libro, r.datos); guardados++; }
+      });
+
+      // Las fotos se escriben en Drive ANTES de armar su fila, porque la fila es
+      // justamente el enlace al archivo. Si Drive falla, se corta el registro
+      // entero y la foto se queda en la cola del teléfono para el próximo
+      // intento: es preferible a dejar una fila que apunta a ningún lado.
+      registros.forEach(function (r) {
+        if (r.tipo !== "foto") return;
+        var puesta = guardarFoto(chacra, r.datos);
+        r.datos.archivo = puesta.archivo;
+        r.datos.enlace = puesta.enlace;
       });
 
       // Las hojas que se acumulan (aplicaciones, monitoreos) entran por acá a

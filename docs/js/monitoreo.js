@@ -39,6 +39,82 @@ window.Monitoreo = (function () {
 
   const SEVERIDADES = ["Leve", "Media", "Alta"];
 
+  // ---------- Fotos ----------
+  //
+  // Una foto de celular pesa entre 3 y 6 MB, y acá se suben desde la chacra con
+  // la señal que haya. Se achican ANTES de salir del teléfono: 1280 px de lado
+  // mayor alcanzan para que un técnico vea una mancha o una colonia, y dejan el
+  // archivo en 100 a 200 KB. Es la misma idea que tools/preparar-fotos.py hace
+  // con las fotos de la wiki, pero en el navegador y en el momento.
+  //
+  // No se guarda copia en el teléfono. La foto vive en la cola hasta que sube, y
+  // después queda solo el enlace: llenar de imágenes el almacenamiento del peor
+  // celular de la chacra sería ganarse que el productor desinstale la app.
+  const MAX_LADO = 1280;
+  const CALIDAD = 0.75;
+  const MAX_FOTOS = 4;
+
+  let fotos = [];   // las de este monitoreo, todavía sin guardar
+
+  // El archivo se lee como data: y no con URL.createObjectURL, porque la CSP de
+  // la app permite img-src 'self' data: y una URL blob: quedaría bloqueada.
+  function leerImagen(archivo) {
+    if (window.createImageBitmap) {
+      return createImageBitmap(archivo, { imageOrientation: "from-image" })
+        .catch(() => porLector(archivo));
+    }
+    return porLector(archivo);
+  }
+
+  function porLector(archivo) {
+    return new Promise((resolver, rechazar) => {
+      const lector = new FileReader();
+      lector.onload = () => {
+        const img = new Image();
+        img.onload = () => resolver(img);
+        img.onerror = () => rechazar(new Error("No se pudo leer la imagen."));
+        img.src = lector.result;
+      };
+      lector.onerror = () => rechazar(new Error("No se pudo leer el archivo."));
+      lector.readAsDataURL(archivo);
+    });
+  }
+
+  async function achicar(archivo) {
+    const img = await leerImagen(archivo);
+    const ancho = img.width;
+    const alto = img.height;
+    const escala = Math.max(ancho, alto) > MAX_LADO ? MAX_LADO / Math.max(ancho, alto) : 1;
+    const w = Math.max(1, Math.round(ancho * escala));
+    const h = Math.max(1, Math.round(alto * escala));
+
+    const lienzo = document.createElement("canvas");
+    lienzo.width = w;
+    lienzo.height = h;
+    lienzo.getContext("2d").drawImage(img, 0, 0, w, h);
+
+    // WebP pesa bastante menos que JPEG a igual calidad, pero no está en todos
+    // los Android viejos: cuando no está, toDataURL devuelve PNG sin avisar, y
+    // un PNG de 1280 px es peor que el JPEG. Por eso se comprueba y se cae a
+    // JPEG a propósito.
+    let datos = lienzo.toDataURL("image/webp", CALIDAD);
+    let tipo = "image/webp";
+    if (datos.indexOf("data:image/webp") !== 0) {
+      datos = lienzo.toDataURL("image/jpeg", CALIDAD);
+      tipo = "image/jpeg";
+    }
+
+    const base64 = datos.slice(datos.indexOf(",") + 1);
+    return {
+      datos: base64,
+      tipo: tipo,
+      ancho: w,
+      alto: h,
+      bytes: Math.round(base64.length * 3 / 4),
+      vista: datos,          // para la miniatura, mientras dure la pantalla
+    };
+  }
+
   let bio = null;        // datos/biopreparados.json
   let plagas = null;     // datos/plagas.json
   let equipo = null;     // datos/equipo.json
@@ -53,6 +129,7 @@ window.Monitoreo = (function () {
     destino = contenedor;
     irA = navegar;
     errores = {};
+    fotos = [];
 
     destino.innerHTML = `<p class="cargando">Cargando…</p>`;
     try {
@@ -175,6 +252,14 @@ window.Monitoreo = (function () {
           <textarea id="m-obs" rows="2" placeholder="Hace cuánto lo venís viendo, si avanza, qué hiciste"></textarea>
         </div>
 
+        <div class="campo">
+          <label for="m-foto">Fotos
+            <span class="ayuda">Hasta ${MAX_FOTOS}. Es lo que más ayuda a un diagnóstico
+              a distancia: sacá una de cerca del daño y otra de la planta entera.</span></label>
+          <input id="m-foto" type="file" accept="image/*" capture="environment" multiple>
+          <div id="m-fotos"></div>
+        </div>
+
         <button class="boton boton--ancho" id="m-guardar">Guardar y ver qué hacer</button>
       </div>`;
   }
@@ -199,6 +284,51 @@ window.Monitoreo = (function () {
           ${esc(f.monitoreo.join(" "))}</p>` : ""}
         <button class="boton--peligro boton--editar" data-plaga="${esc(f.id)}">Ver la ficha completa</button>
       </div>`;
+  }
+
+  // Las miniaturas se dibujan aparte del formulario, así elegir una foto no
+  // repinta —y no borra— lo que ya se escribió en los otros campos.
+  function pintarFotos() {
+    const caja = destino.querySelector("#m-fotos");
+    if (!caja) return;
+
+    const total = fotos.reduce((s, f) => s + f.bytes, 0);
+    caja.innerHTML = !fotos.length ? "" : `
+      <ul class="fotos-tomadas">
+        ${fotos.map((f, i) => `
+          <li>
+            <img src="${f.vista}" alt="Foto ${i + 1} del monitoreo">
+            <span class="fotos-tomadas__peso">${esc(String(Math.round(f.bytes / 1024)))} KB</span>
+            <button class="boton--peligro" data-quitar-foto="${i}">Quitar</button>
+          </li>`).join("")}
+      </ul>
+      <p class="nota">${fotos.length} ${fotos.length === 1 ? "foto" : "fotos"} ·
+        ${esc(String(Math.round(total / 1024)))} KB en total. Se achican acá antes de
+        salir: la original de tu celular no viaja. En el teléfono no queda copia.</p>`;
+
+    caja.querySelectorAll("[data-quitar-foto]").forEach((b) => {
+      b.onclick = () => { fotos.splice(Number(b.dataset.quitarFoto), 1); pintarFotos(); };
+    });
+  }
+
+  async function tomarFotos(archivos) {
+    const caja = destino.querySelector("#m-fotos");
+    const lugar = MAX_FOTOS - fotos.length;
+    if (lugar <= 0) {
+      if (caja) caja.insertAdjacentHTML("beforeend",
+        `<p class="aviso aviso--info">Ya hay ${MAX_FOTOS} fotos: quitá una para sumar otra.</p>`);
+      return;
+    }
+
+    if (caja) caja.insertAdjacentHTML("beforeend", `<p class="nota" id="m-achicando">Achicando…</p>`);
+    for (const archivo of [...archivos].slice(0, lugar)) {
+      try {
+        fotos.push(await achicar(archivo));
+      } catch (err) {
+        brindis("No se pudo usar una de las fotos");
+      }
+    }
+    pintarFotos();
   }
 
   const error = (c) => (errores[c] ? `<span class="campo__error">${esc(errores[c])}</span>` : "");
@@ -250,11 +380,37 @@ window.Monitoreo = (function () {
       creado: new Date().toISOString(),
     };
 
+    datos.fotos = fotos.length;
+
     await window.BioDB.guardar("monitoreos", datos);
     await window.BioDB.encolarCon(datos.id, "monitoreos", datos);
+
+    // Cada foto va a la cola como su propio registro, no adentro del monitoreo:
+    // así viaja en un pedido aparte y, si una falla, no arrastra a las demás ni
+    // al monitoreo, que es el dato que no se puede perder.
+    for (let i = 0; i < fotos.length; i++) {
+      const f = fotos[i];
+      await window.BioDB.encolar("foto", {
+        monitoreo_id: datos.id,
+        fecha: datos.fecha,
+        sector: datos.sector,
+        deteccion: datos.deteccion,
+        numero: i + 1,
+        tipo_imagen: f.tipo,
+        ancho: f.ancho,
+        alto: f.alto,
+        bytes: f.bytes,
+        contenido: f.datos,
+      });
+    }
+    const cuantas = fotos.length;
+    fotos = [];
+
     registros.unshift(datos);
 
-    brindis("Monitoreo registrado");
+    brindis(cuantas
+      ? `Monitoreo registrado · ${cuantas} ${cuantas === 1 ? "foto" : "fotos"} en camino`
+      : "Monitoreo registrado");
     verDetalle = datos.id;
     pintar();
     window.scrollTo(0, 0);
@@ -274,7 +430,8 @@ window.Monitoreo = (function () {
           ${esc(fechaCorta(r.fecha))}${r.incidencia !== "" ? " · " + esc(String(r.incidencia)) + " % de incidencia" : ""}${
           r.severidad ? " · severidad " + esc(r.severidad.toLowerCase()) : ""}</p>
         <p class="aviso aviso--ok">Quedó registrado y se va a subir a la planilla de
-          tu chacra.</p>
+          tu chacra.${r.fotos ? ` Las ${r.fotos === 1 ? "foto va" : r.fotos + " fotos van"}
+          en pedidos aparte: si hay poca señal pueden tardar más que el registro.` : ""}</p>
       </div>
 
       ${avisoTecnico(r)}
@@ -413,11 +570,20 @@ window.Monitoreo = (function () {
     const que = destino.querySelector("#m-que");
     if (que) que.onchange = pintarFicha;
 
+    const foto = destino.querySelector("#m-foto");
+    if (foto) foto.onchange = async () => {
+      await tomarFotos(foto.files || []);
+      foto.value = "";   // así se puede volver a elegir la misma foto
+    };
+    if (destino.querySelector("#m-fotos")) pintarFotos();
+
     const guardarBtn = destino.querySelector("#m-guardar");
     if (guardarBtn) guardarBtn.onclick = guardar;
 
     const volver = destino.querySelector("#m-volver");
-    if (volver) volver.onclick = () => { verDetalle = null; errores = {}; pintar(); window.scrollTo(0, 0); };
+    if (volver) volver.onclick = () => {
+      verDetalle = null; errores = {}; fotos = []; pintar(); window.scrollTo(0, 0);
+    };
 
     destino.querySelectorAll("[data-ver]").forEach((b) => {
       b.onclick = () => { verDetalle = b.dataset.ver; pintar(); window.scrollTo(0, 0); };
