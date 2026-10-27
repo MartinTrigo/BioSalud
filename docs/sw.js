@@ -18,7 +18,7 @@
 // IMPORTANTE: al cambiar un archivo de la lista, subir el número de CACHE.
 // ==========================================================================
 
-const CACHE = "biosalud-v23";
+const CACHE = "biosalud-v24";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -32,6 +32,7 @@ const ARCHIVOS = [
   "js/acceso.js",
   "js/db.js",
   "js/envio.js",
+  "js/terminos.js",
   "js/config.js",
   "js/wiki.js",
   "js/cobre.js",
@@ -41,6 +42,7 @@ const ARCHIVOS = [
   "datos/biopreparados.json",
   "datos/plagas.json",
   "datos/no-permitidos.json",
+  "datos/terminos.json",
   "img/logo-ifab.png",
   "img/logo-ecomarcal.jpg",
   "img/icono-192.png",

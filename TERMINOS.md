@@ -2,10 +2,16 @@
 
 *Versión de prueba (beta) · borrador para revisión del equipo IFAB · agosto de 2026*
 
-> **Este documento todavía no está aprobado.** Es el borrador que se va a mostrar
-> dentro de la app en la fase 4, para que cada productor lo lea y lo acepte antes
-> de empezar a cargar. Tiene que revisarlo el equipo del IFAB y acordarse con la
+> **Este documento todavía no está aprobado.** Es el borrador que la app ya
+> muestra, para que cada productor lo lea y lo acepte antes de activar su
+> teléfono. Tiene que revisarlo el equipo del IFAB y acordarse con la
 > administración de ECOMARCAL. Ver [DERECHOS.md](DERECHOS.md).
+>
+> **Este archivo es la fuente.** La app no tiene una copia escrita aparte: lee
+> `docs/datos/terminos.json`, que sale de acá con
+> `python tools/generar-terminos.py`. Si se corrige una frase, hay que volver a
+> correrlo. La versión que cada productor acepta lleva una huella del contenido,
+> así que un cambio no anunciado se nota.
 
 BioSalud es una herramienta para planificar, registrar y hacer el seguimiento de
 las aplicaciones de bioinsumos y otros insumos agrícolas, y para registrar el

@@ -39,7 +39,7 @@ app y cómo se usa, en el [README](README.md).
 | **1 · Base** | Armazón, identidad, funcionamiento sin señal, **Configuración** del establecimiento, servicio con control de acceso escrito | ✅ hecha |
 | **2 · Catálogo y Plan** | Lista de bioinsumos, biopreparados y banda verde + **Registrar Plan de Salud** con recurrencias y cuenta del cobre contra el tope de 6 kg/ha/año | ✅ hecha |
 | **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | ✅ hecha |
-| **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 casi — servicio publicado y respondiendo, alta de chacras desde el menú de la planilla de accesos, canje arreglado; falta activar el primer teléfono y mostrar los términos en la app |
+| **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 casi — servicio publicado, alta de chacras desde el menú, canje arreglado y términos mostrados y registrados; falta activar el primer teléfono |
 | **5 · Monitoreo** | Registro a campo + motor de sugerencia + aviso al técnico + plan de tratamiento | pendiente |
 | **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 24 biopreparados, 7 plagas y los no permitidos del sello; faltan las enfermedades fúngicas y las fotos propias |
 | **7 · Avisos** | Correo automático de aplicaciones pendientes | pendiente |

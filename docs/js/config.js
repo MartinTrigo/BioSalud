@@ -302,23 +302,45 @@ window.Config = (function () {
     }
 
     if (e.activado) {
+      const aceptado = await window.Terminos.estado();
       zona.innerHTML = `
         <p class="nota">Este teléfono está activado. Si lo perdés, avisale al
           equipo para darlo de baja.</p>
         ${e.pendientes ? `<button class="boton boton--secundario boton--ancho" id="btn-enviar">
           Enviar ahora ${e.pendientes === 1 ? "el registro pendiente"
-            : "los " + e.pendientes + " pendientes"}</button>` : ""}`;
-    } else {
-      zona.innerHTML = `
-        <div class="campo">
-          <label for="f-invitacion">Código de invitación
-            <span class="ayuda">Te lo da el equipo de extensión. Se usa una sola vez, en este teléfono.</span></label>
-          <input id="f-invitacion" type="text" autocomplete="off" spellcheck="false"
-                 maxlength="12" placeholder="XXXX-XXXX">
-          <span class="campo__error" id="error-invitacion"></span>
-        </div>
-        <button class="boton boton--ancho" id="btn-activar">Activar este teléfono</button>`;
+            : "los " + e.pendientes + " pendientes"}</button>` : ""}
+        <button class="boton--peligro centrado" id="btn-terminos">
+          ${aceptado.desactualizados ? "Los términos cambiaron: leerlos"
+            : "Ver los términos que aceptaste"}</button>`;
+      conectarConexion();
+      return;
     }
+
+    // Los términos van antes del código de invitación, no después: activar es el
+    // momento en que los datos empiezan a salir del teléfono. Ofrecer el campo y
+    // rechazar el canje al final sería hacerle escribir el código para nada.
+    const t = await window.Terminos.estado();
+    if (!t.aceptados || t.desactualizados) {
+      zona.innerHTML = `
+        <p class="nota">${t.desactualizados
+          ? "Los términos de uso cambiaron desde que los aceptaste."
+          : "Antes de activar el teléfono hay que leer y aceptar los términos de uso."}
+          Mientras tanto podés usar la app igual: todo se guarda en el teléfono.</p>
+        <button class="boton boton--ancho" id="btn-terminos">
+          ${t.desactualizados ? "Leer los términos nuevos" : "Leer los términos de uso"}</button>`;
+      conectarConexion();
+      return;
+    }
+
+    zona.innerHTML = `
+      <div class="campo">
+        <label for="f-invitacion">Código de invitación
+          <span class="ayuda">Te lo da el equipo de extensión. Se usa una sola vez, en este teléfono.</span></label>
+        <input id="f-invitacion" type="text" autocomplete="off" spellcheck="false"
+               maxlength="12" placeholder="XXXX-XXXX">
+        <span class="campo__error" id="error-invitacion"></span>
+      </div>
+      <button class="boton boton--ancho" id="btn-activar">Activar este teléfono</button>`;
 
     conectarConexion();
   }
@@ -374,6 +396,9 @@ window.Config = (function () {
       activar.disabled = false;
       activar.textContent = "Activar este teléfono";
     };
+
+    const terminos = destino.querySelector("#btn-terminos");
+    if (terminos) terminos.onclick = () => { location.hash = "#/terminos"; };
 
     const enviar = destino.querySelector("#btn-enviar");
     if (enviar) enviar.onclick = async () => {

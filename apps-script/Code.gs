@@ -45,8 +45,12 @@ function planillaAccesos() {
 
 var INVITACIONES_ENCABEZADOS = ["Código", "Chacra", "Para quién", "Estado", "Creada",
                                 "Usada el", "Dispositivo"];
+// Las dos últimas columnas se agregaron después, y van al final a propósito: la
+// huella se busca por su posición (índice 7) en permitido(), así que correrla
+// dejaría a todos los teléfonos sin acceso de golpe.
 var DISPOSITIVOS_ENCABEZADOS = ["Dispositivo", "Chacra", "Persona", "Activo", "Alta",
-                                "Última actividad", "Registros", "Huella"];
+                                "Última actividad", "Registros", "Huella",
+                                "Términos aceptados", "Aceptados el"];
 
 // ---------- Las hojas de datos de cada chacra ----------
 //
@@ -473,7 +477,7 @@ function limpiarHojaSobrante(libro) {
 }
 
 // Canjea el código por una credencial. El código queda usado y no sirve más.
-function canjearInvitacion(chacra, codigo, persona, dispositivo) {
+function canjearInvitacion(chacra, codigo, persona, dispositivo, terminos) {
   codigo = String(codigo || "").trim().toUpperCase();
   if (!codigo || !chacra) return rechazo("Falta el código o la chacra.");
   if (!dispositivo) return rechazo("Falta el identificador del teléfono.");
@@ -501,7 +505,7 @@ function canjearInvitacion(chacra, codigo, persona, dispositivo) {
 
       var credencial = alAzar(8) + "-" + alAzar(8) + "-" + alAzar(8);
       var quien = persona || String(filas[i][2] || "");
-      registrarDispositivo(chacra, dispositivo, quien, credencial);
+      registrarDispositivo(chacra, dispositivo, quien, credencial, terminos);
 
       hoja.getRange(i + 2, 4, 1, 4).setValues([["Usado", filas[i][4], new Date(), dispositivo]]);
       return { ok: true, credencial: credencial, persona: quien };
@@ -512,10 +516,14 @@ function canjearInvitacion(chacra, codigo, persona, dispositivo) {
   }
 }
 
-function registrarDispositivo(chacra, dispositivo, persona, credencial) {
+// La versión de los términos que la persona aceptó queda en su fila, junto con
+// la fecha. Es el único lugar donde tiene sentido: el consentimiento es de una
+// persona en un teléfono, no de la chacra, y acá es donde lo va a buscar quien
+// tenga que verificarlo.
+function registrarDispositivo(chacra, dispositivo, persona, credencial, terminos) {
   hojaAccesos("Dispositivos", DISPOSITIVOS_ENCABEZADOS)
     .appendRow([dispositivo, chacra, persona, "SÍ", new Date(), new Date(), 0,
-                huella(credencial)]);
+                huella(credencial), String(terminos || "sin versión"), new Date()]);
 }
 
 // Comprueba que el teléfono esté registrado, activo y sea de esa chacra.
@@ -600,7 +608,8 @@ function atender(p) {
 
   // Lo único abierto: canjear el código de invitación.
   if (p.canjear) {
-    return respuesta(canjearInvitacion(chacra, p.canjear, p.persona || "", p.dispositivo || ""));
+    return respuesta(canjearInvitacion(chacra, p.canjear, p.persona || "",
+                                       p.dispositivo || "", p.terminos || ""));
   }
 
   // Todo lo que entregue datos de una chacra exige credencial de esa chacra.
@@ -766,6 +775,21 @@ function hojaSuelta(planillaId, nombre, encabezados) {
       : libro.insertSheet(nombre);
     ponerEncabezados(hoja, encabezados);
     hoja.autoResizeColumns(1, encabezados.length);
+    return hoja;
+  }
+
+  // Igual que las hojas de cada chacra: si las columnas cambiaron y todavía no
+  // hay datos, se rehace el encabezado. Sin esto, sumar una columna a Accesos
+  // obligaba a corregir el encabezado a mano, y mientras tanto los valores
+  // nuevos entraban en una columna sin nombre.
+  if (hoja.getLastRow() <= 1) {
+    var actuales = hoja.getLastColumn()
+      ? hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].join("|") : "";
+    if (actuales !== encabezados.join("|")) {
+      hoja.clear();
+      ponerEncabezados(hoja, encabezados);
+      hoja.autoResizeColumns(1, encabezados.length);
+    }
   }
   return hoja;
 }

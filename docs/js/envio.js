@@ -43,10 +43,12 @@ window.Envio = (function () {
   async function estado() {
     const config = await window.BioDB.leerConfig();
     const cola = await window.BioDB.pendientes();
+    const terminos = await window.BioDB.obtener("config", "terminos");
     return {
       pendientes: cola.length,
       conServicio: hayServicio(),
       conCodigoChacra: !!(config && config.codigo),
+      conTerminos: !!(terminos && terminos.valor && terminos.valor.version),
       activado: window.Acceso.tieneAcceso(),
       enLinea: navigator.onLine,
     };
@@ -56,6 +58,10 @@ window.Envio = (function () {
   function resumir(e) {
     if (!e.conServicio) return "El servicio todavía no está publicado: todo queda guardado en el teléfono.";
     if (!e.conCodigoChacra) return "Falta el código de chacra que te da el equipo técnico.";
+    // Antes decía "cargá tu código de invitación" aunque todavía faltaran los
+    // términos: la línea de estado y el panel de abajo mandaban a hacer cosas
+    // distintas.
+    if (!e.conTerminos) return "Este teléfono todavía no está activado. Primero hay que aceptar los términos de uso.";
     if (!e.activado) return "Este teléfono todavía no está activado. Cargá tu código de invitación.";
     if (!e.enLinea) return e.pendientes
       ? `Sin señal · ${e.pendientes} ${e.pendientes === 1 ? "registro" : "registros"} por enviar`
@@ -76,10 +82,20 @@ window.Envio = (function () {
       return { ok: false, error: "Antes hay que cargar el código de chacra en la configuración." };
     }
 
+    // Sin términos aceptados no se activa, y el control está acá y no solo en la
+    // pantalla: activar es el momento en que los datos empiezan a salir del
+    // teléfono, así que es el momento en que el consentimiento tiene que existir.
+    const guardado = await window.BioDB.obtener("config", "terminos");
+    const terminos = guardado && guardado.valor ? guardado.valor.version : "";
+    if (!terminos) {
+      return { ok: false, error: "Antes hay que leer y aceptar los términos de uso." };
+    }
+
     const consulta = url
       + "?canjear=" + encodeURIComponent(String(codigo || "").trim())
       + "&chacra=" + encodeURIComponent(config.codigo)
       + "&persona=" + encodeURIComponent(config.responsable || "")
+      + "&terminos=" + encodeURIComponent(terminos)
       + "&dispositivo=" + encodeURIComponent(window.Acceso.dispositivo());
 
     try {

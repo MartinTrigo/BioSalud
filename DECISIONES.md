@@ -369,6 +369,47 @@ cuánto cobre lleva.
 
 ---
 
+## Por qué los términos se aceptan al activar el teléfono, y no al abrir la app
+
+**Decisión:** la aceptación se pide justo antes de canjear el código de
+invitación, y queda registrada en la fila de ese teléfono en la planilla de
+accesos.
+
+Activar es el momento en que los datos empiezan a salir del aparato. Antes de
+eso no hay nada que consentir: todo lo que se carga se queda en el teléfono, y
+una pantalla de términos al abrir la app por primera vez sería un trámite
+delante de alguien que todavía no sabe si la va a usar. Atarlo a la activación
+además lo vuelve verificable, porque el consentimiento es de una persona en un
+teléfono —no de la chacra— y queda en la misma fila que registra ese teléfono.
+
+**El control está en `js/envio.js` y no solo en la pantalla.** `canjear()` se
+niega a activar si no hay términos aceptados, aunque alguien llegue por otro
+camino.
+
+**La versión aceptada lleva una huella del contenido.** No alcanza con guardar
+"agosto de 2026": si mañana se corrige una frase y la etiqueta no cambia, no
+habría forma de saber qué aceptó cada uno. La versión es `etiqueta · hash`, así
+que mirando la planilla se distingue quién aceptó el texto vigente.
+
+**El texto no se escribe dos veces.** `TERMINOS.md` es el documento
+institucional, y `tools/generar-terminos.py` lo convierte a
+`docs/datos/terminos.json`, que es lo que la app muestra. Un texto que alguien
+acepta no puede tener dos versiones circulando. Es la misma idea que la cartilla
+de biopreparados: una sola fuente, dos salidas.
+
+**Si los términos cambian, se avisa pero no se bloquea.** La app dice que hay
+una versión nueva y ofrece leerla, y sigue funcionando. Bloquear a un productor
+por un cambio de redacción, en una app de uso obligatorio para el sello, sería
+usar la certificación como palanca.
+
+**La nota del borrador no se muestra.** La cita que abre `TERMINOS.md` está
+dirigida a quien revisa el documento: habla de la app en tercera persona y
+menciona archivos del repositorio. Viaja en el JSON como `nota_interna` para no
+perder el rastro, pero en la app se muestra la etiqueta de versión, que dice lo
+único que el productor necesita saber: que es una versión de prueba.
+
+---
+
 ## Decisiones menores que conviene recordar
 
 **El código de chacra lo asigna el equipo, no el productor.** Si cada uno

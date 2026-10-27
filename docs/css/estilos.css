@@ -567,6 +567,12 @@ a.boton { text-decoration: none; }
 .tarjeta--info-producto { background: var(--verde-suave); border-color: var(--verde-claro); }
 .tarjeta--info-producto .nota { margin-top: 8px; }
 
+/* Los términos de uso son para leer, no para escanear: el texto va un punto más
+   grande y con más aire entre líneas que el resto de la app, porque acá nadie
+   está apurado con una mochila al hombro. */
+.terminos p, .terminos .lista li, .terminos .pasos li { font-size: 17px; line-height: 1.6; }
+.terminos p:last-child { margin-bottom: 0; }
+
 /* ---------- Seguimiento ----------
    La agenda del día. Cada grupo se distingue por una franja al costado, porque
    en el campo se mira de reojo y lo primero que hay que ver es si hay algo

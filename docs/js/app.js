@@ -79,7 +79,7 @@
     // Nadie entra a una sección con la configuración incompleta, ni siquiera
     // escribiendo la dirección a mano. La wiki es la excepción: se puede leer
     // desde el primer momento.
-    const libre = base === "inicio" || base === "config"
+    const libre = base === "inicio" || base === "config" || base === "terminos"
                   || (SECCIONES[base] || {}).sinConfig;
     if (!libre && !habilitada) {
       ir("config");
@@ -89,6 +89,14 @@
     if (base === "config") {
       encabezado("Configuración", "Datos de tu establecimiento");
       await window.Config.render(vista, () => ir("inicio"));
+      return;
+    }
+
+    // Los términos se leen sin haber cargado nada: son justamente lo que hay que
+    // leer antes de decidir si se carga algo.
+    if (base === "terminos") {
+      const cabecera = await window.Terminos.render(vista, ir);
+      encabezado(cabecera.titulo, cabecera.subtitulo);
       return;
     }
 

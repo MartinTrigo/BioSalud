@@ -73,8 +73,19 @@ abrirla, vería las huellas de todas las demás.
 
 **Dispositivos**
 
-| Dispositivo | Chacra | Persona | Activo | Alta | Última actividad | Registros | Huella |
-|---|---|---|---|---|---|---|---|
+| Dispositivo | Chacra | Persona | Activo | Alta | Última actividad | Registros | Huella | Términos aceptados | Aceptados el |
+|---|---|---|---|---|---|---|---|---|---|
+
+Las dos últimas columnas guardan **qué versión de los términos de uso aceptó esa
+persona en ese teléfono**, y cuándo. Es el único lugar donde tiene sentido: el
+consentimiento es de una persona en un aparato, no de la chacra. La versión lleva
+pegada una huella del contenido (`agosto de 2026 · b41b2cdf`), así que se puede
+saber si alguien aceptó el texto vigente o uno anterior aunque la etiqueta no
+haya cambiado. Sin términos aceptados, el servicio no entrega credencial.
+
+Van al final de la fila a propósito: `permitido()` busca la huella por su
+posición, así que correrla de lugar dejaría a todos los teléfonos sin acceso de
+golpe.
 
 ---
 
