@@ -325,6 +325,17 @@ window.Config = (function () {
     // rechazar el canje al final sería hacerle escribir el código para nada.
     const t = await window.Terminos.estado();
     if (!t.aceptados || t.desactualizados) {
+      // La línea de estado se corrige acá y no en Envio.resumir(): ese no sabe
+      // qué versión de los términos está vigente, solo si hay alguna aceptada.
+      // Sin esto decía "cargá tu código de invitación" mientras el panel de
+      // abajo pedía releer los términos: es la tercera vez que aparece la misma
+      // incoherencia entre el estado de arriba y el panel de abajo, así que vale
+      // la pena dejarla anotada.
+      if (caja) {
+        caja.textContent = t.desactualizados
+          ? "Los términos de uso cambiaron: conviene leerlos de nuevo."
+          : "Este teléfono todavía no está activado. Primero hay que aceptar los términos de uso.";
+      }
       zona.innerHTML = `
         <p class="nota">${t.desactualizados
           ? "Los términos de uso cambiaron desde que los aceptaste."
