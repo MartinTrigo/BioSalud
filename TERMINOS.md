@@ -3,8 +3,8 @@
 *Versión de prueba (beta) · borrador para revisión del equipo IFAB · agosto de 2026*
 
 > **Este documento todavía no está aprobado.** Es el borrador que la app ya
-> muestra, para que cada productor lo lea y lo acepte antes de activar su
-> teléfono. Tiene que revisarlo el equipo del IFAB y acordarse con la
+> muestra, al abrirse por primera vez, para que cada productor lo lea y lo acepte
+> antes de cargar nada. Tiene que revisarlo el equipo del IFAB y acordarse con la
 > administración de ECOMARCAL. Ver [DERECHOS.md](DERECHOS.md).
 >
 > **Este archivo es la fuente.** La app no tiene una copia escrita aparte: lee

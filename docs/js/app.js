@@ -69,8 +69,27 @@
     config = await window.BioDB.leerConfig();
     const habilitada = window.Config.completa(config);
 
-    botonVolver.hidden = ruta === "inicio";
+    // EL RECORRIDO DE ALGUIEN QUE ABRE LA APP POR PRIMERA VEZ
+    //
+    //   términos → configuración → el resto de la app
+    //
+    // y, saliéndose de la fila, la Info / Wiki, que se lee sin aceptar ni
+    // cargar nada (ver js/terminos.js y SECCIONES.wiki más arriba).
+    //
+    // Si los términos no se pueden leer —la primera vez sin señal y sin caché—
+    // la app no queda trabada: se sigue de largo. El portón es el orden de las
+    // pantallas, no la protección de los datos; eso lo hace el canje, que sin
+    // términos aceptados no activa el teléfono.
+    const sinTerminos = await faltanTerminos();
+    const deLectura = base === "terminos" || (SECCIONES[base] || {}).sinConfig;
+
+    botonVolver.hidden = ruta === "inicio" || (sinTerminos && base === "terminos");
     window.scrollTo(0, 0);
+
+    if (sinTerminos && !deLectura) {
+      ir("terminos");
+      return;
+    }
 
     // Nadie entra a una sección con la configuración incompleta, ni siquiera
     // escribiendo la dirección a mano. La wiki es la excepción: se puede leer
@@ -131,6 +150,17 @@
 
     encabezado("BioSalud", "Salud del suelo y los cultivos");
     inicio(habilitada);
+  }
+
+  // Nunca aceptó nada. Los términos que cambiaron no cuentan acá: a quien ya
+  // viene usando la app se le avisa en Configuración, no se le cierra la puerta.
+  async function faltanTerminos() {
+    try {
+      const t = await window.Terminos.estado();
+      return !t.aceptados;
+    } catch (err) {
+      return false;
+    }
   }
 
   function encabezado(t, sub) {

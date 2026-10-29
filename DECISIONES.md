@@ -410,22 +410,51 @@ cuánto cobre lleva.
 
 ---
 
-## Por qué los términos se aceptan al activar el teléfono, y no al abrir la app
+## Por qué los términos se aceptan al abrir la app
 
-**Decisión:** la aceptación se pide justo antes de canjear el código de
-invitación, y queda registrada en la fila de ese teléfono en la planilla de
-accesos.
+**Decisión:** la primera vez que se abre la app, lo primero y único que se ve
+son los términos. Al aceptarlos se abre la configuración, y recién con la
+configuración cargada se habilita el resto. La Info / Wiki queda fuera de la
+fila: se lee sin aceptar nada.
 
-Activar es el momento en que los datos empiezan a salir del aparato. Antes de
-eso no hay nada que consentir: todo lo que se carga se queda en el teléfono, y
-una pantalla de términos al abrir la app por primera vez sería un trámite
-delante de alguien que todavía no sabe si la va a usar. Atarlo a la activación
-además lo vuelve verificable, porque el consentimiento es de una persona en un
-teléfono —no de la chacra— y queda en la misma fila que registra ese teléfono.
+**Antes era al revés, y el argumento era bueno.** La aceptación se pedía justo
+antes de canjear el código de invitación, porque activar es el momento en que
+los datos empiezan a salir del aparato: antes de eso no hay nada que consentir,
+todo lo que se carga se queda en el teléfono, y una pantalla de términos al abrir
+sería un trámite delante de alguien que todavía no sabe si va a usar la app.
+
+**Lo que mostró el primer teléfono de verdad.** El 29/10/2026, activando el
+suyo, el referente cargó el establecimiento entero y sus sectores; el botón de
+los términos recién apareció al final, al agregar el primer sector, porque el
+bloque de conexión solo se dibuja con la configuración completa. Leerlos lo sacó
+del formulario y al volver estaba todo en blanco: tuvo que cargar de nuevo. Dos
+problemas de una vez —el formulario se perdía, y el orden no era el que cualquiera
+espera de una app— y el segundo es el que no se arregla guardando antes de
+navegar.
+
+Así que la aceptación dejó de estar atada a la activación. Lo que sigue atado es
+el **registro**: el canje manda la versión aceptada y queda en la fila de ese
+teléfono en la planilla de accesos, que es lo que vuelve verificable el
+consentimiento —de una persona en un teléfono, no de la chacra—. Entre aceptar y
+activar puede pasar una semana; en la planilla queda igual.
+
+**La wiki no espera a nada.** Es material de lectura y no toca datos del
+establecimiento. Alguien que todavía está decidiendo si entra al sello, o un
+vecino a quien le muestran la app, tiene que poder leer cómo se hace un
+biofertilizante sin aceptar términos. Por eso la pantalla de términos ofrece
+"solo quiero leer la Info / Wiki", que es la única salida que no vuelve a
+pedirlos.
 
 **El control está en `js/envio.js` y no solo en la pantalla.** `canjear()` se
 niega a activar si no hay términos aceptados, aunque alguien llegue por otro
-camino.
+camino. El portón de pantallas ordena el recorrido; ese es el candado. Por eso,
+si los términos no se pueden leer —primera vez sin señal y sin caché—, la app no
+queda trabada: sigue de largo y lo que protege los datos sigue en su lugar.
+
+**La aceptación de la primera vez nace sin nombre.** Al abrir la app todavía no
+hay configuración, así que no se sabe quién es el responsable: quedan la fecha,
+el teléfono y la versión, y `Terminos.guardarPersona()` completa el nombre cuando
+se guarda la configuración.
 
 **La versión aceptada lleva una huella del contenido.** No alcanza con guardar
 "agosto de 2026": si mañana se corrige una frase y la etiqueta no cambia, no

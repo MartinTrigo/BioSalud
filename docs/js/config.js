@@ -259,6 +259,8 @@ window.Config = (function () {
 
         <div id="zona-activar"></div>
 
+        <button class="boton--enlace centrado" id="btn-terminos">Términos de uso</button>
+
         ${window.Envio.hayServicio() ? "" : `
           <details class="grupo separado" id="avanzado">
             <summary class="grupo__cab">
@@ -288,8 +290,19 @@ window.Config = (function () {
     if (!caja) return;
 
     const e = await window.Envio.estado();
+    const t = await window.Terminos.estado();
     caja.textContent = window.Envio.resumir(e);
     caja.className = "estado-envio " + (e.activado && e.conServicio ? "estado-envio--ok" : "estado-envio--espera");
+
+    // El enlace a los términos está en todos los estados. Desde que se aceptan
+    // al abrir la app, los paneles de abajo ya no tenían por qué nombrarlos, y
+    // quien quisiera volver a leerlos se quedaba sin puerta.
+    const enlace = destino.querySelector("#btn-terminos");
+    if (enlace) {
+      enlace.textContent = !t.aceptados ? "Leer y aceptar los términos de uso"
+        : t.desactualizados ? "Los términos cambiaron: leerlos"
+        : "Ver los términos que aceptaste";
+    }
 
     const zona = destino.querySelector("#zona-activar");
     if (!zona) return;
@@ -298,22 +311,18 @@ window.Config = (function () {
       zona.innerHTML = `<p class="nota">Cuando el servicio esté publicado, acá vas a
         poder activar este teléfono con el código que te dé el equipo técnico.
         Mientras tanto todo se guarda igual y se envía después.</p>`;
+      conectarConexion();
       return;
     }
 
     if (e.activado) {
-      const aceptado = await window.Terminos.estado();
       zona.innerHTML = `
         <p class="nota">Este teléfono está activado. Si lo perdés, avisale al
           equipo para darlo de baja.</p>
         ${e.pendientes ? `<button class="boton boton--secundario boton--ancho" id="btn-enviar">
           Enviar ahora ${e.pendientes === 1 ? "el registro pendiente"
             : "los " + e.pendientes + " pendientes"}</button>` : ""}
-        <button class="boton--peligro centrado" id="btn-terminos">
-          ${!aceptado.aceptados ? "Leer y aceptar los términos de uso"
-            : aceptado.desactualizados ? "Los términos cambiaron: leerlos"
-            : "Ver los términos que aceptaste"}</button>
-        ${!aceptado.aceptados ? `<p class="nota">Este teléfono se activó antes de
+        ${!t.aceptados ? `<p class="nota">Este teléfono se activó antes de
           que la app mostrara los términos de uso, así que no quedó registrada tu
           aceptación. Conviene leerlos y aceptarlos.</p>` : ""}`;
       conectarConexion();
@@ -323,7 +332,6 @@ window.Config = (function () {
     // Los términos van antes del código de invitación, no después: activar es el
     // momento en que los datos empiezan a salir del teléfono. Ofrecer el campo y
     // rechazar el canje al final sería hacerle escribir el código para nada.
-    const t = await window.Terminos.estado();
     if (!t.aceptados || t.desactualizados) {
       // La línea de estado se corrige acá y no en Envio.resumir(): ese no sabe
       // qué versión de los términos está vigente, solo si hay alguna aceptada.
@@ -341,7 +349,7 @@ window.Config = (function () {
           ? "Los términos de uso cambiaron desde que los aceptaste."
           : "Antes de activar el teléfono hay que leer y aceptar los términos de uso."}
           Mientras tanto podés usar la app igual: todo se guarda en el teléfono.</p>
-        <button class="boton boton--ancho" id="btn-terminos">
+        <button class="boton boton--ancho" id="btn-terminos-ahora">
           ${t.desactualizados ? "Leer los términos nuevos" : "Leer los términos de uso"}</button>`;
       conectarConexion();
       return;
@@ -412,8 +420,17 @@ window.Config = (function () {
       activar.textContent = "Activar este teléfono";
     };
 
-    const terminos = destino.querySelector("#btn-terminos");
-    if (terminos) terminos.onclick = () => { location.hash = "#/terminos"; };
+    // Irse a leer los términos destruye esta pantalla, y lo tipeado vive en el
+    // DOM: sin guardar primero, al volver estaba todo en blanco. Pasó de verdad
+    // —cargar el establecimiento entero, los sectores, ir a aceptar los términos
+    // y encontrarse el formulario vacío— y es de los errores más caros que puede
+    // cometer una app de campo: hace perder quince minutos de tipeo con una mano.
+    destino.querySelectorAll("#btn-terminos, #btn-terminos-ahora").forEach((b) => {
+      b.onclick = async () => {
+        await guardarLoTipeado();
+        location.hash = "#/terminos";
+      };
+    });
 
     const enviar = destino.querySelector("#btn-enviar");
     if (enviar) enviar.onclick = async () => {
@@ -544,6 +561,9 @@ window.Config = (function () {
     // Queda en la cola para subir a la planilla de la chacra cuando haya
     // conexión. Reemplaza cualquier versión anterior que no se haya enviado.
     await window.BioDB.encolarUnico("config", borrador);
+    // Los términos se aceptan al abrir la app, antes de que exista un nombre
+    // cargado: la aceptación nació sin responsable y acá se completa.
+    await window.Terminos.guardarPersona(borrador.responsable);
 
     brindis("Configuración guardada");
     if (alGuardar) alGuardar(borrador);
