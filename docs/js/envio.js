@@ -20,11 +20,16 @@ window.Envio = (function () {
   // funcionar sin que cada productor configure nada; lo que impide que un
   // desconocido escriba no es esconder esta dirección, es la credencial.
   //
-  // Publicada el 26/10/2026. Si se vuelve a implementar desde cero cambia, y
-  // hay que actualizarla acá (una nueva VERSIÓN de la misma implementación, en
-  // cambio, conserva la dirección).
+  // Publicada el 29/10/2026 desde la cuenta biosalud.inta@gmail.com, cuando los
+  // datos se mudaron ahí para dejar de usar el Drive personal del referente (ver
+  // MIGRACION-DRIVE.md). La dirección anterior, del 26/10, salía de un proyecto
+  // de la cuenta personal: cambiar de cuenta obliga a implementar de cero, y una
+  // implementación nueva siempre tiene otra dirección.
+  //
+  // Si se vuelve a implementar desde cero, cambia y hay que actualizarla acá. Una
+  // nueva VERSIÓN de la misma implementación, en cambio, conserva la dirección.
   const SERVICIO =
-    "https://script.google.com/macros/s/AKfycbxbVIBQj9ilOpFCfHHZcFRf0MQrze8KubLpAuHaY0s_EGY4K1jC3BfCco6F_XJ-u6gs/exec";
+    "https://script.google.com/macros/s/AKfycbz7eS03Ot-sRIRSlzra80wfMMAGFIDvAerRgqLfMS8nrAybau_lbGz2ciMSUFianReqDA/exec";
 
   const LS_URL = "biosalud_servicio";
 
