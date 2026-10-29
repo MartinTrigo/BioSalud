@@ -44,7 +44,8 @@ cambia**. Una implementación nueva tiene otra URL, así que hay que escribirla 
 | Qué | Cómo |
 |---|---|
 | `BioSalud · Accesos` | Se **copia**, con sus filas: ahí están las invitaciones y, sobre todo, las huellas de los teléfonos activados |
-| `Chacra El Radal`, `Chacra Tika` | Se **copian**: tienen la configuración y los registros que ya subieron |
+| `Chacra Tika` | Se **copia**: tiene la configuración y los registros que ya subieron |
+| `Chacra El Radal` | **No se copia**: está vacía, las cinco hojas tienen solo encabezados. Se vuelve a dar de alta desde el menú, y así nace con la estructura actual en vez de arrastrar los encabezados viejos |
 | `Chacra modelo` | No se copia. Quedó obsoleta desde que existe el alta desde el menú |
 | Carpetas `BioSalud — Datos`, `Chacras` | Se crean nuevas en la cuenta nueva |
 | Carpeta `Fotos` | No existe todavía: la crea el servicio sola con la primera foto |
@@ -76,7 +77,6 @@ BioSalud — Datos
 Desde la cuenta de Martín, compartir con `biosalud.inta@gmail.com` como editor:
 
 - `BioSalud · Accesos`
-- `BioSalud · Chacra El Radal`
 - `BioSalud · Chacra Tika`
 
 Después, **desde la cuenta nueva**, abrir cada una y hacer **Archivo → Hacer una
@@ -112,7 +112,7 @@ Propiedades del script** cargar:
 | `ACCESOS` | el id **nuevo** de la planilla Accesos |
 | `CARPETA_DATOS` | el id **nuevo** de `BioSalud — Datos` |
 | `CARPETA_CHACRAS` | el id **nuevo** de `Chacras` |
-| `CHACRAS` | `{"radal":"id nuevo","tika":"id nuevo"}` |
+| `CHACRAS` | `{"tika":"id nuevo de Chacra Tika"}` — El Radal se suma sola al darla de alta desde el menú |
 | `CLAVE_ADMIN` | una clave nueva, larga y al azar |
 
 Después **recargar la planilla** para que aparezca el menú BioSalud, y correr

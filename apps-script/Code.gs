@@ -37,9 +37,19 @@ function propiedad(nombre) {
 
 // Planilla aparte con quién tiene acceso. No es la de ninguna chacra: si una
 // chacra pudiera abrirla, vería las huellas de todas las demás.
+// Pide el id por propiedad aunque el script viva adentro de esta misma planilla.
+// No es redundante: getActiveSpreadsheet() no sirve, porque la aplicación web se
+// ejecuta sin planilla activa, y es la misma función la que atiende los dos
+// caminos. Pero confunde, así que el mensaje lo aclara: en la mudanza a la cuenta
+// de la app, el alta de una chacra falló justo acá, después de haber creado la
+// planilla, porque la propiedad estaba vacía.
 function planillaAccesos() {
   var id = propiedad("ACCESOS");
-  if (!id) throw new Error("Falta la propiedad ACCESOS con el id de la planilla de accesos.");
+  if (!id) {
+    throw new Error("Falta la propiedad ACCESOS: es el id de ESTA MISMA planilla, " +
+                    "la de accesos. Se carga en Configuración del proyecto → " +
+                    "Propiedades del script.");
+  }
   return id;
 }
 
@@ -267,7 +277,7 @@ function onOpen() {
     .addItem("Dar de alta una chacra", "menuAltaDeChacra")
     .addItem("Nueva invitación para una chacra", "menuNuevaInvitacion")
     .addSeparator()
-    .addItem("Revisar la configuración del servicio", "revisarConfiguracion")
+    .addItem("Revisar la configuración del servicio", "menuRevisarConfiguracion")
     .addToUi();
 }
 
@@ -303,6 +313,20 @@ function menuAltaDeChacra() {
     ui.alert("Chacra dada de alta", crearChacra(codigo, nombre, persona), ui.ButtonSet.OK);
   } catch (err) {
     ui.alert("No se pudo dar de alta", String(err.message || err), ui.ButtonSet.OK);
+  }
+}
+
+// revisarConfiguracion() se escribió para correrla desde el editor: devuelve el
+// resumen y lo manda a Logger. Desde un menú eso no se ve en ningún lado —corre,
+// dice "finalizado" y no muestra nada—, así que el menú necesita su propia
+// envoltura. Pasó de verdad en la mudanza a la cuenta de la app: justo cuando
+// hacía falta para diagnosticar, la revisión no decía nada.
+function menuRevisarConfiguracion() {
+  var ui = SpreadsheetApp.getUi();
+  try {
+    ui.alert("Configuración del servicio", revisarConfiguracion(), ui.ButtonSet.OK);
+  } catch (err) {
+    ui.alert("No se pudo revisar", String(err.message || err), ui.ButtonSet.OK);
   }
 }
 
