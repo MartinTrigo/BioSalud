@@ -843,13 +843,19 @@ function doPost(e) {
 //   establecimiento | localidad  | Mallín Ahogado
 //   sector          | A          | 1200 | 8 | Hortícola | Goteo
 
-var CONFIG_ENCABEZADOS = ["Sección", "Clave", "Valor 1", "Valor 2", "Valor 3", "Valor 4"];
+// La última columna es el id del sector. No es decorativa: cuando una chacra se
+// usa desde dos teléfonos, el segundo baja esta configuración en vez de volver a
+// cargarla, y si los sectores llegaran sin id cada aparato inventaría el suyo.
+// Las aplicaciones y los monitoreos guardan sector_id, así que la planilla
+// terminaría con dos ids para el mismo cantero y nadie podría volver a juntarlos.
+var CONFIG_ENCABEZADOS = ["Sección", "Clave", "Valor 1", "Valor 2", "Valor 3", "Valor 4",
+                          "Id del sector"];
 var CONFIG_COLS = CONFIG_ENCABEZADOS.length;
 
 function leerConfig(chacra) {
   var libro = planillaDe(chacra);
   var hoja = libro.getSheetByName("Config");
-  var cfg = { chacra: chacra, planilla: libro.getUrl(), sectores: [] };
+  var cfg = { chacra: chacra, codigo: chacra, planilla: libro.getUrl(), sectores: [] };
   if (!hoja || hoja.getLastRow() < 2) return cfg;
 
   hoja.getRange(2, 1, hoja.getLastRow() - 1, CONFIG_COLS).getValues().forEach(function (f) {
@@ -860,6 +866,7 @@ function leerConfig(chacra) {
       cfg.sectores.push({
         nombre: clave, superficie: Number(f[2]) || 0, bancales: Number(f[3]) || 0,
         cultivo: String(f[4] || ""), riego: String(f[5] || ""),
+        id: String(f[6] || ""),
       });
     }
   });
@@ -903,7 +910,7 @@ function guardarConfig(libro, cfg) {
   });
   (cfg.sectores || []).forEach(function (s) {
     filas.push(completar(["sector", s.nombre, s.superficie || 0, s.bancales || 0,
-                          s.cultivo || "", s.riego || ""]));
+                          s.cultivo || "", s.riego || "", s.id || ""]));
   });
 
   if (hoja.getLastRow() > 1) {

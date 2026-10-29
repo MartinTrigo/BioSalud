@@ -87,6 +87,41 @@ window.Config = (function () {
         bloqueadas las secciones de planificación y registro; la Info / Wiki se
         puede leer desde ahora.</p>`}
 
+      ${completa(c) || !window.Envio.hayServicio() ? "" : `
+        <details class="grupo separado" id="ya-cargada">
+          <summary class="grupo__cab">
+            <span class="grupo__icono">📥</span>
+            <span class="grupo__texto">
+              <span class="grupo__nombre">Esta chacra ya está cargada en otro teléfono</span>
+              <span class="grupo__cuenta">Traerla en vez de cargarla de nuevo</span>
+            </span>
+            <span class="grupo__flecha" aria-hidden="true"></span>
+          </summary>
+          <div class="grupo__cuerpo">
+            <p class="nota">Si el establecimiento ya se cargó desde otro aparato
+              —una notebook, el teléfono de otra persona de la chacra— no hace falta
+              escribirlo de nuevo. Con los dos códigos que te entrega el equipo
+              técnico, este aparato se activa y baja la configuración que ya está en
+              la planilla, con los mismos sectores. Así no se duplica la chacra.</p>
+
+            <div class="campo">
+              <label for="f-traer-chacra">Código de chacra</label>
+              <input id="f-traer-chacra" type="text" autocomplete="off" spellcheck="false"
+                     placeholder="por ejemplo: laesperanza">
+            </div>
+
+            <div class="campo">
+              <label for="f-traer-invitacion">Código de invitación
+                <span class="ayuda">Cada aparato necesita el suyo: se usa una sola vez.</span></label>
+              <input id="f-traer-invitacion" type="text" autocomplete="off" spellcheck="false"
+                     maxlength="12" placeholder="XXXX-XXXX">
+              <span class="campo__error" id="error-traer"></span>
+            </div>
+
+            <button class="boton boton--ancho" id="btn-traer">Activar y traer la configuración</button>
+          </div>
+        </details>`}
+
       <div class="tarjeta">
         <h2>Datos del establecimiento</h2>
 
@@ -246,7 +281,7 @@ window.Config = (function () {
     return `
       <div class="tarjeta separado" id="caja-conexion">
         <h2>Conexión con el equipo técnico</h2>
-        <p class="nota">Estos dos códigos te los da el equipo de extensión del
+        <p class="nota">Estos dos códigos te los entrega el equipo de extensión del
           IFAB, normalmente en la visita.</p>
         <p class="estado-envio" id="estado-envio">Verificando…</p>
 
@@ -274,7 +309,7 @@ window.Config = (function () {
             <div class="grupo__cuerpo">
               <div class="campo">
                 <label for="f-servicio">Dirección que termina en /exec
-                  <span class="ayuda">Sale de publicar el Apps Script.</span></label>
+                  <span class="ayuda">Se obtiene al publicar el Apps Script.</span></label>
                 <input id="f-servicio" type="url" autocomplete="off" spellcheck="false"
                        value="${esc(window.Envio.leerUrl())}"
                        placeholder="https://script.google.com/macros/s/…/exec">
@@ -329,6 +364,18 @@ window.Config = (function () {
       return;
     }
 
+    // Sin el código de chacra no se puede activar, así que tampoco se ofrece el
+    // campo de la invitación: es la cuarta vez que aparece la misma incoherencia
+    // entre la línea de estado y el panel de abajo —arriba decía que faltaba el
+    // código y abajo invitaba a activar igual—, y se arregla no ofreciendo lo
+    // que todavía no va a funcionar.
+    if (!e.conCodigoChacra) {
+      zona.innerHTML = `<p class="nota">Escribí arriba el código de chacra que te
+        entregó el equipo técnico. Con eso se habilita la activación de este aparato.</p>`;
+      conectarConexion();
+      return;
+    }
+
     // Los términos van antes del código de invitación, no después: activar es el
     // momento en que los datos empiezan a salir del teléfono. Ofrecer el campo y
     // rechazar el canje al final sería hacerle escribir el código para nada.
@@ -358,7 +405,7 @@ window.Config = (function () {
     zona.innerHTML = `
       <div class="campo">
         <label for="f-invitacion">Código de invitación
-          <span class="ayuda">Te lo da el equipo de extensión. Se usa una sola vez, en este teléfono.</span></label>
+          <span class="ayuda">Te lo entrega el equipo de extensión. Se usa una sola vez, en este teléfono.</span></label>
         <input id="f-invitacion" type="text" autocomplete="off" spellcheck="false"
                maxlength="12" placeholder="XXXX-XXXX">
         <span class="campo__error" id="error-invitacion"></span>
@@ -382,6 +429,82 @@ window.Config = (function () {
     await window.BioDB.guardarConfig(borrador);
     await window.BioDB.encolarUnico("config", borrador);
     return true;
+  }
+
+  // ---------- Traer la configuración de una chacra que ya existe ----------
+  //
+  // El segundo aparato de una chacra no vuelve a cargar nada: se activa y baja lo
+  // que ya está en la planilla. El orden importa y no se puede cambiar: el canje
+  // lee el código de chacra de lo GUARDADO, y la bajada exige la credencial que
+  // devuelve el canje.
+  //
+  //   código de chacra guardado  →  canje  →  credencial  →  bajar configuración
+  //
+  // Si el canje sale bien y la bajada falla —se cortó la señal en el medio— el
+  // aparato queda activado y sin configuración: el botón vuelve a intentar solo
+  // la bajada, porque un código de invitación se usa una vez y no se puede gastar
+  // dos veces en lo mismo.
+  function armarConfigDesdeServicio(c, chacra) {
+    return {
+      nombre: c.nombre || "",
+      localidad: c.localidad || "",
+      responsable: c.responsable || "",
+      contacto: c.contacto || "",
+      situacion: c.situacion || "",
+      codigo: chacra,
+      // Los sectores vienen con su id de la planilla. Si alguno llega sin id
+      // —una configuración subida antes de que la planilla guardara ids— se le
+      // pone uno acá, que es lo único que se puede hacer.
+      sectores: (c.sectores || []).map((s) => ({
+        id: s.id || window.BioDB.nuevoId(),
+        nombre: s.nombre,
+        superficie: Number(s.superficie) || 0,
+        bancales: Number(s.bancales) || null,
+        cultivo: s.cultivo || "",
+        riego: s.riego || "",
+      })),
+      actualizado: new Date().toISOString(),
+      traida_de: "la planilla de la chacra",
+    };
+  }
+
+  async function traerConfiguracion() {
+    const btn = destino.querySelector("#btn-traer");
+    const aviso = destino.querySelector("#error-traer");
+    const volver = (texto) => {
+      aviso.textContent = texto;
+      btn.disabled = false;
+      btn.textContent = "Activar y traer la configuración";
+    };
+
+    aviso.textContent = "";
+    const chacra = valor("#f-traer-chacra").trim().toLowerCase().replace(/\s+/g, "");
+    const invitacion = valor("#f-traer-invitacion").trim();
+    if (!chacra) return volver("Falta el código de chacra.");
+    if (!invitacion && !window.Acceso.tieneAcceso()) return volver("Falta el código de invitación.");
+
+    btn.disabled = true;
+    btn.textContent = "Activando…";
+
+    borrador.codigo = chacra;
+    await window.BioDB.guardarConfig(borrador);   // incompleta a propósito: solo el código
+
+    if (!window.Acceso.tieneAcceso()) {
+      const canje = await window.Envio.canjear(invitacion);
+      if (!canje.ok) return volver(canje.error);
+    }
+
+    btn.textContent = "Trayendo la configuración…";
+    const traida = await window.Envio.traerConfig(chacra);
+    if (!traida.ok) return volver(traida.error);
+
+    borrador = armarConfigDesdeServicio(traida.config, chacra);
+    await window.BioDB.guardarConfig(borrador);
+    errores = {};
+    editando = null;
+    brindis(`Configuración de ${borrador.nombre || chacra} traída de la planilla`);
+    pintar();
+    window.scrollTo(0, 0);
   }
 
   function conectarConexion() {
@@ -451,6 +574,18 @@ window.Config = (function () {
       pintarConexion();
     };
 
+    const traer = destino.querySelector("#btn-traer");
+    if (traer) traer.onclick = traerConfiguracion;
+
+    // El código de chacra se guarda al salir del campo, y el panel de abajo se
+    // vuelve a dibujar: así, apenas se escribe, aparece el campo de la
+    // invitación en vez de seguir diciendo que falta algo.
+    const campoCodigo = destino.querySelector("#f-codigo");
+    if (campoCodigo) campoCodigo.onchange = async () => {
+      await guardarLoTipeado();
+      pintarConexion();
+    };
+
     destino.querySelector("#btn-sector").onclick = guardarSector;
     destino.querySelector("#btn-guardar").onclick = guardarTodo;
 
@@ -504,7 +639,7 @@ window.Config = (function () {
     const bancales = textoBancales ? aNumero(textoBancales) : 0;
     const cultivo = valor("#f-cultivo");
 
-    if (!nombre) errores.sector = "Poné un nombre o letra para el sector.";
+    if (!nombre) errores.sector = "Indicá un nombre o una letra para el sector.";
     else if (borrador.sectores.some((s) => s.id !== editando
              && s.nombre.trim().toUpperCase() === nombre.toUpperCase())) {
       errores.sector = "Ya hay un sector con ese nombre.";
@@ -512,7 +647,7 @@ window.Config = (function () {
     if (Number.isNaN(sup)) errores.superficie = "La superficie tiene que ser un número. Por ejemplo: 1200";
     else if (sup <= 0) errores.superficie = "Indicá la superficie en metros cuadrados.";
     if (textoBancales && (Number.isNaN(bancales) || bancales <= 0)) {
-      errores.bancales = "Poné cuántos bancales, o dejalo vacío.";
+      errores.bancales = "Indicá cuántos bancales o dejá el campo vacío.";
     }
     if (!cultivo) errores.cultivo = "Elegí el tipo de cultivo.";
 

@@ -13,9 +13,9 @@ nuevo entienda qué se descartó y con qué argumento.
 
 MonAgric tenía "Sanidad" en la lista de próximos módulos, así que la alternativa
 existía. Pero son dos herramientas con públicos y obligaciones distintas:
-MonAgric es voluntaria y sirve para planificar la producción; BioSalud es de uso
-**obligatorio** para conservar un sello de certificación. Mezclarlas ataría el
-ritmo de una al de la otra y volvería obligatorio, de hecho, todo lo demás.
+MonAgric sirve para planificar la producción; BioSalud lleva el registro
+sanitario que **mira la certificación** del sello. Mezclarlas ataría el ritmo de
+una al de la otra y volvería exigible, de hecho, todo lo demás.
 
 **Lo que se resignó:** un productor que use las dos va a cargar sus sectores dos
 veces. Vale la pena revisarlo más adelante; hoy no justifica acoplarlas.
@@ -72,8 +72,8 @@ que pagar y mantener. Sheets tiene tres cosas que acá pesan más:
 2. **No cuesta nada.**
 3. Si algo sale mal, se entra y se arregla a mano.
 
-Para una herramienta de uso obligatorio, lo primero es lo que más importa: nadie
-está obligado a usar una app que le esconde sus propios registros.
+De los tres, el primero es el que más importa: nadie debería tener que usar, para
+sostener su certificación, una app que le esconde sus propios registros.
 
 **Lo que se resignó:** velocidad con muchos datos. Con diez chacras no se nota.
 
@@ -469,8 +469,8 @@ de biopreparados: una sola fuente, dos salidas.
 
 **Si los términos cambian, se avisa pero no se bloquea.** La app dice que hay
 una versión nueva y ofrece leerla, y sigue funcionando. Bloquear a un productor
-por un cambio de redacción, en una app de uso obligatorio para el sello, sería
-usar la certificación como palanca.
+por un cambio de redacción, en una app atada a una certificación, sería usar esa
+certificación como palanca.
 
 **La nota del borrador no se muestra.** La cita que abre `TERMINOS.md` está
 dirigida a quien revisa el documento: habla de la app en tercera persona y
@@ -538,3 +538,96 @@ negro y el del INTA barras celestes: sobre verde desaparecen.
 **El logo del IFAB reemplaza a los tres sueltos.** Ya es un conjunto que incluye
 CONICET, INTA y la sigla del instituto. Cuatro logos en fila no entran en una
 pantalla de 375 px.
+
+---
+
+## Por qué el plan distingue rutina de "ante necesidad"
+
+**Decisión:** cada renglón del plan declara cómo se va a usar. De rutina va a la
+agenda con sus fechas; ante necesidad no genera fechas y queda en el Seguimiento
+como insumo listo para preparar.
+
+El plan nació suponiendo que todo se aplica cada tantos días, que es verdad para
+un biofertilizante y falso para un repelente. Un biofertilizante alimenta y
+fortalece: el efecto se construye repitiendo, y el calendario **es** el plan. Un
+repelente de ajo y ají dura poco sobre la hoja, el riego o una lluvia se lo
+lleva, y aplicarlo por calendario gasta insumo sin que haya nada que repeler. Lo
+que corresponde ahí es tener la materia prima y las herramientas listas, y
+preparar cuando el monitoreo lo pide.
+
+**Los preventivos de hongos son el caso que no entra en ninguno de los dos.** El
+cobre y la cola de caballo tienen que estar sobre la hoja **antes** de que entre
+la enfermedad: aplicados con la enfermedad instalada rinden poco. Así que van
+planificados, pero atados al estado del cultivo y al clima más que a un número
+fijo de días. Se sugieren como rutina y la app deja cambiarlo.
+
+**La sugerencia vive en los datos, no en el código.** `biopreparados.json` lleva
+`modo_sugerido` por categoría, y por ficha cuando difiere —el caldo de
+bicarbonato, que se usa a los primeros síntomas—. Es criterio agronómico: tiene
+que poder corregirse sin tocar una línea de JavaScript.
+
+**Un renglón ante necesidad no figura nunca como atrasado**, y no entra en el
+semáforo de cumplimiento: no es una deuda. Para registrar la aplicación del día
+que se use, el Seguimiento le arma una ocurrencia con la fecha de hoy, así el
+registro usa el mismo camino que el resto y la planilla recibe una fila igual a
+cualquier otra.
+
+**Lo que no se puede proyectar se dice.** Un preparado con cobre usado ante
+necesidad no tiene cuántas aplicaciones, así que la cuenta del cobre no lo
+proyecta. En vez de mostrar un cero tranquilizador, avisa que el tope sigue
+valiendo y que la cuenta va a salir de lo que se registre.
+
+---
+
+## Cómo se usa una misma chacra desde dos aparatos
+
+**Decisión:** el segundo aparato no vuelve a cargar la chacra: se activa con su
+propio código de invitación y **baja** la configuración que ya está en la
+planilla.
+
+Apareció en la primera prueba real: el referente entró desde la notebook, la app
+le pidió los términos y después la configuración, y cargar Tika de nuevo habría
+duplicado el establecimiento.
+
+**El orden no se puede cambiar:**
+
+    código de chacra guardado  →  canje  →  credencial  →  bajar configuración
+
+El canje lee el código de chacra de lo guardado, y la bajada exige la credencial
+que devuelve el canje. Si el canje sale bien y la bajada falla —se cortó la señal
+en el medio— el aparato queda activado y sin configuración, y el botón reintenta
+**solo** la bajada: un código de invitación se usa una vez y no se puede gastar
+dos veces en lo mismo.
+
+**La puerta del servicio ya existía.** `?config=1` está desde el principio y
+exige credencial de esa chacra. No hizo falta abrir nada nuevo: el control de
+siempre alcanza.
+
+**Lo que sí hubo que agregar es el id del sector en la hoja Config.** Sin eso
+cada aparato inventaría el suyo para el mismo cantero, y como las aplicaciones y
+los monitoreos guardan `sector_id`, la planilla terminaría con dos ids para el
+mismo lugar y nadie podría volver a juntarlos. Va en una columna nueva al final,
+que es lo único que `asegurarEncabezados` agrega sin riesgo.
+
+**Cada aparato sigue necesitando su propio código de invitación.** La credencial
+es de un aparato, no de la chacra: es lo que permite dar de baja un teléfono
+perdido sin dejar afuera a los demás.
+
+---
+
+## Por qué el formulario ya no se borra cuando falta un dato
+
+**Decisión:** antes de volver a dibujar una pantalla para mostrar dónde falta un
+dato, se guarda lo que la persona tenía escrito.
+
+Pasó tres veces, en tres pantallas distintas, y siempre por lo mismo: los
+formularios se dibujan de nuevo enteros —es lo que los hace simples— y sus
+valores salían de lo guardado, que en un registro nuevo no existe. Así que
+avisar "falta la fecha de fin" borraba la dosis, los sectores y la otra fecha.
+
+En una app de campo es de los errores más caros que hay: se carga con una mano,
+con el teléfono al sol, y volver a escribir todo es el momento en que alguien
+deja de usar la herramienta y vuelve al papel. Por eso ahora cada pantalla con
+formulario guarda lo tipeado antes de repintar: Configuración desde que ir a los
+términos borraba el establecimiento entero, y el plan y el monitoreo desde que
+apareció lo mismo al validar.
