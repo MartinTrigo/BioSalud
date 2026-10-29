@@ -35,6 +35,31 @@ function propiedad(nombre) {
   return PropertiesService.getScriptProperties().getProperty(nombre) || "";
 }
 
+// ==========================================================================
+// QUEDARSE SOLO CON EL ID
+//
+// Los identificadores se cargan a mano, copiándolos de la barra de direcciones,
+// y lo que se copia casi nunca es el id pelado: viene con /edit?gid=0#gid=0
+// detrás, o con ?usp=sharing, o es la URL entera. Google entonces contesta
+// "Illegal spreadsheet id or key" y el mensaje no dice que sobra una cola.
+//
+// Pasó en la mudanza a la cuenta de la app, en la primera propiedad que se
+// cargó. Con diez chacras son diez ids pegados a mano, así que conviene que el
+// código se arregle solo en vez de que cada uno lo descubra.
+//
+// Un id de Drive son 25 o más caracteres de letras, números, guión y guión bajo
+// seguidos. Ni los puntos ni las barras entran, así que de una URL completa el
+// primer tramo largo que aparece es justamente el id.
+//
+// Se aplica solo donde se leen identificadores. A CLAVE_ADMIN no se le toca
+// nada: es una clave y podría tener cualquier forma.
+// ==========================================================================
+function soloId(texto) {
+  var s = String(texto || "").trim();
+  var encontrado = s.match(/[-\w]{25,}/);
+  return encontrado ? encontrado[0] : s;
+}
+
 // Planilla aparte con quién tiene acceso. No es la de ninguna chacra: si una
 // chacra pudiera abrirla, vería las huellas de todas las demás.
 // Pide el id por propiedad aunque el script viva adentro de esta misma planilla.
@@ -44,7 +69,7 @@ function propiedad(nombre) {
 // de la app, el alta de una chacra falló justo acá, después de haber creado la
 // planilla, porque la propiedad estaba vacía.
 function planillaAccesos() {
-  var id = propiedad("ACCESOS");
+  var id = soloId(propiedad("ACCESOS"));
   if (!id) {
     throw new Error("Falta la propiedad ACCESOS: es el id de ESTA MISMA planilla, " +
                     "la de accesos. Se carga en Configuración del proyecto → " +
@@ -405,7 +430,7 @@ function crearChacra(codigo, nombre, persona) {
 // ==========================================================================
 
 function carpetaDeFotos(chacra) {
-  var padre = propiedad("CARPETA_DATOS");
+  var padre = soloId(propiedad("CARPETA_DATOS"));
   if (!padre) throw new Error("Falta la propiedad CARPETA_DATOS para guardar las fotos.");
 
   var raiz = DriveApp.getFolderById(padre);
@@ -436,10 +461,10 @@ function guardarFoto(chacra, datos) {
 }
 
 function carpetaDeChacras() {
-  var id = propiedad("CARPETA_CHACRAS");
+  var id = soloId(propiedad("CARPETA_CHACRAS"));
   if (id) return DriveApp.getFolderById(id);
 
-  var padre = propiedad("CARPETA_DATOS");
+  var padre = soloId(propiedad("CARPETA_DATOS"));
   if (!padre) {
     throw new Error("Falta la propiedad CARPETA_CHACRAS (o CARPETA_DATOS) " +
                     "con el id de la carpeta de Drive donde van las planillas.");
@@ -677,7 +702,7 @@ function planillaDe(chacra) {
     mapa = JSON.parse(propiedad("CHACRAS") || "{}");
   } catch (err) { mapa = {}; }
 
-  var id = mapa[String(chacra || "").toLowerCase()];
+  var id = soloId(mapa[String(chacra || "").toLowerCase()]);
   if (!id) throw new Error("Chacra desconocida: " + chacra);
   return SpreadsheetApp.openById(id);
 }
