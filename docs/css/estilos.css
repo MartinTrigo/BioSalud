@@ -5,25 +5,45 @@
    Pensado para usarse con el celular en la mano, al sol y con guantes:
    contraste alto, tipografía grande y botones de al menos 48 px.
 
-   Los colores están tomados de los propios logos institucionales, muestreando
-   los archivos de docs/img. Si mañana cambia un logo, se cambian estos valores
-   y toda la app se actualiza sola.
+   LA APP ES VIOLETA; EL VERDE QUEDÓ COMO SEÑAL.
+   Hasta octubre de 2026 el verde del sello ECOMARCAL dominaba toda la interfaz,
+   muestreado de su logo. Ahora la estructura es violeta y el verde hace un solo
+   trabajo: decir "esto está bien" o "esto es del sello". Aparece en el semáforo
+   de cumplimiento, en el cobre dentro del tope, en los avisos en verde y en el
+   sello "Comarca" de las fichas probadas acá. Trece usos contra treinta: dejó de
+   ser decoración y pasó a significar algo.
+
+   El manual de marca del INTA regula el isologo, no la paleta de una interfaz.
+   Lo que sí exige, y se cumple, es que el logo no se recoloree y que no quede
+   sobre un fondo donde pierda visibilidad: por eso los logos van sobre una
+   franja blanca y no sobre el violeta.
+
+   TODOS LOS VALORES SE ELIGIERON MIDIENDO EL CONTRASTE, no a ojo. La app se usa
+   al sol, al mediodía y con guantes, así que cada color que lleva texto encima
+   llega al menos a 4,5:1, y los principales a 7:1.
    ========================================================================== */
 
 :root {
-  --verde: #16632f;          /* verde del sello ECOMARCAL (hojas) */
-  --verde-claro: #2e8b4a;
+  --violeta: #5b2a86;        /* estructura: cabecera, botones, flechas  9,9:1 */
+  --violeta-claro: #7b2fbe;  /* acentos, bordes y el botón apretado     7,0:1 */
+  --violeta-suave: #f1e9fb;  /* fondos de tarjeta y respuesta al toque */
+
+  /* Verde: solo "está bien" y "es del sello". */
+  --verde: #16632f;          /* verde del sello ECOMARCAL (hojas)       7,3:1 */
+  --verde-claro: #2a8043;    /* el sello Comarca es texto de 11 px      4,9:1 */
   --verde-suave: #e8f2e9;
+
   --celeste: #00bfef;        /* celeste de las barras del logo INTA */
   --azul: #4c7fbe;           /* azul de la cinta CONICET */
   --dorado: #d9a521;         /* sol del logo CONICET, oscurecido para que se lea */
-  --tierra: #6b4423;
 
-  --texto: #1b2620;
-  --texto-suave: #5b6b62;
-  --fondo: #f5f7f4;
+  /* Los neutros también tenían un dejo verde: ahora tiran apenas al violeta,
+     que es lo que hace que la pantalla se lea como una sola paleta. */
+  --texto: #1f1b26;
+  --texto-suave: #5f5b6b;
+  --fondo: #f6f4f9;
   --papel: #ffffff;
-  --borde: #d3ddd6;
+  --borde: #ddd6e4;
   --error: #b3261e;
   --error-suave: #fceceb;
 
@@ -55,7 +75,7 @@ body {
 /* ---------- Cabecera institucional ---------- */
 
 .cabecera {
-  background: var(--verde);
+  background: var(--violeta);
   color: #fff;
   box-shadow: var(--sombra);
   position: sticky;
@@ -187,12 +207,12 @@ h2 {
   color: var(--texto);
   background: var(--papel);
   border: 1px solid var(--borde);
-  border-left: 5px solid var(--verde-claro);
+  border-left: 5px solid var(--violeta-claro);
   border-radius: var(--radio);
   box-shadow: var(--sombra);
   cursor: pointer;
 }
-.menu__boton:active { background: var(--verde-suave); }
+.menu__boton:active { background: var(--violeta-suave); }
 
 .menu__boton[disabled] {
   cursor: not-allowed;
@@ -210,8 +230,8 @@ h2 {
 /* ---------- Resumen del establecimiento ---------- */
 
 .resumen {
-  background: var(--verde-suave);
-  border: 1px solid var(--verde-claro);
+  background: var(--violeta-suave);
+  border: 1px solid var(--violeta-claro);
   border-radius: var(--radio);
   padding: 14px 16px;
   margin-bottom: 16px;
@@ -286,9 +306,9 @@ input, select, textarea {
 }
 
 input:focus, select:focus, textarea:focus {
-  outline: 3px solid var(--verde-claro);
+  outline: 3px solid var(--violeta-claro);
   outline-offset: 1px;
-  border-color: var(--verde-claro);
+  border-color: var(--violeta-claro);
 }
 
 input.mal, select.mal { border-color: var(--error); background: var(--error-suave); }
@@ -310,23 +330,23 @@ input.mal, select.mal { border-color: var(--error); background: var(--error-suav
   font: inherit;
   font-weight: 600;
   color: #fff;
-  background: var(--verde);
+  background: var(--violeta);
   border: 0;
   border-radius: 8px;
   cursor: pointer;
 }
-.boton:active { background: var(--verde-claro); }
+.boton:active { background: var(--violeta-claro); }
 .boton--ancho { width: 100%; }
 
 .boton--secundario {
-  color: var(--verde);
+  color: var(--violeta);
   background: var(--papel);
-  border: 2px solid var(--verde);
+  border: 2px solid var(--violeta);
 }
 
 /* Un enlace que se ve y se toca como botón: la descarga de la cartilla. */
 a.boton { text-decoration: none; }
-.boton--secundario:active { background: var(--verde-suave); }
+.boton--secundario:active { background: var(--violeta-suave); }
 
 .boton--peligro { color: var(--error); background: none; border: 0; min-height: 44px; padding: 8px 10px; }
 
@@ -373,7 +393,7 @@ a.boton { text-decoration: none; }
   overflow: hidden;
 }
 
-.grupo[open] { border-color: var(--verde-claro); }
+.grupo[open] { border-color: var(--violeta-claro); }
 
 /* Los insumos que el sello no admite se distinguen de las categorías de recetas
    por una franja al costado: el icono y el título ya dicen qué son, pero en una
@@ -387,7 +407,7 @@ a.boton { text-decoration: none; }
 .en-su-lugar {
   margin-bottom: 0;
   padding: 10px 12px;
-  background: var(--verde-suave);
+  background: var(--violeta-suave);
   border-radius: var(--radio);
 }
 
@@ -402,7 +422,7 @@ a.boton { text-decoration: none; }
   user-select: none;
 }
 .grupo__cab::-webkit-details-marker { display: none; }   /* y el de Chrome */
-.grupo__cab:active { background: var(--verde-suave); }
+.grupo__cab:active { background: var(--violeta-suave); }
 .grupo[open] .grupo__cab { border-bottom: 1px solid var(--borde); }
 
 .grupo__icono { font-size: 24px; flex: none; }
@@ -415,8 +435,8 @@ a.boton { text-decoration: none; }
   flex: none;
   width: 11px;
   height: 11px;
-  border-right: 2.5px solid var(--verde);
-  border-bottom: 2.5px solid var(--verde);
+  border-right: 2.5px solid var(--violeta);
+  border-bottom: 2.5px solid var(--violeta);
   transform: rotate(45deg);
   margin: -4px 4px 0 0;
   transition: transform .15s ease;
@@ -438,12 +458,12 @@ a.boton { text-decoration: none; }
   color: var(--texto);
   background: var(--papel);
   border: 1px solid var(--borde);
-  border-left: 4px solid var(--verde-claro);
+  border-left: 4px solid var(--violeta-claro);
   border-radius: 8px;
   margin-bottom: 8px;
   cursor: pointer;
 }
-.indice__item:active { background: var(--verde-suave); }
+.indice__item:active { background: var(--violeta-suave); }
 
 .indice__nombre { display: block; font-weight: 600; }
 .indice__cientifico { display: block; font-size: 14px; color: var(--texto-suave); margin-top: 2px; }
@@ -481,7 +501,7 @@ a.boton { text-decoration: none; }
   height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  background: var(--verde-suave);
+  background: var(--violeta-suave);
 }
 
 .foto figcaption {
@@ -520,9 +540,9 @@ a.boton { text-decoration: none; }
 
 .etiqueta {
   font-size: 13px;
-  color: var(--verde);
-  background: var(--verde-suave);
-  border: 1px solid var(--verde-claro);
+  color: var(--violeta);
+  background: var(--violeta-suave);
+  border: 1px solid var(--violeta-claro);
   border-radius: 12px;
   padding: 2px 10px;
 }
@@ -541,7 +561,7 @@ a.boton { text-decoration: none; }
 .renglon {
   background: var(--papel);
   border: 1px solid var(--borde);
-  border-left: 5px solid var(--verde-claro);
+  border-left: 5px solid var(--violeta-claro);
   border-radius: var(--radio);
   padding: 12px 14px;
   margin-bottom: 10px;
@@ -549,7 +569,7 @@ a.boton { text-decoration: none; }
 
 .renglon__datos { display: block; }
 .renglon__producto { display: block; font-weight: 700; }
-.renglon__motivo { display: block; font-size: 14px; color: var(--verde); }
+.renglon__motivo { display: block; font-size: 14px; color: var(--violeta); }
 .renglon__detalle { display: block; font-size: 14px; color: var(--texto-suave); margin-top: 2px; }
 .renglon__periodo { display: block; font-size: 14px; margin-top: 4px; }
 
@@ -564,7 +584,7 @@ a.boton { text-decoration: none; }
 
 /* La ficha del producto dentro del formulario: se distingue de los campos
    porque es información, no algo que haya que completar. */
-.tarjeta--info-producto { background: var(--verde-suave); border-color: var(--verde-claro); }
+.tarjeta--info-producto { background: var(--violeta-suave); border-color: var(--violeta-claro); }
 .tarjeta--info-producto .nota { margin-top: 8px; }
 
 /* Los términos de uso son para leer, no para escanear: el texto va un punto más
@@ -587,7 +607,7 @@ a.boton { text-decoration: none; }
    atrasado, no leer los títulos. */
 .grupo-agenda { border-left: 5px solid var(--borde); }
 .grupo-agenda--atrasado { border-left-color: var(--error); }
-.grupo-agenda--hoy { border-left-color: var(--verde-claro); }
+.grupo-agenda--hoy { border-left-color: var(--violeta-claro); }
 .grupo-agenda--semana { border-left-color: var(--celeste); }
 
 .grupo-agenda__cuenta {
@@ -611,7 +631,7 @@ a.boton { text-decoration: none; }
   border-radius: var(--radio);
 }
 
-.agenda__item--abierto { border-color: var(--verde-claro); }
+.agenda__item--abierto { border-color: var(--violeta-claro); }
 .agenda__item--hecho { background: var(--fondo); }
 
 .agenda__cab { display: flex; align-items: baseline; gap: 10px; }
@@ -765,7 +785,7 @@ textarea { resize: vertical; min-height: 60px; }
 /* ---------- Pie ---------- */
 
 .pie {
-  background: var(--verde);
+  background: var(--violeta);
   color: rgba(255, 255, 255, .85);
   text-align: center;
   font-size: 13px;

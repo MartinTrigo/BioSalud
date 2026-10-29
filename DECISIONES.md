@@ -451,6 +451,43 @@ perder el rastro, pero en la app se muestra la etiqueta de versión, que dice lo
 
 ---
 
+## Por qué la app es violeta y el verde quedó como señal
+
+**Decisión:** la estructura —cabecera, botones, bordes, flechas— es violeta. El
+verde del sello ECOMARCAL quedó para un solo trabajo: decir "esto está bien" o
+"esto es del sello".
+
+Hasta octubre de 2026 el verde dominaba todo, muestreado del logo del sello. No
+estaba mal, pero tenía un costo que se vio recién al cambiarlo: con la pantalla
+entera verde, **el sello "Comarca" de las fichas probadas acá no se distinguía de
+nada**. Ahora salta. Trece usos del verde contra treinta del violeta: dejó de ser
+decoración y pasó a significar algo.
+
+Dónde quedó el verde: el semáforo de cumplimiento, el cobre dentro del tope, los
+avisos en verde, el estado "todo enviado" y el sello Comarca.
+
+**El manual de marca del INTA no lo impide**, y conviene saber por qué: es un
+manual de *isologo*. Regula cómo se construye la marca, su anclaje tipográfico y
+su aplicación sobre fondos de color —contempla positivo y negativo—, pero no fija
+paleta para piezas digitales. Sus prohibiciones tocan al logo, no a la interfaz:
+no recolorearlo, no superponerle textos, no ponerlo donde pierda visibilidad. Las
+dos últimas ya estaban resueltas por la franja blanca sobre la que van los logos,
+que existe desde el primer día por otra razón (las letras negras del CONICET
+desaparecían sobre color).
+
+Y algo que la pregunta original dejaba ver: **la app nunca fue de los colores del
+INTA.** El INTA es rojo, blanco y celeste, y de ahí la app toma apenas el celeste,
+dos veces en todo el CSS. El verde venía del sello, no del instituto.
+
+**Todos los valores se eligieron midiendo contraste**, no a ojo, porque la app se
+usa al sol y con guantes. El violeta vivo que se había propuesto primero
+(`#9900ff`) daba 5,53:1 con texto blanco, por debajo del verde que reemplazaba
+(7,34:1). Los elegidos dan 9,9:1 y 7,0:1. De paso se oscureció el verde del sello
+Comarca de `#2e8b4a` a `#2a8043`, porque con 4,28:1 no llegaba al mínimo para
+texto de 11 px y ahora sí.
+
+---
+
 ## Decisiones menores que conviene recordar
 
 **El código de chacra lo asigna el equipo, no el productor.** Si cada uno

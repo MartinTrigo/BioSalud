@@ -105,7 +105,8 @@ propia de la app es un paso de ese camino, no su final.
 - **Nombre:** BioSalud ECOMARCAL.
 - **Avisos:** panel en la app más correo automático desde Apps Script. Push web
   descartado por ahora.
-- **Paleta:** muestreada de los propios logos institucionales.
+- **Paleta:** violeta para la estructura, y el verde del sello ECOMARCAL
+  reservado para decir "está bien" o "es del sello". Antes era verde en todo.
 - **Punto de partida:** desarrollo limpio sobre la arquitectura de MonAgric.
 - **Acceso:** invitación y credencial por teléfono, desde el primer día.
 - **Licencia:** pendiente de resolver la titularidad; el repositorio queda
