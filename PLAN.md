@@ -65,7 +65,7 @@ si hay tiempo para redactar fichas.
 
 | # | Qué | Bloquea |
 |---|---|---|
-| 1 | **Cuenta institucional de Drive**, y antes de eso saber **si incluye Google Workspace**: el backend es Apps Script sobre Google Sheets, y en Microsoft no existe Apps Script. Hoy las planillas están en el Drive personal, que es lo acordado mientras dure el desarrollo | Antes del piloto |
+| 1 | **Cuenta institucional de Drive**, y antes de eso saber **si incluye Google Workspace**: el backend es Apps Script sobre Google Sheets, y en Microsoft no existe Apps Script. Las planillas ya no están en el Drive personal: el 29/10 se mudaron a una cuenta propia de la app (ver [MIGRACION-DRIVE.md](MIGRACION-DRIVE.md)), que no es institucional todavía | Antes del piloto |
 | 2 | **Códigos y nombres del resto de las chacras** del piloto. Ya están `radal` y `tika` | Fase 8 |
 
 ### Bloqueantes que se cayeron
@@ -95,7 +95,8 @@ si hay tiempo para redactar fichas.
 
 Están detallados en [DERECHOS.md](DERECHOS.md), con responsable y momento. Los
 dos que no dependen de nadie más y se pueden hacer ya: mover las planillas a una
-cuenta institucional y escribir `AUTORES.md`.
+cuenta institucional y escribir `AUTORES.md`. La mudanza del 29/10 a una cuenta
+propia de la app es un paso de ese camino, no su final.
 
 ---
 

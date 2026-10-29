@@ -67,8 +67,10 @@ En planillas de Google Sheets, **una por establecimiento**.
 - **El equipo técnico del IFAB accede a todas las planillas.** Se dice de frente
   porque es así: es lo que permite acompañar el seguimiento y armar planes de
   tratamiento, y es parte del rol de la certificación.
-- Hoy las planillas están alojadas en una cuenta de Drive del referente, con el
-  compromiso de migrarlas a una cuenta institucional.
+- Las planillas están alojadas en una **cuenta de Google registrada
+  especialmente para esta app**, separada de las cuentas personales del equipo.
+  Todavía **no es una cuenta institucional del INTA o del CONICET**, y hay el
+  compromiso de migrarlas cuando se resuelva con esas instituciones.
 
 **No se venden, ni se ceden, ni se comparten con terceros** fuera del equipo
 técnico del IFAB y de la administración del sello.

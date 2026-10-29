@@ -87,13 +87,18 @@ Puntos a resolver:
   fase 4 se muestra dentro de la app.
 - **Uso en investigación.** Si estos datos alimentan una publicación, va agregado
   y anónimo, y avisado antes. Está escrito en los términos.
-- **Dónde viven.** Hoy, en el Drive personal de Martín. Para una herramienta
-  institucional obligatoria eso es frágil: si mañana cambia de rol, los datos de
-  diez chacras quedan en una cuenta que ya no corresponde. **Conviene migrar a
-  una cuenta institucional** y dejarlo asentado.
+- **Dónde viven.** Desde el 29/10/2026, en una cuenta de Google registrada para
+  la app (`biosalud.inta@gmail.com`), no en el Drive personal de Martín. Ver
+  [MIGRACION-DRIVE.md](MIGRACION-DRIVE.md). **Eso resuelve la mitad del
+  problema**: los datos de diez chacras ya no están mezclados con los de una
+  persona. Pero una cuenta de Gmail propia **no es una cuenta institucional**,
+  aunque diga `inta`: sigue dependiendo de quién tenga la contraseña, y si mañana
+  Martín cambia de rol el problema vuelve. Queda pendiente migrar a una cuenta del
+  INTA o del CONICET y dejarlo asentado.
 
-Este último punto es el que más urge, y no depende de ningún trámite: es una
-decisión que se puede tomar ya.
+Lo que ya no se puede postergar es lo otro: antes de mudar a una cuenta
+institucional hay que saber **si incluye Google Workspace**, porque todo el
+backend es Apps Script sobre Sheets y en Microsoft no existe Apps Script.
 
 ---
 
@@ -160,7 +165,7 @@ De más urgente a menos, y de más fácil a más lento:
 
 | # | Qué | Quién | Cuándo |
 |---|---|---|---|
-| 1 | Mover las planillas a una cuenta institucional, y antes averiguar si la cuenta incluye Google Workspace | Martín | Antes del piloto. La fase 4 ya pasó con las planillas en el Drive personal |
+| 1 | Mover las planillas a una cuenta **institucional**, y antes averiguar si incluye Google Workspace | Martín | Antes del piloto. El 29/10 se mudaron a una cuenta propia de la app, que no es institucional |
 | 2 | Escribir `AUTORES.md` | Martín | Ya |
 | 3 | Revisar y aprobar [TERMINOS.md](TERMINOS.md) | Equipo IFAB | Antes del piloto |
 | 4 | Acuerdo por escrito con ECOMARCAL sobre el uso de la marca | IFAB + ECOMARCAL | Antes del piloto |

@@ -1,5 +1,5 @@
 {
-  "version": "agosto de 2026 · b41b2cdf",
+  "version": "agosto de 2026 · 0bbc6247",
   "etiqueta": "Versión de prueba (beta) · borrador para revisión del equipo IFAB · agosto de 2026",
   "titulo": "Términos de uso de BioSalud ECOMARCAL",
   "nota_interna": "**Este documento todavía no está aprobado.** Es el borrador que la app ya muestra, para que cada productor lo lea y lo acepte antes de activar su teléfono. Tiene que revisarlo el equipo del IFAB y acordarse con la administración de ECOMARCAL. Ver DERECHOS.md. **Este archivo es la fuente.** La app no tiene una copia escrita aparte: lee docs/datos/terminos.json, que sale de acá con python tools/generar-terminos.py. Si se corrige una frase, hay que volver a correrlo. La versión que cada productor acepta lleva una huella del contenido, así que un cambio no anunciado se nota.",
@@ -79,7 +79,7 @@
             "Los datos de una chacra **no se mezclan** con los de otra.",
             "**Cada productor puede ver y descargar su planilla completa** cuando quiera: se le comparte el enlace. Los datos no quedan encerrados en la app.",
             "**El equipo técnico del IFAB accede a todas las planillas.** Se dice de frente porque es así: es lo que permite acompañar el seguimiento y armar planes de tratamiento, y es parte del rol de la certificación.",
-            "Hoy las planillas están alojadas en una cuenta de Drive del referente, con el compromiso de migrarlas a una cuenta institucional."
+            "Las planillas están alojadas en una **cuenta de Google registrada especialmente para esta app**, separada de las cuentas personales del equipo. Todavía **no es una cuenta institucional del INTA o del CONICET**, y hay el compromiso de migrarlas cuando se resuelva con esas instituciones."
           ]
         },
         {
