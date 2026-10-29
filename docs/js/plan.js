@@ -51,6 +51,17 @@ window.Plan = (function () {
   let errores = {};
   let destino = null;
 
+  // LO QUE HAY ESCRITO EN EL FORMULARIO, PARA NO PERDERLO AL REPINTAR.
+  //
+  // El formulario se dibuja de nuevo cada vez que cambia algo de arriba —el
+  // tipo, el producto— y también cuando falta un dato, para mostrar dónde
+  // falta. Pero sus valores salían del renglón guardado, que en un renglón
+  // nuevo no existe: así que avisar "falta la fecha de inicio" borraba la
+  // dosis, los sectores y la otra fecha. Pasó en el campo: la primera carga
+  // del plan tuvo que hacerse dos veces. Ahora lo tipeado se guarda acá antes
+  // de repintar y vuelve a su lugar.
+  let tipeado = {};
+
   // ---------- Temporada ----------
   // En la Comarca el ciclo va de julio a junio, así que a mitad de año no
   // cambia de temporada en medio de un plan.
@@ -66,6 +77,10 @@ window.Plan = (function () {
   // pantalla y lo va a usar el Seguimiento.
   function ocurrencias(r) {
     const fechas = [];
+    // Lo que se usa ante necesidad no genera fechas: no se sabe cuándo va a
+    // hacer falta, y ponerle un calendario lo volvería un atraso permanente en
+    // el Seguimiento.
+    if (r.modo === "necesidad") return fechas;
     if (!r.desde || !r.hasta || !r.cada_dias) return fechas;
 
     const desde = new Date(r.desde + "T12:00:00");
@@ -113,6 +128,49 @@ window.Plan = (function () {
 
   const ficha = (id) => (bio.fichas || []).find((f) => f.id === id);
 
+  // RUTINA O ANTE NECESIDAD.
+  //
+  // No es lo mismo planificar un biofertilizante que un repelente. El primero
+  // alimenta y fortalece: se aplica cada tantos días y el calendario es el
+  // plan. El segundo repele o mata, su efecto dura poco y el riego o una
+  // lluvia se lo lleva: aplicarlo por calendario gasta insumo sin necesidad.
+  // Lo que corresponde ahí es tener los insumos y las herramientas listas y
+  // preparar cuando el monitoreo lo pide.
+  //
+  // Los preventivos de hongos —cobre, cola de caballo— son el caso que no
+  // entra en ninguno de los dos extremos: tienen que estar sobre la hoja ANTES
+  // de que entre la enfermedad, así que van planificados, pero atados al
+  // estado del cultivo y al clima más que a un número fijo de días. Por eso se
+  // sugieren como rutina y la app deja cambiarlo.
+  //
+  // La sugerencia vive en datos/biopreparados.json —por categoría, y por ficha
+  // cuando difiere— y no acá: es criterio agronómico, y tiene que poder
+  // corregirse sin tocar el código.
+  // Una línea que explica por qué la app sugiere ese modo para ESTE producto.
+  // Sin esto el desplegable parece una preferencia; con esto es una
+  // recomendación agronómica que se puede discutir.
+  function porQueEseModo(f, modo) {
+    const sugerido = modoSugerido(f);
+    if (modo !== sugerido) return "Para este producto la app sugería lo otro.";
+    const id = f ? f.categoria : "";
+    if (modo === "necesidad") {
+      return id === "estres"
+        ? "Se usa frente a una helada o una ola de calor, y eso no se agenda."
+        : "Repele o controla, y su efecto dura poco: conviene usarlo cuando el monitoreo lo pide.";
+    }
+    if (id === "enfermedades") {
+      return "Es preventivo: tiene que estar sobre la planta antes de que entre la enfermedad.";
+    }
+    return "Alimenta o fortalece: el efecto se construye repitiendo.";
+  }
+
+  const modoSugerido = (f) => {
+    if (f && f.modo_sugerido) return f.modo_sugerido;
+    const id = f ? f.categoria : categoria;
+    const cat = (bio.categorias || []).find((c) => c.id === id);
+    return (cat && cat.modo_sugerido) || "rutina";
+  };
+
   function pintar() {
     const enEdicion = editando ? renglones.find((r) => r.id === editando) : null;
     const sectores = config.sectores || [];
@@ -132,7 +190,7 @@ window.Plan = (function () {
         ${selectorProducto()}
         ${(elegido || categoria === "__otro") ? formulario(enEdicion, sectores) : `<p class="nota">
           ${categoria ? "Elegí cuál para completar sus datos."
-                      : "Empezá por el tipo: eso achica la lista."}</p>`}
+                      : "Empezá por el tipo: eso reduce la lista."}</p>`}
       </div>
 
       ${renglones.length ? `<button class="boton boton--ancho" id="btn-guardar-plan">
@@ -170,9 +228,11 @@ window.Plan = (function () {
           <span class="renglon__producto">${esc(r.producto)}</span>
           <span class="renglon__motivo">${esc(r.motivo || "")}</span>
           <span class="renglon__detalle">${esc(detalle)}</span>
-          <span class="renglon__periodo">${esc(fechaCorta(r.desde))} a ${esc(fechaCorta(r.hasta))}
-            · cada ${esc(String(r.cada_dias))} días
-            · <strong>${n} ${n === 1 ? "aplicación" : "aplicaciones"}</strong></span>
+          <span class="renglon__periodo">${r.modo === "necesidad"
+            ? "<strong>Ante necesidad</strong> · listo para preparar cuando haga falta"
+            : `${esc(fechaCorta(r.desde))} a ${esc(fechaCorta(r.hasta))}
+               · cada ${esc(String(r.cada_dias))} días
+               · <strong>${n} ${n === 1 ? "aplicación" : "aplicaciones"}</strong>`}</span>
         </div>
         <div class="renglon__acciones">
           <button class="boton--peligro boton--editar" data-editar="${esc(r.id)}">Editar</button>
@@ -246,7 +306,7 @@ window.Plan = (function () {
                 : peor.estado === "ok" ? "aviso--ok" : "aviso--info";
 
     const titulo = peor.estado === "pasado"
-      ? `Este plan se pasa del tope de cobre en ${peor.nombre}.`
+      ? `Este plan supera el tope de cobre en ${peor.nombre}.`
       : peor.estado === "cerca"
       ? `En ${peor.nombre} el plan llega al ${Math.round(peor.porcentaje)} % del tope de cobre.`
       : peor.estado === "sin-superficie"
@@ -314,7 +374,9 @@ window.Plan = (function () {
 
   function formulario(enEdicion, sectores) {
     const f = categoria === "__otro" ? null : ficha(elegido);
-    const r = enEdicion || {};
+    // Lo tipeado pisa a lo guardado: es lo más reciente que escribió la persona.
+    const r = Object.assign({}, enEdicion || {}, tipeado);
+    const modo = r.modo || modoSugerido(f);
     const sug = (f && f.sugerencia) || {};
     const marcados = new Set(r.sectores || []);
 
@@ -341,7 +403,7 @@ window.Plan = (function () {
       ${categoria === "__otro" ? `
         <div class="campo">
           <label for="f-otro">¿Qué producto?
-            <span class="ayuda">Un insumo que no está en la wiki: un fertilizante comercial, un producto de banda verde, algo que preparás vos.</span></label>
+            <span class="ayuda">Un insumo que no está en la wiki: un fertilizante comercial, un producto de banda verde o un preparado propio.</span></label>
           <input id="f-otro" class="${mal("otro")}" type="text" value="${esc(r.producto || "")}"
                  autocomplete="off" placeholder="Nombre del producto">
           ${error("otro")}
@@ -377,6 +439,20 @@ window.Plan = (function () {
         <p class="nota" id="aviso-riego"></p>
       </div>
 
+      <div class="campo">
+        <label for="f-modo">¿Cómo se va a usar?</label>
+        <select id="f-modo">
+          <option value="rutina"${modo === "rutina" ? " selected" : ""}>De rutina, cada tantos días</option>
+          <option value="necesidad"${modo === "necesidad" ? " selected" : ""}>Ante necesidad, lo tengo listo</option>
+        </select>
+        <p class="nota">${modo === "necesidad"
+          ? "No lleva fechas: queda en el Seguimiento como insumo listo para preparar, "
+            + "y se registra el día que se use. No va a figurar como atrasado."
+          : "Va a la agenda del Seguimiento con sus fechas, y avisa cuando toca."}
+          ${esc(porQueEseModo(f, modo))}</p>
+      </div>
+
+      ${modo === "necesidad" ? "" : `
       <div class="fila">
         <div class="campo">
           <label for="f-desde">Desde</label>
@@ -399,7 +475,7 @@ window.Plan = (function () {
         ${error("cada")}
       </div>
 
-      <p class="aviso aviso--ok" id="cuenta-aplicaciones">Completá las fechas para ver cuántas aplicaciones son.</p>
+      <p class="aviso aviso--ok" id="cuenta-aplicaciones">Completá las fechas para ver cuántas aplicaciones son.</p>`}
 
       ${cobre ? `
         <div class="campo">
@@ -435,9 +511,44 @@ window.Plan = (function () {
 
   // ---------- Eventos ----------
 
+  // Lee la pantalla con las mismas claves que un renglón guardado, así
+  // formulario() no distingue entre lo que viene del teléfono y lo tipeado.
+  // Solo incluye los campos que están en pantalla: si el formulario todavía no
+  // se dibujó, no inventa claves vacías.
+  function leerFormulario() {
+    const hay = (id) => !!destino.querySelector(id);
+    const leido = {};
+    if (hay("#f-otro")) leido.producto = valor("#f-otro").trim();
+    if (hay("#f-dosis")) leido.dosis = valor("#f-dosis").trim();
+    if (hay("#f-metodo")) leido.metodo = valor("#f-metodo");
+    if (hay("#f-modo")) leido.modo = valor("#f-modo");
+    if (hay("#f-desde")) leido.desde = valor("#f-desde");
+    if (hay("#f-hasta")) leido.hasta = valor("#f-hasta");
+    if (hay("#f-cada")) leido.cada_dias = valor("#f-cada");
+    if (hay("#f-litros")) leido.litros_por_aplicacion = valor("#f-litros");
+    if (hay("#f-obs")) leido.observaciones = valor("#f-obs");
+    if (destino.querySelector(".f-sector")) leido.sectores = sectoresMarcados();
+    return leido;
+  }
+
+  // Al cambiar de producto, lo que depende del producto vuelve a salir de su
+  // ficha: la dosis y la frecuencia que sugiere la bibliografía son distintas.
+  // Las fechas, los sectores y las observaciones no tienen por qué perderse.
+  function soloLoQueNoDependeDelProducto(leido) {
+    const queda = {};
+    // El modo no se conserva al cambiar de producto: la sugerencia es del
+    // producto nuevo, y mantener la del anterior sería arrastrar un criterio
+    // que no le corresponde.
+    ["desde", "hasta", "sectores", "observaciones"].forEach((k) => {
+      if (leido[k] !== undefined) queda[k] = leido[k];
+    });
+    return queda;
+  }
+
   function conectar() {
     const cat = destino.querySelector("#f-categoria");
     if (cat) cat.onchange = () => {
+      tipeado = soloLoQueNoDependeDelProducto(leerFormulario());
       categoria = cat.value;
       elegido = "";              // cambiar de tipo descarta el producto anterior
       errores = {};
@@ -445,14 +556,24 @@ window.Plan = (function () {
     };
 
     const sel = destino.querySelector("#f-producto");
-    if (sel) sel.onchange = () => { elegido = sel.value; errores = {}; pintar(); };
+    if (sel) sel.onchange = () => {
+      tipeado = soloLoQueNoDependeDelProducto(leerFormulario());
+      elegido = sel.value;
+      errores = {};
+      pintar();
+    };
+
+    // Cambiar el modo cambia qué campos tienen sentido, así que repinta; lo
+    // tipeado se conserva entero, porque el producto es el mismo.
+    const modo = destino.querySelector("#f-modo");
+    if (modo) modo.onchange = () => { tipeado = leerFormulario(); errores = {}; pintar(); };
 
     const btn = destino.querySelector("#btn-renglon");
     if (btn) btn.onclick = guardarRenglon;
 
     const cancelar = destino.querySelector("#btn-cancelar");
     if (cancelar) cancelar.onclick = () => {
-      editando = null; categoria = ""; elegido = ""; errores = {}; pintar();
+      editando = null; categoria = ""; elegido = ""; errores = {}; tipeado = {}; pintar();
     };
 
     const guardar = destino.querySelector("#btn-guardar-plan");
@@ -465,6 +586,7 @@ window.Plan = (function () {
       b.onclick = () => {
         const r = renglones.find((x) => x.id === b.dataset.editar);
         editando = r.id;
+        tipeado = {};
         // Se reponen los dos pasos para que el formulario se abra igual que
         // cuando se cargó.
         categoria = r.producto_id ? (ficha(r.producto_id) || {}).categoria || "__otro" : "__otro";
@@ -508,7 +630,9 @@ window.Plan = (function () {
 
   function actualizarCuenta() {
     const caja = destino.querySelector("#cuenta-aplicaciones");
-    if (!caja) return;
+    // Ante necesidad no hay cuenta de aplicaciones que mostrar, pero la del
+    // cobre sí tiene que decir algo.
+    if (!caja) { actualizarCobre(); return; }
     const n = ocurrencias({
       desde: valor("#f-desde"), hasta: valor("#f-hasta"),
       cada_dias: aNumero(valor("#f-cada")),
@@ -533,6 +657,17 @@ window.Plan = (function () {
   function actualizarCobre() {
     const caja = destino.querySelector("#cuenta-cobre");
     if (!caja) return;
+
+    // Un preparado con cobre que se usa ante necesidad no se puede proyectar:
+    // no se sabe cuántas veces se va a aplicar. El tope sigue existiendo, así
+    // que lo que corresponde es decirlo, no mostrar un cero tranquilizador.
+    if (valor("#f-modo") === "necesidad") {
+      caja.innerHTML = `<p class="aviso aviso--info">Al usarse ante necesidad no se
+        puede proyectar cuánto cobre va a sumar. La cuenta va a salir de las
+        aplicaciones que registres, en Seguimiento de plan, y el tope de
+        ${esc(String(limiteCobre()))} kg por hectárea y por año sigue valiendo igual.</p>`;
+      return;
+    }
 
     const borrador = {
       id: editando || "__borrador",
@@ -559,7 +694,7 @@ window.Plan = (function () {
     const clase = peor.estado === "pasado" ? "aviso--error"
                 : peor.estado === "ok" ? "aviso--ok" : "aviso--info";
     const titulo = peor.estado === "pasado"
-      ? `Así la temporada se pasa del tope en ${peor.nombre}.`
+      ? `De esta manera la temporada supera el tope en ${peor.nombre}.`
       : peor.estado === "sin-superficie"
       ? `Falta la superficie de ${peor.nombre} para saber cuánto es por hectárea.`
       : `Con este renglón, el sector más cargado queda en ${Math.round(peor.porcentaje)} % del tope.`;
@@ -582,7 +717,7 @@ window.Plan = (function () {
       .filter((s) => s && RIEGOS_QUE_PERMITEN_FERTIRRIEGO.indexOf(s.riego) < 0);
 
     caja.textContent = sinRiego.length
-      ? `Ojo: ${sinRiego.map((s) => s.nombre).join(", ")} no ${sinRiego.length === 1 ? "tiene" : "tienen"} riego por cañería cargado, así que ahí no se podría aplicar por fertirriego.`
+      ? `Atención: ${sinRiego.map((s) => s.nombre).join(", ")} no ${sinRiego.length === 1 ? "tiene" : "tienen"} riego por cañería cargado, así que ahí no se podría aplicar por fertirriego.`
       : "";
   }
 
@@ -597,28 +732,34 @@ window.Plan = (function () {
     const dosis = valor("#f-dosis").trim();
     const metodo = valor("#f-metodo");
     const sectores = sectoresMarcados();
-    const desde = valor("#f-desde");
-    const hasta = valor("#f-hasta");
-    const cada = aNumero(valor("#f-cada"));
+    const modo = valor("#f-modo") || modoSugerido(f);
+    const aNecesidad = modo === "necesidad";
+    const desde = aNecesidad ? "" : valor("#f-desde");
+    const hasta = aNecesidad ? "" : valor("#f-hasta");
+    const cada = aNecesidad ? null : aNumero(valor("#f-cada"));
 
     if (!categoria) errores.categoria = "Elegí el tipo de bioinsumo.";
     else if (categoria !== "__otro" && !elegido) errores.producto = "Elegí cuál de la lista.";
     if (categoria === "__otro" && !nombre) errores.otro = "Escribí el nombre del producto.";
-    if (!dosis) errores.dosis = "Poné la dosis, aunque sea aproximada.";
+    if (!dosis) errores.dosis = "Indicá la dosis, aunque sea aproximada.";
     if (!metodo) errores.metodo = "Elegí con qué lo vas a aplicar.";
     if (!sectores.length) errores.sectores = "Marcá al menos un sector.";
-    if (!desde) errores.desde = "Falta la fecha de inicio.";
-    if (!hasta) errores.hasta = "Falta la fecha de fin.";
-    if (desde && hasta && hasta < desde) errores.hasta = "La fecha de fin es anterior a la de inicio.";
-    if (Number.isNaN(cada) || cada <= 0) errores.cada = "Poné cada cuántos días se repite. Por ejemplo: 15";
+    // Lo que se usa ante necesidad no tiene fechas ni frecuencia que pedir.
+    if (!aNecesidad) {
+      if (!desde) errores.desde = "Falta la fecha de inicio.";
+      if (!hasta) errores.hasta = "Falta la fecha de fin.";
+      if (desde && hasta && hasta < desde) errores.hasta = "La fecha de fin es anterior a la de inicio.";
+      if (Number.isNaN(cada) || cada <= 0) errores.cada = "Indicá cada cuántos días se repite. Por ejemplo: 15";
+    }
     // Sin los litros no hay cuenta de cobre posible, y es justo el producto en
     // el que no se puede dejar pasar.
     if (cobre && (Number.isNaN(litros) || litros <= 0)) {
-      errores.litros = "Poné cuántos litros de caldo preparás por aplicación. Por ejemplo: "
+      errores.litros = "Indicá cuántos litros de caldo preparás por aplicación. Por ejemplo: "
         + cobre.litros_receta;
     }
 
     if (Object.keys(errores).length) {
+      tipeado = leerFormulario();
       pintar();
       const primero = destino.querySelector(".mal, .campo__error");
       if (primero) primero.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -638,10 +779,11 @@ window.Plan = (function () {
       dosis: dosis,
       litros_por_aplicacion: cobre ? litros : null,
       metodo: metodo,
+      modo: modo,
       sectores: sectores,
       desde: desde,
       hasta: hasta,
-      cada_dias: cada,
+      cada_dias: aNecesidad ? null : cada,
       observaciones: valor("#f-obs").trim(),
       estado: "Activo",
     };
@@ -661,6 +803,7 @@ window.Plan = (function () {
 
     categoria = "";
     elegido = "";
+    tipeado = {};        // el renglón ya está guardado: el próximo arranca limpio
     pintar();
     window.scrollTo(0, 0);
   }

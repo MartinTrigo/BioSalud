@@ -15,43 +15,50 @@
       "id": "biofertilizantes",
       "nombre": "Biofertilizantes",
       "icono": "🌱",
-      "descripcion": "Aportan nutrientes y microorganismos vivos. Alimentan al suelo antes que a la planta."
+      "descripcion": "Aportan nutrientes y microorganismos vivos. Alimentan al suelo antes que a la planta.",
+      "modo_sugerido": "rutina"
     },
     {
       "id": "bioestimulantes",
       "nombre": "Bioestimulantes",
       "icono": "🌿",
-      "descripcion": "No nutren tanto como activan: estimulan el enraizamiento, el crecimiento y las defensas de la planta."
+      "descripcion": "No nutren tanto como activan: estimulan el enraizamiento, el crecimiento y las defensas de la planta.",
+      "modo_sugerido": "rutina"
     },
     {
       "id": "abonos",
       "nombre": "Abonos y enmiendas sólidas",
       "icono": "🪱",
-      "descripcion": "Se incorporan al suelo y mejoran su estructura, su materia orgánica y su vida. Efecto lento y acumulativo."
+      "descripcion": "Se incorporan al suelo y mejoran su estructura, su materia orgánica y su vida. Efecto lento y acumulativo.",
+      "modo_sugerido": "rutina"
     },
     {
       "id": "insectos",
       "nombre": "Biocontroladores de insectos y ácaros",
       "icono": "🐞",
-      "descripcion": "Repelen o controlan plagas. Ninguno es selectivo del todo: usarlos cuando el monitoreo lo justifique, no por calendario."
+      "descripcion": "Repelen o controlan plagas. Ninguno es selectivo del todo: usarlos cuando el monitoreo lo justifique, no por calendario.",
+      "modo_sugerido": "necesidad"
     },
     {
       "id": "enfermedades",
       "nombre": "Biocontroladores de enfermedades",
       "icono": "🍄",
-      "descripcion": "Previenen y controlan hongos y bacterias. Casi todos son preventivos: aplicados con la enfermedad instalada rinden poco."
+      "descripcion": "Previenen y controlan hongos y bacterias. Casi todos son preventivos: aplicados con la enfermedad instalada rinden poco.",
+      "modo_sugerido": "rutina"
     },
     {
       "id": "estres",
       "nombre": "Reguladores de estrés",
       "icono": "❄️",
-      "descripcion": "Ayudan a la planta a soportar heladas, calor o sequía. Es la categoría con menos respaldo local: hay más experiencia de productores que ensayos publicados."
+      "descripcion": "Ayudan a la planta a soportar heladas, calor o sequía. Es la categoría con menos respaldo local: hay más experiencia de productores que ensayos publicados.",
+      "modo_sugerido": "necesidad"
     },
     {
       "id": "base",
       "nombre": "Preparados de base",
       "icono": "🧪",
-      "descripcion": "No se aplican solos. Son la materia prima de los demás biopreparados, y conviene tenerlos hechos de antemano."
+      "descripcion": "No se aplican solos. Son la materia prima de los demás biopreparados, y conviene tenerlos hechos de antemano.",
+      "modo_sugerido": "rutina"
     }
   ],
   "fichas": [
@@ -1171,6 +1178,7 @@
       "id": "caldo-bicarbonato",
       "nombre": "Caldo de bicarbonato de sodio",
       "categoria": "enfermedades",
+      "modo_sugerido": "necesidad",
       "etiquetas": [
         "oídio",
         "mildiu",

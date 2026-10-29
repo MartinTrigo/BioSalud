@@ -129,6 +129,40 @@ window.Seguimiento = (function () {
       a.fecha.localeCompare(b.fecha) || String(a.plan.producto).localeCompare(String(b.plan.producto)));
   }
 
+  // LO QUE ESTÁ LISTO PARA CUANDO HAGA FALTA.
+  //
+  // Los renglones marcados "ante necesidad" no tienen fechas, así que no entran
+  // en la agenda: aparecerían atrasados todos los días, que es exactamente lo
+  // que no son. Pero tienen que estar a la vista, por dos razones: para que el
+  // productor sepa qué insumo le conviene tener preparado, y para poder
+  // registrar la aplicación el día que la haga.
+  //
+  // Se les arma una ocurrencia con la fecha de hoy, así el registro usa el
+  // mismo camino que el resto —el id derivado de renglón, fecha y sector— y la
+  // planilla recibe una fila igual a cualquier otra.
+  function listosANecesidad() {
+    const h = hoy();
+    const lista = [];
+    renglones.filter((r) => r.modo === "necesidad").forEach((r) => {
+      (r.sectores || []).forEach((s) => {
+        const id = idDe(r.id, h, s);
+        lista.push({
+          id: id,
+          plan: r,
+          fecha: h,
+          sector: s,
+          nombreSector: nombreSector(s),
+          registro: registroDe(id),
+          aNecesidad: true,
+        });
+      });
+    });
+    return lista;
+  }
+
+  // Para buscar una ocurrencia por id hay que mirar en las dos listas.
+  const todas = () => agenda().concat(listosANecesidad());
+
   function pintar() {
     if (!renglones.length) {
       destino.innerHTML = `
@@ -150,10 +184,25 @@ window.Seguimiento = (function () {
     const semana = pendientes.filter((o) => o.fecha > h && o.fecha <= limite);
     const despues = pendientes.filter((o) => o.fecha > limite);
 
+    const listos = listosANecesidad();
+    const yaHoy = listos.filter((o) => o.registro).length;
+
     destino.innerHTML = `
       ${semaforo(lista, h)}
 
       ${cobreAplicado()}
+
+      ${listos.length ? `
+        <div class="tarjeta grupo-agenda grupo-agenda--listo">
+          <h2>Listo para cuando haga falta
+            <span class="grupo-agenda__cuenta">${listos.filter((o) => !o.registro).length}</span></h2>
+          <p class="nota">Estos no tienen fecha: se preparan y se aplican cuando el
+            monitoreo lo pide, y por eso nunca figuran como atrasados. Conviene
+            tener los insumos y las herramientas listas.</p>
+          <ul class="agenda">${listos.filter((o) => !o.registro).map(fila).join("")}</ul>
+          ${yaHoy ? `<p class="nota">Hoy ya registraste ${yaHoy}
+            ${yaHoy === 1 ? "aplicación" : "aplicaciones"} de estos.</p>` : ""}
+        </div>` : ""}
 
       ${grupo("Atrasado", atrasadas, "grupo-agenda--atrasado",
         "Pasó la fecha y no está marcado. Si no se aplicó, conviene decirlo igual.")}
@@ -263,7 +312,7 @@ window.Seguimiento = (function () {
         <h2>Cobre aplicado</h2>
         <p class="aviso ${clase}">${esc(titulo)}</p>
         <ul class="cobre__sectores">${filas.map(filaCobre).join("")}</ul>
-        <p class="nota">Sale de las aplicaciones que marcaste, no del plan.
+        <p class="nota">Surge de las aplicaciones que marcaste, no del plan.
           ${estimados ? `En ${estimados} ${estimados === 1 ? "aplicación" : "aplicaciones"}
             no anotaste el volumen, así que se usó el previsto del plan.` : ""}
           ${sinDato ? `Hay ${sinDato} ${sinDato === 1 ? "aplicación" : "aplicaciones"}
@@ -311,7 +360,7 @@ window.Seguimiento = (function () {
     return `
       <li class="agenda__item${abiertaAca ? " agenda__item--abierto" : ""}">
         <div class="agenda__cab">
-          <span class="agenda__fecha">${esc(fechaCorta(o.fecha))}</span>
+          <span class="agenda__fecha">${o.aNecesidad ? "s/f" : esc(fechaCorta(o.fecha))}</span>
           <span class="agenda__texto">
             <strong>${esc(o.plan.producto)}</strong>
             <span class="agenda__detalle">${esc(o.nombreSector)} · ${esc(o.plan.dosis)}
@@ -321,7 +370,7 @@ window.Seguimiento = (function () {
         </div>
         ${abiertaAca ? formulario(o) : `
           <button class="boton boton--secundario boton--ancho" data-marcar="${esc(o.id)}">
-            Marcar</button>`}
+            ${o.aNecesidad ? "Registrar que lo apliqué" : "Marcar"}</button>`}
       </li>`;
   }
 
@@ -345,7 +394,7 @@ window.Seguimiento = (function () {
             <label for="a-fecha">Fecha en que se aplicó</label>
             <input id="a-fecha" type="date" class="${mal("fecha")}" value="${esc(hoy())}">
             ${error("fecha")}
-            ${o.fecha < hoy() ? `<span class="ayuda">Viene propuesta la de hoy.
+            ${o.fecha < hoy() ? `<span class="ayuda">Se propone la de hoy.
               Estaba programada para el ${esc(fechaCorta(o.fecha))}: si la aplicaste
               ese día, cambiala.</span>` : ""}
           </div>
@@ -476,12 +525,12 @@ window.Seguimiento = (function () {
   // ---------- Guardar ----------
 
   async function registrar(id, estado) {
-    const o = agenda().find((x) => x.id === id);
+    const o = todas().find((x) => x.id === id);
     if (!o) return;
 
     errores = {};
     const fecha = valor("#a-fecha");
-    if (estado === "Aplicada" && !fecha) errores.fecha = "Poné la fecha en que se aplicó.";
+    if (estado === "Aplicada" && !fecha) errores.fecha = "Indicá la fecha en que se aplicó.";
     if (Object.keys(errores).length) { pintar(); return; }
 
     const sec = sector(o.sector);
