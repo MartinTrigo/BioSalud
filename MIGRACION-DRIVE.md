@@ -126,6 +126,13 @@ un productor está cargando en el campo.
 (que ahora es la cuenta de la app) y con acceso para **cualquier persona**. Copiar
 la dirección que termina en `/exec`.
 
+> **Esa dirección no es la app.** Es el servicio con el que la app habla por
+> detrás. Si se abre en un navegador tiene que contestar
+> `{"ok":true,"servicio":"BioSalud"}` y nada más: sin credencial el servicio no
+> cuenta ni qué chacras existen. La app sigue estando en
+> <https://martintrigo.github.io/BioSalud/>, y es la única dirección que un
+> productor necesita conocer.
+
 ### 6. Escribir la dirección nueva en la app
 
 En `docs/js/envio.js`, reemplazar la dirección vieja por la nueva, subir el
