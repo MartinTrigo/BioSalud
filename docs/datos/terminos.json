@@ -1,6 +1,6 @@
 {
-  "version": "agosto de 2026 · 0bbc6247",
-  "etiqueta": "Versión de prueba (beta) · borrador para revisión del equipo IFAB · agosto de 2026",
+  "version": "octubre de 2026 · 483f3b62",
+  "etiqueta": "Versión de prueba (beta) · borrador para revisión del equipo IFAB · octubre de 2026",
   "titulo": "Términos de uso de BioSalud ECOMARCAL",
   "nota_interna": "**Este documento todavía no está aprobado.** Es el borrador que la app ya muestra, al abrirse por primera vez, para que cada productor lo lea y lo acepte antes de cargar nada. Tiene que revisarlo el equipo del IFAB y acordarse con la administración de ECOMARCAL. Ver DERECHOS.md. **Este archivo es la fuente.** La app no tiene una copia escrita aparte: lee docs/datos/terminos.json, que sale de acá con python tools/generar-terminos.py. Si se corrige una frase, hay que volver a correrlo. La versión que cada productor acepta lleva una huella del contenido, así que un cambio no anunciado se nota.",
   "secciones": [
@@ -13,7 +13,11 @@
         },
         {
           "tipo": "parrafo",
-          "texto": "Este documento está escrito para que se entienda. Si algo no se entiende, preguntá: es señal de que hay que reescribirlo."
+          "texto": "Por ahora su uso **no es un requisito de la certificación ECOMARCAL**: es una herramienta que el equipo de extensión pone a disposición y que se está probando junto con los establecimientos."
+        },
+        {
+          "tipo": "parrafo",
+          "texto": "Este documento está escrito para que se entienda sin esfuerzo. Si alguna parte no se entiende, pedinos que la expliquemos: es señal de que hay que reescribirla."
         }
       ]
     },
@@ -26,20 +30,7 @@
         },
         {
           "tipo": "parrafo",
-          "texto": "Referente: **Martín Trigo** (trigo.martin@inta.gob.ar), agente de extensión e investigador."
-        }
-      ]
-    },
-    {
-      "titulo": "Que su uso es obligatorio, y qué significa eso",
-      "bloques": [
-        {
-          "tipo": "parrafo",
-          "texto": "Los establecimientos con sello ECOMARCAL **deben usar esta app** para registrar sus aplicaciones y su monitoreo sanitario. Es parte del seguimiento que exige la certificación."
-        },
-        {
-          "tipo": "parrafo",
-          "texto": "Decirlo de frente cambia algunas cosas y por eso están escritas más abajo: qué pasa si la app falla, qué pasa si no hay señal, y qué no puede usarse en tu contra."
+          "texto": "Autoría y referencia: **Martín Emiliano Trigo** — IFAB (CONICET-INTA AER Sede El Bolsón), agente de extensión e investigador, con el equipo de extensión del IFAB. Consultas: trigo.martin@inta.gob.ar"
         }
       ]
     },
@@ -77,9 +68,9 @@
           "tipo": "lista",
           "items": [
             "Los datos de una chacra **no se mezclan** con los de otra.",
-            "**Cada productor puede ver y descargar su planilla completa** cuando quiera: se le comparte el enlace. Los datos no quedan encerrados en la app.",
-            "**El equipo técnico del IFAB accede a todas las planillas.** Se dice de frente porque es así: es lo que permite acompañar el seguimiento y armar planes de tratamiento, y es parte del rol de la certificación.",
-            "Las planillas están alojadas en una **cuenta de Google registrada especialmente para esta app**, separada de las cuentas personales del equipo. Todavía **no es una cuenta institucional del INTA o del CONICET**, y hay el compromiso de migrarlas cuando se resuelva con esas instituciones."
+            "**Cada productor puede ver y descargar su planilla completa** cuando quiera: se le comparte el enlace. Los datos no quedan retenidos dentro de la app.",
+            "**El equipo técnico del IFAB accede a todas las planillas.** Se aclara porque así es: ese acceso es lo que permite acompañar el seguimiento y preparar planes de tratamiento, y forma parte del rol del equipo en la certificación.",
+            "Las planillas están alojadas en una **cuenta de Google registrada especialmente para esta app**, separada de las cuentas personales del equipo. Todavía **no es una cuenta institucional del INTA o del CONICET**, y existe el compromiso de migrarlas cuando se resuelva con esas instituciones."
           ]
         },
         {
@@ -95,8 +86,8 @@
           "tipo": "numerada",
           "items": [
             "Para que cada establecimiento lleve su registro de aplicaciones y monitoreo.",
-            "Para el seguimiento que requiere la certificación ECOMARCAL.",
-            "Para que el equipo de extensión pueda acompañar, detectar problemas sanitarios a tiempo y armar planes de tratamiento.",
+            "Para acompañar el seguimiento sanitario de la certificación ECOMARCAL.",
+            "Para que el equipo de extensión pueda acompañar, detectar problemas sanitarios a tiempo y preparar planes de tratamiento.",
             "Para investigación sobre salud del suelo y manejo agroecológico."
           ]
         },
@@ -115,7 +106,7 @@
         },
         {
           "tipo": "parrafo",
-          "texto": "**Esa sugerencia es orientativa y preliminar.** Sale de reglas escritas por el equipo técnico a partir de bibliografía y experiencia regional, pero **no reemplaza el criterio de un técnico que vea tu campo.** La app no sabe qué pasó la semana pasada, cómo viene el clima ni qué hiciste antes."
+          "texto": "**Esa sugerencia es orientativa y preliminar.** Surge de reglas escritas por el equipo técnico a partir de bibliografía y experiencia regional, pero **no reemplaza el criterio de un técnico que vea tu campo.** La app no conoce el estado previo del cultivo, la evolución del clima ni las aplicaciones anteriores."
         },
         {
           "tipo": "parrafo",
@@ -134,14 +125,14 @@
           "tipo": "lista",
           "items": [
             "**Ver tus datos**: tenés el enlace a tu planilla, siempre.",
-            "**Corregirlos**: desde la app, o pidiéndolo.",
-            "**Llevártelos**: se descargan de la planilla en el formato que quieras.",
-            "**Que se borren**: si dejás el programa, se elimina la planilla de tu establecimiento. Lo que ya se haya usado de forma agregada y anónima en una investigación no se puede deshacer, y se avisa por eso."
+            "**Corregirlos**: desde la app, o solicitándolo.",
+            "**Llevártelos**: se descargan de la planilla en el formato que prefieras.",
+            "**Que se borren**: si dejás el programa, se elimina la planilla de tu establecimiento. Lo que ya se haya usado de forma agregada y anónima en una investigación no se puede deshacer, y por eso se aclara."
           ]
         },
         {
           "tipo": "parrafo",
-          "texto": "Escribí a la dirección de arriba para cualquiera de estas cosas."
+          "texto": "Para cualquiera de estas gestiones, escribí a la dirección indicada más arriba."
         }
       ]
     },
@@ -150,7 +141,7 @@
       "bloques": [
         {
           "tipo": "parrafo",
-          "texto": "Cada teléfono se activa una vez con un código de invitación que te da el equipo técnico. Ese código es personal: no lo compartas. Si perdés el teléfono, avisá para darlo de baja."
+          "texto": "Cada teléfono se activa una vez con un código de invitación que te entrega el equipo técnico. Ese código es personal: no lo compartas. Si perdés el teléfono, avisanos para darlo de baja."
         },
         {
           "tipo": "parrafo",
@@ -163,23 +154,23 @@
       "bloques": [
         {
           "tipo": "parrafo",
-          "texto": "Es una **versión de prueba**. Con toda la honestidad:"
+          "texto": "Es una **versión de prueba**, y conviene decir con claridad qué significa:"
         },
         {
           "tipo": "lista",
           "items": [
             "Puede tener errores y perder datos.",
             "Puede dejar de funcionar sin aviso.",
-            "Depende de servicios de Google que pueden cambiar o cortarse."
+            "Depende de servicios de Google que pueden cambiar o interrumpirse."
           ]
         },
         {
           "tipo": "parrafo",
-          "texto": "**Como el uso es obligatorio para el sello, esto tiene una contrapartida explícita:** una falla de la app, o la falta de señal en tu campo, **no puede usarse en contra de tu certificación**. Si la app no funciona cuando la necesitás, avisá y se registra por otra vía."
+          "texto": "Por eso, **una falla de la app, o la falta de señal en tu campo, no pueden usarse en contra de tu certificación**. Si la app no funciona cuando la necesitás, avisanos y el registro se hace por otra vía."
         },
         {
           "tipo": "parrafo",
-          "texto": "Y aun así: **no la uses como único registro de algo importante.** Si un dato es crítico para tu establecimiento, tené también tu respaldo en papel."
+          "texto": "Y aun así: **no la uses como único registro de algo importante.** Si un dato es crítico para tu establecimiento, conservá también un respaldo en papel."
         }
       ]
     },

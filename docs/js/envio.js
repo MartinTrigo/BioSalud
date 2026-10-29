@@ -62,7 +62,7 @@ window.Envio = (function () {
   // Una frase que resume la situación, para el inicio y para Configuración.
   function resumir(e) {
     if (!e.conServicio) return "El servicio todavía no está publicado: todo queda guardado en el teléfono.";
-    if (!e.conCodigoChacra) return "Falta el código de chacra que te da el equipo técnico.";
+    if (!e.conCodigoChacra) return "Falta el código de chacra que te entrega el equipo técnico.";
     // Antes decía "cargá tu código de invitación" aunque todavía faltaran los
     // términos: la línea de estado y el panel de abajo mandaban a hacer cosas
     // distintas.
@@ -112,7 +112,42 @@ window.Envio = (function () {
       }
       return { ok: false, error: datos.error || "El servicio no devolvió una credencial." };
     } catch (err) {
-      return { ok: false, error: "No se pudo contactar al servicio. ¿Hay señal?" };
+      return { ok: false, error: "No se pudo contactar al servicio. Verificá la señal." };
+    }
+  }
+
+  // ---------- Traer la configuración que ya está en la planilla ----------
+  //
+  // PARA QUÉ: una chacra puede usarse desde más de un teléfono —el del productor
+  // y la notebook, o dos personas del mismo establecimiento— y el segundo no
+  // tiene por qué cargar todo de nuevo. Si lo hiciera, además, inventaría sus
+  // propios ids de sector y la planilla terminaría con dos ids para el mismo
+  // cantero.
+  //
+  // El servicio ya tenía esta puerta abierta (?config=1) y exige credencial de
+  // esa chacra, así que primero se activa el teléfono y recién después se baja.
+  async function traerConfig(codigoChacra) {
+    const url = leerUrl();
+    if (!url) return { ok: false, error: "Todavía no está cargada la dirección del servicio." };
+    if (!window.Acceso.tieneAcceso()) {
+      return { ok: false, error: "Primero hay que activar este teléfono." };
+    }
+
+    const consulta = url
+      + "?config=1"
+      + "&chacra=" + encodeURIComponent(String(codigoChacra || "").trim())
+      + "&credencial=" + encodeURIComponent(window.Acceso.credencial())
+      + "&dispositivo=" + encodeURIComponent(window.Acceso.dispositivo());
+
+    try {
+      const datos = await (await fetch(consulta)).json();
+      if (!datos.ok) return { ok: false, error: datos.error || "El servicio no devolvió la configuración." };
+      if (!datos.config || !(datos.config.sectores || []).length) {
+        return { ok: false, error: "Esa chacra todavía no tiene una configuración cargada en la planilla." };
+      }
+      return { ok: true, config: datos.config };
+    } catch (err) {
+      return { ok: false, error: "No se pudo contactar al servicio. Verificá la señal." };
     }
   }
 
@@ -211,5 +246,5 @@ window.Envio = (function () {
     setTimeout(() => sincronizar(), 1500);
   }
 
-  return { leerUrl, guardarUrl, hayServicio, estado, resumir, canjear, sincronizar, arrancar };
+  return { leerUrl, guardarUrl, hayServicio, estado, resumir, canjear, traerConfig, sincronizar, arrancar };
 })();

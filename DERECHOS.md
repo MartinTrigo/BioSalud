@@ -151,11 +151,14 @@ código, igual que MonAgric:
 - No impide cobrar más adelante: el titular puede licenciar la misma obra
   también de forma comercial.
 
-Y hay una razón que pesa especialmente acá: **los productores están obligados a
-usar esta app para conservar su sello.** Una herramienta de uso obligatorio no
-debería depender de que una sola persona la siga manteniendo. Con el código
-libre, si mañana Martín cambia de rol, cualquiera con conocimientos puede
-continuarla y ninguna chacra queda a la intemperie.
+Y hay una razón que pesa especialmente acá: **la app puede terminar siendo la vía
+por la que un establecimiento registra lo que el sello le pide.** Desde el
+29/10/2026 los términos ya no dicen que su uso sea obligatorio —se decidió que
+por ahora no lo sea, ver [TERMINOS.md](TERMINOS.md)—, pero si el piloto funciona
+va a ser difícil que no lo sea de hecho. Una herramienta de la que depende una
+certificación no debería depender de que una sola persona la siga manteniendo.
+Con el código libre, si mañana Martín cambia de rol, cualquiera con
+conocimientos puede continuarla y ninguna chacra queda a la intemperie.
 
 ---
 

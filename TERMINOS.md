@@ -1,6 +1,6 @@
 # Términos de uso de BioSalud ECOMARCAL
 
-*Versión de prueba (beta) · borrador para revisión del equipo IFAB · agosto de 2026*
+*Versión de prueba (beta) · borrador para revisión del equipo IFAB · octubre de 2026*
 
 > **Este documento todavía no está aprobado.** Es el borrador que la app ya
 > muestra, al abrirse por primera vez, para que cada productor lo lea y lo acepte
@@ -17,26 +17,21 @@ BioSalud es una herramienta para planificar, registrar y hacer el seguimiento de
 las aplicaciones de bioinsumos y otros insumos agrícolas, y para registrar el
 monitoreo sanitario del campo.
 
-Este documento está escrito para que se entienda. Si algo no se entiende,
-preguntá: es señal de que hay que reescribirlo.
+Por ahora su uso **no es un requisito de la certificación ECOMARCAL**: es una
+herramienta que el equipo de extensión pone a disposición y que se está probando
+junto con los establecimientos.
+
+Este documento está escrito para que se entienda sin esfuerzo. Si alguna parte no
+se entiende, pedinos que la expliquemos: es señal de que hay que reescribirla.
 
 ## Quién la hace y quién la administra
 
 La desarrolla el **IFAB (CONICET / INTA El Bolsón)**, Agencia de Extensión Rural
 El Bolsón, en el marco del sello agroecológico **ECOMARCAL**.
 
-Referente: **Martín Trigo** (trigo.martin@inta.gob.ar), agente de extensión
-e investigador.
-
-## Que su uso es obligatorio, y qué significa eso
-
-Los establecimientos con sello ECOMARCAL **deben usar esta app** para registrar
-sus aplicaciones y su monitoreo sanitario. Es parte del seguimiento que exige la
-certificación.
-
-Decirlo de frente cambia algunas cosas y por eso están escritas más abajo: qué
-pasa si la app falla, qué pasa si no hay señal, y qué no puede usarse en tu
-contra.
+Autoría y referencia: **Martín Emiliano Trigo** — IFAB (CONICET-INTA AER Sede El
+Bolsón), agente de extensión e investigador, con el equipo de extensión del IFAB.
+Consultas: trigo.martin@inta.gob.ar
 
 ## Qué datos se guardan
 
@@ -63,13 +58,13 @@ En planillas de Google Sheets, **una por establecimiento**.
 
 - Los datos de una chacra **no se mezclan** con los de otra.
 - **Cada productor puede ver y descargar su planilla completa** cuando quiera: se
-  le comparte el enlace. Los datos no quedan encerrados en la app.
-- **El equipo técnico del IFAB accede a todas las planillas.** Se dice de frente
-  porque es así: es lo que permite acompañar el seguimiento y armar planes de
-  tratamiento, y es parte del rol de la certificación.
+  le comparte el enlace. Los datos no quedan retenidos dentro de la app.
+- **El equipo técnico del IFAB accede a todas las planillas.** Se aclara porque
+  así es: ese acceso es lo que permite acompañar el seguimiento y preparar planes
+  de tratamiento, y forma parte del rol del equipo en la certificación.
 - Las planillas están alojadas en una **cuenta de Google registrada
   especialmente para esta app**, separada de las cuentas personales del equipo.
-  Todavía **no es una cuenta institucional del INTA o del CONICET**, y hay el
+  Todavía **no es una cuenta institucional del INTA o del CONICET**, y existe el
   compromiso de migrarlas cuando se resuelva con esas instituciones.
 
 **No se venden, ni se ceden, ni se comparten con terceros** fuera del equipo
@@ -78,9 +73,9 @@ técnico del IFAB y de la administración del sello.
 ## Para qué se usan
 
 1. Para que cada establecimiento lleve su registro de aplicaciones y monitoreo.
-2. Para el seguimiento que requiere la certificación ECOMARCAL.
+2. Para acompañar el seguimiento sanitario de la certificación ECOMARCAL.
 3. Para que el equipo de extensión pueda acompañar, detectar problemas
-   sanitarios a tiempo y armar planes de tratamiento.
+   sanitarios a tiempo y preparar planes de tratamiento.
 4. Para investigación sobre salud del suelo y manejo agroecológico.
 
 Si estos datos se usan en una publicación o investigación, será **de forma
@@ -90,10 +85,10 @@ agregada y anónima**, y se avisará antes a los establecimientos.
 
 Cuando registrás un monitoreo, la app puede sugerirte un tratamiento posible.
 
-**Esa sugerencia es orientativa y preliminar.** Sale de reglas escritas por el
+**Esa sugerencia es orientativa y preliminar.** Surge de reglas escritas por el
 equipo técnico a partir de bibliografía y experiencia regional, pero **no
-reemplaza el criterio de un técnico que vea tu campo.** La app no sabe qué pasó
-la semana pasada, cómo viene el clima ni qué hiciste antes.
+reemplaza el criterio de un técnico que vea tu campo.** La app no conoce el
+estado previo del cultivo, la evolución del clima ni las aplicaciones anteriores.
 
 Por eso, ante cualquier detección, la app te ofrece siempre contactar al equipo
 de extensión, y esa es la vía recomendada.
@@ -104,37 +99,36 @@ resultados.
 ## Tus derechos
 
 - **Ver tus datos**: tenés el enlace a tu planilla, siempre.
-- **Corregirlos**: desde la app, o pidiéndolo.
-- **Llevártelos**: se descargan de la planilla en el formato que quieras.
+- **Corregirlos**: desde la app, o solicitándolo.
+- **Llevártelos**: se descargan de la planilla en el formato que prefieras.
 - **Que se borren**: si dejás el programa, se elimina la planilla de tu
   establecimiento. Lo que ya se haya usado de forma agregada y anónima en una
-  investigación no se puede deshacer, y se avisa por eso.
+  investigación no se puede deshacer, y por eso se aclara.
 
-Escribí a la dirección de arriba para cualquiera de estas cosas.
+Para cualquiera de estas gestiones, escribí a la dirección indicada más arriba.
 
 ## Acceso
 
-Cada teléfono se activa una vez con un código de invitación que te da el equipo
-técnico. Ese código es personal: no lo compartas. Si perdés el teléfono, avisá
-para darlo de baja.
+Cada teléfono se activa una vez con un código de invitación que te entrega el
+equipo técnico. Ese código es personal: no lo compartas. Si perdés el teléfono,
+avisanos para darlo de baja.
 
 El equipo puede dar de baja un teléfono si detecta un uso indebido.
 
 ## Lo que esta versión NO garantiza
 
-Es una **versión de prueba**. Con toda la honestidad:
+Es una **versión de prueba**, y conviene decir con claridad qué significa:
 
 - Puede tener errores y perder datos.
 - Puede dejar de funcionar sin aviso.
-- Depende de servicios de Google que pueden cambiar o cortarse.
+- Depende de servicios de Google que pueden cambiar o interrumpirse.
 
-**Como el uso es obligatorio para el sello, esto tiene una contrapartida
-explícita:** una falla de la app, o la falta de señal en tu campo, **no puede
-usarse en contra de tu certificación**. Si la app no funciona cuando la
-necesitás, avisá y se registra por otra vía.
+Por eso, **una falla de la app, o la falta de señal en tu campo, no pueden usarse
+en contra de tu certificación**. Si la app no funciona cuando la necesitás,
+avisanos y el registro se hace por otra vía.
 
 Y aun así: **no la uses como único registro de algo importante.** Si un dato es
-crítico para tu establecimiento, tené también tu respaldo en papel.
+crítico para tu establecimiento, conservá también un respaldo en papel.
 
 ## Sobre el código de la app
 

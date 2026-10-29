@@ -200,6 +200,7 @@ def main():
     .portada h1 { font-size: 30pt; color: #16632f; margin: 14mm 0 2mm; line-height: 1.1; }
     .portada .bajada { font-size: 13pt; color: #5b6b62; margin: 0 0 18mm; }
     .portada .inst { font-size: 11pt; line-height: 1.7; }
+    .portada .autoria { font-size: 11pt; line-height: 1.6; margin-top: 12mm; }
     .portada .pie { margin-top: 22mm; font-size: 9pt; color: #5b6b62; }
 
     .intro { page-break-after: always; }
@@ -284,8 +285,13 @@ def main():
     CONICET / INTA · Agencia de Extensión Rural El Bolsón<br>
     Sello agroecológico <strong>ECOMARCAL</strong>
   </p>
+  <p class="autoria">
+    <strong>Martín Emiliano Trigo</strong><br>
+    IFAB (CONICET-INTA AER Sede El Bolsón)<br>
+    con el equipo de extensión del IFAB
+  </p>
   <p class="pie">
-    Recopilado y redactado por el equipo del IFAB a partir de la bibliografía citada en cada ficha.<br>
+    Recopilado y redactado a partir de la bibliografía citada en cada ficha.<br>
     Versión {e(bio.get('version',''))} · Generado el {fecha}<br>
     Este documento se genera desde la app BioSalud: martintrigo.github.io/BioSalud
   </p>

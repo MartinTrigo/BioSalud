@@ -32,7 +32,7 @@
     seguimiento: {
       icono: "✅",
       titulo: "Seguimiento de plan",
-      detalle: "Qué toca aplicar hoy y qué quedó pendiente",
+      detalle: "Qué corresponde aplicar hoy y qué quedó pendiente",
       subtitulo: "Checklist de aplicaciones",
       listo: true,          // la atiende js/seguimiento.js
     },
