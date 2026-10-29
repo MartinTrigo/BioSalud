@@ -286,6 +286,20 @@ h2 {
   margin-bottom: 4px;
 }
 
+/* El título de un campo que no gobierna a un control único, como el par de
+   botones de foto: se ve igual que una etiqueta pero no lo es. */
+.campo__titulo { display: block; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+
+/* Cámara y galería son etiquetas de un campo de archivo oculto: así el
+   navegador abre el selector sin una línea de JavaScript. Hay que devolverles
+   el display de botón, que .campo label les pisa por ser más específico. */
+.campo label.boton { display: inline-flex; margin-bottom: 0; }
+.boton__icono { font-size: 19px; }
+.fila--fotos { margin-bottom: 10px; }
+
+/* Oculto pero no removido: display:none lo sacaría del alcance del teclado. */
+.archivo-oculto { position: absolute; width: 1px; height: 1px; min-height: 0; opacity: 0; overflow: hidden; }
+
 .campo .ayuda {
   display: block;
   font-size: 13px;
@@ -616,6 +630,8 @@ a.boton { text-decoration: none; }
 .grupo-agenda--atrasado { border-left-color: var(--error); }
 .grupo-agenda--hoy { border-left-color: var(--violeta-claro); }
 .grupo-agenda--semana { border-left-color: var(--celeste); }
+/* Lo que se tiene listo por si hace falta: verde porque no es una deuda. */
+.grupo-agenda--listo { border-left-color: var(--verde-claro); }
 
 .grupo-agenda__cuenta {
   display: inline-block;
@@ -800,6 +816,7 @@ textarea { resize: vertical; min-height: 60px; }
   margin-top: auto;
 }
 .pie p { margin: 2px 0; }
+.pie__autoria { opacity: .8; font-size: 12px; margin-top: 6px; }
 .pie__version { opacity: .6; font-size: 12px; margin-top: 8px; }
 
 /* ---------- Mensaje flotante ---------- */

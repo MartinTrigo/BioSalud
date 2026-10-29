@@ -132,7 +132,7 @@ window.Terminos = (function () {
       : primeraVez ? `
         <div class="tarjeta separado">
           <p>Para usar la app hace falta que aceptes estos términos. Si todavía
-            estás viendo de qué se trata, podés leer la <strong>Info / Wiki</strong>
+            estás conociendo la app, podés leer la <strong>Info / Wiki</strong>
             —las fichas de biopreparados y de plagas— sin aceptar nada.</p>
           <button class="boton boton--ancho" id="btn-aceptar">Acepto los términos</button>
           <button class="boton boton--secundario boton--ancho separado" id="btn-solo-wiki">
@@ -141,7 +141,7 @@ window.Terminos = (function () {
       : `
         <div class="tarjeta separado">
           <p>Hasta que aceptes esta versión seguís usando la app con lo que
-            aceptaste antes, pero conviene ponerse al día.</p>
+            aceptaste antes, pero conviene leer la nueva.</p>
           <button class="boton boton--ancho" id="btn-aceptar">Acepto los términos</button>
           <button class="boton--peligro centrado" id="btn-salir">Ahora no</button>
         </div>`}`;
