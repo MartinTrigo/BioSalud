@@ -16,9 +16,20 @@
 // señal siempre llega lo último; con señal mala o nula, la app abre igual.
 //
 // IMPORTANTE: al cambiar un archivo de la lista, subir el número de CACHE.
+//
+// ESTA APP NO ESTÁ SOLA EN EL SITIO.
+//
+// BioSalud, AMA Producción y AMA Economía se publican todas en
+// martintrigo.github.io, y para el navegador eso es UN SOLO SITIO: comparten los
+// cachés y el localStorage, aunque cada una viva en su carpeta. Por eso el
+// nombre del caché lleva el prefijo `biosalud-` y por eso al activarse solo se
+// borran los cachés que empiezan así. Antes se borraba todo lo que no fuera el
+// caché propio, y cada actualización de BioSalud le sacaba a las otras apps lo
+// que necesitan para abrir sin señal.
 // ==========================================================================
 
-const CACHE = "biosalud-v34";
+const PREFIJO = "biosalud-";
+const CACHE = PREFIJO + "v35";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -89,8 +100,10 @@ self.addEventListener("install", (evento) => {
 self.addEventListener("activate", (evento) => {
   evento.waitUntil(
     caches.keys()
+      // Solo los propios: ver la nota de arriba sobre el sitio compartido.
       .then((nombres) => Promise.all(
-        nombres.filter((n) => n !== CACHE).map((n) => caches.delete(n))
+        nombres.filter((n) => n.indexOf(PREFIJO) === 0 && n !== CACHE)
+               .map((n) => caches.delete(n))
       ))
       .then(() => self.clients.claim())
   );
