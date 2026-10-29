@@ -712,12 +712,27 @@ function doPost(e) {
       // justamente el enlace al archivo. Si Drive falla, se corta el registro
       // entero y la foto se queda en la cola del teléfono para el próximo
       // intento: es preferible a dejar una fila que apunta a ningún lado.
-      registros.forEach(function (r) {
-        if (r.tipo !== "foto") return;
-        var puesta = guardarFoto(chacra, r.datos);
-        r.datos.archivo = puesta.archivo;
-        r.datos.enlace = puesta.enlace;
-      });
+      //
+      // Y ANTES DE ESCRIBIRLA SE MIRA SI YA ESTÁ.
+      //
+      // Un reintento manda la foto con el mismo id, así que la fila no se
+      // duplica: de eso ya se encarga idsExistentes más abajo. Pero el archivo
+      // de Drive se escribe acá arriba, antes de ese control, así que un
+      // reintento después de una falla a mitad de camino dejaría una segunda
+      // copia de la imagen en el Drive del equipo, huérfana, sin ninguna fila
+      // que la nombre. Se detectó leyendo el registro de pedidos de una prueba
+      // de envío: la foto rechazada se reintentó con su mismo id.
+      var fotosNuevas = registros.filter(function (r) { return r.tipo === "foto"; });
+      if (fotosNuevas.length) {
+        var hojaFotos = obtenerHoja(libro, HOJAS.fotos);
+        var yaSubidas = idsExistentes(hojaFotos);
+        fotosNuevas.forEach(function (r) {
+          if (yaSubidas[r.id]) return;          // ya tiene archivo y fila
+          var puesta = guardarFoto(chacra, r.datos);
+          r.datos.archivo = puesta.archivo;
+          r.datos.enlace = puesta.enlace;
+        });
+      }
 
       // Las hojas que se acumulan (aplicaciones, monitoreos) entran por acá a
       // partir de la fase 3, agrupadas por tipo y sin repetir ids.
