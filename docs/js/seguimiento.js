@@ -65,8 +65,17 @@ window.Seguimiento = (function () {
     try {
       if (!bio) bio = await (await fetch("datos/biopreparados.json")).json();
       config = await window.BioDB.leerConfig();
-      renglones = (await window.BioDB.todos("planes"))
+      // La agenda sale del plan de la temporada MÁS los tratamientos armados
+      // desde un monitoreo: los dos son lo mismo para quien tiene que aplicar
+      // —un producto que se repite cada tantos días en ciertos sectores—, y
+      // separarlos obligaría al productor a mirar dos listas para saber qué le
+      // toca hoy. De dónde salió cada uno se marca con `desdeMonitoreo`.
+      const plan = (await window.BioDB.todos("planes"))
         .filter((r) => r.temporada === window.Plan.temporadaActual());
+      const tratamientos = (await window.BioDB.todos("tratamientos"))
+        .filter((r) => r.temporada === window.Plan.temporadaActual())
+        .map((r) => Object.assign({}, r, { desdeMonitoreo: true }));
+      renglones = plan.concat(tratamientos);
       registradas = await window.BioDB.todos("aplicaciones");
       const cola = await window.BioDB.pendientes();
       sinEnviar = new Set(cola.map((s) => s.id));
@@ -306,7 +315,8 @@ window.Seguimiento = (function () {
           <span class="agenda__texto">
             <strong>${esc(o.plan.producto)}</strong>
             <span class="agenda__detalle">${esc(o.nombreSector)} · ${esc(o.plan.dosis)}
-              · ${esc(o.plan.metodo)}</span>
+              · ${esc(o.plan.metodo)}${o.plan.desdeMonitoreo
+                ? ` · <span class="agenda__origen">sale de un monitoreo</span>` : ""}</span>
           </span>
         </div>
         ${abiertaAca ? formulario(o) : `

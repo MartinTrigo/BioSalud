@@ -182,9 +182,29 @@ consecuencias productivas y sanitarias reales. Por eso la app además:
 
 1. Presenta la sugerencia como **orientativa**, nunca como prescripción.
 2. Ofrece el contacto con el equipo de extensión en primer plano.
-3. Registra quién validó cada plan de tratamiento y cuándo.
+3. Registra de dónde salió cada plan de tratamiento, y deja lugar para que el
+   técnico lo comente.
 4. Marca de forma inequívoca lo **no admitido bajo sello ECOMARCAL**, para no
    empujar sin querer a un certificado fuera de su protocolo.
+
+**El punto 3 decía antes "registra quién validó cada plan de tratamiento y
+cuándo", y cambió al definirlo con el equipo.** La idea original era que un
+tratamiento quedara en estado *Propuesto* hasta que un técnico lo firmara. Pero
+eso pone al equipo de extensión como autoridad que habilita, y no es así como se
+trabaja ni es lo que dicen los términos de uso: *"las decisiones de manejo son
+tuyas, y también la responsabilidad por sus resultados"*.
+
+Así que el productor arma el tratamiento y lo aplica, y el técnico lo ve en la
+planilla de esa chacra y puede dejarle un comentario. Las columnas de la hoja
+`Tratamientos` cambiaron de nombre para que digan eso: donde había *Validado
+por* y *Validado el* ahora hay *Origen*, *Comentario del técnico*, *Comentado
+por* y *Comentado el*. Una columna que dice "Validado por" y nunca se completa
+no es un dato que falta: es un dato que miente sobre cómo se trabaja.
+
+Lo que sí queda registrado es el **origen**: si el producto salió de la lista
+que la app acercó a partir de la ficha, o si el productor lo eligió por su
+cuenta. Esa diferencia importa para saber, más adelante, qué tanto se usó lo que
+la app sugiere.
 
 ---
 

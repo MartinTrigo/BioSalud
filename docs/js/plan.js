@@ -674,5 +674,8 @@ window.Plan = (function () {
     brindis(`Plan guardado · ${renglones.length} productos, ${totalOcurrencias()} aplicaciones`);
   }
 
-  return { render, ocurrencias, temporadaActual };
+  // METODOS sale afuera para que el tratamiento que se arma desde un monitoreo
+  // ofrezca los mismos métodos que un renglón del plan: son la misma lista y no
+  // tiene sentido que se separen con el tiempo.
+  return { render, ocurrencias, temporadaActual, METODOS };
 })();

@@ -35,7 +35,7 @@
 // ==========================================================================
 
 window.Monitoreo = (function () {
-  const { esc, brindis, numero, aNumero, hoy } = window.Util;
+  const { esc, brindis, numero, aNumero, superficie, hoy } = window.Util;
 
   const SEVERIDADES = ["Leve", "Media", "Alta"];
 
@@ -120,16 +120,19 @@ window.Monitoreo = (function () {
   let equipo = null;     // datos/equipo.json
   let config = null;
   let registros = [];
+  let tratamientos = [];   // los planes de tratamiento ya armados
   let destino = null;
   let irA = null;
   let errores = {};
   let verDetalle = null;   // id del monitoreo cuyo resultado se está mostrando
+  let armando = null;      // { monitoreo, preparado } mientras se arma uno
 
   async function render(contenedor, ruta, navegar) {
     destino = contenedor;
     irA = navegar;
     errores = {};
     fotos = [];
+    armando = null;
 
     destino.innerHTML = `<p class="cargando">Cargando…</p>`;
     try {
@@ -138,6 +141,8 @@ window.Monitoreo = (function () {
       if (!equipo) equipo = await (await fetch("datos/equipo.json")).json();
       config = await window.BioDB.leerConfig();
       registros = (await window.BioDB.todos("monitoreos"))
+        .sort((a, b) => String(b.creado).localeCompare(String(a.creado)));
+      tratamientos = (await window.BioDB.todos("tratamientos"))
         .sort((a, b) => String(b.creado).localeCompare(String(a.creado)));
     } catch (err) {
       destino.innerHTML = `<p class="aviso aviso--error">No se pudo abrir el monitoreo.<br><br>
@@ -156,9 +161,15 @@ window.Monitoreo = (function () {
   function pintar() {
     const detalle = verDetalle ? registros.find((r) => r.id === verDetalle) : null;
 
-    destino.innerHTML = detalle ? resultado(detalle) : `
-      ${formulario()}
-      ${historial()}`;
+    // Tres pantallas: el formulario de registro, el resultado de un monitoreo, y
+    // el armado de un tratamiento a partir de ese resultado.
+    if (armando && detalle) {
+      destino.innerHTML = formularioTratamiento(detalle);
+    } else if (detalle) {
+      destino.innerHTML = resultado(detalle);
+    } else {
+      destino.innerHTML = formulario() + historial();
+    }
 
     conectar();
   }
@@ -472,16 +483,22 @@ window.Monitoreo = (function () {
           <ul class="indice">
             ${tratamientos.map((t) => {
               const cobre = window.Cobre.lleva(t);
-              return `<li><button class="indice__item" data-preparado="${esc(t.id)}">
-                <span class="indice__nombre">${esc(t.nombre)}${cobre
-                  ? ` <span class="sello-comarca sello-comarca--cuidado">lleva cobre</span>` : ""}</span>
-                <span class="indice__cientifico">${esc(t.resumen)}</span>
-              </button></li>`;
+              return `<li class="indice__con-accion">
+                <button class="indice__item" data-preparado="${esc(t.id)}">
+                  <span class="indice__nombre">${esc(t.nombre)}${cobre
+                    ? ` <span class="sello-comarca sello-comarca--cuidado">lleva cobre</span>` : ""}</span>
+                  <span class="indice__cientifico">${esc(t.resumen)}</span>
+                </button>
+                <button class="boton boton--secundario boton--ancho"
+                        data-armar="${esc(t.id)}">Armar tratamiento con esto</button>
+              </li>`;
             }).join("")}
           </ul>
           <p class="nota">Antes de sumar cualquiera de estos a tu plan, fijate la
             cuenta del cobre y qué admite el sello.</p>
         </div>` : ""}
+
+      ${tratamientosArmados(r)}
 
         ${f.cuidados && f.cuidados.length ? `<div class="tarjeta tarjeta--cuidado">
           <h2>A tener en cuenta</h2>
@@ -533,6 +550,209 @@ window.Monitoreo = (function () {
   function fechaCorta(iso) {
     const [a, m, d] = String(iso || "").split("-");
     return d && m ? `${d}/${m}` : "—";
+  }
+
+  // ---------- El plan de tratamiento ----------
+  //
+  // Lo arma el productor, no lo autoriza nadie. El técnico lo ve en la planilla
+  // y, si hace falta, deja un comentario. Es lo que ya decían los términos de
+  // uso: "las decisiones de manejo son tuyas, y también la responsabilidad por
+  // sus resultados".
+  //
+  // El formulario es el mismo que el de un renglón del plan —producto, dosis,
+  // método, sectores, desde, hasta, cada cuántos días— porque es lo mismo: una
+  // aplicación que se repite. Lo que cambia es de dónde viene, y eso queda
+  // atado con el id del monitoreo.
+  //
+  // Viene con todo propuesto: la dosis y el método de la ficha, el sector donde
+  // se vio el problema, y desde hoy. En el campo, con el problema delante, lo
+  // último que ayuda es un formulario en blanco.
+
+  function formularioTratamiento(r) {
+    const t = preparado(armando.preparado);
+    const sug = (t && t.sugerencia) || {};
+    const cobre = window.Cobre.lleva(t) ? t.cobre : null;
+    const sectores = config.sectores || [];
+
+    return `
+      <div class="tarjeta">
+        <h2>Tratamiento para ${esc(r.deteccion)}</h2>
+        <p class="nota">Con ${esc(t.nombre)}, en ${esc(r.sector)}. Sale del monitoreo
+          del ${esc(fechaCorta(r.fecha))}, así que va a quedar atado a él.</p>
+
+        ${cobre ? `<p class="aviso aviso--error"><strong>Lleva cobre.</strong> El sello
+          lo admite hasta ${esc(String(window.Cobre.limite(bio)))} kg por hectárea y por
+          año. ${esc(cobre.detalle)}</p>` : ""}
+
+        <div class="fila">
+          <div class="campo">
+            <label for="t-dosis">Dosis</label>
+            <input id="t-dosis" type="text" class="${mal("dosis")}" autocomplete="off"
+                   value="${esc(sug.dosis || "")}" placeholder="por ejemplo: 2 %">
+            ${error("dosis")}
+          </div>
+          <div class="campo">
+            <label for="t-metodo">Método</label>
+            <select id="t-metodo" class="${mal("metodo")}">
+              <option value="">Elegí…</option>
+              ${window.Plan.METODOS.map((m) => `<option value="${esc(m)}"${
+                m === sug.metodo ? " selected" : ""}>${esc(m)}</option>`).join("")}
+            </select>
+            ${error("metodo")}
+          </div>
+        </div>
+
+        ${cobre ? `
+          <div class="campo">
+            <label for="t-litros">Litros de caldo por aplicación, en cada sector
+              <span class="ayuda">La receta rinde ${esc(String(cobre.litros_receta))} litros.
+                De acá sale la cuenta del cobre.</span></label>
+            <input id="t-litros" type="text" inputmode="decimal" class="${mal("litros")}"
+                   value="${esc(String(cobre.litros_receta))}">
+            ${error("litros")}
+          </div>` : ""}
+
+        <div class="campo">
+          <label>Sectores donde se aplica</label>
+          <ul class="opciones">
+            ${sectores.map((s) => `<li>
+              <label class="opcion">
+                <input type="checkbox" class="t-sector" value="${esc(s.id)}"${
+                  s.id === r.sector_id ? " checked" : ""}>
+                <span><strong>${esc(s.nombre)}</strong> — ${esc(superficie(s.superficie))},
+                  ${esc(s.cultivo || "")}</span>
+              </label></li>`).join("")}
+          </ul>
+          ${error("sectores")}
+        </div>
+
+        <div class="fila">
+          <div class="campo">
+            <label for="t-desde">Desde</label>
+            <input id="t-desde" type="date" class="${mal("desde")}" value="${esc(hoy())}">
+            ${error("desde")}
+          </div>
+          <div class="campo">
+            <label for="t-hasta">Hasta</label>
+            <input id="t-hasta" type="date" class="${mal("hasta")}">
+            ${error("hasta")}
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="t-cada">Cada cuántos días se repite
+            ${sug.cada_dias ? `<span class="ayuda">La bibliografía sugiere cada ${sug.cada_dias} días.</span>`
+              : `<span class="ayuda">La fuente de este producto no indica una frecuencia.</span>`}</label>
+          <input id="t-cada" type="text" inputmode="numeric" class="${mal("cada")}"
+                 value="${esc(String(sug.cada_dias || ""))}" placeholder="15">
+          ${error("cada")}
+        </div>
+
+        <div class="campo">
+          <label for="t-obs">Observaciones <span class="ayuda">Opcional</span></label>
+          <textarea id="t-obs" rows="2" placeholder="Qué te decidió, qué vas a mirar"></textarea>
+        </div>
+
+        <p class="nota">Una vez guardado aparece en el Seguimiento, con sus fechas,
+          para ir marcando lo aplicado. El equipo técnico lo va a ver en la planilla
+          de tu chacra y puede dejarte un comentario.</p>
+
+        <button class="boton boton--ancho" id="t-guardar">Guardar el tratamiento</button>
+        <button class="boton--peligro centrado" id="t-cancelar">Cancelar</button>
+      </div>`;
+  }
+
+  async function guardarTratamiento(r) {
+    const t = preparado(armando.preparado);
+    const cobre = window.Cobre.lleva(t) ? t.cobre : null;
+
+    errores = {};
+    const dosis = valor("#t-dosis").trim();
+    const metodo = valor("#t-metodo");
+    const sectores = [...destino.querySelectorAll(".t-sector:checked")].map((c) => c.value);
+    const desde = valor("#t-desde");
+    const hasta = valor("#t-hasta");
+    const cada = aNumero(valor("#t-cada"));
+    const litros = cobre ? aNumero(valor("#t-litros")) : null;
+
+    if (!dosis) errores.dosis = "Poné la dosis, aunque sea aproximada.";
+    if (!metodo) errores.metodo = "Elegí con qué lo vas a aplicar.";
+    if (!sectores.length) errores.sectores = "Marcá al menos un sector.";
+    if (!desde) errores.desde = "Falta desde cuándo.";
+    if (!hasta) errores.hasta = "Falta hasta cuándo.";
+    if (desde && hasta && hasta < desde) errores.hasta = "La fecha de fin es anterior a la de inicio.";
+    if (Number.isNaN(cada) || cada <= 0) errores.cada = "Poné cada cuántos días se repite. Por ejemplo: 15";
+    if (cobre && (Number.isNaN(litros) || litros <= 0)) {
+      errores.litros = "Poné cuántos litros preparás por aplicación. Por ejemplo: " + cobre.litros_receta;
+    }
+
+    if (Object.keys(errores).length) {
+      pintar();
+      const primero = destino.querySelector(".mal, .campo__error");
+      if (primero) primero.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    const datos = {
+      id: window.BioDB.nuevoId(),
+      monitoreo_id: r.id,
+      temporada: window.Plan.temporadaActual(),
+      fecha: hoy(),
+      problema: r.deteccion,
+      producto_id: t.id,
+      producto: t.nombre,
+      dosis: dosis,
+      litros_por_aplicacion: cobre ? litros : null,
+      metodo: metodo,
+      sectores: sectores,
+      desde: desde,
+      hasta: hasta,
+      cada_dias: cada,
+      // Vino de la lista que la app acercó a partir de la ficha, no de una
+      // búsqueda libre del productor. Queda anotado de dónde salió.
+      origen: "Sugerido por la app",
+      estado: "Activo",
+      observaciones: valor("#t-obs").trim(),
+      creado: new Date().toISOString(),
+    };
+
+    await window.BioDB.guardar("tratamientos", datos);
+    await window.BioDB.encolarCon(datos.id, "tratamientos", datos);
+    tratamientos.unshift(datos);
+
+    armando = null;
+    brindis(`Tratamiento con ${t.nombre} guardado`);
+    pintar();
+    window.scrollTo(0, 0);
+    window.Envio.sincronizar(true);
+  }
+
+  // Los que ya se armaron para este monitoreo.
+  function tratamientosArmados(r) {
+    const suyos = tratamientos.filter((t) => t.monitoreo_id === r.id);
+    if (!suyos.length) return "";
+
+    return `
+      <div class="tarjeta">
+        <h2>Tratamientos que armaste para esto</h2>
+        <ul class="agenda">
+          ${suyos.map((t) => `
+            <li class="agenda__item">
+              <div class="agenda__cab">
+                <span class="agenda__fecha">${esc(fechaCorta(t.desde))}</span>
+                <span class="agenda__texto">
+                  <strong>${esc(t.producto)}</strong>
+                  <span class="agenda__detalle">${esc(t.dosis)} · ${esc(t.metodo)} ·
+                    cada ${esc(String(t.cada_dias))} días ·
+                    hasta ${esc(fechaCorta(t.hasta))}</span>
+                </span>
+              </div>
+              ${t.comentario_tecnico ? `<p class="aviso aviso--info">
+                <strong>El equipo técnico comentó:</strong> ${esc(t.comentario_tecnico)}</p>` : ""}
+            </li>`).join("")}
+        </ul>
+        <p class="nota">Ya están en el Seguimiento, con sus fechas.</p>
+      </div>`;
   }
 
   // ---------- Lo ya registrado ----------
@@ -595,6 +815,25 @@ window.Monitoreo = (function () {
     destino.querySelectorAll("[data-preparado]").forEach((b) => {
       b.onclick = () => { location.hash = "#/wiki/manejo/" + b.dataset.preparado; };
     });
+
+    destino.querySelectorAll("[data-armar]").forEach((b) => {
+      b.onclick = () => {
+        armando = { preparado: b.dataset.armar };
+        errores = {};
+        pintar();
+        window.scrollTo(0, 0);
+      };
+    });
+
+    const guardarT = destino.querySelector("#t-guardar");
+    if (guardarT) guardarT.onclick = () => {
+      guardarTratamiento(registros.find((x) => x.id === verDetalle));
+    };
+
+    const cancelarT = destino.querySelector("#t-cancelar");
+    if (cancelarT) cancelarT.onclick = () => {
+      armando = null; errores = {}; pintar(); window.scrollTo(0, 0);
+    };
 
     destino.querySelectorAll("[data-avise]").forEach((b) => {
       b.onclick = () => marcarAvisado(b.dataset.avise);

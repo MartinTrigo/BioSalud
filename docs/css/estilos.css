@@ -816,3 +816,12 @@ textarea { resize: vertical; min-height: 60px; }
 
 .fotos-tomadas__peso { display: block; font-size: 13px; color: var(--texto-suave); margin: 4px 0 2px; }
 .fotos-tomadas .boton--peligro { min-height: 32px; font-size: 14px; padding: 2px 6px; }
+
+/* Un tratamiento en la agenda se ve igual que un renglón del plan, salvo esta
+   marca: para aplicarlo es lo mismo, pero para entender por qué está ahí no. */
+.agenda__origen { color: var(--azul); font-weight: 600; }
+
+/* En la lista de biopreparados sugeridos, cada uno lleva su botón de armar
+   tratamiento debajo, así que la fila deja de ser solo un enlace. */
+.indice__con-accion { margin-bottom: 10px; }
+.indice__con-accion .boton { margin-top: 6px; }

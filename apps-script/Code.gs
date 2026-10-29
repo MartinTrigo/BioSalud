@@ -137,22 +137,37 @@ var HOJAS = {
     },
   },
 
-  // Fase 5 — el plan de tratamiento que sale de un monitoreo. Lleva quién lo
-  // validó: una recomendación sanitaria no queda sin firma.
+  // Fase 5 — el plan de tratamiento que sale de un monitoreo.
+  //
+  // LO CARGA EL PRODUCTOR, NO LO AUTORIZA EL TÉCNICO.
+  //
+  // La primera versión de esta hoja tenía "Validado por" y "Validado el", con la
+  // idea de que una recomendación sanitaria no quedara sin firma. Al definirlo
+  // con el equipo quedó al revés, y es más fiel a lo que dicen los términos de
+  // uso: "las decisiones de manejo son tuyas". El productor arma el tratamiento
+  // y lo aplica; el técnico lo ve en la planilla y, si hace falta, deja un
+  // comentario.
+  //
+  // Por eso las columnas cambiaron de nombre. Una columna que dice "Validado
+  // por" y nunca se completa no es un dato que falta: es un dato que miente
+  // sobre cómo se trabaja.
   tratamientos: {
     nombre: "Tratamientos",
     encabezados: ["Id", "Monitoreo Id", "Fecha", "Problema", "Producto", "Dosis",
                   "Método", "Sectores", "Desde", "Hasta", "Cada (días)",
-                  "Sugerido por", "Validado por", "Validado el", "Estado",
-                  "Observaciones", "Cargado por", "Recibido"],
+                  "Origen", "Estado", "Observaciones",
+                  "Comentario del técnico", "Comentado por", "Comentado el",
+                  "Cargado por", "Recibido"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.monitoreo_id), comoTexto(d.fecha), comoTexto(d.problema),
               comoTexto(d.producto), comoTexto(d.dosis), comoTexto(d.metodo),
               comoTexto(d.sectores), comoTexto(d.desde), comoTexto(d.hasta),
-              d.cada_dias || "", comoTexto(d.sugerido_por) || "App",
-              comoTexto(d.validado_por), comoTexto(d.validado_el),
-              comoTexto(d.estado) || "Propuesto", comoTexto(d.observaciones),
+              d.cada_dias || "", comoTexto(d.origen) || "Elegido por el productor",
+              comoTexto(d.estado) || "Activo", comoTexto(d.observaciones),
+              // Las tres del técnico quedan vacías: las escribe él en la
+              // planilla, no viajan desde el teléfono.
+              "", "", "",
               comoTexto(r.dispositivo), new Date()];
     },
   },
