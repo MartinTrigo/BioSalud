@@ -45,6 +45,11 @@
     li { margin-bottom: 1.2mm; }
     p { margin: 0 0 2mm; }
 
+    /* Cada grupo de materiales es una columna: título, para qué y opciones. */
+    .materiales h4 { font-size: 9.5pt; margin: 0 0 1mm; color: #3c4a42; }
+    .materiales { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-flow: column;
+                  grid-template-rows: auto auto auto; gap: 1mm 5mm; font-size: 9pt; }
+
     .dos-columnas { display: flex; gap: 7mm; }
     .dos-columnas section { flex: 1; }
 
@@ -88,7 +93,7 @@
     <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxMTEBUPExMVFRUXGBUXGRUYFxcXGhYaFhcXGBsaFRUaHSggGh4lHRgXITEjJSkrLi4uGCI/ODMsNygtLisBCgoKDg0OGBAQGzMjHiAvNzYyLTc3Ny0vNTY3Ly4vLTI3NS03Nys1NTUtMi8rLTAtNzUtLjYrLTYtLTUyLystL//AABEIAOEA4QMBIgACEQEDEQH/xAAcAAEAAwEBAQEBAAAAAAAAAAAABQYHBAMCAQj/xABPEAACAQMCAwUFAggJCQgDAAABAgMABBEFIQYSMQcTIkFRMmFxgZEUQhUjUnKCobHBCDNDYpKisrPCJDQ1U2Ojw9HhFiUmc4O08PE2VIT/xAAaAQEAAgMBAAAAAAAAAAAAAAAAAwQBAgUG/8QAKREBAAIBBAIABAcBAAAAAAAAAAECEQMSITEEQQVhkaETIjNRcdHwMv/aAAwDAQACEQMRAD8A2qlKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKUClKYoFKjb7iC0h/jrq3j9zyxqfoTUa/H2mDrfW/ycH9lBZKVXI+PdMbpf2/zkC/txUnZa7azfxVzBJ+ZLG37DQSFKYpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUqC4s4ttdPi725kwTnkjXBkkx5Imf1nAGdzQTtVTiTtCsbNu5aQzT5wLeAd5IT6HGynfoSD7jVchttW1nxSM2mWJ6Iv+cTLt7TYBUEZ9Bv7LDervwxwdZ2C8ttCqtjBkPikb86Q7/IYHuoKj+Etfvv83totOiPSS4PPNj1EeDynHkyfOh7KXuN9Q1S7uc9UU93H8Ah5hj4YrTKUFGs+yPSI9/svOfV5JW/VzY/VXTe8HaLbp3k1tZxJsOeUIoyeg5nPWu3jji6LToO8YGSVzywwL7crnYADqAMjJx9SQDWtH4Ae8IvtaPfzMPBbAlYbZW+6FU7t0zv5feIzQTVvwRo06CSO0tZEPR4wpU/BkODXDd9j+kPnFsUJ80llH0BYj9VQWqcGXekSNf6OWeHrNYMS4YDqY87scfpDyLA8tXjgrjC31KDvoThlwJIm9uJvRh5g74bofiCAFSHZK8G9hql5bYOQrNzp8CqlBj45r4NxxFY7yRQalEM7x/i5cfABd/cFY1qNKDP9C7UrKZ+4n57KcbGK4HJv7nOw/S5T7qvCnIyNwdwfX4Vw8QcN2t6nd3MCSjyJHiX8xx4l+RrP5uFNS0kmXS5jdWw3axmOWAzk9y22/Xpg+56DT6VVuDOOrbUAUXMVwme8tpNpEK7NjpzAHzG48wKtNApSlApSlApSlApSlApSlApSlApSqR2j8ZNaKlnar3t9ceGKMDPIDt3jD64ztsSdgaD84849Fo62Non2i/kwEiG4j5ujSY92/L6bnA6+PBXZ0Ul/COpv9qvWw3i8SQ+gQdCw9cAD7o2ye7s44DWwQ3Ezd9ey5MsxJYgtuURjvjPVurH3YAt97exQp3ksiRoPvOyoo/SYgUHRSvOCdXUOjKyncMpBBHuI2NfF9eRwxtNK4SNAWZmOAoHmTQfc8yopd2CqoJZmIAUDqSTsBWc6l2omaQ2ukWz3s3TvSCsCdd2Y4JGR58oPk1cQt7jiGXnfng0lG8KbrJeFT7R9EyPl5b7rpum6fFBEsMMaxxqMBFAAH08/f50FO4Q4FdLg6nqMour1h4T/J24/JiX13O+BjOw6k3ulKBWXcecLz2d0Nd0xfxq5+026jwzp1Zgo6n8oDrgEbg51GlBWeCuOLTUog0LgSAeOBiA6Hz2+8v84bfA7VZqzzjTsqt7pjdWzG0u88wkjyFZs5y6rjBO/iXB3yc1E8K9oFxZTfgzWx3cig93dH2ZFHTnYbH3OOvRgDkkNZpWVXPaVc38ptNFty5HtXcw5Y4wfvBT093NucHwmvq87LLqWIzSardNe4LK4cpCrdQqoPEo8sgj1x5UFg444AivSLmJjbXke8dzHsSR0EmN2Hv6j4ZBjODeNZRP+CdUUQ3q4CPsEuR5Mh6cxx5bHfGD4a7uy/i2S7iktLoct9ankmUgAtgkBwBt5YONs77BhUlx3wbDqVv3b+CVMtDOPaib96nAyPd5EAgJ+lUDs+4smMzaPqPgvofZY9LlAMhlPm2N/eN+obF/oFKUoFKUoFKUoFKUoFKUoIjiviCOxtJLyXog8K+budlQfE/QZPlVX7LuF5OZ9avvFeXXiAIx3EbdFVT7JK4+CgDbxZ49Sj/C2uC0O9lpxDyjqstwfZQ774xjf8lx51qVB43l0kUbTSMERFLMx6KqjJJ+VZTw9pZ167bVbxW+wxMUtLc5Cycp3kkHnuN/U7dF36OP7qTVL9OH7ZisK4kvZV+6owyoD0z0238RX8lq0yws0hiSCJQsaKFVR0AUYAoM01Hg670p2vNGZniJ5pdPcllYeZhJ3zjy9rbq3s1x6Zqo4iuxFL+ItLYK8loWHezzZ35wN+6Q7dBv7z4dfqk8Ydnkd1KL62kNpfIeZZ0GzEbYlUe1kbZ64O/MNqC5xRhVCqAqgAAAYAA2AAHQCvuozh03f2dReiITjIYwszIwHRsMoKk+m/7hJ0ClKUClK/G6bUEdxBrtvZQNc3EgjQevVj5Ki9WY+grLG0S64injurmP7Lp8fMYVwO/mDYy3MR4QwAOemwwG9qrbb8Ama8+36lMLt1J7mEJyQQjPlGSeY7dSfjnAIvFBw6LpEFrCtvbxrHGvRV/axO7E+ZO5rupSgyztNtG0+9g4igUkKViu0X78bYUMffjC7+Yj9K02zukljSaNgyOoZWHRlYZBHyr51CyjnieCVQ0cilGU+YYYNZlwnfyaLdfge9Ym0kYmzum9kZOTFIegOT8ifRhgJ3tP4Pa8iW6tiUvrbxwuuxblPN3ZPTcjIz0PuJrq7PeKxqNmJSOWZD3c8eCOSQDchTuFPUem46g1bqybiVPwPrUepL4bO+PdXI6Kkp3Eh8h+Xn3SetBqVKUoFKUoFKUoFKUoFRPFmtCzsp7w4/FoSoPRnPhRfmxUfOpas67WybiTT9IGcXVwGkAOPxUOC39on9CgmuyfQzbabG0mTNcZuZWOeYtL4hzZ3yF5QffmrBxHcTpayvax97Py4jTIA5mIUFiSByrnmO/RTXxxNrkVjaSXkoYxxBcqgBY8zKgCgkDqw86pMHbBE6h107USh3DLCrAj1B5sH60Fh7POEhp9uQ7CS5mbvLibqXc5OATuVXJx6kk7Zq1VF6LriXFsLvkkhTDEide7ZQucswJ2GxOfSqPcdsULO62lnd3aIcNLGnh+I2Jx8QKDTKVE8M8QRXtol7GGVH5tnADKUYqwbfGxBqmXHa2jyPHYWN1fCM4aSNSE+KkBifdkDNBpNKq3AnHEOppKY0kikhIWSKQDK82cEEdRlWHkcqdulcdh2mWkmpyaUwkjkV2jV35QkjqcFQQcgnfGevxIBC60qq9oPG8Ol24kcc8r5EUIOC5HUk74UeZx5j1rr4F4j/CFhFemPuy/OCnNzYKOye1gdeXPTzoJ+lRfE+uxWNrJeTZ5IxnA6sScKq+8kgVB9m/HiarDI4iMLxMA0fPz7MCVYNgdcMOn3TQXClUPjHjqeDUItKs7UXFxJGZPFII1A8ZwCfPCMdyPLrmvPSu0WRLmOy1OzeyllOI35hJFIdhjnGwOSBsT1GSM0GgUqD404jTT7KW8cc3IAFTOOd2OFXPlv1PkAaoDavxElsNWcWzRYSQ2So3ed25HngsGwc45jjzGdqDW6jtf0SC8ga2uIw8beXQgjoynqpHqK/b/AFZYbR7yQMqpEZWUjDABeblI/K8setUjsr7Q5tSmuIZ4kiZAkkarzZMb/lcx36oeYYB5ulBoFjarFEkKliqKqAsxZsKMDmY7k7dTUPx3w+L7T57QjxMpKH0kXxIc/EAH3E1x63rssWsWFkpHdXCXXOuAcmNA6kN1BGD7vF06YtdBSOyfXTd6XEzk97DmCTOc80WAC2d8lChPvJq4Vm3By/ZOINS0/cRzhbuMeWSRz49N5GH/AKdaTQKUpQKUpQKUpQKzZyJ+LkXORa2ZbHoz9T8cTL9BWk1mvB45uKdUk8xFEv8AVhH+CgmO23/QV3/6H/uIam+AUxpViB/+rbn6xKTUN20rnQrse6E/SeI1A8DXmv8A2O3QWtkIVhiWNpJHVmjCKFZuRn3K4PQfCgkO3fUmi0lokJ5riWOHbrg5cj4EJj9KrbwloSWVlDaIAORRzEffcjLsfeWzWe9vcp/7tjP3rnJ/R5B/iNa1QQXHUxj0u9ddiLacgjyPdtg/GozslsUi0a1CKBzx94x/KZySST5+Q+AFdXaW+NHvT/sJB9Rj99OzP/Q9l/5Ef7KCo9m0Xd6/rMQ2y6Sf0mdv+JVai4Hi1LWNYiZ2jeN0aKRfuO5JPMv3gcfH0Iqz8IZ/7Varjp3UWfjiHH769uz8f9/a1+dB+x6CI0jsjmdnudWuTdOiFIkEjuMKCVLuwDEAkkKPmT0qX/g+XXPpHJ/q55U+oR/8daRcDwMPcf2Vkv8ABtb/ACG5HpPn6xp/yoOvtZH2zUdN0UHwySGeZfPkTIH9VZvnivPhO1FlxRe2iALFcQrOqjYAgqTgeQ5mm29MVDa9xFPFxVM8Fm95JFAsKxqSpUFUdnJCtgAuy749rrX5pOuXE/FVrJc2jWjtA8fdM3MSoSdg+eUbEgjp92gntYYLxjZ5+9aMB8cXJ/YDT+EOR+DoFGTIbqPuwPaz3cmcefmPmRUN2qPcpxHYSWcYkuBCCkZIAfDzcwJJAA5ebfIrx0G0vLriVI9WKl7eIzxRLjuh7PLyDzwzZJ65jG5AoJ3tgja4utJ0xt1mn55B7k5FP9V5a1QCs04z34l0gfzZz/Vf/kK0ygovbZdFNEuAOrmKMe/mlTI+ag1CwWS2XE9pEgwk1h3Ix6wKT/ZhSv3+EFM5sra3jBLy3ScqjcsVR8ADz8TLUVPqV9LxBpb3tmLQjv1QCVZOcGNs7qTjGR9aCz8Wn/xFo/5t9/cmtBrPeMP/AMh0b4Xv91WhUGY8a/iOJNKuc475Zbdvf1Cg/OYfQVo9Zz2xgC50iX8m+j/W0Z/w1oxoFKUoFKUoFKUoFZpwaeXijVU9Y4m/VEf8VaXWZxKIOMCen2qz+pUAfst6Cxdr650S8/MQ/SRDUvwTLz6ZZuPO2tz/ALpa+uMNGN5Yz2YYKZUKhj0B2IJx5ZArP+H9A4ktI0to7ixeKMBU5+Y8qjoMrGGPzNB9fwgouW3srk9IrpQfcGUt/wAOtVVgRkbg75qs69w1Jfaa9ldyRmVxnvIkZVR1PMpVGck4wAdxkZ6ZqpaTpvEtrCtoj2MqIOVJZC5YKNlGwGcD1B+dBaO1bP4GvMDJ7o/TmXP6s1+9lUobRrMj/VBf6LMp/ZXfoWnXBszBqMkdxI4cScqBUKuMcgAAyMZGcDOaoVrwprem95babNBLauzGMTe3BzZzjy/aCd+UZNB1dm0ol1zWph92SKPP5pkQ/wB3Xp2f/wCnta/Ot/2PUt2Y8Etp0MrTSCW5uGDyuM8u2cAE7tuzknAzzdNq7eHuFmt9Qvr4yBhdGIhApBTuwQctnfJNBZpBsfgax/8Ag1t/kl0P9sn60/6VsVVzg3g6DThOsBblmk7zlbHg2wEUjyG+M7/HrQVbs8j59d1qY/deGMH+nkf1B+qvLjeIJxNpM/m6yx5/ND4H+9P1q8aFw7Hay3MyMzNcymZ+bGxIxhcAbfHNQ3FvDf22/sp4p41exkEkkZ8TFZGjIBwfDkRtjPrQV/jN+TijSpD0McifNhKv+MVIcWQd1xBpd4NllWe2c/oM0YPxZz/Rqf4i4PhvLq0u5HkV7R+dAhUBjzI+HypJGUHQjqa8u0Lh6W8toxbsi3EE8NxCzkhQ8bfeKgnGCfLqBQVrj+VY+INGlY4BM0efewCgfWQfWtNqq9oPBy6lbLHz91NGwkilAzyN5jbBwdunQgHyxUXo/D+tNPDJe6jGIoiCY7dMGfl/1rFRgHbOBjGcAHeg5ePx3uuaNb9QrzzEe+NVZT8ihrz7Sn5NZ0Rz0M0yfNu5Uf2qtN3wsJNWh1Vpf4mFoli5fvMWy/Pn8lyMY+dcnHvC7Xj2U6yJGbS4WdmfOORSGYDHnlV64FBE8an/AMQaN/8A2f3YrRKyvjmcXt5ZT6bdWzXVs8uI5GIWQSBfZbo2OU7A7g+6rVwydYMub77CsWD4YBMZOby3Y8oH1oxExPSt9su8+kRebXsf6mQf4q0c1nHHmJuIdItevd97OR6Y8Sk/OGtHoyUpSgUpSgUpSgVm3amfs19peq7BYpzDKx8kl8yfQL3v1rSarvaFoX23Tbi2Ay5Tnj/Pj8aj5kcv6VB5dqN/NDp7PCzIS6IzqcMqtnOD5ZPKuf51Y7acS3se6XU4+MjOPPyckeR+lahw/qo1Lh1nIMkncSRuuxYzRLscepIRx+cKyOwvTGTsHRxh4z7LrnPl0IO4Ybg/rh1M5c/y8xeJyvnDPalMjhLwCSM/yiqA6+8qMBh8AD8elaxYXsc0azROro24ZTkH/r7vKv5tvbQKBJGS0THCsccynqUkA6OPow3HmBIcK8UTWMveIcxkjvIifC49R6NjofrkViupMcSxpeTas4vzD+iqV5wSh1Vx0YBh8CMivSp3RKUr5kkCgsxAA6knAHxJoPqlcltqcMh5Y5o3Porqx+gNe80oVSzEADckkAD4k0I56Znx12iSpK9raYHIeR5yObD75VAdgRgjJzuDgbZqA7MdaePUQHy/2ocrMWy3MCxDNvnOQwwd/ED6ZqEl07c45sCRw7ehYF8E+e3O/wBTV6ha2a406CxiOFuQTcNyhp+TBkPLnn5cb5IA2wBUEWmZy5m+9r7pnr02SlBSp3TKUrxS5RublYNyEqwBB5WABwfQ4I299BWeN+NYrFe7XElwwysfkoP3pCOg93U/rGM6xxBdXR/HzO4J2TOE92Ixt++uK+vnnle4kOWkYuT8fL4AYA9wFdhP2ZSBtcMME+cCkbgekrDqfug49onlr2tMuVq61tSfk5dMcieJh1EkZHxDg7V/TtfzvwNpJub+GIeyrCRz6LGQf1nlX9Ktz4o1pLOzmvHxiJCwH5TdFX5sQPnW+l0seFH5ZlReHH+18TX12N47SJLVT/OJ8W/qGWUfOtIqjdjmktDpizyZMt2zXLk9T3nsfVQG/TNXmpV0pSlApSlApSlApSlBl+ly/gnXntW8NpqJ7yI/djnzuvuyTy7flx+lRPaZwm1vO11En+TyHmOBtE56g+ik7g9NyPTOgdoXCo1GyaAeGZT3kL5xyyKDjJ8geh+OfIVw9l3GBvYGtLkct5bfi50YYL4PLz488kYYeR9ARWtq7oRaulGpXEsctLooTsGVhh0PsuOuDjoR1BG4PSvY28aujsXaBjvjHPgEc0Z6AOBtnpggjY4q9dpVzpqs9slqVuVwe8jURKCRnxbfjB+ifcRWf2s4GUbJRscwHUEZw6/zhk/EEjzqCYxw5d67J25y2jgDiqa+lnzGkcEYjCKMlgW5tmfODsvkB1FXasa7O+JYbBLmOc9eSROUZ73bGE+OVIzjqc4wa0rg7WmvLRbplCFmlHKNwAsjKN/M4AyfXNTUtmHR0NSLViJnl1a/rEdrA08mTjAVBu0jn2UQeZJrONQ0+a5uEXV2lhSYDuBEy9zG7fycuVOJOmCepzg138d6dqf2r7dCI2jgVjEoIYp4fE5jcAF+vTPQVAX6S3kXfNfztaKoM0sihEZzgiKG3THeODt1xnGPfi0o9W8zMxjr7vPiKyhiiOn/AGZPt6SRqkkUZHfRnxLIoXZWI8JHrnHu4r21ma2mS6muPtEHdssErEqYmYKXXJPMRnr5Aefl9abDK8U+qPdSRm25Y4nYB5GbcKhOQM4YAnf2j5CpG3sbvVbtILsiJoYuYv3eHKvykZGcZOc+WN9qpXtv4j309Z8M8OviR+LaYiY/6n3GOcRHU8TEWxzz9YjStDAi+0XVtdfZ2AImhKeAH7xjKklfPORt5GpHh8W9hqkcryiSBoy0U4HlJlQzjyIw6n0znboLYLqbSTHDcyfaLJ/xavyYeEhdlZRnmUgH16eWMGl6Bw012lxPayRho3fkt2XJMbZxnOwyDgbHcHcVjbsmIr3/AL6rtrU8qt76/wCn6n18u4zWYnv18m5RuGAYEEEAgjcEHoQa+qo/ZFfGSxMTHPdSFBnqFIDgfIsw+Xuq8VfpffWLfu8z5OhOhq2059SV/PdvxHc2c92qN4pWlWTO+H52BdfRh4vrvnArYbnjO1iu5LOZjEyAMHfARgVDbNnY9dj1xtmsU1m4jmu7i6APcmRnA9kvzElV9QWwSfQZ8xWupP7OX5V442zzDltyIVEn8od4wfuD/WEeufZ+Gfyc8RPmfqf3mrBb8N38jC4FpI24bDIApxjA5GxlMADHTG1avw7wraPHHcyWCQzdWjbJCspIyFJ5cbZG3mK0isyraeha/HTi7J+HTb2xuZBiSfBAPVYx7I9xOS3zHpUJ2iznUtTt9AiJ7pCLi7YHoq4wmc+h+sielW7tB4uTTbQzHxTP4IY+peQjbYfdHU/IdSKjOzDhZ7S3e4ucteXTd7Ox3IySQnyySfeT5AVPEYjDp0pFKxWFyRQAFAAAAAA6ADYAV9UpWW5SlKBSlKBSlKBSlKBWcdo/C86TLrmmjF3FvLGBn7RGBg5Ue0QuxHUjpuBnR6UFW4X1ix1q1WcxRO64EkUiq7QsfLcZ5Tvhh1HvBA6dU4T0xYXeW3gjQAlnACco9Qy4INVfizgqeC5OsaQQlxuZrf8Ak7gdThcgcx812ydwQ3WwcH8Z2uqRNCyhJwCs1pKAWXGzeFh41zt028wKxMQ1tSJ9MUlKEtGrEoGbunYYPLzHHOPIEYPuJPqa1zsf1INZtaHZ4Xbw+fLISwP9IsPkPWp+64LsHXlNpCvvRRGw+DJg1Tbzgy60+Zb2wJmVOsTe2UPtJttIu3xBAwDUcVms5U6aV9K27uGoGs0hSKwvfsd2cWgdrq0ZvYR/ND+aWJA8jg9SKvmh6tHdQLPGdjsVOzIw2ZHHkwNeup6ZDcJ3c0ayLnOGGcH1HofeK3mMrV67oiYY1YXimzkAwywX8dy6jfngPhyB5jIH1FWjiniOKC9tr+1eO4aSNoZIkbLOhYMhAGSDzZAyPdXpxzwLALRprSLkkiGSqZ/GJ94EeZA3Hntiqnw1YW0loZo5UivoZBIneScqyBCGUBWIBB6ZG+RvtVGd9J2ff+HrNKdHyNONe2e5ia+vzRHfvGec9/RL69qlzPNb3N7ZvDYRyKWVhnJbwhpAcEjJG3LjBI3zXTx/bpBPbXFgQlzLlOWHl/GIwHK3INjvtn4egx03XaNbT2TxtC7TOhUwcpZSSNzzj7o6+u3Sq9p3D4g0+LWYrn8dHh+VuUocMU7sefNjIxn4Y61m0xOds5zzn3BpVtSazqV2YzWK8zW2c4z377n3xjp29jsrLdzw+IAxAsDsQ6Py4I8j4mG++1a3WedljtPNe3zIF72RcY6bczFQfPHMuTV8vrtIonmc4RFZmPoFGTVjxoxpw5Pxi+7yrTMYnEZ/nEZ/pi3aw6vqZVcZWKNW9AfE2/6LLXBw/ol9I8c9rblljbmR3VAjHzb8YQGzgdM4wMHIzVy4M4Ua6lfVLxNpXMiQt97JyrSD8kDAVfPGT5VpgFbRTM5l5+vj/iWm9uMuTSZJmhU3CIkuPEqMXX5EgfTfHqa5+JNfgsbZ7q4flReg+87eSIPNj/8AeACa4+MOMLXToe9uH8RB5IhgvIR5Kvp0yx2H0qk6Hwzc6pcJqmrLyxLvb2O/KgO4aYHr0BIO7eeAAtSr0HBeiz6ldjXtQXAH+Z2x6RrnKyEHqfME9T4thy1p9KUClKUClKUClKUClKUClKUClKUCqhxjwFDeuLmN2trxN0uYtmyBgd4BjmHvyD78bVb6UGbWfHt3pzLb61AeX2VvoQWjfb76gbHr0AP83zrRdM1OG4jE0EqSoejIwYfDbofdS5t0kRo5FV0YYZGAZWB8mU7EVn+odlqRyG50y5lsJjuVQlom3JwUJyBv0yQPJaC532nNG7XVso7w/wAZHnlWcD1PRZAOj/I7Yx36beiaJZVVlDZ8LqVZSCQVZT0III+VZn/2n16x2vLFL6MY/HWxwx9SVUH+wo99SGm9s2mOeWUzWz5wVljOx+Kc2PnijERhotU7X+zq0uOZ0BhkOTzJ7PN6mM7fHGKlbHjDT5v4u9tmPp3qBv6JOf1VLx3KNurqfgwP7K1tSt4xaE+j5Gro23adpiWS6fwbqtpPz2/dZwV5w4KupOfGj7+nQeX16tM7Lpmk5rqVFQsXMcOTknrjICp6bA7VqLzKNywHxIFRt9xPZQ/xt3bp7mljB+QzmoY8akL9vjPkzmYxEz7iOXdYWUcMawxKERRgKPL/AOetRF6q3kpt/aghYGb0lkXdYfeq7M3v5Rv4hVf1Tth0uLKpK87dOWGNjk+5m5VPyNQ0HFWr3I7vTdKFpESfx1x4fayxcIeUZJOSQHzmp8OTbNp5ajeXccMZlldI0UZLsQqge8nYVm+q9pslzIbPRYDcy9GuGBEMQJxnfGfPc4G23N0rztey+S5dZ9XvZbthv3KEpCpxuBjBx+aErQtM06G3jEMEaRRjoiKFHx26n3nessqdwn2eCKb8IX8pvL04PO28cR64iUjy8jgY8gtXulKBSlKBSlKBSlKBSlKBSlKBSlKBSlKBSlKBSlKBXFqWkW9wMTwRTD/aRq+PhzA4rtpQU297LNJkOTZqp/mPIn9VWx+qoyTsW0o9EmX4Sn94NaLSgzuPsX0odUmb4yn9wFSVl2W6TGcizVj/AD3lf+qzEfqq5UoODTdFtrf+It4Yf/LjRM/EqN6780pQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQKUpQf//Z" alt="ECOMARCAL">
   </div>
   <h1>Biopreparados para la<br>Comarca Andina</h1>
-  <p class="bajada">Elaboración, uso y dosis · 24 recetas</p>
+  <p class="bajada">Elaboración, uso y dosis · 25 recetas</p>
   <p class="inst">
     <strong>IFAB</strong> — Instituto de Investigaciones Forestales y Agropecuarias Bariloche<br>
     CONICET / INTA · Agencia de Extensión Rural El Bolsón<br>
@@ -101,7 +106,7 @@
   </p>
   <p class="pie">
     Recopilado y redactado a partir de la bibliografía citada en cada ficha.<br>
-    Versión 2026-10-26 · Generado el 29 de octubre de 2026<br>
+    Versión 2026-10-30 · Generado el 30 de octubre de 2026<br>
     Este documento se genera desde la app BioSalud: martintrigo.github.io/BioSalud
   </p>
 </div>
@@ -126,7 +131,7 @@
   </div>
 
   <h1>Índice por función</h1>
-  <ul class="idx"><li class="idx-cat"><strong>🌱 Biofertilizantes</strong><span>Aportan nutrientes y microorganismos vivos. Alimentan al suelo antes que a la planta.</span><span class="idx-item">Microorganismos de montaña (MM) líquido <em>Comarca</em></span><span class="idx-item">Súpermagro sólido enriquecido <em>Comarca</em></span><span class="idx-item">Té de compost</span><span class="idx-item">Bio lana</span><span class="idx-item">Fertilizante rico en fósforo</span><span class="idx-item">Bacterias ácido lácticas</span></li><li class="idx-cat"><strong>🌿 Bioestimulantes</strong><span>No nutren tanto como activan: estimulan el enraizamiento, el crecimiento y las defensas de la planta.</span><span class="idx-item">Bioestimulante de ortiga, consuelda y cola de caballo <em>Comarca</em></span><span class="idx-item">Adherente y bioestimulante de aloe</span></li><li class="idx-cat"><strong>🪱 Abonos y enmiendas sólidas</strong><span>Se incorporan al suelo y mejoran su estructura, su materia orgánica y su vida. Efecto lento y acumulativo.</span><span class="idx-item">Bocashi</span><span class="idx-item">Abono orgánico anaeróbico</span></li><li class="idx-cat"><strong>🐞 Biocontroladores de insectos y ácaros</strong><span>Repelen o controlan plagas. Ninguno es selectivo del todo: usarlos cuando el monitoreo lo justifique, no por calendario.</span><span class="idx-item">Biorepelente picante <em>Comarca</em></span><span class="idx-item">Extracto botánico de ajo, ají y pimienta</span><span class="idx-item">Caldo lejía</span><span class="idx-item">Caldo de ceniza</span></li><li class="idx-cat"><strong>🍄 Biocontroladores de enfermedades</strong><span>Previenen y controlan hongos y bacterias. Casi todos son preventivos: aplicados con la enfermedad instalada rinden poco.</span><span class="idx-item">Caldo mineral caliente (sulfocálcico)</span><span class="idx-item">Caldo bordelés</span><span class="idx-item">Caldo Visosa</span><span class="idx-item">Caldo de bicarbonato de sodio</span><span class="idx-item">Decocción de cola de caballo <em>Comarca</em></span></li><li class="idx-cat"><strong>❄️ Reguladores de estrés</strong><span>Ayudan a la planta a soportar heladas, calor o sequía. Es la categoría con menos respaldo local: hay más experiencia de productores que ensayos publicados.</span><span class="idx-item">Caldo frío mineral</span></li><li class="idx-cat"><strong>🧪 Preparados de base</strong><span>No se aplican solos. Son la materia prima de los demás biopreparados, y conviene tenerlos hechos de antemano.</span><span class="idx-item">Microorganismos de montaña (MM) sólido <em>Comarca</em></span><span class="idx-item">Pasto fermentado</span><span class="idx-item">Microorganismos de silo de maíz</span><span class="idx-item">Lejía de ceniza</span></li></ul>
+  <ul class="idx"><li class="idx-cat"><strong>🌱 Biofertilizantes</strong><span>Aportan nutrientes y microorganismos vivos. Alimentan al suelo antes que a la planta.</span><span class="idx-item">Microorganismos de montaña (MM) líquido <em>Comarca</em></span><span class="idx-item">Súpermagro sólido enriquecido <em>Comarca</em></span><span class="idx-item">Té de compost</span><span class="idx-item">Bio lana</span><span class="idx-item">Fertilizante rico en fósforo</span><span class="idx-item">Bacterias ácido lácticas</span></li><li class="idx-cat"><strong>🌿 Bioestimulantes</strong><span>No nutren tanto como activan: estimulan el enraizamiento, el crecimiento y las defensas de la planta.</span><span class="idx-item">Bioestimulante de ortiga, consuelda y cola de caballo <em>Comarca</em></span><span class="idx-item">Adherente y bioestimulante de aloe</span></li><li class="idx-cat"><strong>🪱 Abonos y enmiendas sólidas</strong><span>Se incorporan al suelo y mejoran su estructura, su materia orgánica y su vida. Efecto lento y acumulativo.</span><span class="idx-item">Compost termófilo</span><span class="idx-item">Bocashi</span><span class="idx-item">Abono orgánico anaeróbico</span></li><li class="idx-cat"><strong>🐞 Biocontroladores de insectos y ácaros</strong><span>Repelen o controlan plagas. Ninguno es selectivo del todo: usarlos cuando el monitoreo lo justifique, no por calendario.</span><span class="idx-item">Biorepelente picante <em>Comarca</em></span><span class="idx-item">Extracto botánico de ajo, ají y pimienta</span><span class="idx-item">Caldo lejía</span><span class="idx-item">Caldo de ceniza</span></li><li class="idx-cat"><strong>🍄 Biocontroladores de enfermedades</strong><span>Previenen y controlan hongos y bacterias. Casi todos son preventivos: aplicados con la enfermedad instalada rinden poco.</span><span class="idx-item">Caldo mineral caliente (sulfocálcico)</span><span class="idx-item">Caldo bordelés</span><span class="idx-item">Caldo Visosa</span><span class="idx-item">Caldo de bicarbonato de sodio</span><span class="idx-item">Decocción de cola de caballo <em>Comarca</em></span></li><li class="idx-cat"><strong>❄️ Reguladores de estrés</strong><span>Ayudan a la planta a soportar heladas, calor o sequía. Es la categoría con menos respaldo local: hay más experiencia de productores que ensayos publicados.</span><span class="idx-item">Caldo frío mineral</span></li><li class="idx-cat"><strong>🧪 Preparados de base</strong><span>No se aplican solos. Son la materia prima de los demás biopreparados, y conviene tenerlos hechos de antemano.</span><span class="idx-item">Microorganismos de montaña (MM) sólido <em>Comarca</em></span><span class="idx-item">Pasto fermentado</span><span class="idx-item">Microorganismos de silo de maíz</span><span class="idx-item">Lejía de ceniza</span></li></ul>
 </div>
 
 <h1 class="seccion">🌱 Biofertilizantes</h1>
@@ -151,6 +156,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Biofertilizante de suelo y foliar. También se usa contra hongos patógenos del suelo. Terminados los 200 litros, la misma bolsa con MM sólido sirve para preparar otra tanda.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Al suelo</th><td>Diluir al 30 %</td></tr><tr><th>Foliar</th><td>Diluir al 20 %</td></tr><tr><th>Contra hongos de suelo</th><td>Diluir al 50 % o aplicar puro, directo al suelo</td></tr><tr><th>Frecuencia en hortalizas</th><td>Semanal</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> Se usa fresco. No es un producto para guardar meses.</p>
@@ -181,6 +187,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Se disuelve y se aplica al suelo, con mochila o por fertirriego.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Al suelo</th><td>1 kg cada 100 litros de agua. Mezclar, dejar disolver 20 minutos agitando, colar con lienzo y aplicar.</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> Hasta un año.</p>
@@ -211,6 +218,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Fertilizante foliar.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Foliar</th><td>3 %</td></tr><tr><th>Combinado</th><td>3 % de té de compost + 3 % de bio lana, para compensar su bajo nitrógeno</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 12 meses.</p>
@@ -241,6 +249,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Fertilizante nitrogenado foliar.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Foliar</th><td>Diluir al 3 %</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 1 año.</p>
@@ -271,6 +280,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Fertilizante. Se puede aplicar junto con el preparado de microorganismos líquidos.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Vegetales</th><td>3 a 10 %, repartido en tres aplicaciones a lo largo del ciclo del cultivo</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 12 meses.</p>
@@ -301,6 +311,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Reduce la incidencia de plagas y patógenos. Se combina bien con el té de compost.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, foliar</th><td>20 %</td></tr><tr><th>Frutales, foliar</th><td>30 %</td></tr><tr><th>Al suelo</th><td>50 %</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 30 días. Pasado ese mes pierde sentido usarlo.</p>
@@ -331,6 +342,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Estimulante del crecimiento radicular y vegetativo. También controla pulgones, ácaros y áfidos en general.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, al inicio del cultivo</th><td>1 litro cada 20 litros de agua (5 %)</td></tr><tr><th>Hortalizas, después</th><td>300 cc cada 20 litros (1,5 %), foliar cada 15 días</td></tr><tr><th>Frutales</th><td>3 litros cada 20 litros (15 %), cada 3 meses</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> Hasta 2 meses en lugar fresco, seco y oscuro.</p>
@@ -361,6 +373,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Se agrega a los demás biopreparados para que se adhieran mejor a la planta.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Junto a otros biopreparados</th><td>400 cc en 10 litros de agua</td></tr></table>
       
@@ -370,6 +383,37 @@
 
       <p class="fuente">Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</p>
     </article><h1 class="seccion">🪱 Abonos y enmiendas sólidas</h1>
+    <article class="ficha">
+      <header class="ficha__cab">
+        <span class="ficha__cat">🪱 Abonos y enmiendas sólidas</span>
+        <h2>Compost termófilo</h2>
+        <p class="ficha__resumen">Compost en caliente, armado por lotes y manejado por la temperatura de cada día. Bien hecho elimina semillas de malezas y patógenos en pocas semanas, y es la forma en que el protocolo del SPG admite el estiércol. Se arma con lo que haya en la chacra y alrededor.</p>
+        <dl class="rapidos"><div><dt>Rinde</dt><dd>Una pila de 1 m³ da unos 500 litros de compost</dd></div><div><dt>Tiempo</dt><dd>15 a 21 días de fase caliente y 1 a 3 meses de maduración</dd></div></dl>
+      </header>
+
+      <div class="alerta"><strong>Dato a verificar.</strong> Las dosis de aplicación son las habituales en extensión y no salen de las fuentes citadas, que describen la elaboración. Ajustarlas con el equipo técnico según el suelo y el cultivo.</div>
+
+      <div class="dos-columnas">
+        <section>
+          <h3>Qué lleva</h3>
+          <ul class=""><li>Para una pila de 1 m³, que es lo mínimo para que caliente:</li><li>100 litros de material alto en nitrógeno (unos 10 baldes)</li><li>300 litros de material verde (unos 30 baldes)</li><li>600 litros de material leñoso (unos 60 baldes)</li><li>Agua sin cloro</li><li>Un termómetro de compost con vástago de 60 cm a 1 m: es lo único que hay que comprar</li><li>Lona o media sombra para tapar, horquilla y pala</li><li>Opcional: un balde de compost maduro, bocashi o mantillo de bosque nativo como inóculo</li></ul>
+        </section>
+        <section>
+          <h3>Cómo se prepara</h3>
+          <ol><li>Juntar todo el material antes de empezar: la pila se arma en el día. Picar lo grueso a menos de 5 cm.</li><li>Elegir un lugar reparado del viento, con algo de sombra, sin charcos y cerca del agua. Marcar una base de 1,5 m de ancho; el largo depende de cuánto material haya.</li><li>Armar en capas de 10 a 15 cm alternando leñoso, verde y alto en nitrógeno, empezando y terminando con leñoso. Regar cada capa.</li><li>Ajustar la humedad al 50 %: al apretar un puñado tienen que caer unas gotas, no un chorro.</li><li>Llegar a 1,2 a 1,5 m de alto y tapar con la lona o la media sombra, para que no la enfríen ni la laven el viento y la lluvia.</li><li>Medir todos los días la temperatura del centro, a la misma hora y en tres puntos. Anotar la fecha, la temperatura y cada volteo.</li><li>A los 2 o 3 días tiene que pasar los 55 °C. Si no llega, faltó alto en nitrógeno o agua, o la pila es chica: desarmar y corregir.</li><li>Cuando el centro lleva 3 días seguidos arriba de 55 °C, voltear: lo de afuera va al centro y el centro afuera. Regar lo que esté seco.</li><li>Si pasa de 71 °C, no voltear antes de tiempo: abrir chimeneas con un palo para que entre aire. No dejar que pase de 77 °C.</li><li>Repetir hasta sumar 15 días por encima de 55 °C con al menos 5 volteos. Si después de un volteo no vuelve a pasar los 55 °C en un día, faltó alto en nitrógeno: sumarlo y voltear.</li><li>Cuando después de un volteo ya no vuelve a calentar, terminó la fase caliente. Dejar madurar tapado de 1 a 3 meses, con un volteo por mes, hasta que huela a tierra de bosque y no se reconozcan los materiales.</li></ol>
+        </section>
+      </div>
+
+      <h3>Con qué se arma</h3><p>Lo que decide el resultado es la proporción entre tres grupos, no el material exacto. Elegir uno o varios de cada grupo, según lo que haya, y respetar los volúmenes. Cuanto más variados los materiales, más variada la vida del compost.</p><div class="materiales"><h4>Alto en nitrógeno · 10 %</h4><p class="dato">Es el arranque: dispara la actividad de los microorganismos y el calor. Sin suficiente, la pila no pasa de 55 °C.</p><ul class=""><li>Guano de gallina del gallinero propio o de una granja agroecológica, no de galpones de producción intensiva</li><li>Estiércol fresco de oveja, cabra, vaca o caballo, de la propia chacra o de un campo de pastoreo</li><li>Bagazo de cervecería artesanal, recién salido: fermenta rápido, usarlo en el día</li><li>Lupino, alfalfa, vicia o trébol cortados en verde, antes de florecer</li><li>Ortiga y brotes tiernos de primavera</li><li>Borra de café de los bares del pueblo</li></ul><h4>Verde · 30 %</h4><p class="dato">Sostiene la temperatura y alimenta a las bacterias.</p><ul class=""><li>Pasto recién cortado y desmalezado sin semilla</li><li>Restos de huerta y de cosecha: hojas de repollo, plantas de haba y arveja ya cosechadas</li><li>Guías y hojas de lúpulo después de la cosecha, picadas</li><li>Descarte de fruta fina y de dulcería (frambuesa, frutilla, cereza, grosella), en capas finas porque es muy húmedo</li><li>Consuelda, y hojas verdes de poda de sauce o álamo</li><li>Restos de cocina vegetales</li></ul><h4>Leñoso · 60 %</h4><p class="dato">Da estructura para que entre aire y alimenta a los hongos. Es lo que más volumen ocupa: conviene juntarlo con tiempo.</p><ul class=""><li>Chip de poda de frutales, rosa mosqueta, retamo sin vainas, sauce o álamo, con ramas de menos de 2 cm</li><li>Hojarasca de otoño de álamo, sauce, roble o frutales</li><li>Paja de trigo, avena o centeno, o fardos viejos de origen conocido</li><li>Aserrín y viruta de aserradero de pino o ciprés sin tratar, hasta un tercio del leñoso porque compacta</li><li>Acículas de pino, hasta un cuarto del leñoso porque se degradan lento</li><li>Cartón corrugado sin tinta de color ni cinta, mojado y desmenuzado</li><li>Cañas secas de maíz o girasol, picadas</li></ul></div><p class="dato">Una misma planta cambia de grupo con la edad: los brotes de primavera son casi alto nitrógeno, la planta en crecimiento es verde y la que ya semilló o se secó pasa a leñoso. Para un compost más rápido, de unas tres semanas, se puede subir a 25 % de alto nitrógeno, 30 % de verde y 45 % de leñoso: calienta más, pero pide volteos más seguidos.</p>
+      <h3>Para qué sirve</h3><p>Es la enmienda de base de la chacra: aporta materia orgánica estable, nutrientes de liberación lenta y vida al suelo. El calor de la fase caliente elimina semillas de malezas y patógenos, y es lo que el protocolo del SPG exige para usar estiércol: 3 días como mínimo entre 55 y 77 °C. Los 15 días con 5 volteos de esta receta son el estándar para pilas volteadas al aire libre y cubren ese mínimo de sobra. También es la materia prima del té de compost y el vehículo para incorporar MM sólido al suelo.</p>
+      <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Preparación de canteros</th><td>2 a 4 kg por metro cuadrado (una capa de 1 a 2 cm) por temporada, incorporado en superficie</td></tr><tr><th>Al trasplante</th><td>Un puñado en el hoyo, mezclado con la tierra</td></tr><tr><th>Almácigos</th><td>Hasta un cuarto del sustrato, bien maduro y tamizado</td></tr><tr><th>Frutales y fruta fina</th><td>5 a 10 kg por planta en la proyección de la copa, a fin de invierno</td></tr><tr><th>Con MM sólido</th><td>1 kg de MM cada 100 kg de compost, mezclado al momento de aplicar</td></tr></table>
+      <p class="dato"><strong>Cuánto dura:</strong> Tapado, con circulación de aire y alrededor de 30 % de humedad. Su vida es más variada cerca de los 6 meses; con los años se estabiliza y se parece cada vez más a la tierra de superficie.</p>
+      
+
+      <div class="cuidados"><h3>Cuidados y riesgos</h3><ul class=""><li>Llevar la planilla de temperatura y volteos. Sin ella no hay cómo mostrar que el estiércol se trató, que es lo que pide el protocolo del SPG.</li><li>Olor a podrido o a amoníaco, color negro o capas pegoteadas: falta aire o sobra agua o nitrógeno. Voltear y sumar leñoso.</li><li>Una capa blanquecina, como ceniza, adentro de la pila: está seca. Regar al voltear.</li><li>Pasto o fardos de campos tratados con herbicidas hormonales (picloram, clopiralid, aminopiralid): el residuo atraviesa el compost y daña tomate, papa, haba y arveja. Preguntar siempre el origen.</li><li>No va: carne, huesos, grasa ni lácteos, que atraen perros, zorros y roedores; estiércol de perro o gato, por zoonosis, que el sello excluye; estiércol de feedlot, del hipódromo o de animales recién tratados con antiparasitarios o antibióticos; madera tratada, pintada o aglomerado.</li><li>Si la fase caliente no se completó, tratarlo como estiércol crudo: al suelo, lejos de lo que se come crudo, y nunca sobre frutilla o lechuga cerca de la cosecha.</li><li>En el invierno de la Comarca cuesta que caliente: armarla entre la primavera y el otoño, o hacerla más grande y bien tapada.</li><li>Usar barbijo al voltear material seco, por el polvo, y guantes.</li></ul></div>
+
+      <p class="fuente">IFAB (2026). Compost de la Soil Food Web y extractos de compost: informe de trabajo, versión 1. Documento interno, revisión de la literatura revisada por pares y del material del método. Ingham, E. Soil Food Web School, curso Foundation: BioComplete Compost, clases 3 y 5. Material del método, no revisado por pares. USDA, Programa Orgánico Nacional de EE.UU. (7 CFR 205.203): compost en hilera, entre 55 y 77 °C durante 15 días con 5 volteos como mínimo. Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</p>
+    </article>
     <article class="ficha">
       <header class="ficha__cab">
         <span class="ficha__cat">🪱 Abonos y enmiendas sólidas</span>
@@ -391,6 +435,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Se aplica al suelo, evitando el contacto directo con las raíces: en camellones, surcos de trasplante o al costado de las plantas ya instaladas. También sirve mezclado en el sustrato de almácigos.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Por planta</th><td>Unos 200 g</td></tr><tr><th>Hortalizas</th><td>Aplicar 15 días antes de la siembra o el trasplante</td></tr></table>
       
@@ -421,6 +466,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Abono sólido o líquido, y componente de sustrato.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Preparación del suelo</th><td>500 g por metro cuadrado</td></tr><tr><th>Al trasplante</th><td>Un puñado; reabonar a los 20 días al costado del cultivo</td></tr><tr><th>Foliar</th><td>1 kg en 100 litros de agua</td></tr><tr><th>Sustrato para trasplante</th><td>10 kg de este abono + 10 kg de bocashi + 80 kg de tierra negra</td></tr></table>
       
@@ -451,6 +497,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Repele insectos y controla nematodos y hongos patógenos del suelo. En la Comarca dio buenos resultados con pulgones y con polilla de las coles (Plutella xylostella), y contra Fusarium, Rhizoctonia y Sclerotinia. Aporta minerales.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas</th><td>200 cc por mochila de 20 litros, foliar y al suelo, cada 15 a 20 días</td></tr><tr><th>Frutales</th><td>5 litros en 200 litros de agua (2,5 %)</td></tr><tr><th>Papa</th><td>Aplicar al suelo antes de sembrar</td></tr></table>
       
@@ -481,6 +528,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Repelente de mosca blanca, pulgones, ácaros, cochinillas y también de aves.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas</th><td>1 % — 1 litro en 99 de agua</td></tr><tr><th>Frutales</th><td>2 %</td></tr><tr><th>Repeler aves</th><td>1 %</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
@@ -511,6 +559,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Insecticida y fungicida.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>General</th><td>5 % — 5 litros en 100 de agua, o 1 litro por mochila de 20 litros</td></tr></table>
       
@@ -541,6 +590,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Controla enfermedades fúngicas y plagas como pulgón y mosca blanca. La fuente le atribuye además un efecto amortiguador frente a heladas, por el engrosamiento del tejido vegetal.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Foliar</th><td>2 %, cada 15 días — unos 400 ml en una mochila de 20 litros</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
@@ -571,6 +621,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Insecticida y fungicida que además aporta minerales. Sirve para cochinilla, mosca blanca, isocas, nematodos, ácaros, trips y pulgones, y previene enfermedades fúngicas como las causadas por Fusarium. Contra nematodos e insectos de suelo se aplica directo al suelo en la preparación de la cama de siembra.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, foliar</th><td>Diluir al 1 %</td></tr><tr><th>Frutales, foliar</th><td>Diluir al 2 %, después de la poda</td></tr><tr><th>Pasta mineral, cicatrizante de poda</th><td>1 parte de pasta + 2 de agua, aplicada con brocha sobre el tronco y sobre las heridas de poda</td></tr><tr><th>Variante foliar enriquecida</th><td>100 litros de agua + 5 kg de pasta mineral + 100 g de sulfato de zinc</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
@@ -601,6 +652,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Fungicida y bactericida de amplio espectro. Se aplica en estado vegetativo o en llenado de grano.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Plantas jóvenes recién trasplantadas</th><td>Diluir al 25 %</td></tr><tr><th>Estados fenológicos avanzados</th><td>Aplicar puro, sin diluir</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> No se almacena. Se prepara sólo lo que se va a usar en el día, porque pierde efectividad.</p>
@@ -631,6 +683,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Fungicida, principalmente contra roya.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Desde pre-macollaje</th><td>25 %</td></tr><tr><th>Frutales jóvenes en formación, primavera</th><td>50 %</td></tr><tr><th>Frutales de más de 3 años</th><td>Puro</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> No se almacena.</p>
@@ -661,6 +714,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Fungicida, en especial para cucurbitáceas: oídio y mildiu. Aplicación foliar.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, ornamentales y frutales</th><td>Se aplica puro</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> No se almacena: se prepara sólo lo que se va a usar en el día.</p>
@@ -691,6 +745,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Preventivo de enfermedades fúngicas: oídio, mildiu y roya.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Curasemilla</th><td>Remojar las semillas en el preparado, dejar secar y sembrar</td></tr><tr><th>Presiembra</th><td>Pulverizar el suelo al 20 %</td></tr><tr><th>Posemergencia</th><td>Al 10 %, en días calurosos y húmedos. Evitar los días cálidos y secos. Con lluvias, cada 3 días.</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 15 días.</p>
@@ -721,6 +776,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Repelente de bicho moro, langosta, chinche, tucura y caracol.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Aplicación</th><td>Puro, por la tarde</td></tr><tr><th>Ataques severos</th><td>Repetir 2 o 3 días seguidos</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> 6 meses.</p>
@@ -751,6 +807,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>No se aplica al cultivo. Es la reserva desde la que se prepara el MM líquido y varios de los demás biopreparados.</p>
       
       <p class="dato"><strong>Cuánto dura:</strong> Una vez fermentado se guarda 1 a 2 años.</p>
@@ -781,6 +838,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Fuente de microorganismos locales. Sirve para revitalizar suelos degradados por manejo convencional. Para aplicarlo hay que activarlo en fase líquida.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Hortalizas, foliar (una vez activado)</th><td>Diluir al 20 %</td></tr><tr><th>Frutales, foliar (una vez activado)</th><td>Diluir al 30 %</td></tr><tr><th>Desintoxicación de suelos</th><td>Diluir al 50 %, durante la preparación de la cama de siembra</td></tr></table>
       <p class="dato"><strong>Cuánto dura:</strong> El sólido se conserva bien. Una vez activado en fase líquida, la vida útil es de 30 días.</p>
@@ -811,6 +869,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Reemplaza al suero de quesería en las demás recetas.</p>
       
       
@@ -841,6 +900,7 @@
         </section>
       </div>
 
+      
       <h3>Para qué sirve</h3><p>Ingrediente del té de compost y de varios caldos. Sola sirve como insecticida y como desinfectante.</p>
       <h3>Cómo se aplica</h3><table class="dosis"><tr><th>Insecticida (pulgones, mosca blanca)</th><td>5 % en agua</td></tr><tr><th>Mosca blanca, con mejor adherencia</th><td>5 % de lejía + 1 kg de harina de trigo</td></tr><tr><th>Desinfectante</th><td>Diluir al 10 %</td></tr></table>
       
@@ -864,13 +924,13 @@
   <table><tr><th>Polilla de la col<br><em>Plutella xylostella</em></th><td>Biorepelente picante</td></tr><tr><th>Polilla del tomate<br><em>Tuta absoluta</em></th><td>Biorepelente picante, Caldo mineral caliente (sulfocálcico)</td></tr><tr><th>Mosca de la cebolla<br><em>Delia antiqua y Delia platura</em></th><td>Biorepelente picante, Caldo mineral caliente (sulfocálcico)</td></tr><tr><th>Pulgones<br><em>Varias especies, familia Aphididae</em></th><td>Bioestimulante de ortiga, consuelda y cola de caballo, Biorepelente picante, Extracto botánico de ajo, ají y pimienta, Lejía de ceniza, Caldo de ceniza, Caldo mineral caliente (sulfocálcico)</td></tr><tr><th>Trips<br><em>Familia Thripidae</em></th><td>Caldo mineral caliente (sulfocálcico), Biorepelente picante</td></tr><tr><th>Mosca blanca<br><em>Bemisia tabaci</em></th><td>Lejía de ceniza, Extracto botánico de ajo, ají y pimienta, Caldo mineral caliente (sulfocálcico), Caldo de ceniza</td></tr><tr><th>Arañuela roja<br><em>Tetranychus urticae</em></th><td>Bioestimulante de ortiga, consuelda y cola de caballo, Biorepelente picante, Extracto botánico de ajo, ají y pimienta, Caldo mineral caliente (sulfocálcico)</td></tr></table>
 
   <h1 class="seccion">Bibliografía</h1>
-  <ul class=""><li>Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.</li><li>Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón.</li><li>Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</li><li>Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</li><li>Barrionuevo, M. E.; Flores, L. B.; Dussi, M. C. Prácticas agroecológicas: preparación y uso de bocashi. INTA CR Patagonia Norte y FCA Universidad Nacional del Comahue.</li><li>Sánchez Miranda, M. (2025). Biopreparado Supermagro: análisis y comparación de distintos casos de estudio. INTA IPAF Región Pampeana.</li><li>Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP.</li></ul>
+  <ul class=""><li>Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.</li><li>Venegas Jaque, P.; Cardozo, A. G.; Sisón Cáceres, L. A.; Gasparetti, A. F. (2021). Elaboración de biopreparados a partir de microorganismos del bosque para la producción frutihortícola de la Comarca Andina del paralelo 42°. Comunicación Técnica N.º 91, INTA AER El Bolsón.</li><li>Cecchini, M. V.; Arancio, D.; Gramaglia, C. y otros (2023). Guía de elaboración de biopreparados agroecológicos de Patagonia Norte II. INTA EEA Valle Inferior, Material Didáctico N.º 11.</li><li>Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.</li><li>Barrionuevo, M. E.; Flores, L. B.; Dussi, M. C. Prácticas agroecológicas: preparación y uso de bocashi. INTA CR Patagonia Norte y FCA Universidad Nacional del Comahue.</li><li>Sánchez Miranda, M. (2025). Biopreparado Supermagro: análisis y comparación de distintos casos de estudio. INTA IPAF Región Pampeana.</li><li>Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP.</li><li>IFAB (2026). Compost de la Soil Food Web y extractos de compost: informe de trabajo, versión 1. Documento interno, revisión de la literatura revisada por pares y del material del método.</li><li>Ingham, E. Soil Food Web School, curso Foundation: BioComplete Compost, clases 3 y 5. Material del método, no revisado por pares.</li><li>USDA, Programa Orgánico Nacional de EE.UU. (7 CFR 205.203): compost en hilera, entre 55 y 77 °C durante 15 días con 5 volteos como mínimo.</li></ul>
 
   <h3>Lo que falta</h3>
   <ul class=""><li>Compatibilidad de cada preparado con el pliego ECOMARCAL: ya hay un borrador del Protocolo de Elaboración de Bioinsumos del SPG (versión agosto de 2026), todavía en discusión en el Consejo de Garantía y la Asamblea General. Hasta que se apruebe no se puede marcar ficha por ficha qué admite el sello.</li><li>Todo bioinsumo de elaboración casera necesita autorización previa del Consejo de Garantía, que evalúa origen de las materias primas, modo de preparación, conservación, forma de uso y período de carencia.</li><li>Los preparados con cobre (bordelés y Visosa) están marcados como &#x27;a consultar&#x27;: el Anexo III de la Resolución 374/2016 los admite, pero con un tope de 6 kg de cobre por hectárea y por año, prescripción y zonas de amortiguación.</li><li>Falta el texto completo del Anexo II de la Resolución 374/2016 (abonos y nutrientes permitidos). Sin eso quedan sin confirmar los sulfatos de zinc, magnesio y potasio, el bórax y la harina de roca que usan el Súpermagro, el caldo Visosa, el sulfocálcico enriquecido y el fertilizante rico en fósforo.</li><li>Volúmenes por superficie: la bibliografía regional ajustó las diluciones, pero reconoce que cuánto aplicar por hectárea todavía no está definido.</li><li>Fotos propias de cada etapa de elaboración.</li></ul>
 
   <p class="fuente">IFAB (CONICET / INTA El Bolsón) · Comarca Andina del Paralelo 42 ·
-  29 de octubre de 2026. Las condiciones de uso y las limitaciones de las recomendaciones están
+  30 de octubre de 2026. Las condiciones de uso y las limitaciones de las recomendaciones están
   en los términos de la app.</p>
 </div>
 

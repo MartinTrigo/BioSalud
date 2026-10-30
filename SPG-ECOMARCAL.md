@@ -67,7 +67,7 @@ De la lista del acuerdo de Abonos, tal cual:
   con Una Salud y conviene que quede escrito con fundamento, no como advertencia
   suelta.
 
-**Ninguna de las 24 recetas de la app usa algo de esta lista.** Así que
+**Ninguna de las 25 recetas de la app usa algo de esta lista.** Así que
 informarlas es contenido nuevo —qué no entra y por qué—, no una corrección de
 fichas existentes.
 
@@ -78,6 +78,7 @@ fichas existentes.
 | Ficha | Encuadre | Estado |
 |---|---|---|
 | MM sólido, MM líquido, Súpermagro | Nombrados en el acuerdo de Abonos | Encuadrados, falta la autorización formal |
+| Compost termófilo | Grupo compost, y es el tratamiento que el 4.1 exige al estiércol: la receta pide 15 días arriba de 55 °C con 5 volteos y tope de 77 °C, más que los 3 días del mínimo | Encuadrado. Excluye por escrito los estiércoles de la lista de no permitidos |
 | Bocashi | Grupo 2 (compost), con ficha propia en el protocolo | Encuadrado |
 | Caldo mineral caliente (sulfocálcico) | Anexo III A.1.6, polisulfuro de calcio | Encuadrado |
 | Caldo de bicarbonato de sodio | Anexo III A.1.7 | Encuadrado |
@@ -200,8 +201,10 @@ Cosas de edición, para antes de que vaya a Asamblea:
 ## Qué puede aportar la app al documento
 
 El documento tiene 6 fichas técnicas y un cuadro resumen de 6 bioinsumos. La app
-tiene **24 fichas redactadas, con fuente del INTA en cada una** (F1 a F7, siete
-publicaciones, cinco de ellas de la Patagonia Norte). Falta sentarse a
+tiene **25 fichas redactadas**: 24 con fuente del INTA (F1 a F7, siete
+publicaciones, cinco de ellas de la Patagonia Norte) y la de compost termófilo,
+que sale del informe del IFAB y de la regla del Programa Orgánico de EE.UU.
+(F8 a F10). Falta sentarse a
 emparejarlas, pero el apartado 5 y el Anexo II del protocolo pueden salir casi
 enteros de `docs/datos/biopreparados.json`, incluidas las dos fichas que quedaron
 pendientes, lejía y bio lana, que la app ya tiene escritas.

@@ -308,6 +308,7 @@ window.Wiki = (function () {
       ${fotos(f.fotos)}
 
       ${bloque("Qué lleva", lista(f.ingredientes))}
+      ${f.materiales ? bloque("Con qué se arma", materiales(f.materiales)) : ""}
       ${bloque("Cómo se prepara", pasos(f.preparacion))}
       ${f.uso ? bloque("Para qué sirve", `<p>${esc(f.uso)}</p>`) : ""}
 
@@ -418,6 +419,17 @@ window.Wiki = (function () {
 
   const lista = (items) =>
     `<ul class="lista">${(items || []).map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
+
+  // Para las recetas que se arman con lo que haya en la zona: en vez de una lista
+  // cerrada, grupos con su proporción y opciones para elegir de cada uno.
+  const materiales = (m) => `
+    ${m.intro ? `<p>${esc(m.intro)}</p>` : ""}
+    ${(m.grupos || []).map((g) => `
+      <h3 class="material__grupo">${esc(g.nombre)}${g.proporcion
+        ? ` <span class="material__proporcion">${esc(g.proporcion)}</span>` : ""}</h3>
+      ${g.para_que ? `<p class="nota">${esc(g.para_que)}</p>` : ""}
+      ${lista(g.opciones)}`).join("")}
+    ${m.nota ? `<p class="nota nota--pie">${esc(m.nota)}</p>` : ""}`;
 
   const pasos = (items) =>
     `<ol class="pasos">${(items || []).map((i) => `<li>${esc(i)}</li>`).join("")}</ol>`;

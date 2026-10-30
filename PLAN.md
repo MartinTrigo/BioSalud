@@ -41,7 +41,7 @@ app y cómo se usa, en el [README](README.md).
 | **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | ✅ hecha |
 | **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 casi — servicio publicado, alta de chacras desde el menú, canje arreglado y términos mostrados y registrados; falta activar el primer teléfono |
 | **5 · Monitoreo** | Registro a campo + motor de sugerencia + aviso al técnico + plan de tratamiento | ✅ hecha — el tratamiento lo arma el productor y el técnico lo comenta en la planilla; falta que el comentario vuelva a la app |
-| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 24 biopreparados, 7 plagas y los no permitidos del sello; faltan las enfermedades fúngicas y las fotos propias |
+| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 25 biopreparados, 7 plagas y los no permitidos del sello; faltan las enfermedades fúngicas y las fotos propias |
 | **7 · Avisos** | Correo automático de aplicaciones pendientes | pendiente |
 | **8 · Piloto** | Prueba con 2 chacras, ajustes y despliegue a las 10 | pendiente |
 
@@ -77,7 +77,11 @@ si hay tiempo para redactar fichas.
   discusión en el Consejo de Garantía y la Asamblea, así que la app dice que es
   un borrador en vez de afirmar que algo está permitido.
 - **Bioinsumos del INTA.** Las 24 fichas están cargadas, cada una con su fuente
-  (siete publicaciones, cinco de la Patagonia Norte).
+  (siete publicaciones, cinco de la Patagonia Norte). La 25, compost termófilo
+  (30/10/2026), sale del informe de trabajo del IFAB sobre el compost de la Soil
+  Food Web y de la regla del Programa Orgánico de EE.UU.: no hay una receta del
+  INTA regional que lo cubra. Es la primera ficha con **materiales a elección**
+  (campo `materiales`): tres grupos con su proporción y opciones de la zona.
 - **Correo de contacto del equipo.** Es `trigo.martin@inta.gob.ar`. Falta
   cablearlo al botón, que es trabajo de la fase 5.
 

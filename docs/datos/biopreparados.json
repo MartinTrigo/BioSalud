@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-26",
+  "version": "2026-10-30",
   "nota": "Fichas redactadas por el equipo del IFAB a partir de la bibliografía citada en cada una. No son copia de las fuentes: cada texto está reescrito y cada receta indica de dónde sale, para que el productor pueda ir al original.",
   "fuentes": {
     "F1": "Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.",
@@ -8,7 +8,10 @@
     "F4": "Arriaga Jara, S. y otros (2025). Guía de elaboración de biopreparados. INTA EEA Hilario Ascasubi.",
     "F5": "Barrionuevo, M. E.; Flores, L. B.; Dussi, M. C. Prácticas agroecológicas: preparación y uso de bocashi. INTA CR Patagonia Norte y FCA Universidad Nacional del Comahue.",
     "F6": "Sánchez Miranda, M. (2025). Biopreparado Supermagro: análisis y comparación de distintos casos de estudio. INTA IPAF Región Pampeana.",
-    "F7": "Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP."
+    "F7": "Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP.",
+    "F8": "IFAB (2026). Compost de la Soil Food Web y extractos de compost: informe de trabajo, versión 1. Documento interno, revisión de la literatura revisada por pares y del material del método.",
+    "F9": "Ingham, E. Soil Food Web School, curso Foundation: BioComplete Compost, clases 3 y 5. Material del método, no revisado por pares.",
+    "F10": "USDA, Programa Orgánico Nacional de EE.UU. (7 CFR 205.203): compost en hilera, entre 55 y 77 °C durante 15 días con 5 volteos como mínimo."
   },
   "categorias": [
     {
@@ -524,6 +527,134 @@
         }
       ],
       "fuente": [
+        "F4"
+      ]
+    },
+    {
+      "id": "compost-termofilo",
+      "nombre": "Compost termófilo",
+      "categoria": "abonos",
+      "etiquetas": [
+        "compost en caliente",
+        "sólido",
+        "higieniza el estiércol",
+        "materia orgánica"
+      ],
+      "resumen": "Compost en caliente, armado por lotes y manejado por la temperatura de cada día. Bien hecho elimina semillas de malezas y patógenos en pocas semanas, y es la forma en que el protocolo del SPG admite el estiércol. Se arma con lo que haya en la chacra y alrededor.",
+      "sugerencia": {
+        "metodo": "Al suelo",
+        "dosis": "3 kg por metro cuadrado"
+      },
+      "rinde": "Una pila de 1 m³ da unos 500 litros de compost",
+      "tiempo": "15 a 21 días de fase caliente y 1 a 3 meses de maduración",
+      "ingredientes": [
+        "Para una pila de 1 m³, que es lo mínimo para que caliente:",
+        "100 litros de material alto en nitrógeno (unos 10 baldes)",
+        "300 litros de material verde (unos 30 baldes)",
+        "600 litros de material leñoso (unos 60 baldes)",
+        "Agua sin cloro",
+        "Un termómetro de compost con vástago de 60 cm a 1 m: es lo único que hay que comprar",
+        "Lona o media sombra para tapar, horquilla y pala",
+        "Opcional: un balde de compost maduro, bocashi o mantillo de bosque nativo como inóculo"
+      ],
+      "materiales": {
+        "intro": "Lo que decide el resultado es la proporción entre tres grupos, no el material exacto. Elegir uno o varios de cada grupo, según lo que haya, y respetar los volúmenes. Cuanto más variados los materiales, más variada la vida del compost.",
+        "grupos": [
+          {
+            "nombre": "Alto en nitrógeno",
+            "proporcion": "10 %",
+            "para_que": "Es el arranque: dispara la actividad de los microorganismos y el calor. Sin suficiente, la pila no pasa de 55 °C.",
+            "opciones": [
+              "Guano de gallina del gallinero propio o de una granja agroecológica, no de galpones de producción intensiva",
+              "Estiércol fresco de oveja, cabra, vaca o caballo, de la propia chacra o de un campo de pastoreo",
+              "Bagazo de cervecería artesanal, recién salido: fermenta rápido, usarlo en el día",
+              "Lupino, alfalfa, vicia o trébol cortados en verde, antes de florecer",
+              "Ortiga y brotes tiernos de primavera",
+              "Borra de café de los bares del pueblo"
+            ]
+          },
+          {
+            "nombre": "Verde",
+            "proporcion": "30 %",
+            "para_que": "Sostiene la temperatura y alimenta a las bacterias.",
+            "opciones": [
+              "Pasto recién cortado y desmalezado sin semilla",
+              "Restos de huerta y de cosecha: hojas de repollo, plantas de haba y arveja ya cosechadas",
+              "Guías y hojas de lúpulo después de la cosecha, picadas",
+              "Descarte de fruta fina y de dulcería (frambuesa, frutilla, cereza, grosella), en capas finas porque es muy húmedo",
+              "Consuelda, y hojas verdes de poda de sauce o álamo",
+              "Restos de cocina vegetales"
+            ]
+          },
+          {
+            "nombre": "Leñoso",
+            "proporcion": "60 %",
+            "para_que": "Da estructura para que entre aire y alimenta a los hongos. Es lo que más volumen ocupa: conviene juntarlo con tiempo.",
+            "opciones": [
+              "Chip de poda de frutales, rosa mosqueta, retamo sin vainas, sauce o álamo, con ramas de menos de 2 cm",
+              "Hojarasca de otoño de álamo, sauce, roble o frutales",
+              "Paja de trigo, avena o centeno, o fardos viejos de origen conocido",
+              "Aserrín y viruta de aserradero de pino o ciprés sin tratar, hasta un tercio del leñoso porque compacta",
+              "Acículas de pino, hasta un cuarto del leñoso porque se degradan lento",
+              "Cartón corrugado sin tinta de color ni cinta, mojado y desmenuzado",
+              "Cañas secas de maíz o girasol, picadas"
+            ]
+          }
+        ],
+        "nota": "Una misma planta cambia de grupo con la edad: los brotes de primavera son casi alto nitrógeno, la planta en crecimiento es verde y la que ya semilló o se secó pasa a leñoso. Para un compost más rápido, de unas tres semanas, se puede subir a 25 % de alto nitrógeno, 30 % de verde y 45 % de leñoso: calienta más, pero pide volteos más seguidos."
+      },
+      "preparacion": [
+        "Juntar todo el material antes de empezar: la pila se arma en el día. Picar lo grueso a menos de 5 cm.",
+        "Elegir un lugar reparado del viento, con algo de sombra, sin charcos y cerca del agua. Marcar una base de 1,5 m de ancho; el largo depende de cuánto material haya.",
+        "Armar en capas de 10 a 15 cm alternando leñoso, verde y alto en nitrógeno, empezando y terminando con leñoso. Regar cada capa.",
+        "Ajustar la humedad al 50 %: al apretar un puñado tienen que caer unas gotas, no un chorro.",
+        "Llegar a 1,2 a 1,5 m de alto y tapar con la lona o la media sombra, para que no la enfríen ni la laven el viento y la lluvia.",
+        "Medir todos los días la temperatura del centro, a la misma hora y en tres puntos. Anotar la fecha, la temperatura y cada volteo.",
+        "A los 2 o 3 días tiene que pasar los 55 °C. Si no llega, faltó alto en nitrógeno o agua, o la pila es chica: desarmar y corregir.",
+        "Cuando el centro lleva 3 días seguidos arriba de 55 °C, voltear: lo de afuera va al centro y el centro afuera. Regar lo que esté seco.",
+        "Si pasa de 71 °C, no voltear antes de tiempo: abrir chimeneas con un palo para que entre aire. No dejar que pase de 77 °C.",
+        "Repetir hasta sumar 15 días por encima de 55 °C con al menos 5 volteos. Si después de un volteo no vuelve a pasar los 55 °C en un día, faltó alto en nitrógeno: sumarlo y voltear.",
+        "Cuando después de un volteo ya no vuelve a calentar, terminó la fase caliente. Dejar madurar tapado de 1 a 3 meses, con un volteo por mes, hasta que huela a tierra de bosque y no se reconozcan los materiales."
+      ],
+      "uso": "Es la enmienda de base de la chacra: aporta materia orgánica estable, nutrientes de liberación lenta y vida al suelo. El calor de la fase caliente elimina semillas de malezas y patógenos, y es lo que el protocolo del SPG exige para usar estiércol: 3 días como mínimo entre 55 y 77 °C. Los 15 días con 5 volteos de esta receta son el estándar para pilas volteadas al aire libre y cubren ese mínimo de sobra. También es la materia prima del té de compost y el vehículo para incorporar MM sólido al suelo.",
+      "dosis": [
+        {
+          "cuando": "Preparación de canteros",
+          "cuanto": "2 a 4 kg por metro cuadrado (una capa de 1 a 2 cm) por temporada, incorporado en superficie"
+        },
+        {
+          "cuando": "Al trasplante",
+          "cuanto": "Un puñado en el hoyo, mezclado con la tierra"
+        },
+        {
+          "cuando": "Almácigos",
+          "cuanto": "Hasta un cuarto del sustrato, bien maduro y tamizado"
+        },
+        {
+          "cuando": "Frutales y fruta fina",
+          "cuanto": "5 a 10 kg por planta en la proyección de la copa, a fin de invierno"
+        },
+        {
+          "cuando": "Con MM sólido",
+          "cuanto": "1 kg de MM cada 100 kg de compost, mezclado al momento de aplicar"
+        }
+      ],
+      "revisar": "Las dosis de aplicación son las habituales en extensión y no salen de las fuentes citadas, que describen la elaboración. Ajustarlas con el equipo técnico según el suelo y el cultivo.",
+      "conservacion": "Tapado, con circulación de aire y alrededor de 30 % de humedad. Su vida es más variada cerca de los 6 meses; con los años se estabiliza y se parece cada vez más a la tierra de superficie.",
+      "cuidados": [
+        "Llevar la planilla de temperatura y volteos. Sin ella no hay cómo mostrar que el estiércol se trató, que es lo que pide el protocolo del SPG.",
+        "Olor a podrido o a amoníaco, color negro o capas pegoteadas: falta aire o sobra agua o nitrógeno. Voltear y sumar leñoso.",
+        "Una capa blanquecina, como ceniza, adentro de la pila: está seca. Regar al voltear.",
+        "Pasto o fardos de campos tratados con herbicidas hormonales (picloram, clopiralid, aminopiralid): el residuo atraviesa el compost y daña tomate, papa, haba y arveja. Preguntar siempre el origen.",
+        "No va: carne, huesos, grasa ni lácteos, que atraen perros, zorros y roedores; estiércol de perro o gato, por zoonosis, que el sello excluye; estiércol de feedlot, del hipódromo o de animales recién tratados con antiparasitarios o antibióticos; madera tratada, pintada o aglomerado.",
+        "Si la fase caliente no se completó, tratarlo como estiércol crudo: al suelo, lejos de lo que se come crudo, y nunca sobre frutilla o lechuga cerca de la cosecha.",
+        "En el invierno de la Comarca cuesta que caliente: armarla entre la primavera y el otoño, o hacerla más grande y bien tapada.",
+        "Usar barbijo al voltear material seco, por el polvo, y guantes."
+      ],
+      "fuente": [
+        "F8",
+        "F9",
+        "F10",
         "F4"
       ]
     },

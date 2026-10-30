@@ -82,6 +82,20 @@ def ficha_html(f, categorias, fuentes, plagas):
             f"<tr><th>{e(d['cuando'])}</th><td>{e(d['cuanto'])}</td></tr>" for d in f["dosis"])
         dosis = f'<h3>Cómo se aplica</h3><table class="dosis">{filas}</table>'
 
+    materiales = ""
+    if f.get("materiales"):
+        m = f["materiales"]
+        grupos = "".join(
+            f'<h4>{e(g["nombre"])} · {e(g.get("proporcion", ""))}</h4>'
+            + (f'<p class="dato">{e(g["para_que"])}</p>' if g.get("para_que") else "")
+            + lista(g.get("opciones"))
+            for g in m.get("grupos", []))
+        materiales = (
+            "<h3>Con qué se arma</h3>"
+            + (f'<p>{e(m["intro"])}</p>' if m.get("intro") else "")
+            + f'<div class="materiales">{grupos}</div>'
+            + (f'<p class="dato">{e(m["nota"])}</p>' if m.get("nota") else ""))
+
     # Contra qué se usa, calculado desde las fichas de plagas.
     contra = [p["nombre"] for p in plagas.get("fichas", [])
               if f["id"] in (p.get("tratamientos") or [])]
@@ -110,6 +124,7 @@ def ficha_html(f, categorias, fuentes, plagas):
         </section>
       </div>
 
+      {materiales}
       {f'<h3>Para qué sirve</h3><p>{e(f["uso"])}</p>' if f.get('uso') else ''}
       {dosis}
       {f'<p class="dato"><strong>Cuánto dura:</strong> {e(f["conservacion"])}</p>' if f.get('conservacion') else ''}
@@ -230,6 +245,11 @@ def main():
     ul, ol { margin: 0; padding-left: 5mm; }
     li { margin-bottom: 1.2mm; }
     p { margin: 0 0 2mm; }
+
+    /* Cada grupo de materiales es una columna: título, para qué y opciones. */
+    .materiales h4 { font-size: 9.5pt; margin: 0 0 1mm; color: #3c4a42; }
+    .materiales { display: grid; grid-template-columns: repeat(3, 1fr); grid-auto-flow: column;
+                  grid-template-rows: auto auto auto; gap: 1mm 5mm; font-size: 9pt; }
 
     .dos-columnas { display: flex; gap: 7mm; }
     .dos-columnas section { flex: 1; }

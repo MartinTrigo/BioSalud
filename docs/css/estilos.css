@@ -542,6 +542,17 @@ a.boton { text-decoration: none; }
 .lista li, .pasos li { margin-bottom: 8px; }
 .pasos li { padding-left: 4px; }
 
+.material__grupo { font-size: 16px; margin: 18px 0 0; }
+.material__proporcion {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--violeta);
+  background: var(--violeta-suave);
+  border-radius: 12px;
+  padding: 1px 8px;
+  margin-left: 4px;
+}
+
 .umbrales { margin: 8px 0 0; }
 .umbrales dt { font-weight: 600; font-size: 15px; }
 .umbrales dd { margin: 2px 0 12px; color: var(--texto-suave); }
