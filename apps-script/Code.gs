@@ -123,11 +123,19 @@ var HOJAS = {
 
   // Fase 3 — lo que se aplicó de verdad. Es el corazón del seguimiento: la
   // fecha programada y la real van juntas para poder ver el desvío.
+  //
+  // Las seis últimas columnas llegaron con las aplicaciones fuera del plan
+  // (noviembre de 2026). Van DESPUÉS de "Recibido" a propósito: las planillas
+  // de las chacras ya tienen filas, y asegurarEncabezados solo agrega columnas
+  // al final; meterlas en el medio desalinearía todo lo cargado. Las filas que
+  // vienen del plan las dejan vacías, salvo Origen.
   aplicaciones: {
     nombre: "Aplicaciones",
     encabezados: ["Id", "Plan Id", "Fecha programada", "Fecha aplicada", "Producto",
                   "Dosis", "Método", "Sector", "Superficie (m²)", "Volumen aplicado",
-                  "Operador", "Clima", "Estado", "Observaciones", "Cargado por", "Recibido"],
+                  "Operador", "Clima", "Estado", "Observaciones", "Cargado por", "Recibido",
+                  "Origen", "Tipo de producto", "Bancal", "Motivo", "Problema Id",
+                  "Monitoreo previo Id"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.plan_id), comoTexto(d.fecha_programada),
@@ -135,7 +143,10 @@ var HOJAS = {
               comoTexto(d.metodo), comoTexto(d.sector), d.superficie || "",
               comoTexto(d.volumen), comoTexto(d.operador), comoTexto(d.clima),
               comoTexto(d.estado) || "Aplicada", comoTexto(d.observaciones),
-              comoTexto(r.dispositivo), new Date()];
+              comoTexto(r.dispositivo), new Date(),
+              comoTexto(d.origen) || "Del plan", comoTexto(d.tipo_producto),
+              comoTexto(d.bancal), comoTexto(d.motivo), comoTexto(d.problema_id),
+              comoTexto(d.monitoreo_id)];
     },
   },
 
@@ -161,14 +172,19 @@ var HOJAS = {
     nombre: "Monitoreos",
     encabezados: ["Id", "Fecha", "Sector", "Bancal", "Cultivo", "Qué se observó",
                   "Tipo", "Incidencia (%)", "Severidad", "Plantas revisadas",
-                  "Avisó al técnico", "Observaciones", "Cargado por", "Recibido"],
+                  "Avisó al técnico", "Observaciones", "Cargado por", "Recibido",
+                  // Noviembre de 2026: el id del primer monitoreo del problema
+                  // cuando este es un control de seguimiento. Al final por la
+                  // misma razón que en Aplicaciones.
+                  "Seguimiento de"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.fecha), comoTexto(d.sector), comoTexto(d.bancal),
               comoTexto(d.cultivo), comoTexto(d.deteccion), comoTexto(d.tipo),
               d.incidencia === undefined ? "" : d.incidencia, comoTexto(d.severidad),
               d.revisadas || "", d.aviso_tecnico ? "SÍ" : "NO",
-              comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date()];
+              comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date(),
+              comoTexto(d.problema_id)];
     },
   },
 

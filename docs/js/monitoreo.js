@@ -121,6 +121,7 @@ window.Monitoreo = (function () {
   let config = null;
   let registros = [];
   let tratamientos = [];   // los planes de tratamiento ya armados
+  let aplicaciones = [];   // para la línea de tiempo de cada problema
   let destino = null;
   let irA = null;
   let errores = {};
@@ -149,11 +150,21 @@ window.Monitoreo = (function () {
         .sort((a, b) => String(b.creado).localeCompare(String(a.creado)));
       tratamientos = (await window.BioDB.todos("tratamientos"))
         .sort((a, b) => String(b.creado).localeCompare(String(a.creado)));
+      aplicaciones = await window.BioDB.todos("aplicaciones");
     } catch (err) {
       destino.innerHTML = `<p class="aviso aviso--error">No se pudo abrir el monitoreo.<br><br>
         Detalle: ${esc(err.message || err)}</p>`;
       return { titulo: "Monitoreo de campo", subtitulo: "Error" };
     }
+
+    // Dos entradas desde otras pantallas:
+    //   monitoreo/ver/<id>        el resultado de un monitoreo (y su evolución)
+    //   monitoreo/seguir/<clave>  un monitoreo nuevo de un problema ya visto,
+    //                             con el qué, el sector y el bancal puestos
+    const [, accion, id] = ruta.split("/");
+    verDetalle = null;
+    if (accion === "ver" && registros.some((r) => r.id === id)) verDetalle = id;
+    if (accion === "seguir") prepararSeguimiento(id);
 
     pintar();
     return { titulo: "Monitoreo de campo", subtitulo: "Observación a campo" };
@@ -162,6 +173,23 @@ window.Monitoreo = (function () {
   const ficha = (id) => (plagas.fichas || []).find((f) => f.id === id);
   const preparado = (id) => (bio.fichas || []).find((f) => f.id === id);
   const sector = (id) => (config.sectores || []).find((s) => s.id === id) || null;
+
+  // Volver a mirar algo ya visto: el formulario viene con lo mismo que la vez
+  // anterior, y atado a ese problema. Lo que cambia —incidencia, severidad— es
+  // justamente lo que hay que volver a contar, así que eso viene vacío.
+  function prepararSeguimiento(clave) {
+    const c = window.Problemas.cadena(registros, clave);
+    const u = c[c.length - 1];
+    if (!u) return;
+    tipeado = {
+      que: u.plaga_id || "__otro",
+      otro: u.plaga_id ? "" : u.deteccion,
+      sector: u.sector_id,
+      bancal: u.bancal,
+      revisadas: u.revisadas ? String(u.revisadas) : "",
+      seguimiento: clave,
+    };
+  }
 
   function pintar() {
     const detalle = verDetalle ? registros.find((r) => r.id === verDetalle) : null;
@@ -235,6 +263,8 @@ window.Monitoreo = (function () {
           </div>
         </div>
 
+        <div id="m-zona-seguimiento"></div>
+
         <div class="fila">
           <div class="campo">
             <label for="m-bancal">Bancal <span class="ayuda">Opcional</span></label>
@@ -304,6 +334,8 @@ window.Monitoreo = (function () {
     const elegido = valor("#m-que");
     if (campoOtro) campoOtro.hidden = elegido !== "__otro";
 
+    pintarSeguimiento();
+
     const f = elegido && elegido !== "__otro" ? ficha(elegido) : null;
     if (!f) { caja.innerHTML = ""; return; }
 
@@ -313,6 +345,50 @@ window.Monitoreo = (function () {
         ${f.monitoreo && f.monitoreo.length ? `<p class="nota"><strong>Cómo se monitorea.</strong>
           ${esc(f.monitoreo.join(" "))}</p>` : ""}
         <button class="boton--peligro boton--editar" data-plaga="${esc(f.id)}">Ver la ficha completa</button>
+      </div>`;
+  }
+
+  // ¿ES LO MISMO QUE YA SE VIO?
+  //
+  // Si en ese sector ya se registró lo mismo en los últimos meses, la app lo
+  // pregunta y propone que sí: casi siempre es volver a mirar el mismo
+  // problema. Elegirlo es lo que después permite ver cómo evolucionó. Se puede
+  // decir que no, porque a veces es un brote nuevo en otra parte del sector.
+  function pintarSeguimiento() {
+    const caja = destino.querySelector("#m-zona-seguimiento");
+    if (!caja) return;
+    const anterior = caja.querySelector("#m-seguimiento");
+    const elegido = anterior ? anterior.value : tipeado.seguimiento;
+    const candidatos = window.Problemas.parecidos(registros, valor("#m-que"),
+      valor("#m-otro"), valor("#m-sector"));
+    // Uno que se pidió explícitamente (desde "volver a monitorear") se respeta
+    // aunque se haya cambiado de sector.
+    if (tipeado.seguimiento && !candidatos.some((p) => p.clave === tipeado.seguimiento)) {
+      const p = window.Problemas.lista(registros, false).find((x) => x.clave === tipeado.seguimiento);
+      if (p) candidatos.unshift(p);
+    }
+    if (!candidatos.length) { caja.innerHTML = ""; return; }
+
+    const marcado = elegido !== undefined && (elegido === "" || candidatos.some((p) => p.clave === elegido))
+      ? elegido : candidatos[0].clave;
+    const op = (p) => {
+      const u = p.ultimo;
+      const veces = p.cadena.length;
+      return `<option value="${esc(p.clave)}"${p.clave === marcado ? " selected" : ""}>Sí, sigue lo del ${
+        esc(fechaCorta(p.cadena[0].fecha))}${u.bancal ? " (bancal " + esc(u.bancal) + ")" : ""} · último: ${
+        u.incidencia !== "" && u.incidencia !== undefined ? esc(String(u.incidencia)) + " %" : "sin %"}${
+        veces > 1 ? " · " + veces + " controles" : ""}</option>`;
+    };
+
+    caja.innerHTML = `
+      <div class="campo campo--destacado">
+        <label for="m-seguimiento">¿Es el mismo problema que ya registraste acá?
+          <span class="ayuda">Si es seguimiento, la app te muestra cómo fue cambiando
+            y qué aplicaste en el medio.</span></label>
+        <select id="m-seguimiento">
+          ${candidatos.map(op).join("")}
+          <option value=""${marcado === "" ? " selected" : ""}>No, es algo nuevo</option>
+        </select>
       </div>`;
   }
 
@@ -392,6 +468,7 @@ window.Monitoreo = (function () {
         incidencia: valor("#m-incidencia").trim(),
         severidad: valor("#m-severidad"),
         observaciones: valor("#m-obs").trim(),
+        seguimiento: valor("#m-seguimiento"),
       };
       pintar();
       const primero = destino.querySelector(".mal, .campo__error");
@@ -417,6 +494,8 @@ window.Monitoreo = (function () {
       severidad: valor("#m-severidad"),
       revisadas: aNumero(valor("#m-revisadas")) || "",
       aviso_tecnico: false,
+      // Vacío si es la primera vez; si no, la clave del problema que sigue.
+      problema_id: valor("#m-seguimiento"),
       observaciones: valor("#m-obs").trim(),
       creado: new Date().toISOString(),
     };
@@ -468,6 +547,7 @@ window.Monitoreo = (function () {
     return `
       <div class="tarjeta">
         <h2>${esc(r.deteccion)}</h2>
+        ${numeroDeControl(r)}
         <p class="nota">${esc(r.sector)}${r.bancal ? ", bancal " + esc(r.bancal) : ""} ·
           ${esc(fechaCorta(r.fecha))}${r.incidencia !== "" ? " · " + esc(String(r.incidencia)) + " % de incidencia" : ""}${
           r.severidad ? " · severidad " + esc(r.severidad.toLowerCase()) : ""}</p>
@@ -476,7 +556,19 @@ window.Monitoreo = (function () {
           en pedidos aparte: si hay poca señal pueden tardar más que el registro.` : ""}</p>
       </div>
 
+      ${window.Problemas.evolucion(window.Problemas.clave(r), registros, aplicaciones, tratamientos, r.id)}
+
       ${avisoTecnico(r)}
+
+      <div class="tarjeta">
+        <h2>¿Qué hiciste o vas a hacer?</h2>
+        <p class="nota">Si ya aplicaste algo —esté o no en la lista de abajo—,
+          registralo: queda en la historia de este problema. Y en unos días volvé
+          a mirar el mismo lugar para ver si avanza o retrocede.</p>
+        <button class="boton boton--ancho" data-aplicar="${esc(r.id)}">Registrar una aplicación para esto</button>
+        <button class="boton boton--secundario boton--ancho" data-seguir="${esc(window.Problemas.clave(r))}">
+          Volver a monitorear esto</button>
+      </div>
 
       ${!f ? `<div class="tarjeta">
         <h2>Esto no está en la wiki</h2>
@@ -537,6 +629,14 @@ window.Monitoreo = (function () {
         </div>` : ""}`}
 
       <button class="boton boton--secundario boton--ancho" id="m-volver">Registrar otra cosa</button>`;
+  }
+
+  function numeroDeControl(r) {
+    const c = window.Problemas.cadena(registros, window.Problemas.clave(r));
+    if (c.length < 2) return "";
+    const n = c.findIndex((x) => x.id === r.id) + 1;
+    return `<p class="nota"><strong>${n === 1 ? "Primer registro" : "Control n.º " + n}</strong>
+      de ${c.length} sobre este problema.</p>`;
   }
 
   // El aviso al técnico va arriba de todo y con el texto ya armado: en el campo,
@@ -788,28 +888,38 @@ window.Monitoreo = (function () {
 
   // ---------- Lo ya registrado ----------
 
+  // Un renglón por problema, no por monitoreo: si los pulgones del sector A se
+  // miraron cinco veces, aparecen una vez, con el último dato y hacia dónde va.
   function historial() {
     if (!registros.length) return "";
+    const problemas = window.Problemas.lista(registros, false);
     return `
       <details class="grupo separado">
         <summary class="grupo__cab">
           <span class="grupo__icono">🔍</span>
           <span class="grupo__texto">
             <span class="grupo__nombre">Lo que registraste</span>
-            <span class="grupo__cuenta">${registros.length} ${registros.length === 1
+            <span class="grupo__cuenta">${problemas.length} ${problemas.length === 1
+              ? "problema" : "problemas"} · ${registros.length} ${registros.length === 1
               ? "monitoreo" : "monitoreos"}</span>
           </span>
           <span class="grupo__flecha" aria-hidden="true"></span>
         </summary>
         <div class="grupo__cuerpo">
           <ul class="indice">
-            ${registros.slice(0, 20).map((r) => `
+            ${problemas.slice(0, 20).map((p) => {
+              const r = p.ultimo;
+              const frase = window.Problemas.tendencia(p.cadena);
+              return `
               <li><button class="indice__item" data-ver="${esc(r.id)}">
                 <span class="indice__nombre">${esc(r.deteccion)}</span>
                 <span class="indice__cientifico">${esc(fechaCorta(r.fecha))} ·
-                  ${esc(r.sector)}${r.incidencia !== "" ? " · " + esc(String(r.incidencia)) + " %" : ""}${
+                  ${esc(r.sector)}${r.bancal ? " b." + esc(r.bancal) : ""}${r.incidencia !== "" && r.incidencia !== undefined ? " · " + esc(String(r.incidencia)) + " %" : ""}${
+                  p.cadena.length > 1 ? " · " + p.cadena.length + " controles" : ""}${
                   r.aviso_tecnico ? " · avisado" : ""}</span>
-              </button></li>`).join("")}
+                ${frase && p.cadena.length > 1 ? `<span class="indice__cientifico">${esc(frase)}</span>` : ""}
+              </button></li>`;
+            }).join("")}
           </ul>
         </div>
       </details>`;
@@ -846,6 +956,26 @@ window.Monitoreo = (function () {
 
     const guardarBtn = destino.querySelector("#m-guardar");
     if (guardarBtn) guardarBtn.onclick = guardar;
+
+    // Cambiar el sector o lo descripto cambia qué problemas anteriores se
+    // ofrecen para seguir.
+    ["#m-sector", "#m-otro"].forEach((id) => {
+      const campo = destino.querySelector(id);
+      if (campo) campo.onchange = pintarSeguimiento;
+    });
+
+    destino.querySelectorAll("[data-aplicar]").forEach((b) => {
+      b.onclick = () => irA("aplicacion/" + b.dataset.aplicar);
+    });
+
+    destino.querySelectorAll("[data-seguir]").forEach((b) => {
+      b.onclick = () => {
+        verDetalle = null; errores = {}; fotos = [];
+        prepararSeguimiento(b.dataset.seguir);
+        pintar();
+        window.scrollTo(0, 0);
+      };
+    });
 
     const volver = destino.querySelector("#m-volver");
     if (volver) volver.onclick = () => {

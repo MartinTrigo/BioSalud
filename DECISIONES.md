@@ -631,3 +631,47 @@ deja de usar la herramienta y vuelve al papel. Por eso ahora cada pantalla con
 formulario guarda lo tipeado antes de repintar: Configuración desde que ir a los
 términos borraba el establecimiento entero, y el plan y el monitoreo desde que
 apareció lo mismo al validar.
+
+---
+
+## Por qué se puede registrar una aplicación que no estaba en el plan
+
+**Decisión:** hay una sección, *Registrar aplicación*, para cualquier producto
+aplicado fuera del plan y fuera de los tratamientos sugeridos, escrito a mano y
+con su tipo (biopreparado casero, bioinsumo comercial, mineral, químico de
+síntesis, otro). Se ata, si corresponde, a un problema visto en Monitoreo.
+
+Salió de un caso real: pulgones y polilla de la col, la ficha sugería el
+extracto de ajo y ají, que no estaba hecho, y se aplicó lo que había —un
+bioinsumo comercial con Bt, *Beauveria* y *Metarhizium*, trichoderma y tierra
+de diatomeas—. Nada de eso se podía registrar, y lo que no se registra no deja
+ver después las fechas, la frecuencia ni si el problema retrocedió.
+
+**Los químicos de síntesis se aceptan y se marcan.** El sello no los admite y la
+app lo dice al elegirlo, pero no los rechaza: una app que solo acepta lo
+correcto enseña a no anotar lo otro, y el técnico pierde justo el dato que
+necesita para acompañar la transición.
+
+**No entra en el semáforo de cumplimiento**, que se mide contra lo planificado;
+**sí entra en la cuenta del cobre**, que es sobre todo lo que tocó el suelo.
+
+## Cómo se sigue un mismo problema a lo largo del tiempo
+
+**Decisión:** un monitoreo puede ser control de uno anterior. El primero de un
+problema no lleva `problema_id`; los siguientes guardan el id del primero. Un
+problema es el conjunto de monitoreos que comparten esa clave: no hay almacén
+nuevo ni migración de la base.
+
+Al registrar algo que ya se vio en el mismo sector en los últimos cuatro meses,
+la app pregunta si es lo mismo y propone que sí; desde el resultado de un
+monitoreo, *Volver a monitorear esto* trae el formulario armado. El resultado
+muestra la línea de tiempo —monitoreos y aplicaciones mezclados por fecha— y una
+frase con de cuánto a cuánto fue la incidencia.
+
+**La app muestra la evolución, no la califica.** Dice "bajó de 40 % a 15 %", no
+"el tratamiento funcionó": entre una cosa y la otra están el clima, los enemigos
+naturales y el ciclo de la plaga.
+
+**Las columnas nuevas de la planilla van al final**, después de "Recibido", por
+la misma razón que el id del sector en Config: es lo único que
+`asegurarEncabezados` agrega sin desalinear lo ya cargado.

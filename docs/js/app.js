@@ -36,6 +36,13 @@
       subtitulo: "Checklist de aplicaciones",
       listo: true,          // la atiende js/seguimiento.js
     },
+    aplicacion: {
+      icono: "💧",
+      titulo: "Registrar aplicación",
+      detalle: "Lo que aplicaste fuera del plan: urgencias, productos comprados",
+      subtitulo: "Aplicación fuera del plan",
+      listo: true,          // la atiende js/aplicacion.js
+    },
     monitoreo: {
       icono: "🔍",
       titulo: "Monitoreo de campo",
@@ -131,6 +138,12 @@
 
     if (base === "monitoreo") {
       const cabecera = await window.Monitoreo.render(vista, ruta, ir);
+      encabezado(cabecera.titulo, cabecera.subtitulo);
+      return;
+    }
+
+    if (base === "aplicacion") {
+      const cabecera = await window.Aplicacion.render(vista, ruta, ir);
       encabezado(cabecera.titulo, cabecera.subtitulo);
       return;
     }

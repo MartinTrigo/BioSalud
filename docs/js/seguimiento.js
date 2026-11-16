@@ -169,7 +169,8 @@ window.Seguimiento = (function () {
         <p class="aviso aviso--info">Todavía no hay plan cargado para la temporada
           ${esc(window.Plan.temporadaActual())}. El seguimiento sale de ahí: primero
           armá la batería de productos y después acá vas a ver qué te toca cada día.</p>
-        <button class="boton boton--ancho" data-ir="plan">Ir a Registrar Plan de Salud</button>`;
+        <button class="boton boton--ancho" data-ir="plan">Ir a Registrar Plan de Salud</button>
+        ${fueraDelPlan()}`;
       conectar();
       return;
     }
@@ -227,6 +228,8 @@ window.Seguimiento = (function () {
         </div>` : ""}
 
       ${hechas(lista)}
+
+      ${fueraDelPlan()}
 
       <button class="boton boton--secundario boton--ancho" data-ir="plan">Ver el plan de la temporada</button>`;
 
@@ -486,6 +489,30 @@ window.Seguimiento = (function () {
       </details>`;
   }
 
+  // ---------- Lo aplicado fuera del plan ----------
+  //
+  // No entra en el semáforo: el cumplimiento se mide contra lo planificado, y
+  // una aplicación de urgencia no cumple ni incumple nada. Pero sí tiene que
+  // estar a la vista acá, porque esta es la pantalla de "qué se aplicó", y
+  // sí entra en la cuenta del cobre, que es sobre todo lo que tocó el suelo.
+
+  function fueraDelPlan() {
+    const libres = registradas.filter((a) => a.origen === "Fuera del plan")
+      .sort((a, b) => String(b.fecha_aplicada).localeCompare(String(a.fecha_aplicada)) ||
+        String(b.creado).localeCompare(String(a.creado)));
+    return `
+      <div class="tarjeta">
+        <h2>Fuera del plan${libres.length ? ` <span class="grupo-agenda__cuenta">${libres.length}</span>` : ""}</h2>
+        <p class="nota">Lo que aplicaste sin que estuviera en el plan: una urgencia,
+          un producto comprado. No cuenta para el cumplimiento, pero queda registrado.</p>
+        ${libres.length ? `<ul class="agenda">${libres.slice(0, 5)
+          .map((a) => window.Aplicacion.filaLibre(a, sinEnviar)).join("")}</ul>
+          ${libres.length > 5 ? `<p class="nota">Y ${libres.length - 5} más, en Registrar aplicación.</p>` : ""}` : ""}
+        <button class="boton boton--secundario boton--ancho" data-ir="aplicacion">
+          Registrar una aplicación fuera del plan</button>
+      </div>`;
+  }
+
   // ---------- Eventos ----------
 
   function conectar() {
@@ -517,6 +544,14 @@ window.Seguimiento = (function () {
 
     destino.querySelectorAll("[data-deshacer]").forEach((b) => {
       b.onclick = () => deshacer(b.dataset.deshacer);
+    });
+
+    destino.querySelectorAll("[data-deshacer-libre]").forEach((b) => {
+      b.onclick = () => window.Aplicacion.deshacer(b.dataset.deshacerLibre, () => {
+        registradas = registradas.filter((a) => a.id !== b.dataset.deshacerLibre);
+        sinEnviar.delete(b.dataset.deshacerLibre);
+        pintar();
+      });
     });
   }
 
@@ -588,6 +623,9 @@ window.Seguimiento = (function () {
   async function actualizarCola() {
     const cola = await window.BioDB.pendientes();
     sinEnviar = new Set(cola.map((s) => s.id));
+    // Si el envío termina con el productor ya en otra pantalla, no se pinta
+    // encima de ella.
+    if (location.hash.indexOf("#/seguimiento") !== 0) return;
     pintar();
   }
 
