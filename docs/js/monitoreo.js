@@ -921,9 +921,12 @@ window.Monitoreo = (function () {
               </div>
               ${t.comentario_tecnico ? `<p class="aviso aviso--info">
                 <strong>El equipo técnico comentó:</strong> ${esc(t.comentario_tecnico)}</p>` : ""}
+              <button class="boton--peligro boton--editar" data-corregir="${esc(t.id)}">
+                Corregir o dar de baja</button>
             </li>`).join("")}
         </ul>
-        <p class="nota">Ya están en el Seguimiento, con sus fechas.</p>
+        <p class="nota">Ya están en el Seguimiento, con sus fechas. Se corrigen
+          desde Registrar Plan de Salud.</p>
       </div>`;
   }
 
@@ -1032,6 +1035,10 @@ window.Monitoreo = (function () {
 
     destino.querySelectorAll("[data-preparado]").forEach((b) => {
       b.onclick = () => { location.hash = "#/wiki/manejo/" + b.dataset.preparado; };
+    });
+
+    destino.querySelectorAll("[data-corregir]").forEach((b) => {
+      b.onclick = () => irA("plan/" + b.dataset.corregir);
     });
 
     destino.querySelectorAll("[data-armar]").forEach((b) => {

@@ -163,6 +163,30 @@ window.Seguimiento = (function () {
   // Para buscar una ocurrencia por id hay que mirar en las dos listas.
   const todas = () => agenda().concat(listosANecesidad());
 
+  // UN RENGLÓN POR APLICACIÓN, NO POR SECTOR.
+  //
+  // La agenda se calcula por sector, porque así se registra y así lo necesita
+  // la cuenta del cobre. Pero mostrarla así hacía que "biofertilizante en A, B
+  // y C" fueran tres cuadros iguales con tres botones, y la lista de una semana
+  // no entraba en la pantalla. Acá se juntan los sectores de un mismo producto
+  // y un mismo día en un solo renglón: se marca una vez, y adentro se puede
+  // destildar el sector donde no se aplicó. Por debajo sigue quedando un
+  // registro por sector, igual que antes.
+  function juntar(items, claveDe) {
+    const mapa = new Map();
+    items.forEach((o) => {
+      const k = claveDe ? claveDe(o) : o.plan.id + "|" + o.fecha;
+      if (!mapa.has(k)) {
+        mapa.set(k, { clave: k, plan: o.plan, fecha: o.fecha, aNecesidad: !!o.aNecesidad, partes: [] });
+      }
+      mapa.get(k).partes.push(o);
+    });
+    return [...mapa.values()];
+  }
+
+  const sectoresDe = (g) => (g.partes.length === 1 ? "Sector " : "Sectores ")
+    + g.partes.map((p) => p.nombreSector).join(", ");
+
   function pintar() {
     if (!renglones.length) {
       destino.innerHTML = `
@@ -180,27 +204,27 @@ window.Seguimiento = (function () {
     const lista = agenda();
     const pendientes = lista.filter((o) => !o.registro);
 
-    const atrasadas = pendientes.filter((o) => o.fecha < h);
-    const deHoy = pendientes.filter((o) => o.fecha === h);
-    const semana = pendientes.filter((o) => o.fecha > h && o.fecha <= limite);
-    const despues = pendientes.filter((o) => o.fecha > limite);
+    const atrasadas = juntar(pendientes.filter((o) => o.fecha < h));
+    const deHoy = juntar(pendientes.filter((o) => o.fecha === h));
+    const semana = juntar(pendientes.filter((o) => o.fecha > h && o.fecha <= limite));
+    const despues = juntar(pendientes.filter((o) => o.fecha > limite));
 
-    const listos = listosANecesidad();
-    const yaHoy = listos.filter((o) => o.registro).length;
+    const todosLosListos = listosANecesidad();
+    const listos = juntar(todosLosListos.filter((o) => !o.registro));
+    const yaHoy = todosLosListos.filter((o) => o.registro).length;
 
     destino.innerHTML = `
       ${semaforo(lista, h)}
 
       ${cobreAplicado()}
 
-      ${listos.length ? `
+      ${todosLosListos.length ? `
         <div class="tarjeta grupo-agenda grupo-agenda--listo">
           <h2>Listo para cuando haga falta
-            <span class="grupo-agenda__cuenta">${listos.filter((o) => !o.registro).length}</span></h2>
-          <p class="nota">Estos no tienen fecha: se preparan y se aplican cuando el
-            monitoreo lo pide, y por eso nunca figuran como atrasados. Conviene
-            tener los insumos y las herramientas listas.</p>
-          <ul class="agenda">${listos.filter((o) => !o.registro).map(fila).join("")}</ul>
+            <span class="grupo-agenda__cuenta">${listos.length}</span></h2>
+          <p class="nota">Sin fecha: se aplican cuando el monitoreo lo pide, y
+            nunca figuran como atrasados.</p>
+          <ul class="agenda">${listos.map(fila).join("")}</ul>
           ${yaHoy ? `<p class="nota">Hoy ya registraste ${yaHoy}
             ${yaHoy === 1 ? "aplicación" : "aplicaciones"} de estos.</p>` : ""}
         </div>` : ""}
@@ -231,7 +255,7 @@ window.Seguimiento = (function () {
 
       ${fueraDelPlan()}
 
-      <button class="boton boton--secundario boton--ancho" data-ir="plan">Ver el plan de la temporada</button>`;
+      <button class="boton boton--secundario boton--ancho" data-ir="plan">Ver o corregir el plan y los tratamientos</button>`;
 
     conectar();
   }
@@ -358,22 +382,24 @@ window.Seguimiento = (function () {
       </div>`;
   }
 
-  function fila(o) {
-    const abiertaAca = abierto === o.id;
+  // Cerrado, el renglón es una sola línea con el botón al costado: lo que hay
+  // que leer —qué, dónde, cuánto— y nada más. El formulario se abre debajo.
+  function fila(g) {
+    const abiertaAca = abierto === g.clave;
     return `
       <li class="agenda__item${abiertaAca ? " agenda__item--abierto" : ""}">
         <div class="agenda__cab">
-          <span class="agenda__fecha">${o.aNecesidad ? "s/f" : esc(fechaCorta(o.fecha))}</span>
+          <span class="agenda__fecha">${g.aNecesidad ? "s/f" : esc(fechaCorta(g.fecha))}</span>
           <span class="agenda__texto">
-            <strong>${esc(o.plan.producto)}</strong>
-            <span class="agenda__detalle">${esc(o.nombreSector)} · ${esc(o.plan.dosis)}
-              · ${esc(o.plan.metodo)}${o.plan.desdeMonitoreo
+            <strong>${esc(g.plan.producto)}</strong>
+            <span class="agenda__detalle">${esc(sectoresDe(g))} · ${esc(g.plan.dosis)}
+              · ${esc(g.plan.metodo)}${g.plan.desdeMonitoreo
                 ? ` · <span class="agenda__origen">sale de un monitoreo</span>` : ""}</span>
           </span>
+          ${abiertaAca ? "" : `<button class="boton boton--secundario agenda__marcar"
+            data-marcar="${esc(g.clave)}">${g.aNecesidad ? "Lo apliqué" : "Marcar"}</button>`}
         </div>
-        ${abiertaAca ? formulario(o) : `
-          <button class="boton boton--secundario boton--ancho" data-marcar="${esc(o.id)}">
-            ${o.aNecesidad ? "Registrar que lo apliqué" : "Marcar"}</button>`}
+        ${abiertaAca ? formulario(g) : ""}
       </li>`;
   }
 
@@ -388,10 +414,20 @@ window.Seguimiento = (function () {
   // viene propuesto: la fecha de hoy y el responsable de la configuración, que
   // es lo que va a ser cierto nueve de cada diez veces.
 
-  function formulario(o) {
-    const sec = sector(o.sector);
+  function formulario(g) {
+    const o = g.partes[0];
+    const sec = g.partes.length === 1 ? sector(o.sector) : null;
+    const variosSectores = g.partes.map((p) => ({ id: p.sector, nombre: p.nombreSector }));
     return `
       <div class="agenda__form">
+        ${g.partes.length > 1 ? `
+          <div class="campo">
+            <span class="campo__titulo">Dónde se aplicó
+              <span class="ayuda">Vienen todos marcados. Destildá el sector donde
+                no: queda pendiente.</span></span>
+            ${window.Util.chipsSectores(variosSectores, variosSectores.map((s) => s.id), "a-sector")}
+            ${error("sectores")}
+          </div>` : ""}
         <div class="fila">
           <div class="campo">
             <label for="a-fecha">Fecha en que se aplicó</label>
@@ -403,7 +439,7 @@ window.Seguimiento = (function () {
           </div>
           <div class="campo">
             <label for="a-volumen">Volumen aplicado
-              <span class="ayuda">Litros de caldo. Opcional.</span></label>
+              <span class="ayuda">Litros de caldo${g.partes.length > 1 ? " en cada sector" : ""}. Opcional.</span></label>
             <input id="a-volumen" type="text" inputmode="decimal" autocomplete="off"
                    value="${esc(o.plan.litros_por_aplicacion || "")}" placeholder="20">
           </div>
@@ -432,8 +468,8 @@ window.Seguimiento = (function () {
         ${sec ? `<p class="nota">Sector ${esc(sec.nombre)}, ${esc(superficie(sec.superficie))},
           ${esc(sec.cultivo || "")}.</p>` : ""}
 
-        <button class="boton boton--ancho" data-guardar="${esc(o.id)}">Se aplicó</button>
-        <button class="boton boton--secundario boton--ancho" data-no-aplico="${esc(o.id)}">
+        <button class="boton boton--ancho" data-guardar="${esc(g.clave)}">Se aplicó</button>
+        <button class="boton boton--secundario boton--ancho" data-no-aplico="${esc(g.clave)}">
           No se aplicó</button>
         <button class="boton--peligro centrado" data-cerrar="1">Cancelar</button>
       </div>`;
@@ -445,8 +481,11 @@ window.Seguimiento = (function () {
   // ---------- Lo ya registrado ----------
 
   function hechas(lista) {
-    const resueltas = lista.filter((o) => o.registro)
-      .sort((a, b) => String(b.registro.creado).localeCompare(String(a.registro.creado)));
+    // Juntas igual que la agenda: lo que se marcó de una vez en tres sectores
+    // se lee como una sola línea.
+    const resueltas = juntar(lista.filter((o) => o.registro)
+      .sort((a, b) => String(b.registro.creado).localeCompare(String(a.registro.creado))),
+      (o) => [o.plan.id, o.fecha, o.registro.estado, o.registro.fecha_aplicada].join("|"));
     if (!resueltas.length) return "";
 
     return `
@@ -462,24 +501,27 @@ window.Seguimiento = (function () {
         </summary>
         <div class="grupo__cuerpo">
           <ul class="agenda">
-            ${resueltas.map((o) => {
+            ${resueltas.map((g) => {
+              const o = g.partes[0];
               const r = o.registro;
-              const enCola = sinEnviar.has(r.id);
+              // Solo se deshace lo que todavía no salió del teléfono.
+              const enCola = g.partes.map((p) => p.registro.id).filter((id) => sinEnviar.has(id));
               return `
                 <li class="agenda__item agenda__item--hecho">
                   <div class="agenda__cab">
                     <span class="agenda__fecha">${esc(fechaCorta(r.fecha_aplicada || o.fecha))}</span>
                     <span class="agenda__texto">
                       <strong>${esc(o.plan.producto)}</strong>
-                      <span class="agenda__detalle">${esc(o.nombreSector)} ·
+                      <span class="agenda__detalle">${esc(sectoresDe(g))} ·
                         ${esc(r.estado)}${r.operador ? " · " + esc(r.operador) : ""}
                         ${r.fecha_aplicada && r.fecha_aplicada !== o.fecha
                           ? " · programada el " + esc(fechaCorta(o.fecha)) : ""}</span>
                     </span>
+                    ${enCola.length
+                      ? `<button class="boton--peligro agenda__marcar" data-deshacer="${esc(enCola.join(","))}">Deshacer</button>`
+                      : ""}
                   </div>
-                  ${enCola
-                    ? `<button class="boton--peligro centrado" data-deshacer="${esc(r.id)}">Deshacer</button>`
-                    : `<span class="agenda__subido">Ya subió a la planilla</span>`}
+                  ${enCola.length ? "" : `<span class="agenda__subido">Ya subió a la planilla</span>`}
                 </li>`;
             }).join("")}
           </ul>
@@ -564,18 +606,51 @@ window.Seguimiento = (function () {
   // cambiara, y la misma aplicación quedaba registrada dos veces.
   let guardando = false;
 
-  async function registrar(id, estado) {
+  async function registrar(clave, estado) {
     if (guardando) return;
-    const o = todas().find((x) => x.id === id);
-    if (!o) return;
-    // Ya está registrada: no se suma otra fila para la misma aplicación.
-    if (o.registro) { abierto = null; pintar(); return; }
+    // Solo lo que sigue pendiente: lo ya registrado no suma otra fila.
+    const g = juntar(todas().filter((x) => !x.registro)).find((x) => x.clave === clave);
+    if (!g) { abierto = null; pintar(); return; }
+
+    // Con un solo sector no hay fichas que mirar: es ese.
+    const marcados = [...destino.querySelectorAll(".a-sector:checked")].map((c) => c.value);
+    const partes = g.partes.length === 1 ? g.partes
+      : g.partes.filter((p) => marcados.includes(p.sector));
 
     errores = {};
     const fecha = valor("#a-fecha");
     if (estado === "Aplicada" && !fecha) errores.fecha = "Indicá la fecha en que se aplicó.";
+    if (!partes.length) errores.sectores = "Marcá al menos un sector.";
     if (Object.keys(errores).length) { pintar(); return; }
 
+    const comunes = {
+      volumen: valor("#a-volumen").trim(),
+      operador: valor("#a-operador").trim(),
+      clima: valor("#a-clima"),
+      observaciones: valor("#a-obs").trim(),
+    };
+
+    guardando = true;
+    try {
+      for (const o of partes) await registrarUna(o, estado, fecha, comunes);
+    } finally {
+      guardando = false;
+    }
+
+    abierto = null;
+    const donde = partes.length > 1 ? ` en ${partes.length} sectores` : "";
+    brindis(estado === "Aplicada"
+      ? `${g.plan.producto} marcado como aplicado${donde}`
+      : `${g.plan.producto} marcado como no aplicado${donde}`);
+    pintar();
+
+    // Si hay señal, sube sola; si no, queda en la cola.
+    window.Envio.sincronizar(true).then(() => actualizarCola());
+  }
+
+  // Un registro por sector, como siempre: así la cuenta del cobre y la planilla
+  // no cambian aunque en pantalla se marque todo junto.
+  async function registrarUna(o, estado, fecha, comunes) {
     const sec = sector(o.sector);
     const datos = {
       id: window.BioDB.nuevoId(),
@@ -591,44 +666,37 @@ window.Seguimiento = (function () {
       sector: o.nombreSector,
       sector_id: o.sector,
       superficie: sec ? sec.superficie : "",
-      volumen: valor("#a-volumen").trim(),
-      operador: valor("#a-operador").trim(),
-      clima: valor("#a-clima"),
+      volumen: comunes.volumen,
+      operador: comunes.operador,
+      clima: comunes.clima,
       estado: estado,
-      observaciones: valor("#a-obs").trim(),
+      observaciones: comunes.observaciones,
       creado: new Date().toISOString(),
     };
 
-    guardando = true;
-    try {
-      await window.BioDB.guardar("aplicaciones", datos);
-      // Con su propio id: si el envío se reintenta, la planilla no duplica la fila.
-      await window.BioDB.encolarCon(datos.id, "aplicaciones", datos);
-    } finally {
-      guardando = false;
-    }
+    await window.BioDB.guardar("aplicaciones", datos);
+    // Con su propio id: si el envío se reintenta, la planilla no duplica la fila.
+    await window.BioDB.encolarCon(datos.id, "aplicaciones", datos);
 
     registradas.push(datos);
     sinEnviar.add(datos.id);
-    abierto = null;
-    brindis(estado === "Aplicada"
-      ? `${o.plan.producto} marcado como aplicado`
-      : `${o.plan.producto} marcado como no aplicado`);
-    pintar();
-
-    // Si hay señal, sube sola; si no, queda en la cola.
-    window.Envio.sincronizar(true).then(() => actualizarCola());
   }
 
-  async function deshacer(idRegistro) {
-    const r = registradas.find((a) => a.id === idRegistro);
-    if (!r) return;
-    if (!confirm(`¿Deshacer el registro de ${r.producto} del ${fechaCorta(r.fecha_programada)}?`)) return;
+  // Llegan los ids de todos los sectores de ese renglón, separados por coma.
+  async function deshacer(ids) {
+    const lista = String(ids).split(",")
+      .map((id) => registradas.find((a) => a.id === id)).filter(Boolean);
+    if (!lista.length) return;
+    const r = lista[0];
+    const donde = lista.length > 1 ? ` en ${lista.map((a) => a.sector).join(", ")}` : "";
+    if (!confirm(`¿Deshacer el registro de ${r.producto} del ${fechaCorta(r.fecha_programada)}${donde}?`)) return;
 
-    await window.BioDB.borrar("aplicaciones", idRegistro);
-    await window.BioDB.borrar("salida", idRegistro);
-    registradas = registradas.filter((a) => a.id !== idRegistro);
-    sinEnviar.delete(idRegistro);
+    for (const a of lista) {
+      await window.BioDB.borrar("aplicaciones", a.id);
+      await window.BioDB.borrar("salida", a.id);
+      sinEnviar.delete(a.id);
+    }
+    registradas = registradas.filter((a) => !lista.includes(a));
     brindis("Registro deshecho");
     pintar();
   }

@@ -106,6 +106,9 @@ var HOJAS = {
   // Fase 2 — los renglones del plan de salud de la temporada.
   plan: {
     nombre: "Plan",
+    // Un renglón que vuelve con un id que ya está se corrige en su fila, en vez
+    // de descartarse como un reintento (ver corregirFila).
+    seCorrige: true,
     encabezados: ["Id", "Temporada", "Producto", "Categoría", "Dosis",
                   "Litros por aplicación", "Método",
                   "Sectores", "Desde", "Hasta", "Cada (días)", "Motivo",
@@ -170,6 +173,7 @@ var HOJAS = {
   // Fase 5 — lo que se ve caminando el campo.
   monitoreos: {
     nombre: "Monitoreos",
+    seCorrige: true,      // el "avisó al técnico" se marca después de subir
     encabezados: ["Id", "Fecha", "Sector", "Bancal", "Cultivo", "Qué se observó",
                   "Tipo", "Incidencia (%)", "Severidad", "Plantas revisadas",
                   "Avisó al técnico", "Observaciones", "Cargado por", "Recibido",
@@ -204,6 +208,11 @@ var HOJAS = {
   // sobre cómo se trabaja.
   tratamientos: {
     nombre: "Tratamientos",
+    seCorrige: true,
+    // Lo que escribe el técnico en la planilla no viaja desde el teléfono, así
+    // que una corrección del productor no lo puede pisar. Son posiciones dentro
+    // de la fila, contando desde cero.
+    conserva: [14, 15, 16],
     encabezados: ["Id", "Monitoreo Id", "Fecha", "Problema", "Producto", "Dosis",
                   "Método", "Sectores", "Desde", "Hasta", "Cada (días)",
                   "Origen", "Estado", "Observaciones",
@@ -828,7 +837,19 @@ function doPost(e) {
         var existentes = idsExistentes(hoja);
         var filas = [];
         porTipo[tipo].forEach(function (r) {
-          if (existentes[r.id]) return;      // reintento de algo que ya llegó
+          var ya = existentes[r.id];
+          if (ya) {
+            // Lo que se acumula (aplicaciones, fotos) no se toca: un id repetido
+            // es un reintento de algo que ya llegó. Lo que se corrige (plan,
+            // tratamientos, monitoreos) se reescribe en su misma fila. Si el id
+            // se repite dentro del mismo pedido todavía no tiene fila, y gana
+            // el primero.
+            if (def.seCorrige && typeof ya === "number") {
+              corregirFila(hoja, ya, def, r);
+              guardados++;
+            }
+            return;
+          }
           existentes[r.id] = true;
           filas.push(def.fila(r));
         });
@@ -1023,15 +1044,41 @@ function ponerEncabezados(hoja, encabezados) {
 
 // Solo se miran las últimas mil filas: alcanza para descartar un reintento y no
 // se hace más lento a medida que la planilla crece.
+//
+// Devuelve, para cada id, el número de su fila en la hoja. Quien solo quiere
+// saber si el id está lo usa como un sí o no; corregirFila lo usa para saber
+// dónde escribir.
 function idsExistentes(hoja) {
   var mapa = {};
   var ultima = hoja.getLastRow();
   if (ultima < 2) return mapa;
   var desde = Math.max(2, ultima - 1000);
-  hoja.getRange(desde, 1, ultima - desde + 1, 1).getValues().forEach(function (f) {
-    if (f[0]) mapa[f[0]] = true;
+  hoja.getRange(desde, 1, ultima - desde + 1, 1).getValues().forEach(function (f, i) {
+    if (f[0]) mapa[f[0]] = desde + i;
   });
   return mapa;
+}
+
+// UNA CORRECCIÓN PISA SU FILA, NO SUMA OTRA.
+//
+// Hasta noviembre de 2026 cualquier registro con un id ya conocido se
+// descartaba. Estaba bien para los reintentos, pero dejaba afuera tres cosas
+// reales: un renglón del plan corregido después de subir, un tratamiento
+// corregido o dado de baja, y un monitoreo al que se le marca después que se
+// avisó al técnico. El teléfono las mandaba, el servicio las ignoraba, y la
+// planilla mostraba una versión que el productor ya había cambiado.
+//
+// Las columnas de `conserva` se dejan como estaban: son las que completa el
+// equipo técnico a mano.
+function corregirFila(hoja, numero, def, r) {
+  var ancho = def.encabezados.length;
+  var rango = hoja.getRange(numero, 1, 1, ancho);
+  var anterior = rango.getValues()[0];
+  // Por las dudas: si en esa fila ya no está ese id, no se escribe nada.
+  if (String(anterior[0]) !== String(r.id)) return;
+  var nueva = def.fila(r);
+  (def.conserva || []).forEach(function (i) { nueva[i] = anterior[i]; });
+  rango.setValues([nueva]);
 }
 
 function respuesta(obj) {

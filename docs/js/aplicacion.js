@@ -126,6 +126,10 @@ window.Aplicacion = (function () {
     const sectores = config.sectores || [];
     const elegido = problemaElegido(t.para);
     const marcados = t.sectores || (elegido ? [elegido.ultimo.sector_id] : []);
+    // Viniendo de un problema, el bancal donde se vio ya viene escrito.
+    if (!t.bancales && elegido && elegido.ultimo.bancal) {
+      t.bancales = { [elegido.ultimo.sector_id]: String(elegido.ultimo.bancal) };
+    }
 
     return `
       <div class="tarjeta">
@@ -188,31 +192,20 @@ window.Aplicacion = (function () {
           </div>
         </div>
 
-        <div class="fila">
-          <div class="campo">
-            <label for="ap-fecha">Fecha en que se aplicó</label>
-            <input id="ap-fecha" type="date" class="${mal("fecha")}" value="${esc(t.fecha || hoy())}">
-            ${error("fecha")}
-          </div>
-          <div class="campo">
-            <label for="ap-bancal">Bancal <span class="ayuda">Opcional</span></label>
-            <input id="ap-bancal" type="text" autocomplete="off"
-                   value="${esc(t.bancal !== undefined ? t.bancal : (elegido ? elegido.ultimo.bancal || "" : ""))}" placeholder="3">
-          </div>
+        <div class="campo">
+          <label for="ap-fecha">Fecha en que se aplicó</label>
+          <input id="ap-fecha" type="date" class="${mal("fecha")}" value="${esc(t.fecha || hoy())}">
+          ${error("fecha")}
         </div>
 
         <div class="campo">
-          <label>Sectores donde se aplicó</label>
-          <ul class="opciones">
-            ${sectores.map((s) => `<li>
-              <label class="opcion">
-                <input type="checkbox" class="ap-sector" value="${esc(s.id)}"${
-                  marcados.includes(s.id) ? " checked" : ""}>
-                <span><strong>${esc(s.nombre)}</strong> — ${esc(superficie(s.superficie))},
-                  ${esc(s.cultivo || "")}</span>
-              </label></li>`).join("")}
-          </ul>
+          <span class="campo__titulo">¿Dónde?
+            <span class="ayuda">Tocá el o los sectores. Si fue solo en algunos
+              bancales, escribilos al lado; vacío quiere decir todo el sector.</span></span>
+          ${window.Util.chipsSectores(sectores, marcados, "ap-sector")}
           ${error("sectores")}
+          <div id="ap-zona-bancales"></div>
+          ${error("bancales")}
         </div>
 
         <div class="fila">
@@ -378,14 +371,55 @@ window.Aplicacion = (function () {
       dosis: valor("#ap-dosis").trim(),
       metodo: valor("#ap-metodo"),
       fecha: valor("#ap-fecha"),
-      bancal: valor("#ap-bancal").trim(),
       sectores: [...destino.querySelectorAll(".ap-sector:checked")].map((c) => c.value),
+      bancales: leerBancales(),
       volumen: valor("#ap-volumen").trim(),
       clima: valor("#ap-clima"),
       operador: valor("#ap-operador").trim(),
       observaciones: valor("#ap-obs").trim(),
     };
   }
+
+  // ---------- Sectores y bancales ----------
+  //
+  // POR QUÉ ASÍ
+  //
+  // Muchas veces no se aplica en el sector entero: solo en los bancales 1, 4 y
+  // 6 donde están las coles, o en el único bancal enfermo. Antes había un solo
+  // campo "Bancal" para todos los sectores juntos, y los sectores eran una
+  // lista larga de casillas. Ahora los sectores son fichas que entran en una
+  // línea, y por cada sector tocado aparece un renglón corto para escribir los
+  // bancales. No hay nada que tildar bancal por bancal: se escribe "1, 4, 6" o
+  // "2-5" y listo. Lo que no se toca no ocupa lugar.
+
+  // Lo que hay escrito ahora, por sector. Incluye lo de sectores destildados,
+  // para que volver a tocar la ficha no obligue a escribir de nuevo.
+  function leerBancales() {
+    const escritos = Object.assign({}, tipeado.bancales || {});
+    destino.querySelectorAll(".ap-bancales").forEach((c) => { escritos[c.dataset.sector] = c.value.trim(); });
+    return escritos;
+  }
+
+  function pintarBancales() {
+    const caja = destino.querySelector("#ap-zona-bancales");
+    if (!caja) return;
+    tipeado.bancales = leerBancales();
+    const marcados = [...destino.querySelectorAll(".ap-sector:checked")].map((c) => c.value);
+    caja.innerHTML = marcados.map((sid) => {
+      const s = sector(sid) || { nombre: "?" };
+      return `
+        <label class="bancales">
+          <span class="bancales__sector">${esc(s.nombre)}</span>
+          <input type="text" class="ap-bancales" data-sector="${esc(sid)}" inputmode="decimal"
+                 autocomplete="off" value="${esc(tipeado.bancales[sid] || "")}"
+                 aria-label="Bancales del sector ${esc(s.nombre)}"
+                 placeholder="${s.bancales ? "los " + esc(String(s.bancales)) + " bancales" : "todo el sector"} · o 1, 4, 6">
+        </label>`;
+    }).join("");
+  }
+
+  // "A b.1, 4, 6", para la confirmación y las listas.
+  const lugarDe = (a) => a.sector + (a.bancal ? " b." + a.bancal : "");
 
   // ---------- Guardar ----------
 
@@ -404,7 +438,18 @@ window.Aplicacion = (function () {
     if (!l.metodo) errores.metodo = "Elegí cómo lo aplicaste.";
     if (!l.fecha) errores.fecha = "Falta la fecha.";
     if (l.fecha && l.fecha > hoy()) errores.fecha = "Es una fecha que todavía no llegó.";
-    if (!l.sectores.length) errores.sectores = "Marcá al menos un sector.";
+    if (!l.sectores.length) errores.sectores = "Tocá al menos un sector.";
+    // Un bancal que el sector no tiene es casi siempre un dedo de más.
+    for (const sid of l.sectores) {
+      const sec = sector(sid);
+      const b = window.Util.bancales(l.bancales[sid]);
+      const tope = sec ? Number(sec.bancales) || 0 : 0;
+      const demas = tope ? b.numeros.filter((n) => n < 1 || n > tope) : [];
+      if (demas.length) {
+        errores.bancales = `El sector ${sec.nombre} tiene ${tope} bancales: no existe el ${demas.join(", ")}.`;
+        break;
+      }
+    }
     if (l.volumen && !(aNumero(l.volumen) > 0)) errores.volumen = "Escribí solo el número de litros. Por ejemplo: 20";
 
     if (Object.keys(errores).length) {
@@ -444,7 +489,7 @@ window.Aplicacion = (function () {
         metodo: l.metodo,
         sector: sec ? sec.nombre : "",
         sector_id: sid,
-        bancal: l.bancal,
+        bancal: window.Util.bancales(l.bancales[sid]).texto,
         superficie: sec ? sec.superficie : "",
         volumen: l.volumen,
         operador: l.operador,
@@ -487,15 +532,14 @@ window.Aplicacion = (function () {
       <div class="tarjeta">
         <h2>Quedó registrado</h2>
         <p class="aviso aviso--ok">${esc(a.producto)} · ${esc(a.dosis)} · ${esc(a.metodo)}<br>
-          ${esc(window.Problemas.fechaCorta(a.fecha_aplicada))} en ${esc(lista.map((x) => x.sector).join(", "))}${
-          a.bancal ? ", bancal " + esc(a.bancal) : ""}.<br>
+          ${esc(window.Problemas.fechaCorta(a.fecha_aplicada))} en ${esc(lista.map(lugarDe).join(" · "))}.<br>
           Se sube a la planilla de tu chacra cuando haya señal.</p>
         ${leido.tipo === "sintesis" ? `<p class="nota">Quedó anotado como producto de
           síntesis. El equipo técnico lo va a ver en la planilla.</p>` : ""}
 
         <button class="boton boton--ancho" id="ap-otro">Registrar otro producto
           del mismo día</button>
-        <p class="nota">Mantiene la fecha, los sectores, el bancal y el motivo.</p>
+        <p class="nota">Mantiene la fecha, los sectores, los bancales y el motivo.</p>
         ${problema ? `<button class="boton boton--secundario boton--ancho" data-ver-problema="${
           esc(problema.ultimo.id)}">Ver cómo viene ${esc(problema.ultimo.deteccion.toLowerCase())}</button>` : ""}
         <button class="boton boton--secundario boton--ancho" data-ir="seguimiento">Ir al Seguimiento</button>
@@ -536,7 +580,7 @@ window.Aplicacion = (function () {
           <span class="agenda__fecha">${esc(window.Problemas.fechaCorta(a.fecha_aplicada))}</span>
           <span class="agenda__texto">
             <strong>${esc(a.producto)}</strong>
-            <span class="agenda__detalle">${esc([a.sector + (a.bancal ? " b." + a.bancal : ""),
+            <span class="agenda__detalle">${esc([lugarDe(a),
               a.dosis, a.metodo, a.tipo_producto].filter(Boolean).join(" · "))}${
               a.motivo ? ` · <span class="agenda__origen">${esc(a.motivo)}</span>` : ""}</span>
           </span>
@@ -573,13 +617,19 @@ window.Aplicacion = (function () {
           const casillas = [...destino.querySelectorAll(".ap-sector")];
           if (!casillas.some((c) => c.checked)) {
             casillas.forEach((c) => { c.checked = c.value === p.ultimo.sector_id; });
+            tipeado.bancales = leerBancales();
+            if (p.ultimo.bancal && !tipeado.bancales[p.ultimo.sector_id]) {
+              tipeado.bancales[p.ultimo.sector_id] = String(p.ultimo.bancal);
+            }
+            pintarBancales();
           }
-          const bancal = destino.querySelector("#ap-bancal");
-          if (bancal && !bancal.value) bancal.value = p.ultimo.bancal || "";
         }
       };
       pintarPara();
     }
+
+    destino.querySelectorAll(".ap-sector").forEach((c) => { c.onchange = pintarBancales; });
+    pintarBancales();
 
     const tipo = destino.querySelector("#ap-tipo");
     if (tipo) { tipo.onchange = pintarTipo; pintarTipo(); }
@@ -594,7 +644,7 @@ window.Aplicacion = (function () {
     if (otro) otro.onclick = () => {
       const l = guardadas.leido;
       tipeado = {
-        para: l.para, fecha: l.fecha, sectores: l.sectores, bancal: l.bancal,
+        para: l.para, fecha: l.fecha, sectores: l.sectores, bancales: l.bancales,
         clima: l.clima, operador: l.operador,
       };
       guardadas = null;

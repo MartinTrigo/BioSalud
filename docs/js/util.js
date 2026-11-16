@@ -99,5 +99,48 @@ window.Util = (function () {
     return `<span class="luz luz--${esc(c.id)}">${esc(c.nombre)}</span>`;
   }
 
-  return { esc, brindis, numero, aNumero, superficie, hoy, fechaISO, luz, colorDe };
+  // LOS SECTORES SE ELIGEN CON FICHAS, NO CON UNA LISTA.
+  //
+  // Antes cada sector era un renglón con su casilla, su superficie y su cultivo:
+  // con seis sectores eran seis renglones para decir "A y C". Las fichas entran
+  // todas en una o dos líneas y se tocan igual de fácil. La marca no depende
+  // solo del color: la elegida lleva además un tilde (ver css/estilos.css).
+  function chipsSectores(sectores, marcados, clase) {
+    const elegidos = marcados || [];
+    return `<div class="chips" role="group" aria-label="Sectores">${(sectores || []).map((s) => `
+      <label class="chip"><input type="checkbox" class="${esc(clase)}" value="${esc(s.id)}"${
+        elegidos.includes(s.id) ? " checked" : ""}><span>${esc(s.nombre)}</span></label>`).join("")}
+    </div>`;
+  }
+
+  // LOS BANCALES SE ESCRIBEN, NO SE TILDAN.
+  //
+  // "1, 4, 6", "2-5", "1 al 3 y 7": se entiende cualquiera y se devuelve
+  // siempre igual ("1, 4, 6"), para que la planilla no tenga cinco maneras de
+  // decir lo mismo. Si lo escrito no son números —hay chacras que les ponen
+  // nombre a los bancales— se deja tal cual, sin protestar.
+  function bancales(texto) {
+    const crudo = String(texto == null ? "" : texto).trim();
+    if (!crudo) return { texto: "", numeros: [] };
+
+    const piezas = crudo.toLowerCase()
+      .replace(/\s+(al|a|hasta)\s+/g, "-")
+      .replace(/\s+y\s+/g, ",")
+      .replace(/\s*-\s*/g, "-")
+      .split(/[,;\s]+/).filter(Boolean);
+
+    const numeros = new Set();
+    for (const p of piezas) {
+      const rango = /^(\d+)-(\d+)$/.exec(p);
+      if (/^\d+$/.test(p)) numeros.add(Number(p));
+      else if (rango && Number(rango[1]) <= Number(rango[2]) && Number(rango[2]) - Number(rango[1]) < 200) {
+        for (let n = Number(rango[1]); n <= Number(rango[2]); n++) numeros.add(n);
+      } else return { texto: crudo, numeros: [] };
+    }
+    const lista = [...numeros].sort((a, b) => a - b);
+    return { texto: lista.join(", "), numeros: lista };
+  }
+
+  return { esc, brindis, numero, aNumero, superficie, hoy, fechaISO, luz, colorDe,
+           chipsSectores, bancales };
 })();

@@ -45,6 +45,21 @@ window.Plan = (function () {
   let bio = null;        // datos/biopreparados.json
   let config = null;
   let renglones = [];    // lo guardado en el teléfono
+
+  // LOS TRATAMIENTOS QUE SALIERON DE UN MONITOREO TAMBIÉN SE CORRIGEN ACÁ.
+  //
+  // Se arman en Monitoreo de campo y aparecen en el Seguimiento junto con el
+  // plan, pero no había ninguna pantalla para corregirlos ni para darlos de
+  // baja: una decisión tomada con el problema delante quedaba fija toda la
+  // temporada. Son lo mismo que un renglón del plan —un producto que se repite
+  // en ciertos sectores—, así que se editan con el mismo formulario. Lo único
+  // distinto es dónde se guardan y que suben a la planilla apenas se tocan,
+  // sin esperar al botón de guardar el plan, igual que cuando se crearon.
+  let tratos = [];
+
+  const todos = () => renglones.concat(tratos);
+  const buscar = (id) => todos().find((r) => r.id === id);
+  const esTrato = (r) => tratos.indexOf(r) >= 0;
   let editando = null;   // id del renglón en edición
   let categoria = "";    // paso 1: para qué se va a usar
   let elegido = "";      // paso 2: cuál producto
@@ -116,14 +131,41 @@ window.Plan = (function () {
       renglones = (await window.BioDB.todos("planes"))
         .filter((r) => r.temporada === temporadaActual())
         .sort((a, b) => String(a.creado).localeCompare(String(b.creado)));
+      tratos = (await window.BioDB.todos("tratamientos"))
+        .filter((r) => r.temporada === temporadaActual())
+        .sort((a, b) => String(a.creado).localeCompare(String(b.creado)));
     } catch (err) {
       destino.innerHTML = `<p class="aviso aviso--error">No se pudo abrir el plan.<br><br>
         Detalle: ${esc(err.message || err)}</p>`;
       return { titulo: "Plan de Salud", subtitulo: "Error" };
     }
 
+    // plan/<id>: se llega desde el monitoreo, con ese tratamiento ya abierto
+    // para corregirlo.
+    const pedido = (ruta || "").split("/")[1];
+    const hayPedido = pedido && buscar(pedido);
+    if (hayPedido) abrirEdicion(pedido);
+
     pintar();
+    if (hayPedido) irAlFormulario();
     return { titulo: "Plan de Salud", subtitulo: "Temporada " + temporadaActual() };
+  }
+
+  function abrirEdicion(id) {
+    const r = buscar(id);
+    if (!r) return;
+    editando = r.id;
+    tipeado = {};
+    // Se reponen los dos pasos para que el formulario se abra igual que
+    // cuando se cargó.
+    categoria = r.producto_id ? (ficha(r.producto_id) || {}).categoria || "__otro" : "__otro";
+    elegido = r.producto_id || "";
+    errores = {};
+  }
+
+  function irAlFormulario() {
+    const campo = destino.querySelector("#f-categoria");
+    if (campo) campo.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
   const ficha = (id) => (bio.fichas || []).find((f) => f.id === id);
@@ -170,7 +212,7 @@ window.Plan = (function () {
   };
 
   function pintar() {
-    const enEdicion = editando ? renglones.find((r) => r.id === editando) : null;
+    const enEdicion = editando ? buscar(editando) || null : null;
     const sectores = config.sectores || [];
 
     destino.innerHTML = `
@@ -181,10 +223,17 @@ window.Plan = (function () {
 
       ${renglones.length ? `<ul class="renglones">${renglones.map(filaRenglon).join("")}</ul>` : ""}
 
+      ${tratos.length ? `
+        <h2 class="separado">Tratamientos que salieron de un monitoreo</h2>
+        <p class="nota">Los armaste en Monitoreo de campo. Están en el Seguimiento
+          junto con el plan, y acá se corrigen o se dan de baja.</p>
+        <ul class="renglones">${tratos.map(filaRenglon).join("")}</ul>` : ""}
+
       ${avisoCobre()}
 
       <div class="tarjeta">
-        <h2>${enEdicion ? "Editar renglón" : "Agregar un producto al plan"}</h2>
+        <h2>${!enEdicion ? "Agregar un producto al plan"
+          : esTrato(enEdicion) ? "Editar el tratamiento" : "Editar renglón"}</h2>
         ${selectorProducto()}
         ${(elegido || categoria === "__otro") ? formulario(enEdicion, sectores) : `<p class="nota">
           ${categoria ? "Elegí cuál para completar sus datos."
@@ -224,7 +273,7 @@ window.Plan = (function () {
       <li class="renglon">
         <div class="renglon__datos">
           <span class="renglon__producto">${esc(r.producto)}</span>
-          <span class="renglon__motivo">${esc(r.motivo || "")}</span>
+          <span class="renglon__motivo">${esc(r.problema ? "Para " + r.problema : r.motivo || "")}</span>
           <span class="renglon__detalle">${esc(detalle)}</span>
           <span class="renglon__periodo">${r.modo === "necesidad"
             ? "<strong>Ante necesidad</strong> · listo para preparar cuando haga falta"
@@ -234,7 +283,7 @@ window.Plan = (function () {
         </div>
         <div class="renglon__acciones">
           <button class="boton--peligro boton--editar" data-editar="${esc(r.id)}">Editar</button>
-          <button class="boton--peligro" data-borrar="${esc(r.id)}">Borrar</button>
+          <button class="boton--peligro" data-borrar="${esc(r.id)}">${esTrato(r) ? "Dar de baja" : "Borrar"}</button>
         </div>
       </li>`;
   }
@@ -296,7 +345,9 @@ window.Plan = (function () {
   }
 
   function avisoCobre() {
-    const filas = cobreDe(renglones);
+    // Con los tratamientos adentro: el tope es sobre todo el cobre que llega al
+    // suelo, venga del plan o de una decisión tomada después de un monitoreo.
+    const filas = cobreDe(todos());
     if (!filas.length) return "";
 
     const peor = window.Cobre.peor(filas);
@@ -590,29 +641,14 @@ window.Plan = (function () {
 
     destino.querySelectorAll("[data-editar]").forEach((b) => {
       b.onclick = () => {
-        const r = renglones.find((x) => x.id === b.dataset.editar);
-        editando = r.id;
-        tipeado = {};
-        // Se reponen los dos pasos para que el formulario se abra igual que
-        // cuando se cargó.
-        categoria = r.producto_id ? (ficha(r.producto_id) || {}).categoria || "__otro" : "__otro";
-        elegido = r.producto_id || "";
-        errores = {};
+        abrirEdicion(b.dataset.editar);
         pintar();
-        destino.querySelector("#f-categoria").scrollIntoView({ behavior: "smooth", block: "center" });
+        irAlFormulario();
       };
     });
 
     destino.querySelectorAll("[data-borrar]").forEach((b) => {
-      b.onclick = async () => {
-        const r = renglones.find((x) => x.id === b.dataset.borrar);
-        if (!confirm(`¿Borrar ${r.producto} del plan?`)) return;
-        await window.BioDB.borrar("planes", r.id);
-        renglones = renglones.filter((x) => x.id !== r.id);
-        if (editando === r.id) { editando = null; elegido = ""; }
-        brindis("Renglón borrado");
-        pintar();
-      };
+      b.onclick = () => borrarRenglon(buscar(b.dataset.borrar));
     });
 
     // La cuenta de aplicaciones y el aviso de riego se actualizan mientras se
@@ -687,7 +723,7 @@ window.Plan = (function () {
     };
 
     const filas = cobreDe(
-      renglones.filter((r) => r.id !== borrador.id).concat([borrador]))
+      todos().filter((r) => r.id !== borrador.id).concat([borrador]))
       .filter((f) => borrador.sectores.indexOf(f.sector) >= 0);
 
     if (!filas.length) {
@@ -794,9 +830,20 @@ window.Plan = (function () {
       estado: "Activo",
     };
 
-    if (editando) {
-      const i = renglones.findIndex((r) => r.id === editando);
-      renglones[i] = Object.assign({}, renglones[i], datos);
+    const viejo = editando ? buscar(editando) : null;
+    if (viejo && esTrato(viejo)) {
+      // Conserva lo que lo ata a su monitoreo (monitoreo_id, problema, origen)
+      // y sube enseguida, como cuando se creó.
+      const nuevo = Object.assign({}, viejo, datos);
+      tratos[tratos.indexOf(viejo)] = nuevo;
+      await window.BioDB.guardar("tratamientos", nuevo);
+      await window.BioDB.encolarCon(nuevo.id, "tratamientos", nuevo);
+      brindis(`Tratamiento con ${nombre} actualizado`);
+      editando = null;
+      window.Envio.sincronizar(true);
+    } else if (viejo) {
+      const i = renglones.indexOf(viejo);
+      renglones[i] = Object.assign({}, viejo, datos);
       await window.BioDB.guardar("planes", renglones[i]);
       brindis(`${nombre} actualizado`);
       editando = null;
@@ -818,9 +865,52 @@ window.Plan = (function () {
   // Plan, con su propio id, así un reintento no duplica.
   async function cerrarPlan() {
     for (const r of renglones) {
+      // Queda anotado que este renglón salió hacia la planilla: es lo que
+      // después permite avisarle la baja si se borra (ver borrarRenglon).
+      if (!r.en_planilla) {
+        r.en_planilla = true;
+        await window.BioDB.guardar("planes", r);
+      }
       await window.BioDB.encolarCon(r.id, "plan", r);
     }
     brindis(`Plan guardado · ${renglones.length} productos, ${totalOcurrencias()} aplicaciones`);
+    window.Envio.sincronizar(true);
+  }
+
+  // BORRAR TAMBIÉN SE AVISA.
+  //
+  // Antes borrar un renglón lo sacaba del teléfono y nada más: en la planilla
+  // seguía figurando como activo, y el técnico veía un plan que el productor ya
+  // había descartado. Ahora, si el renglón alguna vez salió hacia la planilla,
+  // viaja de nuevo con el estado "Dado de baja". No se borra la fila: que una
+  // decisión se haya tomado y después se haya dejado de lado también es
+  // información.
+  //
+  // Lo ya registrado como aplicado no se toca: eso pasó.
+  async function borrarRenglon(r) {
+    if (!r) return;
+    const trato = esTrato(r);
+    const pregunta = trato
+      ? `¿Dar de baja el tratamiento con ${r.producto}? Deja de aparecer en el `
+        + "Seguimiento. Lo que ya registraste como aplicado queda."
+      : `¿Borrar ${r.producto} del plan?`;
+    if (!confirm(pregunta)) return;
+
+    await window.BioDB.borrar(trato ? "tratamientos" : "planes", r.id);
+    if (trato) tratos = tratos.filter((x) => x !== r);
+    else renglones = renglones.filter((x) => x !== r);
+
+    if (trato || r.en_planilla) {
+      await window.BioDB.encolarCon(r.id, trato ? "tratamientos" : "plan",
+        Object.assign({}, r, { estado: "Dado de baja" }));
+      window.Envio.sincronizar(true);
+    } else {
+      await window.BioDB.borrar("salida", r.id);
+    }
+
+    if (editando === r.id) { editando = null; categoria = ""; elegido = ""; tipeado = {}; }
+    brindis(trato ? "Tratamiento dado de baja" : "Renglón borrado");
+    pintar();
   }
 
   // METODOS sale afuera para que el tratamiento que se arma desde un monitoreo
