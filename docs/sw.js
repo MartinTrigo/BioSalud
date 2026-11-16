@@ -29,7 +29,7 @@
 // ==========================================================================
 
 const PREFIJO = "biosalud-";
-const CACHE = PREFIJO + "v38";
+const CACHE = PREFIJO + "v39";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -142,7 +142,12 @@ self.addEventListener("fetch", (evento) => {
         }
         return respuesta;
       })
-      .catch(() => caches.match(pedido).then((guardada) => guardada || caches.match("index.html")))
+      // Si no está guardado, la página de inicio se devuelve SOLO cuando lo que
+      // se pidió era una página. Antes se devolvía para cualquier cosa, y un
+      // archivo de datos que faltaba llegaba como HTML: la app mostraba
+      // "Unexpected token <" en vez de decir que no había señal.
+      .catch(() => caches.match(pedido).then((guardada) => guardada ||
+        (pedido.mode === "navigate" ? caches.match("index.html") : Response.error())))
   );
 });
 

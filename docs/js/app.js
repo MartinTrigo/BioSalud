@@ -8,7 +8,12 @@
 (function () {
   const { esc, superficie } = window.Util;
 
-  const VERSION = "0.1.0 · fase 1";
+  // La versión que se muestra al pie es la del caché del service worker (el
+  // número de CACHE en sw.js), que es lo único que cambia con cada publicación.
+  // Antes había acá un texto fijo que decía "0.1.0 · fase 1" desde el primer
+  // día: no servía para saber si un teléfono tenía o no el último arreglo, que
+  // es para lo único que alguien mira ese renglón.
+  const PREFIJO_CACHE = "biosalud-";
 
   const vista = document.getElementById("vista");
   const titulo = document.getElementById("titulo-vista");
@@ -70,7 +75,33 @@
     location.hash = "#/" + ruta;
   }
 
-  async function mostrar() {
+  // Si una pantalla falla al dibujarse, se dice. Sin esto la app se quedaba en
+  // "Cargando…" para siempre, o mostrando la pantalla anterior con el título de
+  // la nueva, y no había forma de saber qué había pasado ni de contarlo.
+  async function mostrar(evento) {
+    try {
+      await dibujar();
+    } catch (err) {
+      console.error(err);
+      encabezado("BioSalud", "Algo falló");
+      botonVolver.hidden = false;
+      vista.innerHTML = `<p class="aviso aviso--error">No se pudo abrir esta pantalla.
+        Lo que ya cargaste sigue guardado en el teléfono.<br><br>
+        Detalle: ${esc((err && err.message) || err)}</p>
+        <button class="boton boton--ancho" id="btn-reintentar">Volver a intentar</button>`;
+      document.getElementById("btn-reintentar").onclick = () => location.reload();
+    }
+
+    // Al cambiar de pantalla el foco pasa al contenido nuevo. Quien usa lector
+    // de pantalla o teclado quedaba parado en un botón que ya no existe, sin
+    // enterarse de que la pantalla había cambiado. Solo al navegar: en la
+    // primera carga no hay nada de dónde venir.
+    if (evento && evento.type === "hashchange") {
+      try { vista.focus({ preventScroll: true }); } catch (e) { /* navegador viejo */ }
+    }
+  }
+
+  async function dibujar() {
     const ruta = rutaActual();
     const base = ruta.split("/")[0];      // "wiki/plagas/pulgones" → "wiki"
     config = await window.BioDB.leerConfig();
@@ -305,7 +336,17 @@
     if (rutaActual() === "inicio") mostrar();
   });
 
-  document.getElementById("pie-version").textContent = "versión " + VERSION;
+  function mostrarVersion() {
+    const pie = document.getElementById("pie-version");
+    if (!pie || !window.caches) return;
+    caches.keys().then((nombres) => {
+      const numeros = nombres.filter((n) => n.indexOf(PREFIJO_CACHE) === 0)
+        .map((n) => parseInt(n.slice(PREFIJO_CACHE.length).replace(/\D/g, ""), 10))
+        .filter((n) => !isNaN(n));
+      if (numeros.length) pie.textContent = "versión " + Math.max.apply(null, numeros);
+    }).catch(() => { /* sin acceso al caché: el renglón queda vacío */ });
+  }
+  mostrarVersion();
 
   window.BioDB.abrir()
     .then(() => { window.Envio.arrancar(); return mostrar(); })
@@ -330,5 +371,8 @@
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => navigator.serviceWorker.register("sw.js"));
+    // Cuando termina de instalarse una versión nueva, el renglón del pie se
+    // pone al día sin esperar a que se vuelva a abrir la app.
+    navigator.serviceWorker.addEventListener("controllerchange", mostrarVersion);
   }
 })();

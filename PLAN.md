@@ -50,8 +50,10 @@ Cada fase deja algo **usable y mostrable**.
 **Dónde estamos, dicho en lo que un productor puede hacer hoy:** configurar su
 establecimiento y sus sectores, consultar la wiki entera sin señal, armar el plan
 de la temporada con el control de cobre, ver qué le toca hoy y marcar lo que
-aplicó, y sincronizar con la planilla de su chacra. Lo que todavía no puede:
-registrar lo que ve caminando la chacra, ni recibir recordatorios.
+aplicó, registrar lo que ve caminando la chacra —con fotos— y seguir el mismo
+problema en varios controles, anotar lo que aplicó fuera del plan, y sincronizar
+con la planilla de su chacra. Lo que todavía no puede: recibir recordatorios, ni
+ver en la app el comentario que el técnico dejó en la planilla.
 
 **Dependencias que importan:** la 3 necesita la 2; la 5 necesita la 2 y la 4; la
 7 necesita la 4. La 6 es independiente y puede adelantarse en cualquier momento

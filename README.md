@@ -26,7 +26,7 @@ Según para qué vengas, el camino corto:
 | Si sos… | Empezá por | Después |
 |---|---|---|
 | **Del equipo del IFAB o de la agencia** | Abrí la app y andá a *Info / Wiki* | [PLAN.md](PLAN.md), para ver en qué fase está y qué falta |
-| **Programador o informático que va a revisar** | La sección de acá abajo, *Cómo funciona*. Después `docs/js/app.js`, que son 223 líneas y es el que manda | [DECISIONES.md](DECISIONES.md) antes de proponer cambios: explica qué se descartó y con qué argumento |
+| **Programador o informático que va a revisar** | La sección de acá abajo, *Cómo funciona*. Después `docs/js/app.js`, que es corto y es el que manda | [DECISIONES.md](DECISIONES.md) antes de proponer cambios: explica qué se descartó y con qué argumento |
 | **Quien tenga que poner el servicio en marcha** | [INSTALACION.md](INSTALACION.md) | [SEGURIDAD.md](SEGURIDAD.md) |
 | **Del área legal o de vinculación** | [DERECHOS.md](DERECHOS.md) | [TERMINOS.md](TERMINOS.md) |
 | **Un productor** | El enlace de arriba, y listo | — |
@@ -43,7 +43,7 @@ abre un enlace y el navegador la instala. Se actualiza sola al publicarla.
 **Con qué está hecha.** HTML, CSS y JavaScript **sin frameworks y sin ninguna
 dependencia externa**. No hay `npm install`, no hay paso de compilación, no hay
 nada que se baje de un CDN. Se sirve la carpeta `docs/` tal cual está y funciona.
-Son 1.641 líneas en total.
+Son unas 7.300 líneas en total, contando HTML, CSS y JavaScript.
 
 **Por qué así.** Porque el requisito principal es que funcione **sin señal** en
 el campo, y porque tiene que poder mantenerla alguien más dentro de diez años sin
@@ -69,11 +69,13 @@ software.
 
 - **No hay tests automatizados.** La verificación se hizo abriendo la app y
   probando cada cambio en el navegador, incluido apagar el servidor para
-  comprobar el modo sin señal. Para 1.600 líneas sin dependencias es defendible,
-  pero es una deuda real y crece con el proyecto.
-- **El servicio todavía no está desplegado.** `apps-script/Code.gs` está escrito
-  y verificado, pero no corre en ningún lado. Hoy los datos quedan solo en cada
-  teléfono.
+  comprobar el modo sin señal. Cuando eran 1.600 líneas era defendible; con más
+  de 7.000 ya no tanto: la cuenta de fechas y la del cobre son lo primero que
+  conviene cubrir. Es una deuda real y crece con el proyecto.
+- **El servicio está desplegado**, desde el 29/10/2026, en una cuenta propia de
+  la app (ver [MIGRACION-DRIVE.md](MIGRACION-DRIVE.md)). Lo que corre es una
+  copia pegada a mano de `apps-script/Code.gs`: ver más abajo *La única copia
+  que puede quedar desactualizada*.
 - **El repositorio no tiene licencia todavía**, a propósito: hay que resolver
   antes la titularidad entre INTA y CONICET. Está explicado en
   [DERECHOS.md](DERECHOS.md).
@@ -95,7 +97,7 @@ software.
 | [TERMINOS.md](TERMINOS.md) | Términos de uso, para que los lea el productor |
 | [CREDITOS.md](CREDITOS.md) | Autoría y licencia de cada foto de la wiki |
 
-Son ocho documentos, que para 1.641 líneas de código puede parecer mucho. La
+Son varios documentos, que para una app de este tamaño puede parecer mucho. La
 razón es que este proyecto tiene tantas decisiones **no técnicas** —qué admite el
 sello, de quién son los datos, qué se le puede recomendar a un productor— como
 técnicas, y cada una tiene su destinatario. Un programador solo necesita este
@@ -118,16 +120,15 @@ equipo técnico, y se escribe una sola vez.
 |---|---|---|
 | **1 · Base** | Armazón, identidad institucional, sin señal, Configuración del establecimiento, servicio con control de acceso escrito | ✅ **hecha** |
 | **2 · Catálogo y Plan** | Bioinsumos y biopreparados + Registrar Plan de Salud | ✅ **hecha** |
-| 3 · Seguimiento | Agenda Hoy / Semana / Atrasado + checklist | pendiente |
-| 4 · Sincronización | Despliegue del servicio, planillas por chacra, invitaciones | pendiente |
-| 5 · Monitoreo | Registro a campo + sugerencia de tratamiento | pendiente |
+| **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist | ✅ **hecha** |
+| 4 · Sincronización | Despliegue del servicio, planillas por chacra, invitaciones | 🔄 **casi**: falta activar el primer teléfono |
+| **5 · Monitoreo** | Registro a campo + sugerencia de tratamiento | ✅ **hecha** |
 | 6 · Wiki | Fichas de bioinsumos y de plagas regionales | 🔄 **en curso** |
 | 7 · Avisos | Correo automático de aplicaciones pendientes | pendiente |
 | 8 · Piloto | Prueba con 2 chacras y despliegue a las 10 | pendiente |
 
-Lo que ya funciona: la app abre y se usa completa sin conexión, guarda en el
-teléfono, bloquea el menú hasta que la configuración esté completa, y deja la
-configuración en cola para subirla apenas se despliegue el servicio.
+Esta tabla es un resumen: el estado al día, con el detalle de cada fase, está en
+[PLAN.md](PLAN.md).
 
 ## Dónde vive cada cosa
 

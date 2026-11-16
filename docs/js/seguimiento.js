@@ -97,7 +97,7 @@ window.Seguimiento = (function () {
   function enDias(n) {
     const d = new Date(hoy() + "T12:00:00");
     d.setDate(d.getDate() + n);
-    return d.toISOString().slice(0, 10);
+    return window.Util.fechaISO(d);
   }
 
   const registroDe = (id) => registradas.find((a) => a.ocurrencia_id === id);
@@ -559,9 +559,17 @@ window.Seguimiento = (function () {
 
   // ---------- Guardar ----------
 
+  // Mientras se está guardando no se atiende otro toque: en un teléfono lento
+  // el segundo toque sobre "Se aplicó" llegaba antes de que la pantalla
+  // cambiara, y la misma aplicación quedaba registrada dos veces.
+  let guardando = false;
+
   async function registrar(id, estado) {
+    if (guardando) return;
     const o = todas().find((x) => x.id === id);
     if (!o) return;
+    // Ya está registrada: no se suma otra fila para la misma aplicación.
+    if (o.registro) { abierto = null; pintar(); return; }
 
     errores = {};
     const fecha = valor("#a-fecha");
@@ -591,9 +599,14 @@ window.Seguimiento = (function () {
       creado: new Date().toISOString(),
     };
 
-    await window.BioDB.guardar("aplicaciones", datos);
-    // Con su propio id: si el envío se reintenta, la planilla no duplica la fila.
-    await window.BioDB.encolarCon(datos.id, "aplicaciones", datos);
+    guardando = true;
+    try {
+      await window.BioDB.guardar("aplicaciones", datos);
+      // Con su propio id: si el envío se reintenta, la planilla no duplica la fila.
+      await window.BioDB.encolarCon(datos.id, "aplicaciones", datos);
+    } finally {
+      guardando = false;
+    }
 
     registradas.push(datos);
     sinEnviar.add(datos.id);
@@ -626,6 +639,12 @@ window.Seguimiento = (function () {
     // Si el envío termina con el productor ya en otra pantalla, no se pinta
     // encima de ella.
     if (location.hash.indexOf("#/seguimiento") !== 0) return;
+    // Tampoco si ya abrió el formulario de la aplicación siguiente: repintar lo
+    // dibuja de cero y se lleva la fecha, el volumen y las observaciones que
+    // estuviera escribiendo. Con poca señal el envío tarda varios segundos, que
+    // es justo lo que se tarda en tocar "Marcar" en el renglón de abajo. La
+    // lista se pone al día sola en el próximo pantallazo.
+    if (abierto) return;
     pintar();
   }
 

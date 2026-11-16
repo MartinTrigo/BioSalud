@@ -441,7 +441,13 @@ window.Monitoreo = (function () {
   const mal = (c) => (errores[c] ? " mal" : "");
   const valor = (id) => (destino.querySelector(id) || {}).value || "";
 
+  // Un segundo toque sobre el botón mientras el primero todavía escribe en la
+  // base —con cuatro fotos tarda— dejaba el monitoreo o el tratamiento dos
+  // veces.
+  let guardando = false;
+
   async function guardar() {
+    if (guardando) return;
     errores = {};
     const que = valor("#m-que");
     const otro = valor("#m-otro").trim();
@@ -502,6 +508,8 @@ window.Monitoreo = (function () {
 
     datos.fotos = fotos.length;
 
+    guardando = true;
+    try {
     await window.BioDB.guardar("monitoreos", datos);
     await window.BioDB.encolarCon(datos.id, "monitoreos", datos);
 
@@ -523,6 +531,9 @@ window.Monitoreo = (function () {
         contenido: f.datos,
       });
     }
+    } finally {
+      guardando = false;
+    }
     const cuantas = fotos.length;
     fotos = [];
     tipeado = {};        // quedó guardado: el próximo registro arranca limpio
@@ -542,7 +553,12 @@ window.Monitoreo = (function () {
 
   function resultado(r) {
     const f = r.plaga_id ? ficha(r.plaga_id) : null;
-    const tratamientos = f ? (f.tratamientos || []).map(preparado).filter(Boolean) : [];
+    // Se llama `sugeridos` y no `tratamientos` a propósito: con ese nombre
+    // tapaba a la lista de tratamientos armados, y la línea de tiempo recibía
+    // fichas de biopreparados en vez de tratamientos. El resultado era que las
+    // aplicaciones marcadas en el Seguimiento para un tratamiento salido de
+    // este monitoreo nunca aparecían en la evolución del problema.
+    const sugeridos = f ? (f.tratamientos || []).map(preparado).filter(Boolean) : [];
 
     return `
       <div class="tarjeta">
@@ -598,13 +614,13 @@ window.Monitoreo = (function () {
           ${f.enemigos ? `<p class="nota"><strong>Enemigos naturales.</strong> ${esc(f.enemigos)}</p>` : ""}
         </div>
 
-        ${tratamientos.length ? `<div class="tarjeta">
+        ${sugeridos.length ? `<div class="tarjeta">
           <h2>Si eso no alcanza</h2>
           <p class="nota">Biopreparados que la bibliografía regional asocia a esta
             plaga. <strong>Son orientativos</strong>: no reemplazan a alguien que
             vea tu campo, y conviene consultarlos antes de aplicar.</p>
           <ul class="indice">
-            ${tratamientos.map((t) => {
+            ${sugeridos.map((t) => {
               const cobre = window.Cobre.lleva(t);
               return `<li class="indice__con-accion">
                 <button class="indice__item" data-preparado="${esc(t.id)}">
@@ -705,6 +721,14 @@ window.Monitoreo = (function () {
     const sug = (t && t.sugerencia) || {};
     const cobre = window.Cobre.lleva(t) ? t.cobre : null;
     const sectores = config.sectores || [];
+    // Lo que ya se escribió, si la pantalla se está dibujando de nuevo para
+    // marcar un dato que falta. Sin esto, olvidarse el "hasta" borraba la
+    // dosis, los sectores y las observaciones: el mismo problema que ya se
+    // había corregido en el plan y en el registro del monitoreo.
+    const e = armando.tipeado || {};
+    const de = (clave, propuesto) => (e[clave] !== undefined ? e[clave] : propuesto);
+    const metodoElegido = de("metodo", sug.metodo);
+    const marcados = e.sectores || [r.sector_id];
 
     return `
       <div class="tarjeta">
@@ -720,7 +744,7 @@ window.Monitoreo = (function () {
           <div class="campo">
             <label for="t-dosis">Dosis</label>
             <input id="t-dosis" type="text" class="${mal("dosis")}" autocomplete="off"
-                   value="${esc(sug.dosis || "")}" placeholder="por ejemplo: 2 %">
+                   value="${esc(de("dosis", sug.dosis || ""))}" placeholder="por ejemplo: 2 %">
             ${error("dosis")}
           </div>
           <div class="campo">
@@ -728,7 +752,7 @@ window.Monitoreo = (function () {
             <select id="t-metodo" class="${mal("metodo")}">
               <option value="">Elegí…</option>
               ${window.Plan.METODOS.map((m) => `<option value="${esc(m)}"${
-                m === sug.metodo ? " selected" : ""}>${esc(m)}</option>`).join("")}
+                m === metodoElegido ? " selected" : ""}>${esc(m)}</option>`).join("")}
             </select>
             ${error("metodo")}
           </div>
@@ -740,7 +764,7 @@ window.Monitoreo = (function () {
               <span class="ayuda">La receta rinde ${esc(String(cobre.litros_receta))} litros.
                 Con esto se calcula el cobre.</span></label>
             <input id="t-litros" type="text" inputmode="decimal" class="${mal("litros")}"
-                   value="${esc(String(cobre.litros_receta))}">
+                   value="${esc(String(de("litros", cobre.litros_receta)))}">
             ${error("litros")}
           </div>` : ""}
 
@@ -750,7 +774,7 @@ window.Monitoreo = (function () {
             ${sectores.map((s) => `<li>
               <label class="opcion">
                 <input type="checkbox" class="t-sector" value="${esc(s.id)}"${
-                  s.id === r.sector_id ? " checked" : ""}>
+                  marcados.includes(s.id) ? " checked" : ""}>
                 <span><strong>${esc(s.nombre)}</strong> — ${esc(superficie(s.superficie))},
                   ${esc(s.cultivo || "")}</span>
               </label></li>`).join("")}
@@ -761,12 +785,12 @@ window.Monitoreo = (function () {
         <div class="fila">
           <div class="campo">
             <label for="t-desde">Desde</label>
-            <input id="t-desde" type="date" class="${mal("desde")}" value="${esc(hoy())}">
+            <input id="t-desde" type="date" class="${mal("desde")}" value="${esc(de("desde", hoy()))}">
             ${error("desde")}
           </div>
           <div class="campo">
             <label for="t-hasta">Hasta</label>
-            <input id="t-hasta" type="date" class="${mal("hasta")}">
+            <input id="t-hasta" type="date" class="${mal("hasta")}" value="${esc(de("hasta", ""))}">
             ${error("hasta")}
           </div>
         </div>
@@ -776,13 +800,13 @@ window.Monitoreo = (function () {
             ${sug.cada_dias ? `<span class="ayuda">La bibliografía sugiere cada ${sug.cada_dias} días.</span>`
               : `<span class="ayuda">La fuente de este producto no indica una frecuencia.</span>`}</label>
           <input id="t-cada" type="text" inputmode="numeric" class="${mal("cada")}"
-                 value="${esc(String(sug.cada_dias || ""))}" placeholder="15">
+                 value="${esc(String(de("cada", sug.cada_dias || "")))}" placeholder="15">
           ${error("cada")}
         </div>
 
         <div class="campo">
           <label for="t-obs">Observaciones <span class="ayuda">Opcional</span></label>
-          <textarea id="t-obs" rows="2" placeholder="Qué motivó la decisión, qué vas a observar"></textarea>
+          <textarea id="t-obs" rows="2" placeholder="Qué motivó la decisión, qué vas a observar">${esc(de("obs", ""))}</textarea>
         </div>
 
         <p class="nota">Una vez guardado aparece en el Seguimiento, con sus fechas,
@@ -795,6 +819,7 @@ window.Monitoreo = (function () {
   }
 
   async function guardarTratamiento(r) {
+    if (guardando || !armando) return;
     const t = preparado(armando.preparado);
     const cobre = window.Cobre.lleva(t) ? t.cobre : null;
 
@@ -819,6 +844,16 @@ window.Monitoreo = (function () {
     }
 
     if (Object.keys(errores).length) {
+      armando.tipeado = {
+        dosis: dosis,
+        metodo: metodo,
+        sectores: sectores,
+        desde: desde,
+        hasta: hasta,
+        cada: valor("#t-cada").trim(),
+        litros: valor("#t-litros").trim(),
+        obs: valor("#t-obs"),
+      };
       pintar();
       const primero = destino.querySelector(".mal, .campo__error");
       if (primero) primero.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -848,8 +883,13 @@ window.Monitoreo = (function () {
       creado: new Date().toISOString(),
     };
 
-    await window.BioDB.guardar("tratamientos", datos);
-    await window.BioDB.encolarCon(datos.id, "tratamientos", datos);
+    guardando = true;
+    try {
+      await window.BioDB.guardar("tratamientos", datos);
+      await window.BioDB.encolarCon(datos.id, "tratamientos", datos);
+    } finally {
+      guardando = false;
+    }
     tratamientos.unshift(datos);
 
     armando = null;

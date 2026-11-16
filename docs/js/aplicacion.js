@@ -389,7 +389,12 @@ window.Aplicacion = (function () {
 
   // ---------- Guardar ----------
 
+  // Un segundo toque sobre "Guardar" mientras el primero todavía escribe en la
+  // base dejaba la aplicación duplicada en cada sector.
+  let guardando = false;
+
   async function guardar() {
+    if (guardando) return;
     const l = leer();
     errores = {};
     if (!l.para) errores.para = "Elegí para qué fue.";
@@ -417,6 +422,8 @@ window.Aplicacion = (function () {
     const ficha = fichaPorNombre(l.producto);
     const nuevas = [];
 
+    guardando = true;
+    try {
     for (const sid of l.sectores) {
       const sec = sector(sid);
       const id = window.BioDB.nuevoId();
@@ -454,6 +461,9 @@ window.Aplicacion = (function () {
       aplicaciones.push(datos);
       sinEnviar.add(datos.id);
       nuevas.push(datos);
+    }
+    } finally {
+      guardando = false;
     }
 
     guardadas = { lista: nuevas, leido: l, problema: p };
@@ -614,7 +624,14 @@ window.Aplicacion = (function () {
   async function actualizarCola() {
     sinEnviar = new Set((await window.BioDB.pendientes()).map((s) => s.id));
     if (location.hash.indexOf("#/aplicacion") !== 0) return;
-    if (!guardadas) { tipeado = leer(); }
+    if (!guardadas) {
+      // Si está escribiendo, no se toca la pantalla: repintar conserva lo
+      // tipeado, pero le saca el foco al campo y cierra el teclado en la mitad
+      // de una palabra.
+      const foco = document.activeElement;
+      if (foco && destino.contains(foco) && /^(INPUT|SELECT|TEXTAREA)$/.test(foco.tagName)) return;
+      tipeado = leer();
+    }
     pintar();
   }
 

@@ -91,7 +91,7 @@ window.Plan = (function () {
     const cursor = new Date(desde);
     // El tope evita que un "cada 1 día" durante diez años cuelgue la app.
     while (cursor <= hasta && fechas.length < 400) {
-      fechas.push(cursor.toISOString().slice(0, 10));
+      fechas.push(window.Util.fechaISO(cursor));
       cursor.setDate(cursor.getDate() + paso);
     }
     return fechas;

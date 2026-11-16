@@ -155,8 +155,31 @@ window.Envio = (function () {
 
   let enviando = false;
 
+  // Cuánto se espera al servicio antes de dar el pedido por perdido. Sin tope,
+  // un pedido colgado en una señal que va y viene dejaba `enviando` prendido
+  // durante minutos, y en ese rato "Enviar ahora" no hacía nada ni avisaba. Es
+  // largo a propósito: una foto de 200 KB con una rayita de señal tarda.
+  const ESPERA_ENVIO_MS = 90000;
+
+  // SOLO SE SACA DE LA COLA LO QUE SE MANDÓ, NO LO QUE SE CARGÓ MIENTRAS TANTO.
+  //
+  // Un registro que se vuelve a encolar con su mismo id —un renglón del plan
+  // corregido, un monitoreo al que se le marca el aviso— pisa al anterior en la
+  // cola. Si eso pasa mientras el anterior está viajando, borrar por id se
+  // llevaba la versión nueva, que nunca salió del teléfono. Por eso antes de
+  // borrar se mira que en la cola siga estando exactamente lo que se envió.
+  async function quitarDeLaCola(enviado) {
+    const actual = await window.BioDB.obtener("salida", enviado.id);
+    if (actual && actual.creado === enviado.creado) {
+      await window.BioDB.borrar("salida", enviado.id);
+    }
+  }
+
   async function sincronizar(silencioso = true) {
-    if (enviando) return { ok: false, motivo: "ya-en-curso" };
+    if (enviando) {
+      if (!silencioso) window.Util.brindis("Ya se está enviando: esperá un momento.");
+      return { ok: false, motivo: "ya-en-curso" };
+    }
 
     const e = await estado();
     if (!e.conServicio || !e.activado || !e.enLinea) return { ok: false, motivo: "no-corresponde" };
@@ -186,7 +209,7 @@ window.Envio = (function () {
         if (!r.ok) return r;
         guardados += r.guardados || 0;
         enviados += resto.length;
-        for (const x of resto) await window.BioDB.borrar("salida", x.id);
+        for (const x of resto) await quitarDeLaCola(x);
       }
 
       for (const foto of fotos) {
@@ -196,7 +219,7 @@ window.Envio = (function () {
         if (!r.ok) return Object.assign(r, { enviados: enviados, guardados: guardados });
         guardados += r.guardados || 0;
         enviados += 1;
-        await window.BioDB.borrar("salida", foto.id);
+        await quitarDeLaCola(foto);
       }
 
       if (!silencioso) {
@@ -214,14 +237,24 @@ window.Envio = (function () {
   // Un pedido al servicio con un lote de registros. No saca nada de la cola:
   // eso lo decide quien lo llama, cuando ya sabe que el lote entró.
   async function mandar(chacra, registros, silencioso) {
-    const respuesta = await fetch(leerUrl(), {
-      method: "POST",
-      // texto plano a propósito: evita la consulta previa de CORS, que
-      // Apps Script no contesta.
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(Object.assign(
-        window.Acceso.identificacion(chacra), { registros: registros })),
-    });
+    // AbortController está en cualquier navegador de 2019 en adelante; donde no
+    // esté, el pedido sale igual, sin tope de espera.
+    const corte = window.AbortController ? new AbortController() : null;
+    const reloj = corte ? setTimeout(() => corte.abort(), ESPERA_ENVIO_MS) : null;
+    let respuesta;
+    try {
+      respuesta = await fetch(leerUrl(), {
+        signal: corte ? corte.signal : undefined,
+        method: "POST",
+        // texto plano a propósito: evita la consulta previa de CORS, que
+        // Apps Script no contesta.
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(Object.assign(
+          window.Acceso.identificacion(chacra), { registros: registros })),
+      });
+    } finally {
+      if (reloj) clearTimeout(reloj);
+    }
     const datos = await respuesta.json();
 
     // Dado de baja: se corta el acceso, pero la cola queda intacta.

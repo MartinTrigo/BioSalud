@@ -62,7 +62,20 @@ window.Util = (function () {
     return numero(n) + " m²";
   }
 
-  const hoy = () => new Date().toISOString().slice(0, 10);
+  // LA FECHA ES LA DEL TELÉFONO, NO LA DE GREENWICH.
+  //
+  // Antes esto era new Date().toISOString().slice(0, 10), que da la fecha en
+  // hora universal. La Comarca está tres horas atrás, así que desde las 21:00
+  // "hoy" ya era mañana: lo que tocaba hoy pasaba a figurar como atrasado, los
+  // formularios proponían la fecha del día siguiente, y Registrar aplicación
+  // aceptaba una fecha que todavía no había llegado. Justo a la hora en que se
+  // suele sentar alguien a anotar lo que hizo en el día.
+  function fechaISO(d) {
+    const dos = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + dos(d.getMonth() + 1) + "-" + dos(d.getDate());
+  }
+
+  const hoy = () => fechaISO(new Date());
 
   // EL SEMÁFORO AGROECOLÓGICO
   //
@@ -86,5 +99,5 @@ window.Util = (function () {
     return `<span class="luz luz--${esc(c.id)}">${esc(c.nombre)}</span>`;
   }
 
-  return { esc, brindis, numero, aNumero, superficie, hoy, luz, colorDe };
+  return { esc, brindis, numero, aNumero, superficie, hoy, fechaISO, luz, colorDe };
 })();

@@ -51,7 +51,7 @@ window.Problemas = (function () {
   function haceDias(iso, n) {
     const d = new Date(window.Util.hoy() + "T12:00:00");
     d.setDate(d.getDate() - n);
-    return String(iso) >= d.toISOString().slice(0, 10);
+    return String(iso) >= window.Util.fechaISO(d);
   }
 
   // Un renglón por problema, con su último monitoreo, los más recientes arriba.

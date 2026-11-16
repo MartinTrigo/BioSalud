@@ -158,6 +158,21 @@ body {
 }
 .volver:active { background: rgba(255, 255, 255, .3); }
 
+/* El foco visible, para quien recorre la app con teclado o con un lector de
+   pantalla. Los campos ya lo tenían; los botones, los enlaces y los grupos
+   plegables dependían del contorno por defecto de cada navegador, que sobre el
+   violeta de la cabecera casi no se ve. Con :focus-visible no aparece al tocar
+   con el dedo. */
+button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--violeta-claro);
+  outline-offset: 2px;
+}
+.cabecera button:focus-visible { outline-color: #fff; }
+
+/* El contenido recibe el foco al cambiar de pantalla (ver js/app.js), pero no
+   es un control: no lleva contorno. */
+.vista:focus { outline: none; }
+
 /* ---------- Contenido ---------- */
 
 .vista {
