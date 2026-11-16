@@ -29,7 +29,7 @@
 // ==========================================================================
 
 const PREFIJO = "biosalud-";
-const CACHE = PREFIJO + "v37";
+const CACHE = PREFIJO + "v38";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -58,6 +58,9 @@ const ARCHIVOS = [
   "datos/no-permitidos.json",
   "datos/terminos.json",
   "datos/equipo.json",
+
+  // El manual de uso: es solo texto, así que se lee también sin señal.
+  "ayuda/",
   "img/logo-ifab.png",
   "img/logo-ecomarcal.jpg",
   "img/icono-192.png",

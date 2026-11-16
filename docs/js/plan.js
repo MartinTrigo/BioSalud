@@ -154,9 +154,7 @@ window.Plan = (function () {
     if (modo !== sugerido) return "Para este producto la app sugería lo otro.";
     const id = f ? f.categoria : "";
     if (modo === "necesidad") {
-      return id === "estres"
-        ? "Se usa frente a una helada o una ola de calor, y eso no se agenda."
-        : "Repele o controla, y su efecto dura poco: conviene usarlo cuando el monitoreo lo pide.";
+      return "Repele o controla, y su efecto dura poco: conviene usarlo cuando el monitoreo lo pide.";
     }
     if (id === "enfermedades") {
       return "Es preventivo: tiene que estar sobre la planta antes de que entre la enfermedad.";
@@ -364,7 +362,8 @@ window.Plan = (function () {
             <option value="">${deLaCategoria.length === 1
               ? "Hay uno solo…" : "Elegí entre los " + deLaCategoria.length + "…"}</option>
             ${deLaCategoria.map((f) => `<option value="${esc(f.id)}"${f.id === elegido ? " selected" : ""}>
-              ${esc(f.nombre)}${f.comarca ? " · probado en la Comarca" : ""}</option>`).join("")}
+              ${esc(window.Util.colorDe(f, bio.semaforo).icono + " " + f.nombre)}${
+                f.comarca ? " · probado en la Comarca" : ""}</option>`).join("")}
           </select>
           ${error("producto")}
         </div>` : ""}`;
@@ -388,12 +387,19 @@ window.Plan = (function () {
     return `
       ${f ? `<div class="tarjeta tarjeta--info-producto">
         <p class="resumen-ficha">${esc(f.resumen)}</p>
+        <p>${window.Util.luz(f, bio.semaforo)}</p>
+        ${f.semaforo && f.semaforo.motivo ? `<p class="nota">${esc(f.semaforo.motivo)}</p>` : ""}
         ${f.uso ? `<p class="nota"><strong>Para qué sirve.</strong> ${esc(f.uso)}</p>` : ""}
         ${f.carencia ? `<p class="nota"><strong>Carencia.</strong> ${esc(f.carencia)}</p>` : ""}
         ${f.dosis ? `<p class="nota"><strong>Dosis de la bibliografía:</strong>
           ${f.dosis.map((d) => esc(d.cuando + ": " + d.cuanto)).join(" · ")}</p>` : ""}
         <button class="boton--peligro boton--editar" data-ficha="${esc(f.id)}">Ver la ficha completa</button>
       </div>` : ""}
+
+      ${f && f.semaforo && f.semaforo.color === "rojo" ? `<p class="aviso aviso--error">
+        <strong>El semáforo lo marca en rojo:</strong> no estaría aprobado para la
+        producción agroecológica y se recomienda reemplazarlo. Si igual lo sumás al
+        plan, queda registrado así, y el equipo técnico lo va a ver.</p>` : ""}
 
       ${cobre ? `<p class="aviso aviso--error"><strong>Lleva cobre.</strong> El sello
         lo admite, pero hasta <strong>${esc(String(limiteCobre()))} kg de cobre por

@@ -158,7 +158,7 @@
       ],
       "enemigos": "Es el grupo con más enemigos naturales conocidos: vaquitas de San Antonio, depredadoras tanto de larvas como de adultos; sírfidos, cuyas larvas depredan y cuyos adultos comen polen y néctar; crisopas; y varias especies de parasitoides. Los pulgones parasitados quedan como momias, fáciles de reconocer en el cultivo. Conviene tener bordes florales diversos, y también plantas hospederas de pulgones que no atacan al cultivo, como cereales u ortiga, para que los parasitoides tengan de qué vivir.",
       "entomopatogenos": "Beauveria bassiana y Lecanicillium lecanii son los más usados, aunque su incidencia natural sobre pulgones suele ser menor que sobre otras plagas.",
-      "tratamientos": ["bioestimulante-ortiga", "biorepelente-picante", "extracto-botanico", "lejia-ceniza", "caldo-ceniza", "caldo-mineral-caliente"],
+      "tratamientos": ["bioestimulante-ortiga", "biorepelente-picante", "extracto-botanico", "caldo-ceniza", "caldo-mineral-caliente"],
       "cuidados": [
         "El momento ideal de aplicación de un biopreparado es cuando aparecen los adultos alados, antes de la colonia. Como repelente se aplica dos veces por semana.",
         "El jabón potásico es la opción de mejor relación entre eficacia y respeto por la fauna benéfica: actúa por contacto sobre insectos de cuerpo blando sin afectar a sus enemigos naturales."
@@ -229,7 +229,7 @@
       ],
       "enemigos": "Ácaros y chinches depredadores, y parasitoides. Conviene implantar islas con plantas nectaríferas de floración extendida dentro de los invernaderos.",
       "entomopatogenos": "Beauveria bassiana e Isaria fumosorosea. Todos rinden mejor con humedad relativa alta, lo que es una limitación real en el clima seco patagónico: puede hacer falta más frecuencia de aplicación, o riego por microaspersión para sostener la humedad.",
-      "tratamientos": ["lejia-ceniza", "extracto-botanico", "caldo-mineral-caliente", "caldo-ceniza"],
+      "tratamientos": ["caldo-ceniza", "extracto-botanico", "caldo-mineral-caliente"],
       "cuidados": [
         "Para mosca blanca, mezclar la lejía al 5 % con 1 kg de harina de trigo mejora la adherencia.",
         "El jabón potásico sigue siendo la opción más compatible con los enemigos naturales."

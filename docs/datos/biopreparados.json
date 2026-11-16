@@ -1,5 +1,5 @@
 {
-  "version": "2026-10-30",
+  "version": "2026-11-16",
   "nota": "Fichas redactadas por el equipo del IFAB a partir de la bibliografía citada en cada una. No son copia de las fuentes: cada texto está reescrito y cada receta indica de dónde sale, para que el productor pueda ir al original.",
   "fuentes": {
     "F1": "Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.",
@@ -11,7 +11,8 @@
     "F7": "Arguello Caro, E. B. y otros (2021). Biopreparados para el manejo de insectos en horticultura: experimentación participativa en el periurbano de Córdoba. INTA CIAP.",
     "F8": "IFAB (2026). Compost de la Soil Food Web y extractos de compost: informe de trabajo, versión 1. Documento interno, revisión de la literatura revisada por pares y del material del método.",
     "F9": "Ingham, E. Soil Food Web School, curso Foundation: BioComplete Compost, clases 3 y 5. Material del método, no revisado por pares.",
-    "F10": "USDA, Programa Orgánico Nacional de EE.UU. (7 CFR 205.203): compost en hilera, entre 55 y 77 °C durante 15 días con 5 volteos como mínimo."
+    "F10": "USDA, Programa Orgánico Nacional de EE.UU. (7 CFR 205.203): compost en hilera, entre 55 y 77 °C durante 15 días con 5 volteos como mínimo.",
+    "F11": "IPES / FAO (2010). Biopreparados para el manejo sostenible de plagas y enfermedades en la agricultura urbana y periurbana. Lima, Perú. Ficha 4: humus líquido."
   },
   "categorias": [
     {
@@ -50,13 +51,6 @@
       "modo_sugerido": "rutina"
     },
     {
-      "id": "estres",
-      "nombre": "Reguladores de estrés",
-      "icono": "❄️",
-      "descripcion": "Ayudan a la planta a soportar heladas, calor o sequía. Es la categoría con menos respaldo local: hay más experiencia de productores que ensayos publicados.",
-      "modo_sugerido": "necesidad"
-    },
-    {
       "id": "base",
       "nombre": "Preparados de base",
       "icono": "🧪",
@@ -65,46 +59,6 @@
     }
   ],
   "fichas": [
-    {
-      "id": "mm-solido",
-      "nombre": "Microorganismos de montaña (MM) sólido",
-      "categoria": "base",
-      "etiquetas": [
-        "microorganismos",
-        "de la Comarca",
-        "base de otros preparados"
-      ],
-      "comarca": true,
-      "resumen": "La captura del bosque nativo: hojarasca con microorganismos locales, multiplicada sobre afrecho y azúcar. Es el punto de partida de casi todo lo demás.",
-      "rinde": "Un tambor de 200 litros de material sólido",
-      "tiempo": "30 a 50 días de fermentación",
-      "ingredientes": [
-        "60 kg de hojarasca de suelo de bosque",
-        "30 kg de afrecho, salvado o molienda de cereales (trigo, avena, cebada, centeno)",
-        "5 kg de azúcar, melaza o miel de caña",
-        "Agua sin cloro",
-        "1 tambor plástico de 200 litros con tapa hermética"
-      ],
-      "preparacion": [
-        "Juntar la hojarasca del bosque, de los primeros 10 cm de suelo. Buscar donde haya especies de hoja caduca, sobre todo ñire. Sirve la hojarasca con manchas blancas y con hifas de hongos a la vista: eso indica que los microorganismos están ahí.",
-        "Conviene colectar en primavera: la humedad y la temperatura de esa época favorecen la reproducción.",
-        "Al aire libre, mezclar bien con pala la hojarasca y el afrecho.",
-        "Aparte, disolver el azúcar en un poco de agua y agregarla a la mezcla, sin dejar de revolver.",
-        "Ir sumando agua hasta llegar al 40 % de humedad. Se controla con la prueba del puño: al apretar un puñado no debe escurrir agua entre los dedos, pero el bollo tiene que quedar armado.",
-        "Cargar el tambor de a poco, apisonando cada capa para sacarle el aire.",
-        "Tapar herméticamente y dejar a la sombra 30 a 50 días, según la zona."
-      ],
-      "uso": "No se aplica al cultivo. Es la reserva desde la que se prepara el MM líquido y varios de los demás biopreparados.",
-      "conservacion": "Una vez fermentado se guarda 1 a 2 años.",
-      "cuidados": [
-        "Colectar sin arrasar: se saca hojarasca superficial de varios puntos, no un pozo en un solo lugar.",
-        "El tambor tiene que cerrar bien. Si entra aire, la fermentación se pudre en vez de conservarse."
-      ],
-      "fuente": [
-        "F1",
-        "F2"
-      ]
-    },
     {
       "id": "mm-liquido",
       "nombre": "Microorganismos de montaña (MM) líquido",
@@ -167,7 +121,11 @@
       "fuente": [
         "F1",
         "F2"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Es el MM sólido fermentado en agua con azúcar o melaza."
+      }
     },
     {
       "id": "supermagro",
@@ -221,7 +179,11 @@
       "fuente": [
         "F2",
         "F6"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Fermentado de estiércol de rumiante con minerales. Verde siempre que el estiércol cumpla las condiciones de su ficha."
+      }
     },
     {
       "id": "te-compost",
@@ -240,7 +202,7 @@
       "tiempo": "4 días",
       "ingredientes": [
         "6 kg de compost maduro",
-        "10 litros de lejía de ceniza",
+        "10 litros de lejía de ceniza (ver «Lejía y caldos de ceniza»)",
         "Agua hasta completar 50 litros",
         "1 recipiente plástico de 50 litros y un agitador de madera"
       ],
@@ -265,7 +227,11 @@
       "conservacion": "12 meses.",
       "fuente": [
         "F4"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Compost maduro y lejía de ceniza, de la propia chacra."
+      }
     },
     {
       "id": "bio-lana",
@@ -313,7 +279,11 @@
       ],
       "fuente": [
         "F4"
-      ]
+      ],
+      "semaforo": {
+        "color": "amarillo",
+        "motivo": "La lana es un descarte de la zona, pero se disuelve con soda cáustica, un insumo industrial peligroso, y puede traer restos de los baños antiparasitarios de las ovejas."
+      }
     },
     {
       "id": "fertilizante-fosforo",
@@ -405,130 +375,228 @@
       "conservacion": "30 días. Pasado ese mes pierde sentido usarlo.",
       "fuente": [
         "F3"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Arroz, leche y melaza: fermentación con ingredientes de cocina."
+      }
     },
     {
-      "id": "pasto-fermentado",
-      "nombre": "Pasto fermentado",
-      "categoria": "base",
+      "id": "humus-liquido",
+      "nombre": "Humus líquido",
+      "categoria": "biofertilizantes",
       "etiquetas": [
-        "microorganismos",
-        "base de otros preparados"
+        "sustancias húmicas y fúlvicas",
+        "foliar",
+        "al suelo",
+        "raíces"
       ],
-      "resumen": "La alternativa a los microorganismos de montaña cuando no hay bosque cerca: se capturan del pasto y del compost del propio establecimiento.",
-      "rinde": "1 tambor de 200 litros",
-      "tiempo": "30 días",
+      "resumen": "Extracto de humus de lombriz. En su versión enriquecida, un álcali ayuda a sacar del humus las sustancias húmicas y fúlvicas; en la variante que difunde César Gramaglia, ese álcali es la lejía de ceniza.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "2,5 ml por litro de agua"
+      },
+      "rinde": "Alrededor de 2 litros de concentrado",
+      "tiempo": "2 días, y 4 más para la versión enriquecida",
       "ingredientes": [
-        "2 bolsas de pasto fresco recién picado (maíz, sorgo, moha, mijo, alfalfa o corte de césped)",
-        "4 bolsas de afrechillo de cereales o grano de maíz molido",
-        "5 kg de compost maduro, bocashi o mantillo de un ambiente natural",
-        "5 kg de melaza o azúcar",
-        "10 litros de suero de quesería",
-        "1 tambor plástico de 200 litros con tapa y zuncho",
-        "1 pisón de madera y una lona plástica"
+        "½ kg de humus de lombriz maduro (ver «Lombricompuesto»)",
+        "2,5 litros de agua sin cloro, de lluvia o reposada",
+        "Para enriquecerlo: 3 g de hidróxido de potasio cada 2 litros de humus líquido, o lejía de ceniza en su lugar",
+        "1 balde plástico, un agitador de madera y un lienzo"
       ],
       "preparacion": [
-        "Extender la lona e ir armando capas de unos 20 cm: pasto picado, afrechillo o maíz molido, y el compost distribuido encima. Homogeneizar con pala.",
-        "Aparte, disolver la melaza en el suero y agregarlo a la mezcla.",
-        "Sumar agua de a poco hasta llegar al 30 % de humedad.",
-        "Cargar el tambor por capas de 20 cm, apisonando cada una con el pisón de madera.",
-        "Cerrar con tapa y zuncho, hermético, y dejar 30 días de fermentación anaeróbica."
+        "Humus líquido. Mezclar el humus de lombriz con el agua en el balde.",
+        "Dejar reposar 48 horas.",
+        "Filtrar con el lienzo y envasar en bidones oscuros.",
+        "Versión enriquecida. A cada 2 litros de humus líquido sumarle el álcali y mezclar.",
+        "Revolver un minuto por día durante 4 días.",
+        "Volver a filtrar con lienzo y envasar en bidones oscuros rotulados."
       ],
-      "uso": "Fuente de microorganismos locales. Sirve para revitalizar suelos degradados por manejo convencional. Para aplicarlo hay que activarlo en fase líquida.",
+      "uso": "Abono foliar y al suelo. Mejora la vida del suelo y la disponibilidad de nutrientes, y favorece el desarrollo de raíces.",
       "dosis": [
         {
-          "cuando": "Hortalizas, foliar (una vez activado)",
-          "cuanto": "Diluir al 20 %"
+          "cuando": "Foliar o en el riego",
+          "cuanto": "2,5 ml por litro de agua"
         },
         {
-          "cuando": "Frutales, foliar (una vez activado)",
-          "cuanto": "Diluir al 30 %"
-        },
-        {
-          "cuando": "Desintoxicación de suelos",
-          "cuanto": "Diluir al 50 %, durante la preparación de la cama de siembra"
+          "cuando": "Frecuencia",
+          "cuanto": "La fuente indica cada 3 días en condiciones normales, y más seguido con clima muy seco. Ajustar en la chacra."
         }
       ],
-      "conservacion": "El sólido se conserva bien. Una vez activado en fase líquida, la vida útil es de 30 días.",
+      "variantes": {
+        "intro": "El paso de enriquecido se puede hacer con dos álcalis distintos.",
+        "lista": [
+          {
+            "nombre": "Con lejía de ceniza (versión de César Gramaglia)",
+            "para": "En lugar del hidróxido de potasio se usa lejía de ceniza, que es alcalina por el potasio de la ceniza y cumple la misma función: disolver las sustancias húmicas y fúlvicas del humus. No hace falta comprar un reactivo.",
+            "ingredientes": [
+              "Humus líquido (paso anterior)",
+              "Lejía de ceniza (ver «Lejía y caldos de ceniza»): cantidad a confirmar"
+            ]
+          },
+          {
+            "nombre": "Con hidróxido de potasio",
+            "para": "La receta de la fuente: 3 g cada 2 litros de humus líquido. Es un reactivo cáustico."
+          }
+        ]
+      },
+      "revisar": "Falta una fuente escrita del método de César Gramaglia y la proporción de lejía de ceniza que usa. La receta base es la de IPES/FAO (2010), validada en huertas urbanas de Bogotá.",
       "cuidados": [
-        "Para activarlo: 5 kg de pasto fermentado en una bolsa de tela, 5 kg de melaza y 10 litros de suero en el tambor, completar con agua y cerrar con zuncho. A partir del cuarto día se puede usar."
+        "El hidróxido de potasio es cáustico: guantes y antiparras. La lejía de ceniza también irrita la piel.",
+        "Usar humus maduro: si todavía huele a amoníaco o está caliente, no está listo."
       ],
       "fuente": [
-        "F3",
-        "F4"
+        "F11"
       ]
     },
     {
-      "id": "microorganismos-silo",
-      "nombre": "Microorganismos de silo de maíz",
-      "categoria": "base",
+      "id": "bioestimulante-ortiga",
+      "nombre": "Bioestimulante de ortiga, consuelda y cola de caballo",
+      "categoria": "bioestimulantes",
       "etiquetas": [
-        "reemplaza el suero",
-        "base de otros preparados"
+        "enraizante",
+        "de la Comarca",
+        "pulgones y ácaros",
+        "foliar"
       ],
-      "resumen": "La salida cuando no hay quesería cerca. Reemplaza al suero de leche en cualquiera de las otras recetas.",
+      "comarca": true,
+      "resumen": "Tres plantas que crecen solas en la Comarca, fermentadas juntas. Estimula el crecimiento y de paso funciona contra pulgones y ácaros.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "300 cc cada 20 litros (1,5 %)",
+        "cada_dias": 15
+      },
       "rinde": "100 litros",
-      "tiempo": "4 días",
+      "tiempo": "8 días",
       "ingredientes": [
-        "100 litros de agua",
-        "5 kg de silo de maíz picado fino",
-        "5 kg de melaza o azúcar",
-        "1 tambor plástico de 200 litros"
+        "10 kg de ortiga y/o consuelda bien picada",
+        "10 litros de decocción de cola de caballo",
+        "20 litros de MM líquido",
+        "2,5 kg de azúcar",
+        "Agua hasta completar 100 litros",
+        "1 tambor de 100 litros y una malla o bolsa de tela"
       ],
       "preparacion": [
-        "Poner el silo de maíz dentro de una bolsa de tela cerrada con hilo y meterla en el tambor.",
-        "Disolver la melaza en un balde con 20 litros de agua y volcarlo al tambor.",
-        "Agregar 80 litros más de agua de buena calidad.",
-        "Cerrar con tapa y zuncho y dejar fermentar 4 días."
+        "Primero la decocción de cola de caballo: infusionar 1 kg de tallos en 10 litros de agua durante 1 hora a fuego medio, sin dejar que hierva. Dejar enfriar.",
+        "Picar las hojas de ortiga y consuelda y colocarlas dentro de una malla.",
+        "Sumar el azúcar o melaza, el MM líquido y la decocción fría.",
+        "Completar con agua hasta los 100 litros.",
+        "Tapar y esperar 8 días."
       ],
-      "uso": "Reemplaza al suero de quesería en las demás recetas.",
+      "uso": "Estimulante del crecimiento radicular y vegetativo. También controla pulgones, ácaros y áfidos en general.",
+      "dosis": [
+        {
+          "cuando": "Hortalizas, al inicio del cultivo",
+          "cuanto": "1 litro cada 20 litros de agua (5 %)"
+        },
+        {
+          "cuando": "Hortalizas, después",
+          "cuanto": "300 cc cada 20 litros (1,5 %), foliar cada 15 días"
+        },
+        {
+          "cuando": "Frutales",
+          "cuanto": "3 litros cada 20 litros (15 %), cada 3 meses"
+        }
+      ],
+      "conservacion": "Hasta 2 meses en lugar fresco, seco y oscuro.",
+      "carencia": "Evitar aplicar en los 20 días previos a la cosecha.",
+      "cuidados": [
+        "La ortiga aporta cerca de 52 minerales; es el ingrediente que hace el trabajo nutricional.",
+        "Cosechar la ortiga con guantes y antes de que semille, para no dispersarla donde no se la quiere.",
+        "La cola de caballo aporta sílice, que endurece los tejidos y ayuda a prevenir hongos como oídio, mildiu y roya. Ya no tiene ficha propia: se usa como parte de este bioestimulante."
+      ],
+      "fuente": [
+        "F2"
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Plantas que crecen solas en la Comarca, fermentadas con MM."
+      }
+    },
+    {
+      "id": "adherente-bioestimulante",
+      "nombre": "Adherente y bioestimulante de aloe",
+      "categoria": "bioestimulantes",
+      "etiquetas": [
+        "adherente",
+        "mejora otras aplicaciones"
+      ],
+      "resumen": "El complemento que hace que los demás biopreparados se queden en la hoja en vez de escurrir. Cambiando un ingrediente pasa de adherente a bioestimulante.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)",
+        "dosis": "400 cc en 10 litros, junto a otro preparado"
+      },
+      "rinde": "20 litros",
+      "tiempo": "1 semana",
+      "ingredientes": [
+        "1 kg de Aloe vera picado (es lo que da el efecto adherente)",
+        "2 litros de suero o microorganismos líquidos",
+        "500 g de melaza o azúcar",
+        "1 balde plástico de 20 litros"
+      ],
+      "preparacion": [
+        "Mezclar los ingredientes picados en el balde.",
+        "Tapar con lienzo, para que la fermentación sea aeróbica.",
+        "Fermentar una semana y filtrar con lienzo.",
+        "Guardar en envase oscuro."
+      ],
+      "uso": "Se agrega a los demás biopreparados para que se adhieran mejor a la planta.",
+      "dosis": [
+        {
+          "cuando": "Junto a otros biopreparados",
+          "cuanto": "400 cc en 10 litros de agua"
+        }
+      ],
+      "cuidados": [
+        "Cambiando el aloe por 1 kg de ortiga, el efecto pasa a ser bioestimulante. Con 500 g de cada uno se logran los dos a la vez.",
+        "Equivalencia útil: 1 kg de ortiga fresca ≈ 200 g de ortiga seca.",
+        "La fuente menciona una variante con flor de floripondio para efecto nematicida. No la incluimos: el floripondio (Brugmansia) es muy tóxico para las personas y no corresponde recomendarlo sin protocolo de manejo."
+      ],
       "fuente": [
         "F3"
       ]
     },
     {
-      "id": "lejia-ceniza",
-      "nombre": "Lejía de ceniza",
-      "categoria": "base",
+      "id": "mm-sales-minerales",
+      "nombre": "Bioestimulante de MM líquido con sales minerales",
+      "categoria": "bioestimulantes",
       "etiquetas": [
-        "base de otros preparados",
-        "insecticida suave",
-        "desinfectante"
+        "microorganismos",
+        "micronutrientes",
+        "en ensayo",
+        "foliar",
+        "fertirriego"
       ],
-      "resumen": "Agua de ceniza. Es el ingrediente de arranque de varios caldos y, por sí sola, un insecticida suave y un desinfectante.",
-      "rinde": "50 litros",
-      "tiempo": "4 días",
+      "resumen": "MM líquido al que se le suman sales minerales solubles: junta la vida del MM con un aporte de micronutrientes. Es el bioestimulante que se está evaluando en los ensayos del IFAB.",
+      "sugerencia": {
+        "metodo": "Mochila (foliar)"
+      },
+      "tiempo": "El del MM líquido, más el agregado de las sales",
       "ingredientes": [
-        "Ceniza de madera bien quemada, de color gris, tamizada: un tercio del recipiente",
-        "Agua de buena calidad: los dos tercios restantes",
-        "1 recipiente plástico de 50 litros y un agitador de madera"
+        "MM líquido terminado (ver su ficha)",
+        "Sales minerales solubles: cuáles y cuánto de cada una, según el protocolo del ensayo (a completar)",
+        "Agua tibia sin cloro, para disolver las sales"
       ],
       "preparacion": [
-        "Llenar un tercio del recipiente con ceniza tamizada.",
-        "Completar los otros dos tercios con agua.",
-        "Mezclar al menos dos veces por día durante dos días.",
-        "Dejar reposar 48 horas.",
-        "Retirar el líquido amarillo que queda arriba: esa es la lejía.",
-        "Guardar en bidones oscuros rotulados."
+        "Preparar el MM líquido como indica su ficha.",
+        "Disolver cada sal por separado en un poco de agua tibia sin cloro.",
+        "Sumar las sales disueltas al tambor de a una, mezclando bien entre una y otra.",
+        "El resto del procedimiento, según el protocolo del ensayo (a completar)."
       ],
-      "uso": "Ingrediente del té de compost y de varios caldos. Sola sirve como insecticida y como desinfectante.",
-      "dosis": [
-        {
-          "cuando": "Insecticida (pulgones, mosca blanca)",
-          "cuanto": "5 % en agua"
-        },
-        {
-          "cuando": "Mosca blanca, con mejor adherencia",
-          "cuanto": "5 % de lejía + 1 kg de harina de trigo"
-        },
-        {
-          "cuando": "Desinfectante",
-          "cuanto": "Diluir al 10 %"
-        }
+      "uso": "Bioestimulante foliar y al suelo.",
+      "revisar": "Ficha en preparación: faltan las sales minerales, la cantidad de cada una, el tiempo de fermentación y la dosis. Se completa con el protocolo del ensayo.",
+      "cuidados": [
+        "Las sales de micronutrientes, como el boro y el zinc, se vuelven tóxicas para la planta con muy poco exceso. Respetar las cantidades del protocolo y probar en pocas plantas.",
+        "Usar siempre agua sin cloro: el cloro mata los microorganismos del MM."
       ],
       "fuente": [
-        "F4"
-      ]
+        "F1",
+        "F2"
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "MM líquido con sales minerales solubles, en evaluación en ensayos del IFAB."
+      }
     },
     {
       "id": "compost-termofilo",
@@ -656,7 +724,11 @@
         "F9",
         "F10",
         "F4"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Materiales de la chacra y la zona, transformados por un compostaje que sanea."
+      }
     },
     {
       "id": "bocashi",
@@ -706,7 +778,11 @@
       ],
       "fuente": [
         "F5"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Abono fermentado con materiales de la zona."
+      }
     },
     {
       "id": "abono-anaerobico",
@@ -760,109 +836,132 @@
       ],
       "fuente": [
         "F3"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Abono fermentado con materiales de la zona."
+      }
     },
     {
-      "id": "bioestimulante-ortiga",
-      "nombre": "Bioestimulante de ortiga, consuelda y cola de caballo",
-      "categoria": "bioestimulantes",
+      "id": "lombricompost",
+      "nombre": "Lombricompuesto (humus de lombriz)",
+      "categoria": "abonos",
       "etiquetas": [
-        "enraizante",
-        "de la Comarca",
-        "pulgones y ácaros",
-        "foliar"
+        "lombrices",
+        "materia orgánica",
+        "almácigos",
+        "base del humus líquido"
       ],
-      "comarca": true,
-      "resumen": "Tres plantas que crecen solas en la Comarca, fermentadas juntas. Estimula el crecimiento y de paso funciona contra pulgones y ácaros.",
+      "resumen": "Abono que hacen las lombrices rojas a partir de restos orgánicos. Es fino, estable y muy rico en vida, y es la materia prima del humus líquido.",
       "sugerencia": {
-        "metodo": "Mochila (foliar)",
-        "dosis": "300 cc cada 20 litros (1,5 %)",
-        "cada_dias": 15
+        "metodo": "Al suelo, en seco"
       },
-      "rinde": "100 litros",
-      "tiempo": "8 días",
+      "rinde": "Según el tamaño del lecho",
+      "tiempo": "3 a 4 meses",
       "ingredientes": [
-        "10 kg de ortiga y/o consuelda bien picada",
-        "10 litros de decocción de cola de caballo",
-        "20 litros de MM líquido",
-        "2,5 kg de azúcar",
-        "Agua hasta completar 100 litros",
-        "1 tambor de 100 litros y una malla o bolsa de tela"
+        "Lombriz roja californiana (Eisenia fetida) para sembrar el lecho",
+        "Restos de cocina y de huerta, sin carne, lácteos ni aceites",
+        "Estiércol de rumiante estacionado, o compost a medio hacer",
+        "Material seco para la cama: hojas, paja o cartón sin tinta",
+        "Un lecho o cajón con buen drenaje, a la sombra"
       ],
       "preparacion": [
-        "Primero la decocción de cola de caballo: infusionar 1 kg de tallos en 10 litros de agua durante 1 hora a fuego medio, sin dejar que hierva. Dejar enfriar.",
-        "Picar las hojas de ortiga y consuelda y colocarlas dentro de una malla.",
-        "Sumar el azúcar o melaza, el MM líquido y la decocción fría.",
-        "Completar con agua hasta los 100 litros.",
-        "Tapar y esperar 8 días."
+        "Armar una cama de 15 a 20 cm con material seco y estiércol estacionado, y humedecerla.",
+        "Sembrar las lombrices sobre la cama.",
+        "Agregar el alimento en capas finas cada pocos días, sin tapar del todo la cama.",
+        "Mantener la humedad como la de una esponja escurrida. Cubrir con paja o media sombra en verano y abrigar en invierno.",
+        "Cuando el material está oscuro, suelto y huele a tierra, poner alimento fresco de un solo lado: las lombrices se mudan y el resto se cosecha.",
+        "Tamizar y dejar orear a la sombra antes de guardar."
       ],
-      "uso": "Estimulante del crecimiento radicular y vegetativo. También controla pulgones, ácaros y áfidos en general.",
-      "dosis": [
-        {
-          "cuando": "Hortalizas, al inicio del cultivo",
-          "cuanto": "1 litro cada 20 litros de agua (5 %)"
-        },
-        {
-          "cuando": "Hortalizas, después",
-          "cuanto": "300 cc cada 20 litros (1,5 %), foliar cada 15 días"
-        },
-        {
-          "cuando": "Frutales",
-          "cuanto": "3 litros cada 20 litros (15 %), cada 3 meses"
-        }
-      ],
-      "conservacion": "Hasta 2 meses en lugar fresco, seco y oscuro.",
-      "carencia": "Evitar aplicar en los 20 días previos a la cosecha.",
+      "uso": "Al suelo, en el trasplante o en superficie. También para sustratos de almácigo y para preparar humus líquido.",
+      "conservacion": "Varios meses, húmedo y a la sombra, en bolsas que respiren.",
+      "revisar": "Ficha armada con la práctica general de lombricultura: falta citar una fuente regional y las dosis de uso en la Comarca.",
       "cuidados": [
-        "La ortiga aporta cerca de 52 minerales; es el ingrediente que hace el trabajo nutricional.",
-        "Cosechar la ortiga con guantes y antes de que semille, para no dispersarla donde no se la quiere."
+        "No usar estiércol fresco ni caliente en la cama: la fermentación mata a las lombrices.",
+        "En la Comarca el límite es el frío: sin abrigo, en invierno la actividad casi se detiene."
       ],
-      "fuente": [
-        "F2"
-      ]
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Restos orgánicos de la chacra transformados por lombrices."
+      }
     },
     {
-      "id": "adherente-bioestimulante",
-      "nombre": "Adherente y bioestimulante de aloe",
-      "categoria": "bioestimulantes",
+      "id": "estiercol-rumiante-fresco",
+      "nombre": "Estiércol fresco de rumiantes",
+      "categoria": "abonos",
+      "insumo": true,
       "etiquetas": [
-        "adherente",
-        "mejora otras aplicaciones"
+        "estiércol",
+        "insumo"
       ],
-      "resumen": "El complemento que hace que los demás biopreparados se queden en la hoja en vez de escurrir. Cambiando un ingrediente pasa de adherente a bioestimulante.",
-      "sugerencia": {
-        "metodo": "Mochila (foliar)",
-        "dosis": "400 cc en 10 litros, junto a otro preparado"
-      },
-      "rinde": "20 litros",
-      "tiempo": "1 semana",
-      "ingredientes": [
-        "1 kg de Aloe vera picado (es lo que da el efecto adherente)",
-        "2 litros de suero o microorganismos líquidos",
-        "500 g de melaza o azúcar",
-        "1 balde plástico de 20 litros"
-      ],
-      "preparacion": [
-        "Mezclar los ingredientes picados en el balde.",
-        "Tapar con lienzo, para que la fermentación sea aeróbica.",
-        "Fermentar una semana y filtrar con lienzo.",
-        "Guardar en envase oscuro."
-      ],
-      "uso": "Se agrega a los demás biopreparados para que se adhieran mejor a la planta.",
-      "dosis": [
-        {
-          "cuando": "Junto a otros biopreparados",
-          "cuanto": "400 cc en 10 litros de agua"
-        }
-      ],
+      "resumen": "Bosta recién juntada de vaca, oveja o cabra. Es la base de muchos preparados, pero tiene condiciones.",
+      "uso": "Para compostar y para los preparados que lo piden fresco, como el súpermagro y el abono anaeróbico. Directo al suelo, solo lejos de la cosecha y nunca sobre cultivos que se comen crudos.",
       "cuidados": [
-        "Cambiando el aloe por 1 kg de ortiga, el efecto pasa a ser bioestimulante. Con 500 g de cada uno se logran los dos a la vez.",
-        "Equivalencia útil: 1 kg de ortiga fresca ≈ 200 g de ortiga seca.",
-        "La fuente menciona una variante con flor de floripondio para efecto nematicida. No la incluimos: el floripondio (Brugmansia) es muy tóxico para las personas y no corresponde recomendarlo sin protocolo de manejo."
+        "Fresco puede llevar patógenos para las personas. Lo más seguro es compostarlo antes de usarlo.",
+        "Si los animales recibieron antiparasitarios, sus restos en la bosta afectan a los escarabajos y lombrices que lo descomponen."
       ],
-      "fuente": [
-        "F3"
-      ]
+      "semaforo": {
+        "color": "amarillo",
+        "motivo": "Se acepta solo si se puede demostrar la trazabilidad y hay confianza en el origen: animales sin tratamiento antibiótico ni antiparasitario reciente, y potreros sin herbicidas."
+      }
+    },
+    {
+      "id": "estiercol-hipodromo",
+      "nombre": "Estiércol fresco de hipódromo",
+      "categoria": "abonos",
+      "insumo": true,
+      "etiquetas": [
+        "estiércol",
+        "insumo"
+      ],
+      "resumen": "Cama y estiércol de los caballos de carrera. Es abundante y barato, y por eso tienta.",
+      "uso": "No se recomienda su uso. Ver también «Qué no entra en la chacra».",
+      "cuidados": [
+        "En su lugar: estiércol de rumiantes de origen conocido, compost termófilo o bocashi."
+      ],
+      "semaforo": {
+        "color": "rojo",
+        "motivo": "Los caballos de carrera reciben de forma habitual antiparasitarios, antibióticos y otros medicamentos, cuyos restos pasan al estiércol. Además es de monogástrico."
+      }
+    },
+    {
+      "id": "estiercol-monogastrico-fresco",
+      "nombre": "Estiércol fresco de monogástricos",
+      "categoria": "abonos",
+      "insumo": true,
+      "etiquetas": [
+        "estiércol",
+        "insumo"
+      ],
+      "resumen": "Guano de gallina, estiércol de cerdo o de conejo, sin compostar.",
+      "uso": "No se recomienda aplicarlo fresco. Compostado pasa a amarillo (ver la ficha siguiente).",
+      "cuidados": [
+        "En su lugar: compostarlo, o usar estiércol de rumiantes de origen conocido."
+      ],
+      "semaforo": {
+        "color": "rojo",
+        "motivo": "Fresco trae más riesgo de patógenos para la salud humana que el de rumiantes, y el guano quema raíces por su exceso de nitrógeno. Si viene de producción intensiva, puede traer restos de medicamentos."
+      }
+    },
+    {
+      "id": "estiercol-monogastrico-compostado",
+      "nombre": "Estiércol compostado de monogástricos",
+      "categoria": "abonos",
+      "insumo": true,
+      "etiquetas": [
+        "estiércol",
+        "insumo"
+      ],
+      "resumen": "Guano de gallina, estiércol de cerdo o de conejo, después de un compostaje termófilo completo.",
+      "uso": "Al suelo, como cualquier compost. Es un buen arranque de nitrógeno dentro de la pila de compost termófilo.",
+      "cuidados": [
+        "Que sea de crianza propia o de una granja agroecológica, no de galpones de producción intensiva.",
+        "El compostaje tiene que llegar a la temperatura y los volteos de la ficha del compost termófilo."
+      ],
+      "semaforo": {
+        "color": "amarillo",
+        "motivo": "El compostaje termófilo baja el riesgo sanitario, pero no elimina los restos de medicamentos que pudiera traer. Depende de conocer el origen."
+      }
     },
     {
       "id": "biorepelente-picante",
@@ -982,139 +1081,144 @@
       ]
     },
     {
-      "id": "caldo-lejia",
-      "nombre": "Caldo lejía",
-      "categoria": "insectos",
-      "etiquetas": [
-        "insecticida",
-        "fungicida",
-        "cal"
-      ],
-      "resumen": "Jabón, ceniza y cal. Insecticida y fungicida de dos días de elaboración, con ingredientes que hay en cualquier chacra.",
-      "sugerencia": {
-        "metodo": "Mochila (foliar)",
-        "dosis": "5 % (1 litro por mochila de 20 L)"
-      },
-      "rinde": "100 litros",
-      "tiempo": "2 días",
-      "ingredientes": [
-        "1 kg de jabón en pan, rallado",
-        "3 kg de ceniza de madera tamizada",
-        "3 kg de cal viva",
-        "100 litros de agua",
-        "1 tambor plástico de 100 litros y un agitador de madera"
-      ],
-      "preparacion": [
-        "Día 1. Disolver el jabón rallado en 10 a 15 litros de agua caliente.",
-        "Agregar la ceniza tamizada, mezclar y dejar en reposo 24 horas. Colar con lienzo.",
-        "Día 2. Sobre el filtrado, agregar los 3 kg de cal, mezclar y completar con agua hasta los 100 litros.",
-        "No necesita reposo: se puede usar enseguida. Filtrar con lienzo."
-      ],
-      "uso": "Insecticida y fungicida.",
-      "dosis": [
-        {
-          "cuando": "General",
-          "cuanto": "5 % — 5 litros en 100 de agua, o 1 litro por mochila de 20 litros"
-        }
-      ],
-      "cuidados": [
-        "La cal viva reacciona con el agua desprendiendo calor y salpica. Guantes y antiparras.",
-        "Alcaliniza: no mezclar con preparados que dependan de microorganismos vivos, porque los desactiva."
-      ],
-      "fuente": [
-        "F3"
-      ]
-    },
-    {
       "id": "caldo-ceniza",
-      "nombre": "Caldo de ceniza",
+      "nombre": "Lejía y caldos de ceniza",
       "categoria": "insectos",
       "etiquetas": [
         "pulgones",
         "mosca blanca",
+        "caracoles y tucuras",
         "preventivo de hongos",
-        "heladas"
+        "base de otros preparados"
       ],
-      "resumen": "La versión chica y rápida del caldo lejía: un balde, tres ingredientes y sin cocción.",
+      "resumen": "Ceniza de madera y agua, a veces con cal o jabón. Según la proporción y lo que se le sume, sale un insecticida suave, un repelente de bichos grandes o un preventivo de hongos. Antes eran cuatro fichas; acá están juntas porque son variantes de lo mismo.",
       "sugerencia": {
         "metodo": "Mochila (foliar)",
         "dosis": "2 % (400 ml por mochila de 20 L)",
         "cada_dias": 15
       },
-      "rinde": "20 litros",
-      "tiempo": "Inmediato",
+      "rinde": "Según la variante, de 20 a 100 litros",
+      "tiempo": "De inmediato a 4 días, según la variante",
       "ingredientes": [
-        "200 g de ceniza de madera tamizada",
-        "100 g de cal viva o apagada",
-        "20 litros de agua",
-        "1 balde plástico de 20 litros y un agitador de madera"
+        "Ceniza de madera bien quemada, de color gris, tamizada: un tercio del recipiente",
+        "Agua de buena calidad: los dos tercios restantes",
+        "1 recipiente plástico de 50 litros y un agitador de madera"
       ],
       "preparacion": [
-        "Mezclar la ceniza con la cal.",
-        "Agregar el agua y mezclar.",
-        "Filtrar con tela y envasar en bidones oscuros rotulados."
+        "Llenar un tercio del recipiente con ceniza tamizada.",
+        "Completar los otros dos tercios con agua.",
+        "Mezclar al menos dos veces por día durante dos días.",
+        "Dejar reposar 48 horas.",
+        "Retirar el líquido amarillo que queda arriba: esa es la lejía.",
+        "Guardar en bidones oscuros rotulados."
       ],
-      "uso": "Controla enfermedades fúngicas y plagas como pulgón y mosca blanca. La fuente le atribuye además un efecto amortiguador frente a heladas, por el engrosamiento del tejido vegetal.",
+      "uso": "La lejía sola es un insecticida suave y un desinfectante, y es ingrediente del té de compost y del humus líquido enriquecido. Con cal y jabón se arman los caldos de abajo, que amplían el efecto.",
       "dosis": [
         {
-          "cuando": "Foliar",
-          "cuanto": "2 %, cada 15 días — unos 400 ml en una mochila de 20 litros"
-        }
-      ],
-      "conservacion": "6 meses.",
-      "revisar": "En el PDF original de la fuente las dosis del caldo de ceniza y del caldo frío mineral están en columnas contiguas y la extracción de texto pudo cruzarlas. Antes de recomendarla a un productor, verificar contra el documento impreso.",
-      "fuente": [
-        "F4"
-      ]
-    },
-    {
-      "id": "caldo-frio-mineral",
-      "nombre": "Caldo frío mineral",
-      "categoria": "estres",
-      "etiquetas": [
-        "repelente",
-        "caracoles",
-        "tucura",
-        "sin cocción"
-      ],
-      "resumen": "Ceniza y cal con agua caliente y fría. Repelente de los bichos grandes que muerden y de los caracoles, y el único preparado de la lista con efecto declarado frente a heladas.",
-      "sugerencia": {
-        "metodo": "Mochila (foliar)",
-        "dosis": "Puro, por la tarde"
-      },
-      "rinde": "20 litros",
-      "tiempo": "24 horas de reposo",
-      "ingredientes": [
-        "800 g de ceniza de madera tamizada",
-        "200 g de cal viva o apagada",
-        "2 litros de agua caliente",
-        "18 litros de agua fría",
-        "1 balde plástico de 20 litros y un agitador de madera"
-      ],
-      "preparacion": [
-        "Mezclar en seco la ceniza y la cal.",
-        "Agregar el agua caliente y mezclar para disolver.",
-        "Sumar los 18 litros de agua fría y volver a mezclar.",
-        "Dejar reposar 24 horas.",
-        "Filtrar con tela el líquido de arriba y guardar en bidones oscuros rotulados."
-      ],
-      "uso": "Repelente de bicho moro, langosta, chinche, tucura y caracol.",
-      "dosis": [
-        {
-          "cuando": "Aplicación",
-          "cuanto": "Puro, por la tarde"
+          "cuando": "Insecticida (pulgones, mosca blanca)",
+          "cuanto": "5 % en agua"
         },
         {
-          "cuando": "Ataques severos",
-          "cuanto": "Repetir 2 o 3 días seguidos"
+          "cuando": "Mosca blanca, con mejor adherencia",
+          "cuanto": "5 % de lejía + 1 kg de harina de trigo"
+        },
+        {
+          "cuando": "Desinfectante",
+          "cuanto": "Diluir al 10 %"
         }
       ],
-      "conservacion": "6 meses.",
-      "revisar": "Ver la nota del caldo de ceniza: en la fuente original las dosis de los dos preparados están en columnas contiguas y conviene verificarlas contra el impreso.",
+      "variantes": {
+        "intro": "Las tres parten de ceniza de madera bien quemada y tamizada. Cambian la cantidad de ceniza, si llevan cal, si llevan jabón y cuánto reposan. Elegir según el problema.",
+        "lista": [
+          {
+            "nombre": "Caldo de ceniza (rápido)",
+            "para": "Pulgones, mosca blanca y preventivo de hongos. Es la versión chica, sin reposo.",
+            "rinde": "20 litros",
+            "tiempo": "Inmediato",
+            "ingredientes": [
+              "200 g de ceniza de madera tamizada",
+              "100 g de cal viva o apagada",
+              "20 litros de agua",
+              "1 balde plástico de 20 litros y un agitador de madera"
+            ],
+            "preparacion": [
+              "Mezclar la ceniza con la cal.",
+              "Agregar el agua y mezclar.",
+              "Filtrar con tela y envasar en bidones oscuros rotulados."
+            ],
+            "dosis": [
+              {
+                "cuando": "Foliar",
+                "cuanto": "2 %, cada 15 días — unos 400 ml en una mochila de 20 litros"
+              }
+            ]
+          },
+          {
+            "nombre": "Caldo frío mineral (repelente)",
+            "para": "Repelente de bicho moro, langosta, chinche, tucura y caracol. Lleva cuatro veces más ceniza que el caldo rápido y reposa un día. La fuente le atribuye además un efecto protector frente a heladas.",
+            "rinde": "20 litros",
+            "tiempo": "24 horas de reposo",
+            "ingredientes": [
+              "800 g de ceniza de madera tamizada",
+              "200 g de cal viva o apagada",
+              "2 litros de agua caliente",
+              "18 litros de agua fría",
+              "1 balde plástico de 20 litros y un agitador de madera"
+            ],
+            "preparacion": [
+              "Mezclar en seco la ceniza y la cal.",
+              "Agregar el agua caliente y mezclar para disolver.",
+              "Sumar los 18 litros de agua fría y volver a mezclar.",
+              "Dejar reposar 24 horas.",
+              "Filtrar con tela el líquido de arriba y guardar en bidones oscuros rotulados."
+            ],
+            "dosis": [
+              {
+                "cuando": "Aplicación",
+                "cuanto": "Puro, por la tarde"
+              },
+              {
+                "cuando": "Ataques severos",
+                "cuanto": "Repetir 2 o 3 días seguidos"
+              }
+            ]
+          },
+          {
+            "nombre": "Caldo lejía con jabón",
+            "para": "Insecticida y fungicida de mayor volumen. El jabón mejora la adherencia y suma efecto sobre insectos de cuerpo blando.",
+            "rinde": "100 litros",
+            "tiempo": "2 días",
+            "ingredientes": [
+              "1 kg de jabón en pan, rallado",
+              "3 kg de ceniza de madera tamizada",
+              "3 kg de cal viva",
+              "100 litros de agua",
+              "1 tambor plástico de 100 litros y un agitador de madera"
+            ],
+            "preparacion": [
+              "Día 1. Disolver el jabón rallado en 10 a 15 litros de agua caliente.",
+              "Agregar la ceniza tamizada, mezclar y dejar en reposo 24 horas. Colar con lienzo.",
+              "Día 2. Sobre el filtrado, agregar los 3 kg de cal, mezclar y completar con agua hasta los 100 litros.",
+              "No necesita reposo: se puede usar enseguida. Filtrar con lienzo."
+            ],
+            "dosis": [
+              {
+                "cuando": "General",
+                "cuanto": "5 % — 5 litros en 100 de agua, o 1 litro por mochila de 20 litros"
+              }
+            ]
+          }
+        ]
+      },
+      "conservacion": "La lejía y los caldos sin jabón, hasta 6 meses en bidones oscuros y rotulados.",
+      "revisar": "En la fuente original (F4) las dosis del caldo de ceniza rápido y del caldo frío mineral están en columnas contiguas y la extracción de texto pudo cruzarlas. Antes de recomendarlas, verificar contra el documento impreso.",
       "cuidados": [
-        "La cal viva desprende calor al contacto con el agua. Guantes y antiparras."
+        "La cal viva reacciona con el agua desprendiendo calor y salpica. Guantes y antiparras.",
+        "Es alcalino: no mezclar con preparados que dependen de microorganismos vivos (MM, bacterias lácticas, té de compost ya terminado), porque los desactiva.",
+        "Usar ceniza solo de madera sin pintar ni tratar: nada de cenizas de carbón, plásticos o diarios."
       ],
       "fuente": [
+        "F3",
         "F4"
       ]
     },
@@ -1184,7 +1288,11 @@
       "fuente": [
         "F3",
         "F4"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Azufre y cal: preventivo de hongos sin cobre."
+      }
     },
     {
       "id": "caldo-bordeles",
@@ -1231,7 +1339,8 @@
         "No aplicar en floración.",
         "El cobre se acumula en el suelo y es tóxico para lombrices y microorganismos. No es inocuo por ser 'natural'.",
         "El Anexo III de la Resolución 374/2016 lo admite, pero hasta 6 kg de cobre por hectárea y por año, sumando todos los preparados con cobre. La app lleva esa cuenta a partir de tu plan.",
-        "Evitar la exposición al sol durante la preparación."
+        "Evitar la exposición al sol durante la preparación.",
+        "El semáforo lo marca en rojo por el cobre: se acumula en el suelo y no se degrada. Como preventivo de hongos, preferir el caldo sulfocálcico o el caldo de bicarbonato de sodio."
       ],
       "fuente": [
         "F4"
@@ -1241,68 +1350,10 @@
         "litros_receta": 20,
         "gramos_por_receta": 50.8,
         "detalle": "200 g de sulfato de cobre en 20 litros de caldo, que son unos 50,8 g de cobre metálico por tanda."
-      }
-    },
-    {
-      "id": "caldo-visosa",
-      "nombre": "Caldo Visosa",
-      "categoria": "enfermedades",
-      "etiquetas": [
-        "roya",
-        "boro",
-        "cobre con tope anual"
-      ],
-      "resumen": "Un bordelés enriquecido con boro, magnesio y zinc. Apunta específicamente a la roya, corrigiendo la deficiencia de boro que la favorece.",
-      "sugerencia": {
-        "metodo": "Mochila (foliar)",
-        "dosis": "25 % desde pre-macollaje"
       },
-      "rinde": "100 litros",
-      "tiempo": "Se prepara y se usa el mismo día",
-      "ingredientes": [
-        "100 litros de agua",
-        "500 g de sulfato de cobre",
-        "500 g de cal",
-        "600 g de sulfato de zinc",
-        "400 g de bórax",
-        "400 g de sulfato de magnesio",
-        "1 recipiente plástico de 200 litros y un balde de 20"
-      ],
-      "preparacion": [
-        "Disolver primero la cal en 10 litros de agua.",
-        "En otro recipiente, disolver las demás sales minerales.",
-        "Agregar la mezcla de sales sobre la cal, nunca al revés.",
-        "Filtrar con lienzo y usar en el día."
-      ],
-      "uso": "Fungicida, principalmente contra roya.",
-      "dosis": [
-        {
-          "cuando": "Desde pre-macollaje",
-          "cuanto": "25 %"
-        },
-        {
-          "cuando": "Frutales jóvenes en formación, primavera",
-          "cuanto": "50 %"
-        },
-        {
-          "cuando": "Frutales de más de 3 años",
-          "cuanto": "Puro"
-        }
-      ],
-      "conservacion": "No se almacena.",
-      "cuidados": [
-        "Nunca aplicar en floración.",
-        "El Anexo III de la Resolución 374/2016 lo admite, pero hasta 6 kg de cobre por hectárea y por año, sumando todos los preparados con cobre. La app lleva esa cuenta a partir de tu plan.",
-        "El bórax es tóxico por ingestión. Guardarlo fuera del alcance de chicos y animales."
-      ],
-      "fuente": [
-        "F4"
-      ],
-      "cobre": {
-        "gramos_por_litro": 1.27,
-        "litros_receta": 100,
-        "gramos_por_receta": 127.0,
-        "detalle": "500 g de sulfato de cobre en 100 litros de caldo, que son unos 127 g de cobre metálico por tanda."
+      "semaforo": {
+        "color": "rojo",
+        "motivo": "El cobre se acumula en el suelo, no se degrada y afecta su vida. Se recomienda reemplazarlo por el sulfocálcico o el caldo de bicarbonato."
       }
     },
     {
@@ -1347,64 +1398,110 @@
       ],
       "fuente": [
         "F4"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Bicarbonato de sodio en agua: preventivo de hongos de bajo impacto."
+      }
     },
     {
-      "id": "cola-caballo",
-      "nombre": "Decocción de cola de caballo",
-      "categoria": "enfermedades",
+      "id": "mm-solido",
+      "nombre": "Microorganismos de montaña (MM) sólido",
+      "categoria": "base",
       "etiquetas": [
-        "preventivo",
-        "oídio",
-        "mildiu",
-        "roya",
-        "curasemilla",
-        "de la Comarca"
+        "microorganismos",
+        "de la Comarca",
+        "base de otros preparados"
       ],
       "comarca": true,
-      "resumen": "Cocción de una planta que crece sola en los mallines de la Comarca. Aporta sílice, endurece los tejidos y previene hongos. Es preventivo: no cura lo ya instalado.",
-      "sugerencia": {
-        "metodo": "Mochila (foliar)",
-        "dosis": "10 % en posemergencia"
-      },
-      "rinde": "10 litros",
-      "tiempo": "12 horas de remojo y 30 minutos de hervor",
+      "resumen": "La captura del bosque nativo: hojarasca con microorganismos locales, multiplicada sobre afrecho y azúcar. Es el punto de partida de casi todo lo demás.",
+      "rinde": "Un tambor de 200 litros de material sólido",
+      "tiempo": "30 a 50 días de fermentación",
       "ingredientes": [
-        "1 kg de cola de caballo fresca, o 250 g seca",
-        "10 litros de agua",
-        "1 recipiente metálico de 20 litros",
-        "Envases de vidrio oscuro para guardar"
+        "60 kg de hojarasca de suelo de bosque",
+        "30 kg de afrecho, salvado o molienda de cereales (trigo, avena, cebada, centeno)",
+        "5 kg de azúcar, melaza o miel de caña",
+        "Agua sin cloro",
+        "1 tambor plástico de 200 litros con tapa hermética"
       ],
       "preparacion": [
-        "Dejar los tallos en remojo durante 12 horas.",
-        "Hervir a fuego directo durante 30 minutos.",
-        "Para que dure más, envasar en caliente en recipientes de vidrio.",
-        "Rotular con nombre y fecha."
+        "Juntar la hojarasca del bosque, de los primeros 10 cm de suelo. Buscar donde haya especies de hoja caduca, sobre todo ñire. Sirve la hojarasca con manchas blancas y con hifas de hongos a la vista: eso indica que los microorganismos están ahí.",
+        "Conviene colectar en primavera: la humedad y la temperatura de esa época favorecen la reproducción.",
+        "Al aire libre, mezclar bien con pala la hojarasca y el afrecho.",
+        "Aparte, disolver el azúcar en un poco de agua y agregarla a la mezcla, sin dejar de revolver.",
+        "Ir sumando agua hasta llegar al 40 % de humedad. Se controla con la prueba del puño: al apretar un puñado no debe escurrir agua entre los dedos, pero el bollo tiene que quedar armado.",
+        "Cargar el tambor de a poco, apisonando cada capa para sacarle el aire.",
+        "Tapar herméticamente y dejar a la sombra 30 a 50 días, según la zona."
       ],
-      "uso": "Preventivo de enfermedades fúngicas: oídio, mildiu y roya.",
-      "dosis": [
-        {
-          "cuando": "Curasemilla",
-          "cuanto": "Remojar las semillas en el preparado, dejar secar y sembrar"
-        },
-        {
-          "cuando": "Presiembra",
-          "cuanto": "Pulverizar el suelo al 20 %"
-        },
-        {
-          "cuando": "Posemergencia",
-          "cuanto": "Al 10 %, en días calurosos y húmedos. Evitar los días cálidos y secos. Con lluvias, cada 3 días."
-        }
-      ],
-      "conservacion": "15 días.",
+      "uso": "No se aplica al cultivo. Es la reserva desde la que se prepara el MM líquido y varios de los demás biopreparados.",
+      "conservacion": "Una vez fermentado se guarda 1 a 2 años.",
       "cuidados": [
-        "Es también un ingrediente del bioestimulante de ortiga, así que conviene preparar de más.",
-        "En la versión para ese bioestimulante se infusiona 1 hora a fuego medio sin llegar a hervir; acá se hierve 30 minutos. Son dos preparaciones distintas para dos usos distintos."
+        "Colectar sin arrasar: se saca hojarasca superficial de varios puntos, no un pozo en un solo lugar.",
+        "El tambor tiene que cerrar bien. Si entra aire, la fermentación se pudre en vez de conservarse."
       ],
       "fuente": [
-        "F2",
+        "F1",
+        "F2"
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Mantillo del bosque nativo, salvado y melaza: insumos de la zona que multiplican la vida del suelo."
+      }
+    },
+    {
+      "id": "pasto-fermentado",
+      "nombre": "Pasto fermentado",
+      "categoria": "base",
+      "etiquetas": [
+        "microorganismos",
+        "base de otros preparados"
+      ],
+      "resumen": "La alternativa a los microorganismos de montaña cuando no hay bosque cerca: se capturan del pasto y del compost del propio establecimiento.",
+      "rinde": "1 tambor de 200 litros",
+      "tiempo": "30 días",
+      "ingredientes": [
+        "2 bolsas de pasto fresco recién picado (maíz, sorgo, moha, mijo, alfalfa o corte de césped)",
+        "4 bolsas de afrechillo de cereales o grano de maíz molido",
+        "5 kg de compost maduro, bocashi o mantillo de un ambiente natural",
+        "5 kg de melaza o azúcar",
+        "10 litros de suero de quesería",
+        "1 tambor plástico de 200 litros con tapa y zuncho",
+        "1 pisón de madera y una lona plástica"
+      ],
+      "preparacion": [
+        "Extender la lona e ir armando capas de unos 20 cm: pasto picado, afrechillo o maíz molido, y el compost distribuido encima. Homogeneizar con pala.",
+        "Aparte, disolver la melaza en el suero y agregarlo a la mezcla.",
+        "Sumar agua de a poco hasta llegar al 30 % de humedad.",
+        "Cargar el tambor por capas de 20 cm, apisonando cada una con el pisón de madera.",
+        "Cerrar con tapa y zuncho, hermético, y dejar 30 días de fermentación anaeróbica."
+      ],
+      "uso": "Fuente de microorganismos locales. Sirve para revitalizar suelos degradados por manejo convencional. Para aplicarlo hay que activarlo en fase líquida.",
+      "dosis": [
+        {
+          "cuando": "Hortalizas, foliar (una vez activado)",
+          "cuanto": "Diluir al 20 %"
+        },
+        {
+          "cuando": "Frutales, foliar (una vez activado)",
+          "cuanto": "Diluir al 30 %"
+        },
+        {
+          "cuando": "Desintoxicación de suelos",
+          "cuanto": "Diluir al 50 %, durante la preparación de la cama de siembra"
+        }
+      ],
+      "conservacion": "El sólido se conserva bien. Una vez activado en fase líquida, la vida útil es de 30 días.",
+      "cuidados": [
+        "Para activarlo: 5 kg de pasto fermentado en una bolsa de tela, 5 kg de melaza y 10 litros de suero en el tambor, completar con agua y cerrar con zuncho. A partir del cuarto día se puede usar."
+      ],
+      "fuente": [
+        "F3",
         "F4"
-      ]
+      ],
+      "semaforo": {
+        "color": "verde",
+        "motivo": "Pasto de la chacra fermentado."
+      }
     }
   ],
   "recomendaciones": {
@@ -1422,10 +1519,11 @@
     ]
   },
   "pendiente": [
+    "Falta asignarle el color del semáforo a: Fertilizante rico en fósforo, Humus líquido, Adherente y bioestimulante de aloe, Biorepelente picante, Extracto botánico de ajo, ají y pimienta, Lejía y caldos de ceniza.",
     "Compatibilidad de cada preparado con el pliego ECOMARCAL: ya hay un borrador del Protocolo de Elaboración de Bioinsumos del SPG (versión agosto de 2026), todavía en discusión en el Consejo de Garantía y la Asamblea General. Hasta que se apruebe no se puede marcar ficha por ficha qué admite el sello.",
     "Todo bioinsumo de elaboración casera necesita autorización previa del Consejo de Garantía, que evalúa origen de las materias primas, modo de preparación, conservación, forma de uso y período de carencia.",
-    "Los preparados con cobre (bordelés y Visosa) están marcados como 'a consultar': el Anexo III de la Resolución 374/2016 los admite, pero con un tope de 6 kg de cobre por hectárea y por año, prescripción y zonas de amortiguación.",
-    "Falta el texto completo del Anexo II de la Resolución 374/2016 (abonos y nutrientes permitidos). Sin eso quedan sin confirmar los sulfatos de zinc, magnesio y potasio, el bórax y la harina de roca que usan el Súpermagro, el caldo Visosa, el sulfocálcico enriquecido y el fertilizante rico en fósforo.",
+    "El caldo bordelés lleva cobre: el semáforo lo marca en rojo, y el Anexo III de la Resolución 374/2016 los admite, pero con un tope de 6 kg de cobre por hectárea y por año, prescripción y zonas de amortiguación.",
+    "Falta el texto completo del Anexo II de la Resolución 374/2016 (abonos y nutrientes permitidos). Sin eso quedan sin confirmar los sulfatos de zinc, magnesio y potasio, el bórax y la harina de roca que usan el Súpermagro, el sulfocálcico enriquecido y el fertilizante rico en fósforo.",
     "Volúmenes por superficie: la bibliografía regional ajustó las diluciones, pero reconoce que cuánto aplicar por hectárea todavía no está definido.",
     "Fotos propias de cada etapa de elaboración."
   ],
@@ -1434,5 +1532,35 @@
     "titulo": "Tope de cobre del Anexo III",
     "detalle": "El Anexo III de la Resolución 374/2016 de SENASA admite los compuestos de cobre hasta 6 kg de cobre por hectárea y por año, con prescripción y medidas de reducción de riesgo como zonas de amortiguación. El protocolo del SPG Ecomarcal pide que el Consejo de Garantía lleve el acumulado por chacra y por temporada.",
     "sulfato_de_cobre_por_ciento": 25.4
+  },
+  "semaforo": {
+    "titulo": "Semáforo agroecológico",
+    "intro": "Cada biopreparado, bioinsumo e insumo de la wiki lleva un color que indica qué tan agroecológica consideramos la práctica. Se mira el producto entero: con qué se hace, cómo se elabora y qué efecto tiene sobre el suelo, los cultivos, los animales y las personas.",
+    "colores": [
+      {
+        "id": "verde",
+        "nombre": "Agroecológico",
+        "icono": "🟢",
+        "descripcion": "Tanto los insumos utilizados como el proceso de elaboración y los efectos sobre el agroecosistema se consideran beneficiosos o inocuos. Se puede usar dentro de un manejo agroecológico."
+      },
+      {
+        "id": "amarillo",
+        "nombre": "En transición",
+        "icono": "🟡",
+        "descripcion": "Alguno de los ingredientes o insumos con que se elabora es cuestionable o de origen dudoso. Es una práctica que puede mejorarse. Puede aceptarse en un manejo agroecológico si se cumplen las condiciones que indica su ficha, y conviene avanzar hacia una alternativa mejor."
+      },
+      {
+        "id": "rojo",
+        "nombre": "No recomendado",
+        "icono": "🔴",
+        "descripcion": "No estaría aprobado para la producción agroecológica. Se recomienda reemplazarlo por prácticas más adecuadas; la ficha sugiere alternativas cuando las hay."
+      }
+    ],
+    "sin_evaluar": {
+      "nombre": "Sin evaluar",
+      "icono": "⚪",
+      "descripcion": "El equipo todavía no le asignó un color."
+    },
+    "aclaracion": "El semáforo es una valoración del equipo técnico del IFAB, construida con los productores de ECOMARCAL. Orienta, pero no reemplaza lo que resuelva el Consejo de Garantía del SPG, que es quien autoriza cada bioinsumo para el sello."
   }
 }

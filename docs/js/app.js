@@ -215,6 +215,15 @@
             <span class="menu__detalle">Establecimiento, localidad y sectores de riego</span>
           </span>
         </button>
+        <!-- El manual es una página aparte, como la guía de AMA Producción:
+             se lee entera, con índice, y se puede pasar por mensaje. -->
+        <a class="menu__boton" href="ayuda/">
+          <span class="menu__icono">❓</span>
+          <span>
+            <span class="menu__titulo">Manual de uso</span>
+            <span class="menu__detalle">Cómo usar la app y qué significa el semáforo agroecológico</span>
+          </span>
+        </a>
       </div>
 
       ${instalador ? `<button class="boton boton--secundario boton--ancho separado"

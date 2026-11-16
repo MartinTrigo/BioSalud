@@ -41,7 +41,7 @@ app y cómo se usa, en el [README](README.md).
 | **3 · Seguimiento** | Agenda Hoy / Semana / Atrasado + checklist + semáforo de cumplimiento | ✅ hecha |
 | **4 · Sincronización** | Despliegue del Apps Script, planillas por chacra, canje de invitación, términos aceptados en la app | 🔄 casi — servicio publicado, alta de chacras desde el menú, canje arreglado y términos mostrados y registrados; falta activar el primer teléfono |
 | **5 · Monitoreo** | Registro a campo + motor de sugerencia + aviso al técnico + plan de tratamiento | ✅ hecha — el tratamiento lo arma el productor y el técnico lo comenta en la planilla; falta que el comentario vuelva a la app. Desde noviembre también se registran aplicaciones fuera del plan y se sigue un mismo problema en varios controles |
-| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 25 biopreparados, 7 plagas y los no permitidos del sello; faltan las enfermedades fúngicas y las fotos propias |
+| **6 · Wiki** | Fichas de bioinsumos y de plagas regionales + qué no admite el sello, consultables sin señal | 🔄 en curso — 26 fichas de biopreparados e insumos con su semáforo agroecológico, 7 plagas, los no permitidos del sello y el manual de uso; faltan las enfermedades fúngicas y las fotos propias |
 | **7 · Avisos** | Correo automático de aplicaciones pendientes | pendiente |
 | **8 · Piloto** | Prueba con 2 chacras, ajustes y despliegue a las 10 | pendiente |
 

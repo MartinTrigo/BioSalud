@@ -923,3 +923,60 @@ textarea { resize: vertical; min-height: 60px; }
   border-radius: var(--radio);
   background: var(--violeta-suave);
 }
+
+/* ---------- Semáforo agroecológico ----------
+   La palabra va siempre: el color solo no alcanza al sol ni para quien no
+   distingue rojo de verde. Los fondos son suaves y el texto oscuro, por
+   contraste (todos pasan 4,5:1). */
+
+.luz {
+  display: inline-block;
+  padding: 1px 9px 1px 7px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.luz::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 5px;
+  border-radius: 50%;
+  vertical-align: 0;
+}
+.luz--verde { background: var(--verde-suave); color: var(--verde); }
+.luz--verde::before { background: var(--verde-claro); }
+.luz--amarillo { background: #fbf0cf; color: #6b4b00; }
+.luz--amarillo::before { background: var(--dorado); }
+.luz--rojo { background: var(--error-suave); color: var(--error); }
+.luz--rojo::before { background: var(--error); }
+.luz--sin { background: var(--fondo); color: var(--texto-suave); border: 1px solid var(--borde); }
+.luz--sin::before { background: var(--borde); }
+
+.indice__item .luz { margin-top: 3px; }
+.leyenda-luz { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0 12px; }
+
+.luz-ficha { border-left: 5px solid var(--borde); padding-left: 10px; margin: 10px 0; }
+.tarjeta.luz-ficha { padding-left: 16px; }
+.luz-ficha--verde { border-left-color: var(--verde-claro); }
+.luz-ficha--amarillo { border-left-color: var(--dorado); }
+.luz-ficha--rojo { border-left-color: var(--error); }
+.luz-ficha p { margin: 4px 0; }
+
+.enlace {
+  background: none;
+  border: 0;
+  padding: 0 4px;
+  min-height: 0;
+  font: inherit;
+  font-size: 14px;
+  color: var(--violeta-claro);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a.menu__boton { text-decoration: none; }

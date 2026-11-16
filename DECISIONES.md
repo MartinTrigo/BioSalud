@@ -675,3 +675,40 @@ naturales y el ciclo de la plaga.
 **Las columnas nuevas de la planilla van al final**, después de "Recibido", por
 la misma razón que el id del sector en Config: es lo único que
 `asegurarEncabezados` agrega sin desalinear lo ya cargado.
+
+---
+
+## Por qué cada ficha lleva un semáforo agroecológico
+
+**Decisión:** cada biopreparado, bioinsumo e insumo de la wiki lleva un color:
+verde (agroecológico), amarillo (en transición) o rojo (no recomendado), con
+una línea que dice por qué. Las definiciones viven en
+`datos/biopreparados.json` (`semaforo`) y se muestran en la wiki, el plan, el
+monitoreo, la cartilla y el manual.
+
+**La palabra va siempre al lado del color.** Al sol el rojo y el verde se
+confunden, y una de cada doce personas no los distingue.
+
+**El porqué importa más que el color.** "Amarillo" solo no dice qué cuidar; "se
+acepta solo con trazabilidad del origen del estiércol" sí.
+
+**Los rojos se pueden planificar y registrar**, con aviso. Por la misma razón
+que los químicos en las aplicaciones fuera del plan: ocultarlos enseña a no
+anotarlos.
+
+**Es una valoración del equipo, no la habilitación del sello.** Eso lo resuelve
+el Consejo de Garantía, y la app lo aclara cada vez que explica el semáforo.
+
+**Las fichas sin color quedan "Sin evaluar"**, a la vista y listadas en lo
+pendiente, en vez de recibir un color supuesto.
+
+## Por qué las lejías y caldos de ceniza son una sola ficha
+
+Lejía de ceniza, caldo de ceniza, caldo frío mineral y caldo lejía eran cuatro
+fichas de lo mismo: ceniza de madera y agua, con o sin cal y jabón, en distintas
+proporciones. Ahora son una ficha con la lejía como base y las otras tres como
+variantes, cada una con su receta y su dosis. Con eso desaparecieron también la
+categoría "Reguladores de estrés", que solo tenía el caldo frío mineral, y la
+decocción de cola de caballo como ficha aparte: queda como ingrediente del
+bioestimulante de ortiga. El caldo Visosa y los microorganismos de silo de maíz
+salieron de la lista.

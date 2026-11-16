@@ -64,5 +64,27 @@ window.Util = (function () {
 
   const hoy = () => new Date().toISOString().slice(0, 10);
 
-  return { esc, brindis, numero, aNumero, superficie, hoy };
+  // EL SEMÁFORO AGROECOLÓGICO
+  //
+  // Una sola función para dibujarlo en la wiki, el plan y el monitoreo, así
+  // el mismo producto se ve igual en las tres pantallas. Los nombres de cada
+  // color vienen de datos/biopreparados.json (`semaforo`), no de acá: son
+  // criterio del equipo y se corrigen sin tocar el código.
+  //
+  // Lleva siempre la palabra, no solo el color: al sol, con la pantalla al
+  // mínimo, un punto rojo y uno verde se confunden, y una de cada doce
+  // personas no distingue esos dos colores.
+  function colorDe(f, sem) {
+    const id = f && f.semaforo ? f.semaforo.color : "";
+    const def = ((sem && sem.colores) || []).find((c) => c.id === id);
+    return def ? Object.assign({ id: id }, def)
+      : Object.assign({ id: "sin" }, (sem && sem.sin_evaluar) || { nombre: "Sin evaluar", icono: "⚪" });
+  }
+
+  function luz(f, sem) {
+    const c = colorDe(f, sem);
+    return `<span class="luz luz--${esc(c.id)}">${esc(c.nombre)}</span>`;
+  }
+
+  return { esc, brindis, numero, aNumero, superficie, hoy, luz, colorDe };
 })();

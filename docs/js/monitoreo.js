@@ -610,6 +610,7 @@ window.Monitoreo = (function () {
                 <button class="indice__item" data-preparado="${esc(t.id)}">
                   <span class="indice__nombre">${esc(t.nombre)}${cobre
                     ? ` <span class="sello-comarca sello-comarca--cuidado">lleva cobre</span>` : ""}</span>
+                  ${window.Util.luz(t, bio.semaforo)}
                   <span class="indice__cientifico">${esc(t.resumen)}</span>
                 </button>
                 <button class="boton boton--secundario boton--ancho"

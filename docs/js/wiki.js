@@ -20,7 +20,7 @@
 // ==========================================================================
 
 window.Wiki = (function () {
-  const { esc } = window.Util;
+  const { esc, luz, colorDe } = window.Util;
 
   let bio = null;      // datos/biopreparados.json
   let plagas = null;   // datos/plagas.json
@@ -81,6 +81,7 @@ window.Wiki = (function () {
     if (eje === "manejo" && id) return verBiopreparado(id);
     if (eje === "manejo") return listaBiopreparados();
     if (eje === "no-permitidos") return noPermitidos();
+    if (eje === "semaforo") return semaforo();
     return portada();
   }
 
@@ -120,6 +121,15 @@ window.Wiki = (function () {
             <span class="menu__titulo">Manejo y tratamientos</span>
             <span class="menu__detalle">Biopreparados: qué lleva, cómo se hace,
               cómo se aplica y qué cuidados tiene · ${bio.fichas.length} recetas</span>
+          </span>
+        </button>
+
+        <button class="menu__boton" data-wiki="wiki/semaforo">
+          <span class="menu__icono">🚦</span>
+          <span>
+            <span class="menu__titulo">${esc(bio.semaforo.titulo)}</span>
+            <span class="menu__detalle">Qué significan el verde, el amarillo y el rojo
+              de cada ficha</span>
           </span>
         </button>
 
@@ -222,6 +232,7 @@ window.Wiki = (function () {
           ${tratamientos.map((t) => `
             <li><button class="indice__item" data-wiki="wiki/manejo/${esc(t.id)}">
               <span class="indice__nombre">${esc(t.nombre)}</span>
+              ${luz(t, bio.semaforo)}
               <span class="indice__cientifico">${esc(t.resumen)}</span>
             </button></li>`).join("")}
         </ul>`) : ""}
@@ -248,7 +259,7 @@ window.Wiki = (function () {
             <span class="grupo__icono">${c.icono}</span>
             <span class="grupo__texto">
               <span class="grupo__nombre">${esc(c.nombre)}</span>
-              <span class="grupo__cuenta">${fichas.length} ${fichas.length === 1 ? "receta" : "recetas"}</span>
+              <span class="grupo__cuenta">${fichas.length} ${fichas.length === 1 ? "ficha" : "fichas"}</span>
             </span>
             <span class="grupo__flecha" aria-hidden="true"></span>
           </summary>
@@ -259,6 +270,7 @@ window.Wiki = (function () {
                 <li><button class="indice__item" data-wiki="wiki/manejo/${esc(f.id)}">
                   <span class="indice__nombre">${esc(f.nombre)}${f.comarca
                     ? ` <span class="sello-comarca" title="Probado en la Comarca Andina">Comarca</span>` : ""}</span>
+                  ${luz(f, bio.semaforo)}
                   <span class="indice__cientifico">${esc(f.resumen)}</span>
                 </button></li>`).join("")}
             </ul>
@@ -267,9 +279,10 @@ window.Wiki = (function () {
     }).join("");
 
     destino.innerHTML = `
-      <p class="nota">Tocá un tipo para ver sus recetas. Las marcadas como
+      <p class="nota">Tocá un tipo para ver sus fichas. Las marcadas como
         <span class="sello-comarca">Comarca</span> se vienen elaborando y probando
         acá, en talleres de la AER INTA El Bolsón.</p>
+      ${leyenda()}
       ${porCategoria}
       ${pendientes(bio.pendiente)}
       <button class="boton boton--secundario boton--ancho" data-wiki="wiki">Volver a Info / Wiki</button>`;
@@ -293,6 +306,7 @@ window.Wiki = (function () {
         <p class="cientifico">${categoria.icono || ""} ${esc(categoria.nombre || "")}${f.comarca
           ? ` · <span class="sello-comarca">Comarca</span>` : ""}</p>
         <p class="resumen-ficha">${esc(f.resumen)}</p>
+        ${explicarLuz(f)}
         <dl class="datos-rapidos">
           ${f.rinde ? `<div><dt>Rinde</dt><dd>${esc(f.rinde)}</dd></div>` : ""}
           ${f.tiempo ? `<div><dt>Tiempo</dt><dd>${esc(f.tiempo)}</dd></div>` : ""}
@@ -307,15 +321,17 @@ window.Wiki = (function () {
 
       ${fotos(f.fotos)}
 
-      ${bloque("Qué lleva", lista(f.ingredientes))}
+      ${f.ingredientes ? bloque("Qué lleva", lista(f.ingredientes)) : ""}
       ${f.materiales ? bloque("Con qué se arma", materiales(f.materiales)) : ""}
-      ${bloque("Cómo se prepara", pasos(f.preparacion))}
+      ${f.preparacion ? bloque("Cómo se prepara", pasos(f.preparacion)) : ""}
       ${f.uso ? bloque("Para qué sirve", `<p>${esc(f.uso)}</p>`) : ""}
 
       ${f.dosis ? bloque("Cómo se aplica", `
         <dl class="umbrales">
           ${f.dosis.map((d) => `<dt>${esc(d.cuando)}</dt><dd>${esc(d.cuanto)}</dd>`).join("")}
         </dl>`) : ""}
+
+      ${f.variantes ? bloque("Variantes", variantes(f.variantes)) : ""}
 
       ${f.conservacion ? bloque("Cuánto dura", `<p>${esc(f.conservacion)}</p>`) : ""}
       ${f.cuidados ? bloque("Cuidados y riesgos", lista(f.cuidados), "tarjeta--cuidado") : ""}
@@ -334,6 +350,62 @@ window.Wiki = (function () {
       <button class="boton boton--secundario boton--ancho" data-wiki="wiki/manejo">Volver a la lista</button>`;
     conectar();
     return { titulo: f.nombre, subtitulo: categoria.nombre || "Biopreparado" };
+  }
+
+  // ---------- El semáforo ----------
+
+  // En la lista, una línea con los colores y un enlace a qué quieren decir.
+  function leyenda() {
+    const s = bio.semaforo;
+    return `
+      <p class="leyenda-luz">
+        ${s.colores.map((c) => `<span class="luz luz--${esc(c.id)}">${esc(c.nombre)}</span>`).join(" ")}
+        <button class="enlace" data-wiki="wiki/semaforo">¿Qué significan?</button>
+      </p>`;
+  }
+
+  // En la ficha, el color con su porqué. El porqué es lo que importa: "amarillo"
+  // solo no dice qué hay que cuidar ni qué se podría mejorar.
+  function explicarLuz(f) {
+    const c = colorDe(f, bio.semaforo);
+    return `
+      <div class="luz-ficha luz-ficha--${esc(c.id)}">
+        <p>${luz(f, bio.semaforo)}
+          <button class="enlace" data-wiki="wiki/semaforo">Qué significa</button></p>
+        ${f.semaforo && f.semaforo.motivo ? `<p class="nota">${esc(f.semaforo.motivo)}</p>`
+          : `<p class="nota">${esc(c.descripcion || "")}</p>`}
+      </div>`;
+  }
+
+  function semaforo() {
+    const s = bio.semaforo;
+    const cuantas = (id) => bio.fichas.filter((f) => colorDe(f, s).id === id);
+    const grupo = (c) => {
+      const fichas = cuantas(c.id);
+      return `
+        <div class="tarjeta luz-ficha luz-ficha--${esc(c.id)}">
+          <h2><span class="luz luz--${esc(c.id)}">${esc(c.nombre)}</span></h2>
+          <p>${esc(c.descripcion)}</p>
+          ${fichas.length ? `<ul class="indice">
+            ${fichas.map((f) => `
+              <li><button class="indice__item" data-wiki="wiki/manejo/${esc(f.id)}">
+                <span class="indice__nombre">${esc(f.nombre)}</span>
+                ${f.semaforo && f.semaforo.motivo
+                  ? `<span class="indice__cientifico">${esc(f.semaforo.motivo)}</span>` : ""}
+              </button></li>`).join("")}
+          </ul>` : ""}
+        </div>`;
+    };
+
+    destino.innerHTML = `
+      <p class="resumen-ficha">${esc(s.intro)}</p>
+      ${s.colores.map(grupo).join("")}
+      ${cuantas("sin").length ? grupo(Object.assign({ id: "sin" }, s.sin_evaluar)) : ""}
+      <p class="aviso aviso--info">${esc(s.aclaracion)}</p>
+      <button class="boton boton--secundario boton--ancho" data-wiki="wiki/manejo">Ver todas las fichas</button>
+      <button class="boton boton--secundario boton--ancho" data-wiki="wiki">Volver a Info / Wiki</button>`;
+    conectar();
+    return { titulo: s.titulo, subtitulo: "Qué tan agroecológica es cada práctica" };
   }
 
   // ---------- El límite: qué no entra ----------
@@ -430,6 +502,20 @@ window.Wiki = (function () {
       ${g.para_que ? `<p class="nota">${esc(g.para_que)}</p>` : ""}
       ${lista(g.opciones)}`).join("")}
     ${m.nota ? `<p class="nota nota--pie">${esc(m.nota)}</p>` : ""}`;
+
+  // Las fichas que juntan preparados parecidos —las lejías y caldos de ceniza,
+  // el humus líquido— traen sus variantes adentro, cada una con lo suyo.
+  const variantes = (v) => `
+    ${v.intro ? `<p>${esc(v.intro)}</p>` : ""}
+    ${(v.lista || []).map((x) => `
+      <h3 class="material__grupo">${esc(x.nombre)}</h3>
+      ${x.para ? `<p class="nota">${esc(x.para)}</p>` : ""}
+      ${x.rinde || x.tiempo ? `<p class="nota">${x.rinde ? "Rinde " + esc(x.rinde) : ""}${
+        x.rinde && x.tiempo ? " · " : ""}${x.tiempo ? esc(x.tiempo) : ""}</p>` : ""}
+      ${x.ingredientes ? lista(x.ingredientes) : ""}
+      ${x.preparacion ? pasos(x.preparacion) : ""}
+      ${x.dosis ? `<dl class="umbrales">${x.dosis.map((d) =>
+        `<dt>${esc(d.cuando)}</dt><dd>${esc(d.cuanto)}</dd>`).join("")}</dl>` : ""}`).join("")}`;
 
   const pasos = (items) =>
     `<ol class="pasos">${(items || []).map((i) => `<li>${esc(i)}</li>`).join("")}</ol>`;

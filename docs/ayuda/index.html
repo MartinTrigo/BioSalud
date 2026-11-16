@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#5b2a86">
+<title>Manual de uso · BioSalud ECOMARCAL</title>
+<meta name="description" content="Cómo usar BioSalud: configurar la chacra, armar el plan de salud, seguir las aplicaciones, monitorear el campo y leer el semáforo agroecológico de cada biopreparado.">
+<link rel="icon" href="../img/icono-192.png">
+<!-- Página aparte de la app, como la guía de AMA Producción. Es solo texto, así
+     que el service worker la guarda y se puede leer sin señal. Si se agregan
+     capturas, conviene sacarlas de la lista del service worker para no
+     sumarle peso al teléfono. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'; object-src 'none'">
+<style>
+  :root {
+    --violeta: #5b2a86; --violeta-claro: #7b2fbe; --violeta-suave: #f1e9fb;
+    --verde: #16632f; --verde-claro: #2a8043; --verde-suave: #e8f2e9;
+    --dorado: #d9a521; --amarillo-suave: #fbf0cf; --amarillo-texto: #6b4b00;
+    --error: #b3261e; --error-suave: #fceceb;
+    --texto: #1f1b26; --gris: #5f5b6b; --fondo: #f6f4f9; --borde: #ddd6e4;
+    --ancho: 900px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+  body { margin: 0; background: var(--fondo); color: var(--texto);
+         font: 17px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  a { color: var(--violeta-claro); }
+  header.portada { background: var(--violeta); color: #fff; padding: 32px 16px 28px; }
+  .portada .dentro { max-width: var(--ancho); margin: 0 auto; }
+  .portada h1 { margin: 0; font-size: 1.7rem; line-height: 1.2; }
+  .portada p { margin: 8px 0 0; opacity: .94; }
+  .volver { display: inline-block; margin-top: 14px; color: #fff; background: #ffffff26;
+            border: 1px solid #ffffff66; padding: 6px 14px; border-radius: 999px;
+            text-decoration: none; font-weight: 600; font-size: .92rem; }
+  nav.indice { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 1px solid var(--borde); }
+  nav.indice .dentro { max-width: var(--ancho); margin: 0 auto; display: flex; gap: 6px; overflow-x: auto;
+                       padding: 10px 16px; scrollbar-width: none; }
+  nav.indice a { flex: 0 0 auto; text-decoration: none; padding: 5px 12px; border-radius: 999px;
+                 background: var(--fondo); border: 1px solid var(--borde); font-size: .88rem;
+                 font-weight: 600; color: var(--violeta); }
+  main { max-width: var(--ancho); margin: 0 auto; padding: 8px 16px 60px; }
+  section { background: #fff; border: 1px solid var(--borde); border-radius: 18px; padding: 22px 22px 10px; margin: 22px 0; }
+  h2 { margin: 0 0 6px; font-size: 1.4rem; color: var(--violeta); }
+  h3 { margin: 24px 0 6px; font-size: 1.12rem; }
+  .bajada { color: var(--gris); margin-top: 0; }
+  ol, ul { padding-left: 1.3em; }
+  li { margin: 4px 0; }
+  .consejo, .ojo { border-radius: 12px; padding: 12px 14px; margin: 14px 0; font-size: .95rem; }
+  .consejo { background: var(--violeta-suave); border-left: 4px solid var(--violeta-claro); }
+  .ojo { background: var(--amarillo-suave); border-left: 4px solid var(--dorado); }
+  .consejo b:first-child, .ojo b:first-child { display: block; margin-bottom: 2px; }
+  .ciclo { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 16px 0 10px; }
+  .ciclo div { background: var(--fondo); border: 1px solid var(--borde); border-radius: 12px; padding: 12px; text-align: center; }
+  .ciclo b { display: block; color: var(--violeta); }
+  .ciclo span { font-size: .85rem; color: var(--gris); }
+  .menu-app { display: grid; gap: 8px; margin: 12px 0; padding: 0; list-style: none; }
+  .menu-app li { display: flex; gap: 12px; align-items: flex-start; background: var(--fondo);
+                 border: 1px solid var(--borde); border-radius: 12px; padding: 10px 12px; margin: 0; }
+  .menu-app .ico { font-size: 1.4rem; line-height: 1.2; }
+  .menu-app b { display: block; }
+  .menu-app span { font-size: .93rem; color: var(--gris); }
+  /* El semáforo: la palabra va siempre, no solo el color. */
+  .luz { display: inline-block; padding: 1px 10px 1px 8px; border-radius: 999px; font-weight: 700;
+         font-size: .9rem; white-space: nowrap; }
+  .luz::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+  .luz--verde { background: var(--verde-suave); color: var(--verde); }
+  .luz--verde::before { background: var(--verde-claro); }
+  .luz--amarillo { background: var(--amarillo-suave); color: var(--amarillo-texto); }
+  .luz--amarillo::before { background: var(--dorado); }
+  .luz--rojo { background: var(--error-suave); color: var(--error); }
+  .luz--rojo::before { background: var(--error); }
+  .luz--sin { background: var(--fondo); color: var(--gris); border: 1px solid var(--borde); }
+  .luz--sin::before { background: var(--borde); }
+  .colores { display: grid; gap: 10px; margin: 14px 0; }
+  .color { border: 1px solid var(--borde); border-left-width: 6px; border-radius: 12px; padding: 12px 14px; }
+  .color--verde { border-left-color: var(--verde-claro); }
+  .color--amarillo { border-left-color: var(--dorado); }
+  .color--rojo { border-left-color: var(--error); }
+  .color p { margin: 6px 0 2px; }
+  .color small { color: var(--gris); }
+  details { border: 1px solid var(--borde); border-radius: 12px; padding: 10px 14px; margin: 8px 0; background: var(--fondo); }
+  summary { cursor: pointer; font-weight: 600; }
+  footer { text-align: center; color: var(--gris); font-size: .85rem; padding: 10px 16px 40px; }
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    .portada h1 { font-size: 1.45rem; }
+    section { padding: 18px 16px 8px; border-radius: 14px; }
+    .ciclo { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header class="portada">
+  <div class="dentro">
+    <h1>Manual de uso de BioSalud</h1>
+    <p>Cómo planificar la salud del suelo y los cultivos, registrar lo que se aplica,
+    monitorear la chacra y leer el semáforo agroecológico de cada biopreparado.</p>
+    <a class="volver" href="../">← Volver a la app</a>
+  </div>
+</header>
+
+<nav class="indice" aria-label="Secciones">
+  <div class="dentro">
+    <a href="#que-es">Qué es</a>
+    <a href="#empezar">Empezar</a>
+    <a href="#plan">Plan de salud</a>
+    <a href="#seguimiento">Seguimiento</a>
+    <a href="#monitoreo">Monitoreo</a>
+    <a href="#aplicacion">Aplicación libre</a>
+    <a href="#wiki">Wiki</a>
+    <a href="#semaforo">Semáforo</a>
+    <a href="#senal">Sin señal</a>
+    <a href="#preguntas">Preguntas</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================================================================== -->
+<section id="que-es">
+  <h2>Qué es BioSalud y para qué sirve</h2>
+  <p class="bajada">BioSalud es la herramienta de los productores del sello
+  agroecológico ECOMARCAL para cuidar la salud del suelo y de los cultivos. La
+  desarrolla el IFAB (CONICET / INTA El Bolsón) junto con las chacras de la
+  Comarca Andina.</p>
+
+  <p>Sirve para tres cosas a la vez: <b>organizar</b> lo que se va a aplicar en la
+  temporada, <b>registrar</b> lo que de verdad se hizo y se vio en el campo, y
+  <b>consultar</b> cómo se prepara cada biopreparado y cómo se maneja cada plaga.</p>
+
+  <div class="ciclo">
+    <div><b>1 · Planificar</b><span>qué, dónde y cada cuánto</span></div>
+    <div><b>2 · Aplicar</b><span>y marcarlo en el día</span></div>
+    <div><b>3 · Monitorear</b><span>lo que se ve en el campo</span></div>
+    <div><b>4 · Ajustar</b><span>con lo registrado</span></div>
+  </div>
+
+  <h3>Las secciones de la app</h3>
+  <ul class="menu-app">
+    <li><span class="ico">🌱</span><div><b>Registrar Plan de Salud</b>
+      <span>La batería de productos de la temporada: qué, con qué dosis, en qué sectores y cada cuántos días.</span></div></li>
+    <li><span class="ico">✅</span><div><b>Seguimiento de plan</b>
+      <span>Qué toca aplicar hoy, qué quedó atrasado y qué viene esta semana. Ahí se marca lo aplicado.</span></div></li>
+    <li><span class="ico">💧</span><div><b>Registrar aplicación</b>
+      <span>Para lo que se aplicó fuera del plan: una urgencia, un producto comprado.</span></div></li>
+    <li><span class="ico">🔍</span><div><b>Monitoreo de campo</b>
+      <span>Lo que se ve recorriendo la chacra, con incidencia, severidad y fotos.</span></div></li>
+    <li><span class="ico">📖</span><div><b>Info / Wiki</b>
+      <span>Fichas de biopreparados y de plagas, el semáforo agroecológico y lo que el sello no admite.</span></div></li>
+    <li><span class="ico">⚙️</span><div><b>Configuración</b>
+      <span>Los datos del establecimiento, los sectores y la activación del teléfono.</span></div></li>
+  </ul>
+</section>
+
+<!-- ================================================================== -->
+<section id="empezar">
+  <h2>Primeros pasos</h2>
+  <ol>
+    <li><b>Abrí la app</b> desde <a href="https://martintrigo.github.io/BioSalud/">martintrigo.github.io/BioSalud</a>
+      en el navegador del teléfono.</li>
+    <li><b>Instalala:</b> en el menú del navegador, «Agregar a pantalla de inicio» (Android) o
+      «Compartir → Agregar a inicio» (iPhone). En Android la app también ofrece un botón
+      <b>Instalar en el celular</b> en la pantalla de inicio.</li>
+    <li><b>Leé y aceptá los términos de uso.</b> Dicen qué se hace con tus datos y hasta dónde
+      llegan las recomendaciones de la app.</li>
+    <li><b>Completá la configuración:</b> nombre del establecimiento, localidad, responsable y
+      los <b>sectores</b> de la chacra con su superficie, cultivo y riego. Hasta que esté
+      completa, las secciones de registro quedan bloqueadas; la wiki se puede leer desde el
+      primer momento.</li>
+    <li><b>Activá el teléfono</b> con los dos códigos que te entrega el equipo de extensión: el
+      <b>código de chacra</b> y el <b>código de invitación</b>. Es lo que permite que lo que
+      cargues llegue a la planilla de tu chacra.</li>
+  </ol>
+  <div class="consejo"><b>Los sectores son la base de todo.</b>
+  El plan, las aplicaciones y los monitoreos se registran por sector, y la cuenta del
+  cobre se hace por hectárea de cada sector. Cargá bien la superficie.</div>
+  <div class="consejo"><b>Una misma chacra desde dos teléfonos.</b>
+  Si la chacra ya está cargada en otro aparato, en Configuración podés traerla con los
+  dos códigos en vez de escribirla de nuevo. Cada teléfono necesita su propio código de
+  invitación.</div>
+</section>
+
+<!-- ================================================================== -->
+<section id="plan">
+  <h2>Registrar el Plan de Salud</h2>
+  <p class="bajada">Se arma al empezar la temporada y se ajusta cuando haga falta. Cada
+  renglón es un producto que se repite.</p>
+  <ol>
+    <li><b>Elegí el tipo de bioinsumo</b> (biofertilizante, bioestimulante, abono,
+      biocontrolador…) y después <b>cuál</b>. Al lado de cada nombre aparece el color del
+      <a href="#semaforo">semáforo agroecológico</a>.</li>
+    <li>La app propone la <b>dosis y el método</b> de la ficha. Se pueden cambiar.</li>
+    <li>Marcá los <b>sectores</b> donde se aplica, <b>desde</b> y <b>hasta</b> cuándo, y
+      <b>cada cuántos días</b>.</li>
+    <li>Elegí si va <b>de rutina</b> (con fechas) o <b>ante necesidad</b> (sin fechas: se
+      aplica cuando el monitoreo lo pide, y nunca figura como atrasado).</li>
+  </ol>
+  <div class="ojo"><b>El cobre tiene tope.</b>
+  Si un producto lleva cobre, la app avisa al armar el plan y muestra cuánto suma por
+  hectárea y por año contra el límite de 6 kg. El caldo bordelés, además, está en rojo
+  en el semáforo.</div>
+  <div class="ojo"><b>Productos en rojo.</b>
+  Se pueden sumar al plan, pero la app avisa que no estarían aprobados para la producción
+  agroecológica y que conviene reemplazarlos.</div>
+</section>
+
+<!-- ================================================================== -->
+<section id="seguimiento">
+  <h2>Seguimiento de plan</h2>
+  <p class="bajada">La pantalla de todos los días: qué toca aplicar y qué ya se hizo.</p>
+  <ul>
+    <li><b>Atrasado, Hoy y Esta semana:</b> las aplicaciones del plan y de los tratamientos,
+      ordenadas por fecha.</li>
+    <li><b>Listo para cuando haga falta:</b> lo que está en el plan «ante necesidad».</li>
+    <li>Tocá <b>Marcar</b> y elegí <b>Se aplicó</b> (con fecha, volumen, quién y clima) o
+      <b>No se aplicó</b>. Un «no se aplicó, llovió tres días» es un registro tan válido como
+      una aplicación.</li>
+    <li>El <b>Cumplimiento</b> mide solo lo que ya venció: qué parte quedó registrada.</li>
+    <li><b>Cobre aplicado:</b> la cuenta sobre lo que de verdad se aplicó, por sector.</li>
+    <li><b>Fuera del plan:</b> lo registrado en «Registrar aplicación». No cuenta para el
+      cumplimiento, pero queda a la vista.</li>
+  </ul>
+  <div class="consejo"><b>¿Te equivocaste?</b>
+  Mientras un registro no subió a la planilla, se puede <b>Deshacer</b>. Lo que ya subió
+  se corrige avisándole al equipo técnico.</div>
+</section>
+
+<!-- ================================================================== -->
+<section id="monitoreo">
+  <h2>Monitoreo de campo</h2>
+  <p class="bajada">Lo que se ve recorriendo la chacra. Es el punto de partida para decidir
+  y, después, para saber si lo que se hizo sirvió.</p>
+  <ol>
+    <li><b>Qué observaste:</b> elegí la plaga o enfermedad de la lista. Si no sabés qué es,
+      elegí «Otra cosa» y describilo.</li>
+    <li><b>Dónde:</b> sector y, si querés, bancal.</li>
+    <li><b>Cuánto:</b> cuántas plantas revisaste, la <b>incidencia</b> (qué porcentaje tenía
+      el problema) y la <b>severidad</b> (qué tan afectada está cada planta: leve, media o
+      alta).</li>
+    <li><b>Fotos:</b> hasta cuatro, de la cámara o de la galería. Una de cerca del daño y
+      otra de la planta entera.</li>
+  </ol>
+  <p>Al guardar, la app muestra lo que dice la ficha de esa plaga: cuándo intervenir, la
+  prevención primero y, si no alcanza, los biopreparados que se usan, con su color del
+  semáforo. Desde ahí se puede <b>avisar al equipo de extensión</b> con el correo ya
+  escrito, o <b>armar un tratamiento</b> que pasa al Seguimiento con sus fechas.</p>
+
+  <h3>Seguir un mismo problema</h3>
+  <p>Un problema casi nunca se mira una sola vez. Para ver si avanza o retrocede:</p>
+  <ul>
+    <li>En el resultado de un monitoreo tocá <b>Volver a monitorear esto</b>: el formulario
+      viene con la plaga, el sector y el bancal puestos.</li>
+    <li>Si registrás algo que ya viste en ese sector en los últimos meses, la app pregunta
+      si es el mismo problema y propone que sí.</li>
+    <li>El resultado muestra <b>Cómo viene evolucionando</b>: de cuánto a cuánto fue la
+      incidencia, y una línea de tiempo con cada control y cada aplicación en el medio.</li>
+  </ul>
+  <div class="consejo"><b>La app muestra, no califica.</b>
+  Dice «bajó de 40 % a 15 %», no «el tratamiento funcionó». Si la mejora fue por las
+  aplicaciones, el clima o los enemigos naturales, lo juzgás vos con el técnico.</div>
+</section>
+
+<!-- ================================================================== -->
+<section id="aplicacion">
+  <h2>Registrar una aplicación fuera del plan</h2>
+  <p class="bajada">Para lo que se aplicó sin que estuviera en el plan: una urgencia, un
+  bioinsumo comprado, algo decidido en el momento porque el preparado sugerido no estaba
+  hecho.</p>
+  <ol>
+    <li><b>¿Para qué?</b> Elegí el problema que registraste en Monitoreo, o prevención,
+      nutrición del suelo u otro motivo. Si fue por una plaga que todavía no registraste,
+      conviene anotarla primero: así queda cómo estaba antes de aplicar.</li>
+    <li><b>Tipo de producto:</b> biopreparado casero, bioinsumo comercial, mineral o
+      natural, químico de síntesis u otro.</li>
+    <li><b>Producto, dosis y método.</b> Lo que ya usaste una vez aparece en la lista y
+      completa solo la dosis y el método.</li>
+    <li><b>Fecha, sectores y bancal.</b> Se guarda un registro por sector.</li>
+  </ol>
+  <p>Al guardar, <b>Registrar otro producto del mismo día</b> mantiene la fecha, el lugar y
+  el motivo, para cargar seguido todo lo que se aplicó en una misma salida.</p>
+  <div class="ojo"><b>Los químicos también se registran.</b>
+  El sello no admite productos de síntesis y la app lo avisa, pero los acepta: que quede
+  anotado es lo que permite acompañar la transición.</div>
+</section>
+
+<!-- ================================================================== -->
+<section id="wiki">
+  <h2>Info / Wiki</h2>
+  <p class="bajada">Material de consulta que viaja entero en el teléfono, así que se lee
+  sin señal.</p>
+  <ul>
+    <li><b>Enfermedades y plagas:</b> qué es, qué daño hace, cómo se monitorea, cuándo
+      intervenir y qué hacer, de menor a mayor intervención.</li>
+    <li><b>Manejo y tratamientos:</b> cada biopreparado e insumo con su color del semáforo,
+      qué lleva, cómo se prepara, cómo se aplica, cuánto dura, sus cuidados y de dónde sale
+      la receta. Las marcadas <b>Comarca</b> se vienen elaborando y probando acá.</li>
+    <li><b>Semáforo agroecológico:</b> qué significa cada color y qué fichas tiene cada uno.</li>
+    <li><b>Qué no entra en la chacra:</b> los insumos que el sello no admite, por qué, y qué
+      usar en su lugar.</li>
+    <li><b>La cartilla en PDF:</b> todas las fichas en un documento para imprimir o pasar por
+      mensaje. Se descarga con señal.</li>
+  </ul>
+</section>
+
+<!-- ================================================================== -->
+<section id="semaforo">
+  <h2>El semáforo agroecológico</h2>
+  <p class="bajada">Cada biopreparado, bioinsumo e insumo de la wiki lleva un color que
+  indica qué tan agroecológica consideramos la práctica. Se mira el producto entero: con
+  qué se hace, cómo se elabora y qué efecto tiene sobre el suelo, los cultivos, los
+  animales y las personas.</p>
+
+  <div class="colores">
+    <div class="color color--verde">
+      <span class="luz luz--verde">Agroecológico</span>
+      <p>Tanto los insumos utilizados como el proceso de elaboración y los efectos sobre el
+      agroecosistema se consideran beneficiosos o inocuos. Se puede usar dentro de un
+      manejo agroecológico.</p>
+      <small>Por ejemplo: MM sólido y líquido, compost termófilo, bocashi, caldo sulfocálcico.</small>
+    </div>
+    <div class="color color--amarillo">
+      <span class="luz luz--amarillo">En transición</span>
+      <p>Alguno de los ingredientes o insumos con que se elabora es cuestionable o de origen
+      dudoso. Es una práctica que puede mejorarse. Puede aceptarse en un manejo
+      agroecológico si se cumplen las condiciones que indica su ficha, y conviene avanzar
+      hacia una alternativa mejor.</p>
+      <small>Por ejemplo: bio lana, estiércol fresco de rumiantes (solo con trazabilidad del
+      origen), estiércol compostado de monogástricos.</small>
+    </div>
+    <div class="color color--rojo">
+      <span class="luz luz--rojo">No recomendado</span>
+      <p>No estaría aprobado para la producción agroecológica. Se recomienda reemplazarlo por
+      prácticas más adecuadas; la ficha sugiere alternativas cuando las hay.</p>
+      <small>Por ejemplo: caldo bordelés, estiércol de hipódromo, estiércol fresco de monogástricos.</small>
+    </div>
+  </div>
+
+  <p>Algunas fichas todavía muestran <span class="luz luz--sin">Sin evaluar</span>: el equipo
+  no les asignó un color todavía.</p>
+
+  <h3>Dónde aparece</h3>
+  <ul>
+    <li>En la <b>wiki</b>, al lado de cada ficha, y dentro de la ficha con el <b>porqué</b> de
+      su color. El porqué es lo más útil: dice qué cuidar o qué se podría mejorar.</li>
+    <li>Al armar el <b>Plan de Salud</b>, en la lista de productos y en la tarjeta del
+      producto elegido.</li>
+    <li>En el resultado de un <b>monitoreo</b>, junto a cada biopreparado sugerido.</li>
+    <li>En la <b>cartilla en PDF</b>, en cada ficha y en el índice.</li>
+  </ul>
+
+  <div class="consejo"><b>Quién lo define.</b>
+  El semáforo es una valoración del equipo técnico del IFAB, construida con los
+  productores de ECOMARCAL. Orienta, pero no reemplaza lo que resuelva el Consejo de
+  Garantía del SPG, que es quien autoriza cada bioinsumo para el sello.</div>
+</section>
+
+<!-- ================================================================== -->
+<section id="senal">
+  <h2>Sin señal</h2>
+  <p>BioSalud está hecha para usarse en el campo. Todo lo que cargues queda guardado
+  primero en el teléfono, y se envía solo a la planilla de tu chacra cuando vuelve la
+  conexión. En la pantalla de inicio, debajo del menú, se ve cuántos registros quedan
+  por enviar.</p>
+  <div class="consejo"><b>Las fotos tardan más.</b>
+  Se achican en el teléfono antes de salir, pero viajan aparte del monitoreo: si hay poca
+  señal pueden llegar después que el registro. En el teléfono no queda copia.</div>
+</section>
+
+<!-- ================================================================== -->
+<section id="preguntas">
+  <h2>Preguntas frecuentes</h2>
+  <details><summary>¿La app me dice qué aplicar?</summary>
+    <p>Acerca lo que dicen las fichas y la bibliografía, con la prevención primero. Las
+    decisiones de manejo son tuyas, y ante la duda conviene consultar al equipo de
+    extensión antes de aplicar algo que no esté en el plan.</p></details>
+  <details><summary>Apliqué algo que no estaba en el plan. ¿Lo registro igual?</summary>
+    <p>Sí, en <b>Registrar aplicación</b>. Si fue por un problema que viste, elegilo en
+    «¿Para qué?» y la aplicación aparece en la historia de ese problema.</p></details>
+  <details><summary>¿Qué pasa si uso un producto en rojo?</summary>
+    <p>La app lo deja registrar y avisa. El semáforo es una orientación del equipo técnico;
+    lo que habilita o no un insumo para el sello lo resuelve el Consejo de Garantía.</p></details>
+  <details><summary>¿Cómo vuelvo a mirar un problema que ya registré?</summary>
+    <p>En Monitoreo, abrí «Lo que registraste», tocá el problema y después <b>Volver a
+    monitorear esto</b>.</p></details>
+  <details><summary>Me equivoqué en un registro.</summary>
+    <p>Si todavía no subió a la planilla, aparece el botón <b>Deshacer</b>. Si ya subió,
+    avisale al equipo técnico para que lo corrija.</p></details>
+  <details><summary>Cambié de teléfono.</summary>
+    <p>Pedile al equipo de extensión un código de invitación nuevo, y en Configuración
+    traé la chacra con el código de chacra y la invitación.</p></details>
+</section>
+
+</main>
+
+<footer>
+  BioSalud ECOMARCAL · IFAB (CONICET / INTA El Bolsón) · Comarca Andina del Paralelo 42
+</footer>
+
+</body>
+</html>

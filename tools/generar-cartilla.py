@@ -68,7 +68,34 @@ def pasos(items):
     return "<ol>" + "".join(f"<li>{e(i)}</li>" for i in items) + "</ol>"
 
 
-def ficha_html(f, categorias, fuentes, plagas):
+# El semáforo en papel: la palabra y un punto de color. La palabra va siempre,
+# porque la cartilla también se imprime en blanco y negro.
+def luz(f, sem):
+    cid = (f.get("semaforo") or {}).get("color", "")
+    c = next((x for x in sem.get("colores", []) if x["id"] == cid), None)
+    if not c:
+        c = dict(sem.get("sin_evaluar", {"nombre": "Sin evaluar"}), id="sin")
+    return f'<span class="luz luz--{e(c["id"])}">{e(c["nombre"])}</span>'
+
+
+def variantes_html(v):
+    if not v:
+        return ""
+    partes = [f'<p>{e(v["intro"])}</p>' if v.get("intro") else ""]
+    for x in v.get("lista", []):
+        partes.append(f'<h4>{e(x["nombre"])}</h4>')
+        if x.get("para"):
+            partes.append(f'<p class="dato">{e(x["para"])}</p>')
+        partes.append(lista(x.get("ingredientes")))
+        partes.append(pasos(x.get("preparacion")))
+        if x.get("dosis"):
+            partes.append('<table class="dosis">' + "".join(
+                f"<tr><th>{e(d['cuando'])}</th><td>{e(d['cuanto'])}</td></tr>" for d in x["dosis"])
+                + "</table>")
+    return '<h3>Variantes</h3><div class="variantes">' + "".join(partes) + "</div>"
+
+
+def ficha_html(f, categorias, fuentes, plagas, sem):
     cat = next((c for c in categorias if c["id"] == f["categoria"]), {})
 
     rapidos = []
@@ -108,12 +135,13 @@ def ficha_html(f, categorias, fuentes, plagas):
         <span class="ficha__cat">{e(cat.get('icono',''))} {e(cat.get('nombre',''))}</span>
         <h2>{e(f['nombre'])}{' <span class="sello">Comarca</span>' if f.get('comarca') else ''}</h2>
         <p class="ficha__resumen">{e(f['resumen'])}</p>
+        <p class="ficha__luz">{luz(f, sem)} {e((f.get('semaforo') or {}).get('motivo', ''))}</p>
         {f'<dl class="rapidos">{"".join(rapidos)}</dl>' if rapidos else ''}
       </header>
 
       {f'<div class="alerta"><strong>Dato a verificar.</strong> {e(f["revisar"])}</div>' if f.get('revisar') else ''}
 
-      <div class="dos-columnas">
+      {f"""<div class="dos-columnas">
         <section>
           <h3>Qué lleva</h3>
           {lista(f.get('ingredientes'))}
@@ -122,11 +150,12 @@ def ficha_html(f, categorias, fuentes, plagas):
           <h3>Cómo se prepara</h3>
           {pasos(f.get('preparacion'))}
         </section>
-      </div>
+      </div>""" if f.get('ingredientes') or f.get('preparacion') else ''}
 
       {materiales}
       {f'<h3>Para qué sirve</h3><p>{e(f["uso"])}</p>' if f.get('uso') else ''}
       {dosis}
+      {variantes_html(f.get('variantes'))}
       {f'<p class="dato"><strong>Cuánto dura:</strong> {e(f["conservacion"])}</p>' if f.get('conservacion') else ''}
       {f'<p class="dato"><strong>Se usa contra:</strong> {e(", ".join(contra))}</p>' if contra else ''}
 
@@ -147,6 +176,7 @@ def main():
     categorias = bio["categorias"]
     fuentes = bio["fuentes"]
     fichas = bio["fichas"]
+    sem = bio.get("semaforo", {})
 
     # Índice y cuerpo, agrupados por función.
     indice, cuerpo = [], []
@@ -157,12 +187,12 @@ def main():
         indice.append(
             f'<li class="idx-cat"><strong>{e(c["icono"])} {e(c["nombre"])}</strong>'
             f'<span>{e(c["descripcion"])}</span>'
-            + "".join(f'<span class="idx-item">{e(f["nombre"])}'
+            + "".join(f'<span class="idx-item">{luz(f, sem)} {e(f["nombre"])}'
                       + (' <em>Comarca</em>' if f.get("comarca") else "") + "</span>"
                       for f in de_la_cat)
             + "</li>")
         cuerpo.append(f'<h1 class="seccion">{e(c["icono"])} {e(c["nombre"])}</h1>')
-        cuerpo += [ficha_html(f, categorias, fuentes, plagas) for f in de_la_cat]
+        cuerpo += [ficha_html(f, categorias, fuentes, plagas, sem) for f in de_la_cat]
 
     # Lo que el sello no admite. En papel va entero y desplegado: no hay dónde
     # tocar para abrir, y es la parte que conviene leer antes de ir a buscar un
@@ -211,6 +241,18 @@ def main():
            font-family: Helvetica, Arial, sans-serif; }
 
     .portada { text-align: center; padding-top: 45mm; page-break-after: always; }
+
+    .luz { font-family: Helvetica, Arial, sans-serif; font-size: 8pt; font-weight: bold;
+           padding: 0 2mm; border-radius: 3mm; white-space: nowrap; border: 0.3mm solid; }
+    .luz::before { content: "●  "; }
+    .luz--verde { color: #16632f; background: #e8f2e9; }
+    .luz--amarillo { color: #6b4b00; background: #fbf0cf; }
+    .luz--rojo { color: #b3261e; background: #fceceb; }
+    .luz--sin { color: #5f5b6b; background: #f6f4f9; }
+    .ficha__luz { font-size: 9.5pt; margin: 1mm 0 2mm; }
+    .semaforo-def dt { margin-top: 2mm; }
+    .semaforo-def dd { margin: 1mm 0 0 0; }
+    .variantes h4 { font-family: Helvetica, Arial, sans-serif; margin: 3mm 0 1mm; }
     .portada img { height: 22mm; margin: 0 6mm; vertical-align: middle; }
     .portada h1 { font-size: 30pt; color: #16632f; margin: 14mm 0 2mm; line-height: 1.1; }
     .portada .bajada { font-size: 13pt; color: #5b6b62; margin: 0 0 18mm; }
@@ -299,7 +341,7 @@ def main():
     <img src="{imagen('logo-ecomarcal.jpg')}" alt="ECOMARCAL">
   </div>
   <h1>Biopreparados para la<br>Comarca Andina</h1>
-  <p class="bajada">Elaboración, uso y dosis · {len(fichas)} recetas</p>
+  <p class="bajada">Elaboración, uso y dosis · {len(fichas)} fichas</p>
   <p class="inst">
     <strong>IFAB</strong> — Instituto de Investigaciones Forestales y Agropecuarias Bariloche<br>
     CONICET / INTA · Agencia de Extensión Rural El Bolsón<br>
@@ -330,6 +372,13 @@ def main():
   <p><strong>Ninguna ficha es copia de su fuente.</strong> Todas están reescritas
   por el equipo del IFAB, y cada una indica de dónde sale para que se pueda ir al
   documento original.</p>
+
+  <h1>{e(sem.get('titulo', 'Semáforo agroecológico'))}</h1>
+  <p>{e(sem.get('intro', ''))}</p>
+  <dl class="semaforo-def">{''.join(
+      f'<dt><span class="luz luz--{e(c["id"])}">{e(c["nombre"])}</span></dt><dd>{e(c["descripcion"])}</dd>'
+      for c in sem.get('colores', []))}</dl>
+  <p class="fuente">{e(sem.get('aclaracion', ''))}</p>
 
   <div class="aviso-general">
     <h3>{e(bio['recomendaciones']['titulo'])}</h3>
@@ -382,7 +431,7 @@ def main():
         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     print(f"PDF   {SALIDA_PDF.relative_to(RAIZ)}  ({SALIDA_PDF.stat().st_size/1024:.0f} KB)")
-    print(f"\n{len(fichas)} recetas · {len(plagas.get('fichas', []))} plagas en la tabla final")
+    print(f"\n{len(fichas)} fichas · {len(plagas.get('fichas', []))} plagas en la tabla final")
 
 
 if __name__ == "__main__":
