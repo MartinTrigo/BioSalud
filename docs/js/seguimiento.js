@@ -515,13 +515,13 @@ window.Seguimiento = (function () {
                       <span class="agenda__detalle">${esc(sectoresDe(g))} ·
                         ${esc(r.estado)}${r.operador ? " · " + esc(r.operador) : ""}
                         ${r.fecha_aplicada && r.fecha_aplicada !== o.fecha
-                          ? " · programada el " + esc(fechaCorta(o.fecha)) : ""}</span>
+                          ? " · programada el " + esc(fechaCorta(o.fecha)) : ""}${
+                        enCola.length ? "" : " · ya en la planilla"}</span>
                     </span>
                     ${enCola.length
                       ? `<button class="boton--peligro agenda__marcar" data-deshacer="${esc(enCola.join(","))}">Deshacer</button>`
                       : ""}
                   </div>
-                  ${enCola.length ? "" : `<span class="agenda__subido">Ya subió a la planilla</span>`}
                 </li>`;
             }).join("")}
           </ul>
@@ -542,14 +542,15 @@ window.Seguimiento = (function () {
     const libres = registradas.filter((a) => a.origen === "Fuera del plan")
       .sort((a, b) => String(b.fecha_aplicada).localeCompare(String(a.fecha_aplicada)) ||
         String(b.creado).localeCompare(String(a.creado)));
+    // Juntas por aplicación: lo que se hizo en tres sectores es un renglón.
+    const grupos = window.Aplicacion.juntarLibres(libres);
     return `
       <div class="tarjeta">
-        <h2>Fuera del plan${libres.length ? ` <span class="grupo-agenda__cuenta">${libres.length}</span>` : ""}</h2>
-        <p class="nota">Lo que aplicaste sin que estuviera en el plan: una urgencia,
-          un producto comprado. No cuenta para el cumplimiento, pero queda registrado.</p>
-        ${libres.length ? `<ul class="agenda">${libres.slice(0, 5)
-          .map((a) => window.Aplicacion.filaLibre(a, sinEnviar)).join("")}</ul>
-          ${libres.length > 5 ? `<p class="nota">Y ${libres.length - 5} más, en Registrar aplicación.</p>` : ""}` : ""}
+        <h2>Fuera del plan${grupos.length ? ` <span class="grupo-agenda__cuenta">${grupos.length}</span>` : ""}</h2>
+        <p class="nota">No cuenta para el cumplimiento, pero queda registrado.</p>
+        ${grupos.length ? `<ul class="agenda">${grupos.slice(0, 5)
+          .map((g) => window.Aplicacion.filaLibre(g, sinEnviar)).join("")}</ul>
+          ${grupos.length > 5 ? `<p class="nota">Y ${grupos.length - 5} más, en Registrar aplicación.</p>` : ""}` : ""}
         <button class="boton boton--secundario boton--ancho" data-ir="aplicacion">
           Registrar una aplicación fuera del plan</button>
       </div>`;
@@ -590,8 +591,9 @@ window.Seguimiento = (function () {
 
     destino.querySelectorAll("[data-deshacer-libre]").forEach((b) => {
       b.onclick = () => window.Aplicacion.deshacer(b.dataset.deshacerLibre, () => {
-        registradas = registradas.filter((a) => a.id !== b.dataset.deshacerLibre);
-        sinEnviar.delete(b.dataset.deshacerLibre);
+        const idos = b.dataset.deshacerLibre.split(",");
+        registradas = registradas.filter((a) => !idos.includes(a.id));
+        idos.forEach((id) => sinEnviar.delete(id));
         pintar();
       });
     });

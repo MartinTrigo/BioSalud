@@ -560,44 +560,73 @@ window.Aplicacion = (function () {
           <span class="grupo__icono">💧</span>
           <span class="grupo__texto">
             <span class="grupo__nombre">Lo que registraste fuera del plan</span>
-            <span class="grupo__cuenta">${lista.length} ${lista.length === 1 ? "aplicación" : "aplicaciones"}</span>
+            <span class="grupo__cuenta">${juntarLibres(lista).length} ${juntarLibres(lista).length === 1 ? "aplicación" : "aplicaciones"}</span>
           </span>
           <span class="grupo__flecha" aria-hidden="true"></span>
         </summary>
         <div class="grupo__cuerpo">
-          <ul class="agenda">${lista.slice(0, 30).map((a) => filaLibre(a, sinEnviar)).join("")}</ul>
+          <ul class="agenda">${juntarLibres(lista).slice(0, 30).map((g) => filaLibre(g, sinEnviar)).join("")}</ul>
           <p class="nota">Lo que ya subió a la planilla no se puede deshacer desde
             el teléfono: si hay que corregirlo, avisale al equipo técnico.</p>
         </div>
       </details>`;
   }
 
+  // UNA APLICACIÓN ES UN RENGLÓN, AUNQUE HAYA SIDO EN TRES SECTORES.
+  //
+  // Se guarda un registro por sector —así lo necesitan la planilla y la cuenta
+  // del cobre—, pero mostrarlos así repetía el mismo cuadro tres veces: mismo
+  // producto, misma fecha, misma dosis, y solo cambiaba la letra del sector.
+  // Acá se juntan los que son la misma aplicación y los lugares van en una
+  // sola línea: "A b.1, 4, 6 · B · C".
+  function juntarLibres(lista) {
+    const mapa = new Map();
+    lista.forEach((a) => {
+      const k = [a.producto, a.fecha_aplicada, a.dosis, a.metodo, a.tipo_producto,
+                 a.motivo, a.problema_id].join("|");
+      if (!mapa.has(k)) mapa.set(k, []);
+      mapa.get(k).push(a);
+    });
+    return [...mapa.values()].map((partes) =>
+      partes.slice().sort((x, y) => String(x.sector).localeCompare(String(y.sector))));
+  }
+
   // La comparte el Seguimiento, para que se vea igual en los dos lugares.
-  function filaLibre(a, cola) {
+  // Recibe un grupo: los registros de una misma aplicación, uno por sector.
+  function filaLibre(partes, cola) {
+    const a = partes[0];
+    // Solo se deshace lo que todavía no salió del teléfono.
+    const enCola = partes.map((x) => x.id).filter((id) => cola.has(id));
     return `
       <li class="agenda__item agenda__item--hecho">
         <div class="agenda__cab">
           <span class="agenda__fecha">${esc(window.Problemas.fechaCorta(a.fecha_aplicada))}</span>
           <span class="agenda__texto">
             <strong>${esc(a.producto)}</strong>
-            <span class="agenda__detalle">${esc([lugarDe(a),
-              a.dosis, a.metodo, a.tipo_producto].filter(Boolean).join(" · "))}${
-              a.motivo ? ` · <span class="agenda__origen">${esc(a.motivo)}</span>` : ""}</span>
+            <span class="agenda__detalle">${esc([partes.map(lugarDe).join(" · "),
+              a.dosis, a.metodo].filter(Boolean).join(" — "))}${
+              a.motivo ? ` · <span class="agenda__origen">${esc(a.motivo)}</span>` : ""}${
+              enCola.length ? "" : " · ya en la planilla"}</span>
           </span>
+          ${enCola.length ? `<button class="boton--peligro agenda__marcar"
+            data-deshacer-libre="${esc(enCola.join(","))}">Deshacer</button>` : ""}
         </div>
-        ${cola.has(a.id)
-          ? `<button class="boton--peligro centrado" data-deshacer-libre="${esc(a.id)}">Deshacer</button>`
-          : `<span class="agenda__subido">Ya subió a la planilla</span>`}
       </li>`;
   }
 
-  async function deshacer(id, alTerminar) {
+  // Llegan los ids de todos los sectores de esa aplicación, separados por coma.
+  async function deshacer(ids, alTerminar) {
+    const pedidos = String(ids).split(",");
     const todas = await window.BioDB.todos("aplicaciones");
-    const a = todas.find((x) => x.id === id);
-    if (!a) return false;
-    if (!confirm(`¿Deshacer el registro de ${a.producto} del ${window.Problemas.fechaCorta(a.fecha_aplicada)}?`)) return false;
-    await window.BioDB.borrar("aplicaciones", id);
-    await window.BioDB.borrar("salida", id);
+    const lista = todas.filter((x) => pedidos.includes(x.id));
+    if (!lista.length) return false;
+    const a = lista[0];
+    const donde = lista.length > 1 ? ` en ${lista.map((x) => x.sector).join(", ")}` : "";
+    if (!confirm(`¿Deshacer el registro de ${a.producto} del ${window.Problemas.fechaCorta(a.fecha_aplicada)}${donde}?`)) return false;
+    for (const x of lista) {
+      await window.BioDB.borrar("aplicaciones", x.id);
+      await window.BioDB.borrar("salida", x.id);
+    }
     brindis("Registro deshecho");
     if (alTerminar) alTerminar();
     return true;
@@ -661,8 +690,9 @@ window.Aplicacion = (function () {
 
     destino.querySelectorAll("[data-deshacer-libre]").forEach((b) => {
       b.onclick = () => deshacer(b.dataset.deshacerLibre, () => {
-        aplicaciones = aplicaciones.filter((a) => a.id !== b.dataset.deshacerLibre);
-        sinEnviar.delete(b.dataset.deshacerLibre);
+        const idos = b.dataset.deshacerLibre.split(",");
+        aplicaciones = aplicaciones.filter((a) => !idos.includes(a.id));
+        idos.forEach((id) => sinEnviar.delete(id));
         tipeado = leer();
         pintar();
       });
@@ -685,5 +715,5 @@ window.Aplicacion = (function () {
     pintar();
   }
 
-  return { render, filaLibre, deshacer };
+  return { render, filaLibre, juntarLibres, deshacer };
 })();

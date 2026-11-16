@@ -701,7 +701,8 @@ a.boton { text-decoration: none; }
 /* El botón de marcar va al costado del renglón, no debajo: es lo que deja la
    agenda en una línea por aplicación. */
 .agenda__cab { align-items: center; }
-.agenda__marcar { flex: none; min-height: 44px; padding: 8px 14px; font-size: 15px; }
+.agenda__marcar { flex: none; min-height: 44px; padding: 8px 12px; font-size: 15px; }
+.agenda__item--hecho { padding-top: 6px; padding-bottom: 6px; }
 
 /* Fichas de sector: se tocan como un botón y entran varias por línea. La
    elegida no depende solo del color: lleva además un tilde. */
