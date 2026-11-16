@@ -680,7 +680,8 @@ la misma razón que el id del sector en Config: es lo único que
 
 ## Por qué cada ficha lleva un semáforo agroecológico
 
-**Decisión:** cada biopreparado, bioinsumo e insumo de la wiki lleva un color:
+**Decisión:** cada biopreparado, bioinsumo e insumo de la wiki lleva el color del
+semáforo de ECOMARCAL:
 verde (agroecológico), amarillo (en transición) o rojo (no recomendado), con
 una línea que dice por qué. Las definiciones viven en
 `datos/biopreparados.json` (`semaforo`) y se muestran en la wiki, el plan, el
@@ -696,8 +697,11 @@ acepta solo con trazabilidad del origen del estiércol" sí.
 que los químicos en las aplicaciones fuera del plan: ocultarlos enseña a no
 anotarlos.
 
-**Es una valoración del equipo, no la habilitación del sello.** Eso lo resuelve
-el Consejo de Garantía, y la app lo aclara cada vez que explica el semáforo.
+**El semáforo es de ECOMARCAL, no de la app.** Es parte de las condiciones del
+sello y se aplica en todos sus protocolos de certificación, no solo en el de
+bioinsumos. La app no inventa el criterio: muestra el color que le corresponde a
+cada ficha. Por eso los textos lo presentan como criterio del sello y no como una
+opinión del equipo técnico, que era como lo decía la primera versión.
 
 **Las fichas sin color quedan "Sin evaluar"**, a la vista y listadas en lo
 pendiente, en vez de recibir un color supuesto.
