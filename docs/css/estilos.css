@@ -1042,3 +1042,39 @@ textarea { resize: vertical; min-height: 60px; }
 }
 
 a.menu__boton { text-decoration: none; }
+
+/* ---------- Cuadro de diálogo (sugerencias) ----------
+   Capa propia en vez de <dialog>: ver js/sugerencias.js. Se pega abajo en el
+   celular, donde el pulgar llega, y queda centrado en pantallas grandes. */
+
+.capa {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(30, 20, 40, .55);
+  padding: 16px;
+}
+@media (min-width: 600px) { .capa { align-items: center; } }
+
+.dialogo {
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  background: var(--papel);
+  border-radius: var(--radio);
+  padding: 18px 16px 16px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .3);
+}
+.dialogo h2 { margin: 0 0 6px; }
+.dialogo .nota { margin-bottom: 14px; }
+.dialogo .campo__error[hidden] { display: none; }
+.dialogo textarea { min-height: 120px; resize: vertical; }
+.dialogo textarea.mal { border-color: var(--error); background: var(--error-suave); }
+.dialogo__botones { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Con el cuadro abierto, la página de atrás no se desplaza. */
+body.con-capa { overflow: hidden; }

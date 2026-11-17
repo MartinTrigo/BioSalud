@@ -76,7 +76,17 @@ abrirla, vería las huellas de todas las demás.
 | Dispositivo | Chacra | Persona | Activo | Alta | Última actividad | Registros | Huella | Términos aceptados | Aceptados el |
 |---|---|---|---|---|---|---|---|---|---|
 
-Las dos últimas columnas guardan **qué versión de los términos de uso aceptó esa
+**Sugerencias** (desde noviembre de 2026; se crea sola con la primera que llega)
+
+| Id | Fecha | Chacra | Establecimiento | Persona | Tipo | Comentario | Versión de la app | Dispositivo | Recibido | Leída | Respuesta / qué se hizo |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+
+Lo que se manda desde el botón «Enviar una sugerencia» del inicio. Entra con la
+misma credencial que el resto de los registros: un teléfono sin activar la
+guarda en su cola y la manda cuando se active. Las dos últimas columnas son
+para el equipo; el servicio no las toca.
+
+En la tabla de Dispositivos, las dos últimas columnas guardan **qué versión de los términos de uso aceptó esa
 persona en ese teléfono**, y cuándo. Es el único lugar donde tiene sentido: el
 consentimiento es de una persona en un aparato, no de la chacra. La versión lleva
 pegada una huella del contenido (`agosto de 2026 · b41b2cdf`), así que se puede

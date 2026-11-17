@@ -823,6 +823,9 @@ function doPost(e) {
         });
       }
 
+      var sugerencias = registros.filter(function (r) { return r.tipo === "sugerencia"; });
+      if (sugerencias.length) guardados += guardarSugerencias(chacra, permiso, sugerencias);
+
       // Las hojas que se acumulan (aplicaciones, monitoreos) entran por acá a
       // partir de la fase 3, agrupadas por tipo y sin repetir ids.
       var porTipo = {};
@@ -868,6 +871,41 @@ function doPost(e) {
   } catch (err) {
     return respuesta({ ok: false, error: String(err) });
   }
+}
+
+// ==========================================================================
+// SUGERENCIAS (hoja "Sugerencias" de la planilla de accesos)
+//
+// No van a la planilla de cada chacra: son sobre la app, no sobre el campo, y
+// el equipo las quiere leer todas juntas en un solo lugar. La planilla de
+// accesos ya es la que solo abre el equipo.
+//
+// Las tres últimas columnas las completa el equipo a mano, para llevar la
+// cuenta de qué se leyó y qué se hizo. Nada del teléfono las pisa: una
+// sugerencia nunca se corrige, un id repetido es solo un reintento.
+// ==========================================================================
+var SUGERENCIAS_ENCABEZADOS = ["Id", "Fecha", "Chacra", "Establecimiento", "Persona",
+                               "Tipo", "Comentario", "Versión de la app", "Dispositivo",
+                               "Recibido", "Leída", "Respuesta / qué se hizo"];
+
+function guardarSugerencias(chacra, permiso, registros) {
+  var hoja = hojaAccesos("Sugerencias", SUGERENCIAS_ENCABEZADOS);
+  var existentes = idsExistentes(hoja);
+  var filas = [];
+  registros.forEach(function (r) {
+    if (existentes[r.id]) return;
+    existentes[r.id] = true;
+    var d = r.datos || {};
+    filas.push([r.id, comoTexto(d.fecha), chacra, comoTexto(d.establecimiento),
+                comoTexto(d.persona) || permiso.persona || "", comoTexto(d.tipo),
+                comoTexto(d.comentario).slice(0, 2000), comoTexto(d.version),
+                comoTexto(r.dispositivo), new Date(), "", ""]);
+  });
+  if (filas.length) {
+    hoja.getRange(hoja.getLastRow() + 1, 1, filas.length, SUGERENCIAS_ENCABEZADOS.length)
+        .setValues(filas);
+  }
+  return filas.length;
 }
 
 // ==========================================================================

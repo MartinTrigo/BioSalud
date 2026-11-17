@@ -29,7 +29,7 @@
 // ==========================================================================
 
 const PREFIJO = "biosalud-";
-const CACHE = PREFIJO + "v41";
+const CACHE = PREFIJO + "v42";
 
 // Cuánto se espera a la red antes de usar lo guardado en el teléfono.
 const ESPERA_MS = 3000;
@@ -52,6 +52,7 @@ const ARCHIVOS = [
   "js/problemas.js",
   "js/monitoreo.js",
   "js/aplicacion.js",
+  "js/sugerencias.js",
   "js/app.js",
   "datos/biopreparados.json",
   "datos/plagas.json",

@@ -257,6 +257,11 @@
         </a>
       </div>
 
+      <!-- Va en el inicio y no escondida en Configuración: es donde se la ve
+           sin buscarla. Funciona aunque falte la configuración (ver js/sugerencias.js). -->
+      <button class="boton boton--secundario boton--ancho separado" id="btn-sugerencia">
+        💬 Enviar una sugerencia</button>
+
       ${instalador ? `<button class="boton boton--secundario boton--ancho separado"
                         id="btn-instalar">Instalar en el celular</button>` : ""}
 
@@ -277,6 +282,8 @@
     vista.querySelectorAll("[data-ir]").forEach((b) => {
       b.onclick = () => ir(b.dataset.ir);
     });
+
+    document.getElementById("btn-sugerencia").onclick = () => window.Sugerencias.abrir();
 
     const instalar = document.getElementById("btn-instalar");
     if (instalar) instalar.onclick = async () => {
