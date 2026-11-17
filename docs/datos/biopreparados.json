@@ -1,5 +1,5 @@
 {
-  "version": "2026-11-16",
+  "version": "2026-11-17",
   "nota": "Fichas redactadas por el equipo del IFAB a partir de la bibliografía citada en cada una. No son copia de las fuentes: cada texto está reescrito y cada receta indica de dónde sale, para que el productor pueda ir al original.",
   "fuentes": {
     "F1": "Cardozo, A.; El Mujtar, V.; Álvarez, V. (2020). Elaboración de biofertilizantes a partir de microorganismos del bosque. INTA EEA Bariloche, Proyecto FONTAGRO ATN/RF-16680-RG.",
@@ -12,7 +12,8 @@
     "F8": "IFAB (2026). Compost de la Soil Food Web y extractos de compost: informe de trabajo, versión 1. Documento interno, revisión de la literatura revisada por pares y del material del método.",
     "F9": "Ingham, E. Soil Food Web School, curso Foundation: BioComplete Compost, clases 3 y 5. Material del método, no revisado por pares.",
     "F10": "USDA, Programa Orgánico Nacional de EE.UU. (7 CFR 205.203): compost en hilera, entre 55 y 77 °C durante 15 días con 5 volteos como mínimo.",
-    "F11": "IPES / FAO (2010). Biopreparados para el manejo sostenible de plagas y enfermedades en la agricultura urbana y periurbana. Lima, Perú. Ficha 4: humus líquido."
+    "F11": "IPES / FAO (2010). Biopreparados para el manejo sostenible de plagas y enfermedades en la agricultura urbana y periurbana. Lima, Perú. Ficha 4: humus líquido.",
+    "F12": "Gramaglia, C. (2025). Taller de Biopreparados, El Hoyo (Chubut). Receta de humus líquido tomada en el taller; sin publicación escrita."
   },
   "categorias": [
     {
@@ -391,13 +392,13 @@
         "al suelo",
         "raíces"
       ],
-      "resumen": "Extracto de humus de lombriz. En su versión enriquecida, un álcali ayuda a sacar del humus las sustancias húmicas y fúlvicas; en la variante que difunde César Gramaglia, ese álcali es la lejía de ceniza.",
+      "resumen": "Extracto de las sustancias húmicas del humus o del compost. Mejora la agregación del suelo, sus propiedades físicas y químicas, y es alimento para la microbiología y la red trófica del suelo. Hay dos recetas: la de humus de lombriz, de a 2 litros, y la de César Gramaglia, con compost y lejía de ceniza, de a 200 litros.",
       "sugerencia": {
         "metodo": "Mochila (foliar)",
         "dosis": "2,5 ml por litro de agua"
       },
       "rinde": "Alrededor de 2 litros de concentrado",
-      "tiempo": "2 días, y 4 más para la versión enriquecida",
+      "tiempo": "2 días la receta de humus de lombriz (4 más si se enriquece); 4 días la de compost y lejía",
       "ingredientes": [
         "½ kg de humus de lombriz maduro (ver «Lombricompuesto»)",
         "2,5 litros de agua sin cloro, de lluvia o reposada",
@@ -415,38 +416,61 @@
       "uso": "Abono foliar y al suelo. Mejora la vida del suelo y la disponibilidad de nutrientes, y favorece el desarrollo de raíces.",
       "dosis": [
         {
-          "cuando": "Foliar o en el riego",
+          "cuando": "Humus de lombriz, foliar o en el riego",
           "cuanto": "2,5 ml por litro de agua"
         },
         {
-          "cuando": "Frecuencia",
+          "cuando": "Frecuencia (humus de lombriz)",
           "cuanto": "La fuente indica cada 3 días en condiciones normales, y más seguido con clima muy seco. Ajustar en la chacra."
+        },
+        {
+          "cuando": "Receta de compost y lejía (Gramaglia)",
+          "cuanto": "Al 3 %, o algo más según el suelo. 20 mochilas por hectárea."
         }
       ],
       "variantes": {
-        "intro": "El paso de enriquecido se puede hacer con dos álcalis distintos.",
+        "intro": "El paso de enriquecido se hace con un álcali, que es lo que saca del humus las sustancias húmicas y fúlvicas. La receta de César Gramaglia lo resuelve todo en un solo paso y para volumen de chacra.",
         "lista": [
           {
-            "nombre": "Con lejía de ceniza (versión de César Gramaglia)",
-            "para": "En lugar del hidróxido de potasio se usa lejía de ceniza, que es alcalina por el potasio de la ceniza y cumple la misma función: disolver las sustancias húmicas y fúlvicas del humus. No hace falta comprar un reactivo.",
+            "nombre": "Con compost y lejía de ceniza, 200 litros (receta de César Gramaglia)",
+            "para": "Para preparar en cantidad. Usa compost maduro en vez de humus de lombriz, y lejía de ceniza como álcali: es alcalina por el potasio de la ceniza y no hace falta comprar ningún reactivo. Es la misma lógica que el «Té de compost», en otra proporción.",
+            "rinde": "200 litros",
+            "tiempo": "4 días",
             "ingredientes": [
-              "Humus líquido (paso anterior)",
-              "Lejía de ceniza (ver «Lejía y caldos de ceniza»): cantidad a confirmar"
+              "20 a 30 kg de compost maduro",
+              "20 a 30 litros de lejía de ceniza (ver «Lejía y caldos de ceniza»)",
+              "Agua hasta completar 200 litros",
+              "1 tambor de 200 litros y un agitador de madera"
+            ],
+            "preparacion": [
+              "Poner el compost y la lejía en el tambor y completar con agua hasta los 200 litros.",
+              "Revolver 2 o 3 veces por día durante 3 días.",
+              "Al cuarto día está listo: filtrar y envasar en bidones oscuros rotulados con nombre y fecha."
+            ],
+            "dosis": [
+              {
+                "cuando": "Dosis",
+                "cuanto": "Al 3 %, o un poco más según lo que necesite el suelo"
+              },
+              {
+                "cuando": "Cuánto por hectárea",
+                "cuanto": "Se calculan 20 mochilas por hectárea"
+              }
             ]
           },
           {
             "nombre": "Con hidróxido de potasio",
-            "para": "La receta de la fuente: 3 g cada 2 litros de humus líquido. Es un reactivo cáustico."
+            "para": "La receta de IPES/FAO para enriquecer el humus de lombriz: 3 g cada 2 litros de humus líquido. Es un reactivo cáustico."
           }
         ]
       },
-      "revisar": "Falta una fuente escrita del método de César Gramaglia y la proporción de lejía de ceniza que usa. La receta base es la de IPES/FAO (2010), validada en huertas urbanas de Bogotá.",
       "cuidados": [
         "El hidróxido de potasio es cáustico: guantes y antiparras. La lejía de ceniza también irrita la piel.",
         "Usar humus maduro: si todavía huele a amoníaco o está caliente, no está listo."
       ],
       "fuente": [
-        "F11"
+        "F11",
+        "F12"
       ]
     },
     {
