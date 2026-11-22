@@ -3,7 +3,7 @@
 Hasta el 29/10/2026 todo vivía en el Drive personal de Martín. Desde ahora va en
 una cuenta registrada para la app:
 
-**`biosalud.inta@gmail.com`**
+**`biosalud.ecomarcal@gmail.com`**
 
 Este documento es el procedimiento, en orden, y sobre todo las tres cosas que
 pueden salir mal si se hace en otro orden.
@@ -65,7 +65,7 @@ actualización de la app. Si las filas no viajan, hay que darlos de alta de nuev
 
 ### 1. En la cuenta nueva, armar el lugar
 
-Entrar a `biosalud.inta@gmail.com` y crear en su Drive:
+Entrar a `biosalud.ecomarcal@gmail.com` y crear en su Drive:
 
 ```
 BioSalud — Datos
@@ -74,7 +74,7 @@ BioSalud — Datos
 
 ### 2. Copiar las planillas
 
-Desde la cuenta de Martín, compartir con `biosalud.inta@gmail.com` como editor:
+Desde la cuenta de Martín, compartir con `biosalud.ecomarcal@gmail.com` como editor:
 
 - `BioSalud · Accesos`
 - `BioSalud · Chacra Tika`

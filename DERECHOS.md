@@ -88,7 +88,7 @@ Puntos a resolver:
 - **Uso en investigación.** Si estos datos alimentan una publicación, va agregado
   y anónimo, y avisado antes. Está escrito en los términos.
 - **Dónde viven.** Desde el 29/10/2026, en una cuenta de Google registrada para
-  la app (`biosalud.inta@gmail.com`), no en el Drive personal de Martín. Ver
+  la app (`biosalud.ecomarcal@gmail.com`), no en el Drive personal de Martín. Ver
   [MIGRACION-DRIVE.md](MIGRACION-DRIVE.md). **Eso resuelve la mitad del
   problema**: los datos de diez chacras ya no están mezclados con los de una
   persona. Pero una cuenta de Gmail propia **no es una cuenta institucional**,

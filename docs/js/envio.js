@@ -20,7 +20,7 @@ window.Envio = (function () {
   // funcionar sin que cada productor configure nada; lo que impide que un
   // desconocido escriba no es esconder esta dirección, es la credencial.
   //
-  // Publicada el 29/10/2026 desde la cuenta biosalud.inta@gmail.com, cuando los
+  // Publicada el 29/10/2026 desde la cuenta biosalud.ecomarcal@gmail.com, cuando los
   // datos se mudaron ahí para dejar de usar el Drive personal del referente (ver
   // MIGRACION-DRIVE.md). La dirección anterior, del 26/10, salía de un proyecto
   // de la cuenta personal: cambiar de cuenta obliga a implementar de cero, y una
