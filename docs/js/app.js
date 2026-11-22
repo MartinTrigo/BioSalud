@@ -233,7 +233,7 @@
     // grilla de dos columnas. Antes de eso el menú sigue como lista, con la
     // explicación de cada sección, que es lo que necesita quien recién empieza.
     vista.innerHTML = `
-      ${habilitada ? resumen(config) + `<section id="tablero-inicio" aria-label="Resumen de la temporada">
+      ${habilitada ? resumen(config) + `<div id="solo-aca"></div><section id="tablero-inicio" aria-label="Resumen de la temporada">
         <p class="cargando">Armando el resumen…</p></section>` : `
         <p class="aviso aviso--info">
           <strong>Empezá por la configuración.</strong> Cargá los datos de tu
@@ -291,6 +291,9 @@
     const tablero = document.getElementById("tablero-inicio");
     if (tablero) window.Tablero.render(tablero, ir);
 
+    const soloAca = document.getElementById("solo-aca");
+    if (soloAca) avisoSoloAca(soloAca);
+
     document.getElementById("btn-sugerencia").onclick = () => window.Sugerencias.abrir();
 
     const instalar = document.getElementById("btn-instalar");
@@ -298,6 +301,56 @@
       instalador.prompt();
       await instalador.userChoice;
       instalador = null;
+      mostrar();
+    };
+  }
+
+  // ---------- Lo que está en este aparato y no en la planilla ----------
+  //
+  // Aparece cuando la app baja la planilla y encuentra registros que solo
+  // tiene este aparato (ver Envio.mezclar, regla 5). Pasa una vez, al estrenar
+  // la versión que comparte los datos: cada aparato venía guardando su propio
+  // plan. La decisión es del productor y no se puede adivinar: en la notebook
+  // lo que quiere es subirlo; en un celular con un plan viejo, sacarlo.
+  const NOMBRES_SOLO = {
+    plan: ["renglón del plan", "renglones del plan"],
+    aplicaciones: ["aplicación", "aplicaciones"],
+    monitoreos: ["monitoreo", "monitoreos"],
+    tratamientos: ["tratamiento", "tratamientos"],
+  };
+
+  async function avisoSoloAca(caja) {
+    let s;
+    try { s = await window.Envio.soloEnEsteAparato(); } catch (err) { return; }
+    if (!document.body.contains(caja)) return;
+    if (!s.total) { caja.innerHTML = ""; return; }
+
+    const partes = Object.keys(NOMBRES_SOLO).filter((t) => s.porTipo[t])
+      .map((t) => `${s.porTipo[t]} ${NOMBRES_SOLO[t][s.porTipo[t] === 1 ? 0 : 1]}`);
+    const plan = s.registros.filter((x) => x.tipo === "plan").map((x) => x.r.producto);
+    const muestra = [...new Set(plan)].slice(0, 6);
+
+    caja.innerHTML = `
+      <div class="aviso aviso--info solo-aca">
+        <p><strong>Este aparato tiene datos que no están en la planilla de la chacra.</strong>
+          ${esc(partes.join(", "))}.${muestra.length ? ` En el plan: ${esc(muestra.join(", "))}${plan.length > muestra.length ? "…" : ""}.` : ""}</p>
+        <p class="nota">Ahora todos los aparatos de la chacra ven lo mismo: lo que
+          está en la planilla. Si esto es lo que querés que vean todos, subilo. Si
+          es un plan viejo o de prueba, sacalo de este aparato.</p>
+        <button class="boton boton--ancho" id="solo-subir">Subirlo a la planilla</button>
+        <button class="boton boton--secundario boton--ancho separado" id="solo-sacar">
+          Sacarlo de este aparato</button>
+      </div>`;
+
+    caja.querySelector("#solo-subir").onclick = async () => {
+      await window.Envio.subirSolo();
+      window.Util.brindis("Subiendo a la planilla…");
+      mostrar();
+    };
+    caja.querySelector("#solo-sacar").onclick = async () => {
+      if (!confirm(`¿Sacar de este aparato ${partes.join(", ")}? No están en la planilla, así que no quedan en ningún otro lado.`)) return;
+      const n = await window.Envio.descartarSolo();
+      window.Util.brindis(`${n} ${n === 1 ? "registro sacado" : "registros sacados"} de este aparato`);
       mostrar();
     };
   }
@@ -344,6 +397,19 @@
     ir("inicio");
   };
   window.addEventListener("hashchange", mostrar);
+
+  // LLEGARON DATOS DE LA PLANILLA (ver Envio.bajar).
+  //
+  // El inicio se redibuja: es un resumen y no hay nada a medio escribir. Las
+  // demás pantallas no, porque redibujar se lleva lo que se esté tipeando; ahí
+  // alcanza con avisar, y la próxima vez que se abra la sección ya lee lo nuevo.
+  window.addEventListener("biosalud:datos", () => {
+    const base = rutaActual().split("/")[0];
+    if (base === "inicio" || base === "") { mostrar(); return; }
+    if (["plan", "seguimiento", "monitoreo", "aplicacion"].includes(base)) {
+      window.Util.brindis("Llegaron cambios de la planilla. Volvé a entrar a la sección para verlos.");
+    }
+  });
 
   window.addEventListener("beforeinstallprompt", (evento) => {
     evento.preventDefault();

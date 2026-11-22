@@ -102,6 +102,32 @@ function comoTexto(valor) {
   return valor === undefined || valor === null ? "" : String(valor);
 }
 
+// ==========================================================================
+// LA COLUMNA «REGISTRO»: LO QUE PERMITE QUE TODOS LOS TELÉFONOS VEAN LO MISMO
+//
+// Hasta noviembre de 2026 la planilla solo recibía: cada teléfono guardaba su
+// plan, sus aplicaciones y sus monitoreos, y los mandaba, pero nunca leía lo
+// que habían cargado los demás. Con una notebook y un celular en la misma
+// chacra, cada uno mostraba un plan distinto.
+//
+// Para que un teléfono pueda bajar lo que cargó otro hace falta el registro
+// entero, tal como lo guarda la app, y las columnas legibles no alcanzan: les
+// faltan cosas que la app usa (el id de cada sector, si el renglón va "a
+// necesidad", los bancales, a qué ocurrencia del plan responde una
+// aplicación). Rearmarlo desde ellas sería adivinar.
+//
+// Por eso cada fila lleva al final una columna más con el registro completo en
+// JSON. No es para leerla a ojo: las columnas de antes siguen siendo las que
+// mira el técnico. Una celda admite 50.000 caracteres; un registro de la app
+// ocupa unos cientos.
+// ==========================================================================
+var MAX_REGISTRO = 45000;
+
+function registro(d) {
+  var texto = JSON.stringify(d || {});
+  return texto.length > MAX_REGISTRO ? "" : texto;
+}
+
 var HOJAS = {
   // Fase 2 — los renglones del plan de salud de la temporada.
   plan: {
@@ -112,7 +138,8 @@ var HOJAS = {
     encabezados: ["Id", "Temporada", "Producto", "Categoría", "Dosis",
                   "Litros por aplicación", "Método",
                   "Sectores", "Desde", "Hasta", "Cada (días)", "Motivo",
-                  "Estado", "Observaciones", "Cargado por", "Recibido"],
+                  "Estado", "Observaciones", "Cargado por", "Recibido",
+                  "Registro"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.temporada), comoTexto(d.producto), comoTexto(d.categoria),
@@ -120,7 +147,8 @@ var HOJAS = {
               comoTexto(d.sectores),
               comoTexto(d.desde), comoTexto(d.hasta), d.cada_dias || "",
               comoTexto(d.motivo), comoTexto(d.estado) || "Activo",
-              comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date()];
+              comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date(),
+              registro(d)];
     },
   },
 
@@ -138,7 +166,7 @@ var HOJAS = {
                   "Dosis", "Método", "Sector", "Superficie (m²)", "Volumen aplicado",
                   "Operador", "Clima", "Estado", "Observaciones", "Cargado por", "Recibido",
                   "Origen", "Tipo de producto", "Bancal", "Motivo", "Problema Id",
-                  "Monitoreo previo Id"],
+                  "Monitoreo previo Id", "Registro"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.plan_id), comoTexto(d.fecha_programada),
@@ -149,7 +177,7 @@ var HOJAS = {
               comoTexto(r.dispositivo), new Date(),
               comoTexto(d.origen) || "Del plan", comoTexto(d.tipo_producto),
               comoTexto(d.bancal), comoTexto(d.motivo), comoTexto(d.problema_id),
-              comoTexto(d.monitoreo_id)];
+              comoTexto(d.monitoreo_id), registro(d)];
     },
   },
 
@@ -180,7 +208,7 @@ var HOJAS = {
                   // Noviembre de 2026: el id del primer monitoreo del problema
                   // cuando este es un control de seguimiento. Al final por la
                   // misma razón que en Aplicaciones.
-                  "Seguimiento de"],
+                  "Seguimiento de", "Registro"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.fecha), comoTexto(d.sector), comoTexto(d.bancal),
@@ -188,7 +216,7 @@ var HOJAS = {
               d.incidencia === undefined ? "" : d.incidencia, comoTexto(d.severidad),
               d.revisadas || "", d.aviso_tecnico ? "SÍ" : "NO",
               comoTexto(d.observaciones), comoTexto(r.dispositivo), new Date(),
-              comoTexto(d.problema_id)];
+              comoTexto(d.problema_id), registro(d)];
     },
   },
 
@@ -217,7 +245,7 @@ var HOJAS = {
                   "Método", "Sectores", "Desde", "Hasta", "Cada (días)",
                   "Origen", "Estado", "Observaciones",
                   "Comentario del técnico", "Comentado por", "Comentado el",
-                  "Cargado por", "Recibido"],
+                  "Cargado por", "Recibido", "Registro"],
     fila: function (r) {
       var d = r.datos;
       return [r.id, comoTexto(d.monitoreo_id), comoTexto(d.fecha), comoTexto(d.problema),
@@ -228,7 +256,7 @@ var HOJAS = {
               // Las tres del técnico quedan vacías: las escribe él en la
               // planilla, no viajan desde el teléfono.
               "", "", "",
-              comoTexto(r.dispositivo), new Date()];
+              comoTexto(r.dispositivo), new Date(), registro(d)];
     },
   },
 };
@@ -770,6 +798,16 @@ function atender(p) {
     return respuesta({ ok: true, config: leerConfig(chacra) });
   }
 
+  // Todo lo de la chacra, para que cada teléfono vea lo mismo (ver leerTodo).
+  if (p.datos) {
+    var permisoDatos = esAdmin(p.clave) ? { ok: true }
+                                        : permitido(chacra, p.credencial, p.dispositivo);
+    if (!permisoDatos.ok) return respuesta(permisoDatos);
+    var todo = leerTodo(chacra);
+    todo.ok = true;
+    return respuesta(todo);
+  }
+
   // Sin credencial solo se sabe que el servicio existe. Ni siquiera se listan
   // las chacras: eso ya sería contar quiénes están adentro.
   return respuesta({ ok: true, servicio: "BioSalud", hora: new Date().toISOString() });
@@ -849,6 +887,10 @@ function doPost(e) {
             // el primero.
             if (def.seCorrige && typeof ya === "number") {
               corregirFila(hoja, ya, def, r);
+              guardados++;
+            } else if (typeof ya === "number" && completarRegistro(hoja, ya, def, r)) {
+              // Una aplicación que llegó antes de que existiera la columna
+              // Registro: no se toca la fila, solo se le agrega esa celda.
               guardados++;
             }
             return;
@@ -1117,6 +1159,87 @@ function corregirFila(hoja, numero, def, r) {
   var nueva = def.fila(r);
   (def.conserva || []).forEach(function (i) { nueva[i] = anterior[i]; });
   rango.setValues([nueva]);
+}
+
+// Si a una fila ya cargada le falta el Registro, se lo agrega y no toca nada
+// más. Devuelve si escribió algo.
+function completarRegistro(hoja, numero, def, r) {
+  var col = def.encabezados.indexOf("Registro") + 1;
+  if (!col) return false;
+  if (String(hoja.getRange(numero, 1).getValue()) !== String(r.id)) return false;
+  var celda = hoja.getRange(numero, col);
+  if (String(celda.getValue() || "")) return false;
+  var texto = registro(r.datos);
+  if (!texto) return false;
+  celda.setValue(texto);
+  return true;
+}
+
+// ==========================================================================
+// LEER TODO LO DE UNA CHACRA (?datos=1)
+//
+// Lo usa cada teléfono para ponerse al día con lo que cargaron los demás. La
+// planilla es la versión compartida; lo que guarda cada aparato es una copia
+// para poder trabajar sin señal en el campo.
+//
+// Devuelve, por hoja, los registros que tienen la columna Registro. Las filas
+// que no la tienen —las que llegaron antes de noviembre de 2026— van aparte,
+// solo con su id, en `sin_registro`: el teléfono que las cargó las vuelve a
+// mandar y así se completan (ver completarRegistro y corregirFila).
+//
+// DOS COSAS SE TOMAN DE LA FILA Y NO DEL REGISTRO:
+//
+//   · El Estado del plan y de los tratamientos. Si alguien escribe "Dado de
+//     baja" a mano en la planilla, los teléfonos lo respetan.
+//   · El comentario del técnico en los tratamientos. Lo escribe él en la
+//     planilla, así que no está en el registro que mandó el teléfono.
+// ==========================================================================
+var HOJAS_COMPARTIDAS = ["plan", "aplicaciones", "monitoreos", "tratamientos"];
+
+function leerTodo(chacra) {
+  var libro = planillaDe(chacra);
+  var salida = { config: leerConfig(chacra), sin_registro: {} };
+
+  HOJAS_COMPARTIDAS.forEach(function (tipo) {
+    var def = HOJAS[tipo];
+    salida[tipo] = [];
+    salida.sin_registro[tipo] = [];
+    var hoja = libro.getSheetByName(def.nombre);
+    if (!hoja || hoja.getLastRow() < 2 || !hoja.getLastColumn()) return;
+
+    var ancho = hoja.getLastColumn();
+    var encabezado = hoja.getRange(1, 1, 1, ancho).getValues()[0].map(String);
+    var colRegistro = encabezado.indexOf("Registro");
+    var colEstado = encabezado.indexOf("Estado");
+    var colComentario = encabezado.indexOf("Comentario del técnico");
+
+    hoja.getRange(2, 1, hoja.getLastRow() - 1, ancho).getValues().forEach(function (f) {
+      var id = String(f[0] || "").trim();
+      if (!id) return;
+      var d = null;
+      if (colRegistro >= 0 && f[colRegistro]) {
+        try { d = JSON.parse(String(f[colRegistro])); } catch (err) { d = null; }
+      }
+      if (!d || typeof d !== "object") { salida.sin_registro[tipo].push(id); return; }
+
+      d.id = id;
+      if ((tipo === "plan" || tipo === "tratamientos") && colEstado >= 0 &&
+          /baja/i.test(String(f[colEstado] || ""))) {
+        d.estado = "Dado de baja";
+      }
+      if (tipo === "tratamientos" && colComentario >= 0) {
+        var c = String(f[colComentario] || "").trim();
+        if (c) {
+          d.comentario_tecnico = c;
+          d.comentado_por = String(f[colComentario + 1] || "");
+          var el = f[colComentario + 2];
+          d.comentado_el = el instanceof Date ? el.toISOString().slice(0, 10) : String(el || "");
+        }
+      }
+      salida[tipo].push(d);
+    });
+  });
+  return salida;
 }
 
 function respuesta(obj) {

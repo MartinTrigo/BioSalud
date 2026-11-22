@@ -111,6 +111,10 @@ tanto el resumen del plan como el Seguimiento.
 
 ## Por qué cada renglón se guarda antes de tocar "Guardar plan"
 
+> **Reemplazada el 22/11/2026.** El botón "Guardar plan de la temporada" ya no
+> existe: cada renglón sube a la planilla apenas se guarda. Ver "Todos los
+> aparatos de una chacra ven lo mismo", al final.
+
 **Decisión:** el renglón se escribe en el teléfono apenas se agrega. El botón de
 abajo cierra el plan y lo manda a la planilla, pero no es lo que evita perderlo.
 
@@ -765,3 +769,67 @@ Seguimiento y el Plan ya lo muestran con su detalle por sector.
 
 Todo sale de la base del teléfono: funciona sin señal, pero un teléfono nuevo
 arranca con el tablero vacío aunque la planilla tenga la temporada.
+
+---
+
+## Todos los aparatos de una chacra ven lo mismo (22/11/2026)
+
+**El problema.** Hasta acá los datos solo subían. Cada aparato guardaba su plan,
+sus aplicaciones y sus monitoreos en su propia base y los mandaba a la planilla,
+pero nunca leía lo que habían cargado los demás. Martín armó el plan en la
+notebook y el celular seguía mostrando otro. Con alguien más ayudando con las
+aplicaciones, esa persona no tenía forma de saber qué tocaba en la semana.
+
+**Decisión:** la planilla de la chacra es la versión compartida, y cada aparato
+guarda una copia para trabajar sin señal. Es lo mismo que hace AMA Producción.
+No se pasó a leer la planilla en cada pantalla, porque en el campo no hay
+señal y la app tiene que andar igual.
+
+**Cómo baja.** Después de cada envío, al abrir la app y al volver a ella, el
+aparato pide `?datos=1` y mezcla lo que llega con su copia. Pide como mucho una
+vez cada 30 segundos. Si llegó algo nuevo, el inicio se redibuja solo. En las
+otras pantallas solo avisa, porque redibujar se llevaría lo que se esté tipeando.
+
+**Qué baja.** Cada fila de Plan, Aplicaciones, Monitoreos y Tratamientos lleva
+al final una columna **Registro** con el registro completo, tal como lo guarda
+la app. Las columnas legibles no alcanzan para rearmarlo: les faltan el id de
+cada sector, el modo "ante necesidad", los bancales y la ocurrencia a la que
+responde cada aplicación. Hay dos datos que se toman de la fila y no del
+registro:
+
+- el **Estado** "Dado de baja", para que se pueda dar de baja un renglón desde
+  la planilla;
+- el **comentario del técnico** en Tratamientos. Ya llega al teléfono, pero
+  todavía no se muestra.
+
+La configuración también baja: los sectores y los datos del establecimiento.
+
+**Las reglas de la mezcla**, de la más fuerte a la más débil (están en
+`Envio.mezclar`):
+
+1. Lo que el aparato todavía no mandó gana siempre.
+2. Lo de la planilla reemplaza a la copia.
+3. Lo dado de baja en la planilla se saca de la copia.
+4. Lo que está en la planilla pero sin Registro (filas de antes de esta
+   versión) se vuelve a mandar solo. Así se completa la celda, sin duplicar la
+   fila.
+5. Lo que está **solo** en el aparato no se sube ni se borra sin preguntar.
+
+La regla 5 existe porque el aparato no tiene cómo saber qué es lo que está solo
+en él. En la notebook era el plan bueno; en un celular puede ser un plan viejo
+de prueba. El inicio muestra cuánto es y pregunta: **Subirlo a la planilla** o
+**Sacarlo de este aparato**. Nunca se borra algo de la copia solo porque falta
+en la planilla.
+
+**El plan sube renglón por renglón.** Se sacó el botón "Guardar plan de la
+temporada". Con datos compartidos, un renglón que no subió es un renglón que el
+celular de quien aplica no ve. Ahora sube apenas se guarda, como ya pasaba con
+los tratamientos. Borrar un renglón lo manda como "Dado de baja", y así
+desaparece de todos los aparatos.
+
+**Lo que queda afuera.** Dos aparatos que corrigen el mismo renglón sin señal y
+después suben: gana el último que llega a la planilla. Con una chacra y dos o
+tres personas no justifica nada más complicado. Una fila vieja cuyo aparato
+nunca abre la versión nueva se queda sin Registro, y los demás no la ven. Está
+en la planilla, pero no baja.
+

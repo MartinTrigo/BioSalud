@@ -240,11 +240,9 @@ window.Plan = (function () {
                       : "Empezá por el tipo: eso reduce la lista."}</p>`}
       </div>
 
-      ${renglones.length ? `<button class="boton boton--ancho" id="btn-guardar-plan">
-        Guardar plan de la temporada</button>
-        <p class="nota nota--pie">Cada renglón ya quedó guardado en el teléfono.
-        Este botón da el plan por cerrado y lo deja listo para subir a la planilla
-        de tu chacra.</p>` : ""}
+      ${renglones.length ? `<p class="nota nota--pie">Cada renglón se guarda en este
+        aparato y sube solo a la planilla de tu chacra, apenas haya señal. Desde
+        ahí lo ven todos los teléfonos y computadoras de la chacra.</p>` : ""}
     `;
     conectar();
   }
@@ -633,9 +631,6 @@ window.Plan = (function () {
       editando = null; categoria = ""; elegido = ""; errores = {}; tipeado = {}; pintar();
     };
 
-    const guardar = destino.querySelector("#btn-guardar-plan");
-    if (guardar) guardar.onclick = cerrarPlan;
-
     const verFicha = destino.querySelector("[data-ficha]");
     if (verFicha) verFicha.onclick = () => { location.hash = "#/wiki/manejo/" + verFicha.dataset.ficha; };
 
@@ -843,14 +838,15 @@ window.Plan = (function () {
       window.Envio.sincronizar(true);
     } else if (viejo) {
       const i = renglones.indexOf(viejo);
-      renglones[i] = Object.assign({}, viejo, datos);
-      await window.BioDB.guardar("planes", renglones[i]);
+      renglones[i] = Object.assign({}, viejo, datos, { en_planilla: true });
+      await publicar(renglones[i]);
       brindis(`${nombre} actualizado`);
       editando = null;
     } else {
-      const nuevo = Object.assign({ id: window.BioDB.nuevoId(), creado: new Date().toISOString() }, datos);
+      const nuevo = Object.assign({ id: window.BioDB.nuevoId(), creado: new Date().toISOString() },
+        datos, { en_planilla: true });
       renglones.push(nuevo);
-      await window.BioDB.guardar("planes", nuevo);
+      await publicar(nuevo);
       brindis(`${nombre} agregado · ${ocurrencias(nuevo).length} aplicaciones`);
     }
 
@@ -861,19 +857,20 @@ window.Plan = (function () {
     window.scrollTo(0, 0);
   }
 
-  // Deja el plan listo para subir. Cada renglón viaja como una fila de la hoja
-  // Plan, con su propio id, así un reintento no duplica.
-  async function cerrarPlan() {
-    for (const r of renglones) {
-      // Queda anotado que este renglón salió hacia la planilla: es lo que
-      // después permite avisarle la baja si se borra (ver borrarRenglon).
-      if (!r.en_planilla) {
-        r.en_planilla = true;
-        await window.BioDB.guardar("planes", r);
-      }
-      await window.BioDB.encolarCon(r.id, "plan", r);
-    }
-    brindis(`Plan guardado · ${renglones.length} productos, ${totalOcurrencias()} aplicaciones`);
+  // CADA RENGLÓN SUBE APENAS SE GUARDA.
+  //
+  // Hasta noviembre de 2026 los renglones quedaban en el teléfono hasta tocar
+  // "Guardar plan de la temporada". Mientras cada aparato tenía su propio plan
+  // daba igual; desde que todos bajan la planilla (ver Envio.bajar), un renglón
+  // que no subió es un renglón que el celular de quien aplica no ve. Así que
+  // sube solo, como ya hacían los tratamientos. Cada uno viaja con su propio
+  // id, así un reintento o una corrección pisa su fila en vez de sumar otra.
+  //
+  // `en_planilla` queda en true desde el primer guardado: es lo que permite
+  // avisar la baja si después se borra (ver borrarRenglon).
+  async function publicar(r) {
+    await window.BioDB.guardar("planes", r);
+    await window.BioDB.encolarCon(r.id, "plan", r);
     window.Envio.sincronizar(true);
   }
 
