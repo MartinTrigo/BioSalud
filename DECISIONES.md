@@ -744,5 +744,20 @@ Seguimiento y el Plan ya lo muestran con su detalle por sector.
 - **La tira de días**: una semana para atrás y una para adelante, un renglón
   por producto, con forma además de color (lleno, hueco, cruz, rombo).
 
+- **La curva de sanidad**: arriba, la incidencia de cada plaga para toda la
+  chacra; abajo, con la misma línea de tiempo, lo aplicado (el tamaño del punto
+  es el volumen). Dos franjas y no dos ejes Y, porque porcentaje y litros en
+  los mismos ejes sugieren cruces que no significan nada. El valor de la chacra
+  en un día es el del **peor sector según lo último que se sabe de cada uno**
+  (con menos de un mes): tomar solo lo monitoreado ese día hacía zigzag cuando
+  se miraba un sector sano. Lo monitoreado sin porcentaje va en un carril
+  «s/%» y no en cero. Al tocar una plaga se ve sector por sector, con lo
+  aplicado ahí desde que apareció: se muestra, no se califica (como en
+  `js/problemas.js`).
+- **Sabías que**: un dato por día tomado tal cual de las fichas de la wiki
+  (enemigos naturales, resúmenes y cuidados), así que no hay texto nuevo que
+  validar. Si en el último mes se monitoreó una plaga con ficha, van primero
+  sus datos.
+
 Todo sale de la base del teléfono: funciona sin señal, pero un teléfono nuevo
 arranca con el tablero vacío aunque la planilla tenga la temporada.

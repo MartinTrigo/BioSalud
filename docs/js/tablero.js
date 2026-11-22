@@ -1,8 +1,8 @@
 // ==========================================================================
 // BioSalud ECOMARCAL — el tablero del inicio
 //
-// Al abrir la app, antes del menú, tres cosas que dicen cómo viene la
-// temporada sin tener que entrar a ninguna sección:
+// Al abrir la app, antes del menú, lo que dice cómo viene la temporada sin
+// tener que entrar a ninguna sección:
 //
 //   · HOY: qué toca aplicar, qué quedó atrasado y qué biopreparado hay que
 //     empezar a preparar para llegar a la primera aplicación del plan.
@@ -11,6 +11,9 @@
 //     hecho: nunca un porcentaje solo.
 //   · LA TIRA DE DÍAS: una semana para atrás y una para adelante, un renglón
 //     por producto, con lo hecho, lo que viene y lo atrasado.
+//   · LA CURVA DE SANIDAD: la incidencia de cada plaga en la temporada y,
+//     debajo, lo aplicado. Cada plaga se toca para verla por sector.
+//   · SABÍAS QUE: un dato por día de las fichas de la wiki.
 //
 // DE DÓNDE SALEN LOS NÚMEROS
 //
@@ -41,11 +44,19 @@ window.Tablero = (function () {
   // Con cuánta anticipación se avisa que hay que empezar un biopreparado.
   const AVISO_PREPARAR_DIAS = 7;
 
+  // La curva de sanidad: cuántas plagas y cuántos productos entran antes de
+  // que el dibujo deje de leerse.
+  const SERIES_CURVA = 4;
+  const PRODUCTOS_CURVA = 5;
+
   let bio = null;          // datos/biopreparados.json, por el tiempo de elaboración
+  let plagas = null;       // datos/plagas.json, para los «sabías que»
   let cuenta = null;       // la última cuenta, para redibujar sin volver a leer
   let destino = null;
   let irA = null;
   let abierto = "";        // qué reloj muestra su detalle; vacío = ninguno
+  let plagaAbierta = "";   // qué plaga de la curva muestra su detalle por sector
+  let dato = null;         // qué «sabías que» se está mostrando (índice); null = el del día
 
   // ---------- Fechas ----------
 
@@ -102,6 +113,10 @@ window.Tablero = (function () {
       try { bio = await (await fetch("datos/biopreparados.json")).json(); }
       catch (err) { bio = { fichas: [] }; }   // sin la ficha solo se pierde el aviso de preparar
     }
+    if (!plagas) {
+      try { plagas = await (await fetch("datos/plagas.json")).json(); }
+      catch (err) { plagas = { fichas: [] }; }
+    }
     const t = window.Plan.temporadaActual();
     const config = await window.BioDB.leerConfig();
     const planes = (await window.BioDB.todos("planes")).filter((r) => r.temporada === t);
@@ -145,7 +160,126 @@ window.Tablero = (function () {
       monitoreo: monitoreo(d.monitoreos, sectores, h),
       prevencion: prevencion(d, necesidad, enTemporada),
       tira: tira(agenda, d.aplicaciones, h),
+      sanidad: sanidad(d, enTemporada, h),
+      datos: datosCuriosos(d.monitoreos, h),
     };
+  }
+
+  // LA CURVA DE SANIDAD: cada plaga a lo largo de la temporada, para toda la
+  // chacra, y debajo, con la misma línea de tiempo, lo que se aplicó.
+  //
+  // Dos franjas y no dos ejes Y: la incidencia es un porcentaje y lo aplicado
+  // son litros, y en un mismo par de ejes cualquier cruce de líneas parecería
+  // decir algo que no dice.
+  //
+  // Para la chacra se toma, de cada día, el sector con más incidencia: es el
+  // que pide atención, y un promedio lo escondería. El detalle por sector está
+  // al tocar la plaga.
+  const SEVERIDAD = { Leve: 1, Media: 2, Alta: 3 };
+
+  function sanidad(d, enTemporada, h) {
+    const mons = d.monitoreos.filter((m) => enTemporada(m.fecha) && m.fecha <= h);
+    const apls = d.aplicaciones.filter((a) => a.estado === "Aplicada"
+      && enTemporada(a.fecha_aplicada || a.fecha) && (a.fecha_aplicada || a.fecha) <= h);
+    if (!mons.length && !apls.length) return null;
+
+    const series = new Map();
+    mons.forEach((m) => {
+      const nombre = String(m.deteccion || "Sin identificar").trim();
+      const k = m.plaga_id || "otro:" + nombre.toLowerCase();
+      if (!series.has(k)) series.set(k, { clave: k, plagaId: m.plaga_id || "", nombre, mons: [] });
+      series.get(k).mons.push(m);
+    });
+    // Cada día con algún monitoreo de esa plaga, la chacra vale lo que el peor
+    // sector según lo último que se sabe de cada uno (si tiene menos de un
+    // mes). Tomar solo lo monitoreado ese día hacía zigzag: un día se miraba
+    // el invernadero con 10 % y la curva "bajaba", aunque la huerta seguía
+    // en 45 %.
+    const inc = (m) => (m.incidencia === "" || m.incidencia === undefined ? null
+      : isNaN(Number(m.incidencia)) ? null : Number(m.incidencia));
+    const lista = [...series.values()].map((s) => {
+      const ordenados = s.mons.slice().sort((a, b) => String(a.fecha).localeCompare(String(b.fecha))
+        || String(a.creado).localeCompare(String(b.creado)));
+      const dias = [...new Set(ordenados.map((m) => m.fecha))];
+      const puntos = dias.map((fecha) => {
+        const ultimo = new Map();   // sector → su último monitoreo hasta esa fecha
+        ordenados.forEach((m) => {
+          if (m.fecha <= fecha && diasEntre(m.fecha, fecha) <= 30) ultimo.set(m.sector_id || m.sector || "", m);
+        });
+        let valor = null, sev = 0;
+        ultimo.forEach((m) => {
+          const v = inc(m);
+          if (v !== null) valor = valor === null ? v : Math.max(valor, v);
+          sev = Math.max(sev, SEVERIDAD[m.severidad] || 0);
+        });
+        return { fecha, inc: valor, sev };
+      });
+      return Object.assign(s, { puntos, ultima: dias[dias.length - 1] });
+    }).sort((a, b) => b.ultima.localeCompare(a.ultima) || b.mons.length - a.mons.length);
+
+    // Lo aplicado: una marca por producto y día, del tamaño de los litros
+    // (sumando los sectores). Sin volumen anotado, la marca más chica.
+    const productos = new Map();
+    apls.forEach((a) => {
+      const nombre = String(a.producto || "Sin nombre").trim();
+      const f = a.fecha_aplicada || a.fecha;
+      if (!productos.has(nombre)) productos.set(nombre, { nombre, dias: new Map(), veces: 0 });
+      const p = productos.get(nombre);
+      if (!p.dias.has(f)) { p.dias.set(f, { fecha: f, litros: 0, fuera: !a.plan_id, sectores: [] }); p.veces += 1; }
+      const dia = p.dias.get(f);
+      dia.litros += Number(String(a.volumen || "").replace(",", ".")) || 0;
+      dia.sectores.push(a.sector_id);
+    });
+    const prods = [...productos.values()].sort((a, b) => b.veces - a.veces || a.nombre.localeCompare(b.nombre));
+
+    const fechas = mons.map((m) => m.fecha).concat(apls.map((a) => a.fecha_aplicada || a.fecha)).sort();
+    let desde = fechas[0];
+    if (diasEntre(desde, h) < 28) desde = masDias(h, -28);   // menos de un mes se ve apretado
+
+    return {
+      desde, hasta: h,
+      series: lista.slice(0, SERIES_CURVA),
+      otrasSeries: Math.max(0, lista.length - SERIES_CURVA),
+      productos: prods.slice(0, PRODUCTOS_CURVA),
+      otrosProductos: Math.max(0, prods.length - PRODUCTOS_CURVA),
+      mons, apls,
+      sectores: d.config.sectores || [],
+    };
+  }
+
+  // SABÍAS QUE: un dato por día, sacado de las fichas de la wiki, que ya
+  // pasaron por el equipo del IFAB. No se escribe nada nuevo acá. Si en el
+  // último mes se monitoreó una plaga que tiene ficha, primero van sus datos:
+  // lo curioso que además sirve para lo que está pasando en la chacra.
+  function datosCuriosos(monitoreos, h) {
+    const corto = (t) => {
+      const s = String(t || "").trim();
+      if (!s || s.length > 260) return "";
+      return s;
+    };
+    const vistas = new Set(monitoreos.filter((m) => m.plaga_id && diasEntre(m.fecha, h) <= 30)
+      .map((m) => m.plaga_id));
+    const lista = [];
+    ((plagas && plagas.fichas) || []).forEach((f) => {
+      const ruta = "wiki/plagas/" + f.id;
+      const cerca = vistas.has(f.id);
+      if (corto(f.enemigos)) lista.push({ texto: f.enemigos, titulo: `Enemigos naturales de ${f.nombre.toLowerCase()}`, ruta, nombre: f.nombre, cerca });
+      if (corto(f.resumen)) lista.push({ texto: f.resumen, titulo: f.nombre, ruta, nombre: f.nombre, cerca });
+      (f.cuidados || []).forEach((c) => { if (corto(c)) lista.push({ texto: c, titulo: f.nombre, ruta, nombre: f.nombre, cerca }); });
+    });
+    ((bio && bio.fichas) || []).forEach((f) => {
+      const ruta = "wiki/manejo/" + f.id;
+      if (f.comarca && corto(f.resumen)) lista.push({ texto: f.resumen, titulo: f.nombre, ruta, nombre: f.nombre });
+      (f.cuidados || []).forEach((c) => { if (corto(c)) lista.push({ texto: c, titulo: f.nombre, ruta, nombre: f.nombre }); });
+    });
+    // Los de las plagas vistas, adelante. El resto, en un orden fijo.
+    lista.sort((a, b) => (b.cerca ? 1 : 0) - (a.cerca ? 1 : 0));
+    const cerca = lista.filter((x) => x.cerca).length;
+    // El dato del día: entre los cercanos si hay, si no entre todos. Cambia
+    // cada día y es el mismo todo el día, aunque se abra la app diez veces.
+    const dia = Math.floor(new Date(h + "T12:00:00") / 864e5);
+    const inicial = lista.length ? (cerca ? dia % cerca : dia % lista.length) : 0;
+    return { lista, inicial };
   }
 
   // HOY: lo que toca, lo atrasado y lo que hay que empezar a preparar.
@@ -541,6 +675,162 @@ window.Tablero = (function () {
     </div>`;
   }
 
+  // ---------- La curva de sanidad ----------
+
+  // Un tope "redondo" para el eje: 10, 20, 25, 50 o 100 %.
+  const topeDe = (v) => [10, 20, 25, 50, 100].find((t) => t >= v) || 100;
+  const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+
+  function tarjetaSanidad(c) {
+    const s = c.sanidad;
+    if (!s) return "";
+    const W = 340, x0 = 34, x1 = 330;
+    const dias = Math.max(1, diasEntre(s.desde, s.hasta));
+    const X = (f) => +(x0 + (x1 - x0) * Math.max(0, Math.min(1, diasEntre(s.desde, f) / dias))).toFixed(1);
+
+    // Arriba, la incidencia. Lo monitoreado sin porcentaje va en un carril
+    // aparte, "s/%", debajo del cero: dibujarlo en cero diría que no había nada.
+    const conInc = s.series.some((x) => x.puntos.some((p) => p.inc !== null));
+    const sinInc = s.series.some((x) => x.puntos.some((p) => p.inc === null));
+    const yArriba = 14, yCero = 116, yCarril = 132;
+    const max = Math.max(0, ...s.series.map((x) => Math.max(0, ...x.puntos.map((p) => p.inc || 0))));
+    const tope = topeDe(max);
+    const Y = (v) => +(yCero - (yCero - yArriba) * Math.min(1, v / tope)).toFixed(1);
+    const radio = (sev) => [3.5, 4, 5, 6.5][sev] || 4;
+
+    let arriba = "";
+    if (s.series.length) {
+      const guias = [0, 0.5, 1].map((f) => `<line class="curva__guia" x1="${x0}" x2="${x1}" y1="${Y(tope * f)}" y2="${Y(tope * f)}"/>
+        <text class="curva__eje" x="${x0 - 5}" y="${Y(tope * f) + 4}" text-anchor="end">${Math.round(tope * f)}%</text>`).join("");
+      const lineas = s.series.map((x, i) => {
+        const pts = x.puntos.filter((p) => p.inc !== null);
+        const linea = pts.length > 1 ? `<polyline class="curva__linea serie-${i}" points="${pts.map((p) => `${X(p.fecha)},${Y(p.inc)}`).join(" ")}"/>` : "";
+        const marcas = x.puntos.map((p) => `<circle class="curva__punto serie-${i}${p.inc === null ? " curva__punto--sin" : ""}"
+          cx="${X(p.fecha)}" cy="${p.inc === null ? yCarril : Y(p.inc)}" r="${radio(p.sev)}"><title>${esc(x.nombre)} · ${esc(fechaCorta(p.fecha))}${
+          p.inc === null ? "" : " · " + p.inc + " %"}${p.sev ? " · severidad " + ["", "leve", "media", "alta"][p.sev] : ""}</title></circle>`).join("");
+        return linea + marcas;
+      }).join("");
+      arriba = `${conInc ? guias : ""}
+        ${sinInc ? `<text class="curva__eje" x="${x0 - 5}" y="${yCarril + 4}" text-anchor="end">s/%</text>` : ""}
+        ${lineas}`;
+    }
+
+    // Abajo, lo aplicado: un renglón por producto, el nombre arriba (como en
+    // la tira) y una marca por día, del tamaño de los litros.
+    const base = s.series.length ? (sinInc ? yCarril + 16 : yCero + 14) : 8;
+    const alto = 32;
+    const maxL = Math.max(0, ...s.productos.map((p) => Math.max(0, ...[...p.dias.values()].map((d) => d.litros))));
+    const r = (l) => (maxL > 0 && l > 0 ? 3.5 + 5 * Math.sqrt(l / maxL) : 3.5);
+    const abajo = s.productos.map((p, j) => {
+      const y = base + alto * j + 22;
+      return `<text class="curva__producto" x="2" y="${y - 10}">${esc(recortar(p.nombre, 40))}</text>
+        <line class="curva__guia" x1="${x0}" x2="${x1}" y1="${y}" y2="${y}"/>
+        ${[...p.dias.values()].map((d) => `<circle class="curva__aplicacion${d.fuera ? " curva__aplicacion--fuera" : ""}"
+          cx="${X(d.fecha)}" cy="${y}" r="${r(d.litros).toFixed(1)}"><title>${esc(p.nombre)} · ${esc(fechaCorta(d.fecha))}${
+          d.litros ? " · " + numero(d.litros) + " L" : ""}</title></circle>`).join("")}`;
+    }).join("");
+    const yMeses = base + alto * s.productos.length + 16;
+    const H = yMeses + 6;
+
+    // Las marcas de los meses y la raya de hoy, que cruza las dos franjas.
+    const meses = [];
+    const m = new Date(s.desde + "T12:00:00");
+    m.setDate(1); m.setMonth(m.getMonth() + 1);
+    while (fechaISO(m) <= s.hasta) {
+      meses.push(`<line class="curva__mes" x1="${X(fechaISO(m))}" x2="${X(fechaISO(m))}" y1="${yArriba - 6}" y2="${yMeses - 12}"/>
+        <text class="curva__eje" x="${X(fechaISO(m)) + 3}" y="${yMeses}">${MESES[m.getMonth()]}</text>`);
+      m.setMonth(m.getMonth() + 1);
+    }
+
+    const leyenda = s.series.map((x, i) => {
+      const u = x.puntos[x.puntos.length - 1];
+      return `<button type="button" class="curva__plaga${plagaAbierta === x.clave ? " curva__plaga--abierta" : ""}"
+          data-plaga="${esc(x.clave)}" aria-expanded="${plagaAbierta === x.clave}">
+        <svg viewBox="0 0 22 10" aria-hidden="true"><line class="curva__linea serie-${i}" x1="1" x2="21" y1="5" y2="5"/></svg>
+        <span>${esc(x.nombre)}</span>
+        <small>${u.inc === null ? (u.sev ? ["", "leve", "media", "alta"][u.sev] : "") : u.inc + " %"} · ${esc(fechaCorta(u.fecha))}</small>
+      </button>`;
+    }).join("");
+
+    const abiertaSerie = s.series.find((x) => x.clave === plagaAbierta);
+    return `<div class="tarjeta curva">
+      <h2>Sanidad de la temporada</h2>
+      <p class="nota">${s.series.length
+        ? "Arriba, la incidencia de cada plaga en el sector más afectado, y el tamaño del punto es la severidad. Abajo, lo aplicado: el tamaño es el volumen."
+        : "Cuando registres monitoreos, arriba vas a ver cómo evoluciona cada plaga. Por ahora, lo aplicado: el tamaño del punto es el volumen."}</p>
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Incidencia de ${esc(s.series.map((x) => x.nombre).join(", ") || "plagas")} y aplicaciones de la temporada.">
+        ${meses.join("")}
+        ${arriba}
+        ${s.series.length && s.productos.length ? `<line class="curva__separador" x1="${x0}" x2="${x1}" y1="${base}" y2="${base}"/>` : ""}
+        ${abajo}
+        <line class="curva__hoy" x1="${X(s.hasta)}" x2="${X(s.hasta)}" y1="${yArriba - 8}" y2="${yMeses - 12}"/>
+      </svg>
+      ${s.series.length ? `<div class="curva__leyenda">${leyenda}</div>
+        ${abiertaSerie ? detallePlaga(abiertaSerie, s) : `<p class="nota tablero__pista">Tocá una plaga para verla por sector.</p>`}` : ""}
+      ${s.otrasSeries || s.otrosProductos ? `<p class="nota">${s.otrasSeries ? `Y ${plural(s.otrasSeries, "problema más", "problemas más")} en Monitoreo. ` : ""}${
+        s.otrosProductos ? `Y ${plural(s.otrosProductos, "producto más", "productos más")} aplicados.` : ""}</p>` : ""}
+    </div>`;
+  }
+
+  // El detalle de una plaga, sector por sector: cómo fue cambiando y qué se
+  // aplicó ahí desde que apareció. Se muestra, no se califica: si bajó por lo
+  // aplicado, por el clima o por los enemigos naturales lo decide quien conoce
+  // el campo (ver js/problemas.js).
+  function detallePlaga(x, s) {
+    const nombre = (id, texto) => ((s.sectores.find((q) => q.id === id) || {}).nombre) || texto || "Sector sin nombre";
+    const porSector = new Map();
+    x.mons.forEach((m) => {
+      const k = m.sector_id || m.sector || "";
+      if (!porSector.has(k)) porSector.set(k, { nombre: nombre(m.sector_id, m.sector), mons: [] });
+      porSector.get(k).mons.push(m);
+    });
+    const valor = (m) => (m.incidencia !== "" && m.incidencia !== undefined ? m.incidencia + " %"
+      : m.severidad ? m.severidad.toLowerCase() : "visto");
+    const filas = [...porSector.entries()].map(([id, g]) => {
+      const mons = g.mons.sort((a, b) => String(a.fecha).localeCompare(String(b.fecha)));
+      const primera = mons[0].fecha;
+      // Por producto: cuántas veces y la última, así entra todo en un renglón.
+      const porProducto = new Map();
+      s.apls.filter((a) => a.sector_id === id && (a.fecha_aplicada || a.fecha) >= primera).forEach((a) => {
+        const f = a.fecha_aplicada || a.fecha;
+        const p = porProducto.get(a.producto) || { producto: a.producto, veces: 0, ultima: f };
+        p.veces += 1;
+        if (f > p.ultima) p.ultima = f;
+        porProducto.set(a.producto, p);
+      });
+      const aplicado = [...porProducto.values()].sort((a, b) => b.ultima.localeCompare(a.ultima));
+      return `<li>
+        <strong>${esc(g.nombre)}</strong>
+        <span class="curva__evolucion">${mons.slice(-4).map((m) => `${esc(valor(m))} <small>${esc(fechaCorta(m.fecha))}</small>`).join(" → ")}</span>
+        <span class="nota">${aplicado.length ? "Aplicado desde que apareció: " + aplicado.map((a) =>
+          `${esc(a.producto)} ${a.veces > 1 ? `${a.veces} veces, la última el` : "el"} ${esc(fechaCorta(a.ultima))}`).join("; ")
+          : "Sin aplicaciones registradas en este sector desde que apareció."}</span>
+      </li>`;
+    }).join("");
+    return `<div class="tablero__detalle">
+      <ul class="curva__sectores">${filas}</ul>
+      ${x.plagaId ? `<button class="boton boton--secundario boton--ancho" data-ir="wiki/plagas/${esc(x.plagaId)}">Ver la ficha de ${esc(x.nombre.toLowerCase())}</button>` : ""}
+    </div>`;
+  }
+
+  // ---------- Sabías que ----------
+
+  function tarjetaDato(c) {
+    const l = c.datos.lista;
+    if (!l.length) return "";
+    const i = (dato === null ? c.datos.inicial : dato) % l.length;
+    const x = l[i];
+    return `<div class="tarjeta dato">
+      <h2>💡 Sabías que…</h2>
+      <p class="dato__titulo">${esc(x.titulo)}${x.cerca ? ` <span class="dato__cerca">lo viste en la chacra</span>` : ""}</p>
+      <p>${esc(x.texto)}</p>
+      <div class="dato__botones">
+        <button class="boton boton--secundario" data-ir="${esc(x.ruta)}">Ver la ficha</button>
+        <button class="boton boton--secundario" data-otro-dato="${i}">Otro dato</button>
+      </div>
+    </div>`;
+  }
+
   // ---------- Pantalla ----------
 
   function pintar() {
@@ -549,7 +839,7 @@ window.Tablero = (function () {
     // Una chacra que recién empieza no tiene nada que medir: cuatro relojes en
     // raya y una tira vacía serían ruido. Solo la invitación a cargar el plan.
     if (!cuenta.hayPlan && !cuenta.prevencion.total && cuenta.monitoreo.nunca) {
-      destino.innerHTML = tarjetaHoy(cuenta);
+      destino.innerHTML = tarjetaHoy(cuenta) + tarjetaDato(cuenta);
       conectar();
       return;
     }
@@ -561,7 +851,9 @@ window.Tablero = (function () {
         ${detalle ? `<div class="tablero__detalle">${detalle(cuenta)}</div>`
           : `<p class="nota tablero__pista">Tocá un reloj para ver de qué está hecho.</p>`}
       </div>
-      ${tarjetaTira(cuenta)}`;
+      ${tarjetaTira(cuenta)}
+      ${tarjetaSanidad(cuenta)}
+      ${tarjetaDato(cuenta)}`;
     conectar();
   }
 
@@ -573,6 +865,23 @@ window.Tablero = (function () {
         pintar();
         const otra = destino.querySelector(`[data-reloj="${id}"]`);
         if (otra) otra.focus();
+      };
+    });
+    destino.querySelectorAll("[data-plaga]").forEach((b) => {
+      b.onclick = () => {
+        const k = b.dataset.plaga;
+        plagaAbierta = plagaAbierta === k ? "" : k;
+        pintar();
+        const otra = [...destino.querySelectorAll("[data-plaga]")].find((x) => x.dataset.plaga === k);
+        if (otra) otra.focus();
+      };
+    });
+    destino.querySelectorAll("[data-otro-dato]").forEach((b) => {
+      b.onclick = () => {
+        dato = Number(b.dataset.otroDato) + 1;
+        pintar();
+        const otro = destino.querySelector("[data-otro-dato]");
+        if (otro) otro.focus();
       };
     });
     destino.querySelectorAll("[data-ir]").forEach((b) => {
