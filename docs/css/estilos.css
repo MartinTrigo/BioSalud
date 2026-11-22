@@ -1078,3 +1078,101 @@ a.menu__boton { text-decoration: none; }
 
 /* Con el cuadro abierto, la página de atrás no se desplaza. */
 body.con-capa { overflow: hidden; }
+
+/* ---------- Tablero del inicio (js/tablero.js) ----------
+
+   Los relojes son los mismos de AMA Producción: medio círculo que se llena,
+   el número en grande y debajo, en palabras, de qué está hecho. El color dice
+   bien / atención / flojo, pero nunca va solo: el número y la frase están
+   siempre. */
+
+.hoy { border-left: 5px solid var(--violeta-claro); }
+.hoy h2 { margin-bottom: 6px; }
+.hoy p { margin: 4px 0; }
+.hoy__lista { margin: 0 0 6px; padding-left: 20px; }
+.hoy__lista li { margin: 2px 0; }
+.hoy__atrasado { color: var(--error); font-weight: 600; }
+.hoy__preparar {
+  background: var(--violeta-suave);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 15px;
+}
+.hoy .boton { margin-top: 10px; }
+
+.tablero h2 small, .tira h2 small { font-weight: 400; font-size: 14px; color: var(--texto-suave); }
+
+.relojes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.reloj {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding: 8px 6px 10px;
+  font: inherit;
+  color: var(--texto);
+  background: var(--papel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+.reloj:active, .reloj--abierto { background: var(--violeta-suave); border-color: var(--violeta-claro); }
+.reloj svg { width: 100%; max-width: 130px; height: auto; display: block; }
+.reloj__pista, .reloj__arco { fill: none; stroke-width: 11; stroke-linecap: round; }
+.reloj__pista { stroke: var(--borde); }
+.reloj--bien .reloj__arco { stroke: var(--verde-claro); }
+.reloj--ojo .reloj__arco { stroke: var(--dorado); }
+.reloj--flojo .reloj__arco { stroke: var(--error); }
+.reloj__valor { font-size: 24px; line-height: 1; margin-top: -22px; }
+.reloj__valor small { font-size: 14px; font-weight: 600; }
+.reloj__titulo { font-weight: 600; font-size: 15px; margin-top: 6px; }
+.reloj__detalle { font-size: 13px; color: var(--texto-suave); line-height: 1.3; }
+
+.tablero__pista { text-align: center; margin-top: 10px; }
+.tablero__detalle {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--borde);
+}
+.tablero__detalle .boton { margin-top: 10px; }
+.tablero__lista { margin: 8px 0 0; padding-left: 20px; font-size: 15px; }
+.tablero__lista li { margin: 3px 0; }
+.tablero__atrasado { color: var(--error); }
+
+.tira svg { width: 100%; height: auto; display: block; }
+.tira__hoy { fill: var(--violeta-suave); }
+.tira__guia { stroke: var(--borde); stroke-width: 1; }
+.tira__producto { font-size: 14px; font-weight: 600; fill: var(--texto); }
+.tira__dia { font-size: 12px; fill: var(--texto-suave); }
+.tira__dia--hoy { fill: var(--violeta); font-weight: 700; }
+.tira__hecha { fill: var(--violeta); }
+.tira__viene { fill: var(--papel); stroke: var(--violeta); stroke-width: 1.6; }
+.tira__atrasada { fill: var(--papel); stroke: var(--error); stroke-width: 2.4; }
+.tira__fuera { fill: var(--dorado); }
+.tira__no { stroke: var(--texto-suave); stroke-width: 1.8; stroke-linecap: round; fill: none; }
+.tira__leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+.tira__leyenda span { display: inline-flex; align-items: center; gap: 4px; }
+.tira__leyenda svg { width: 16px; height: 16px; overflow: visible; }
+
+/* El menú en grilla, una vez que la configuración está completa: el tablero
+   ocupa la parte de arriba y las secciones entran en una pantalla. */
+.menu--grilla { grid-template-columns: 1fr 1fr; gap: 10px; }
+.menu--grilla .menu__boton {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 84px;
+  padding: 12px;
+}
+.menu--grilla .menu__detalle { display: none; }
+.menu--grilla .menu__titulo { font-size: 15px; line-height: 1.25; }
+.menu--grilla .menu__boton--ancho { grid-column: 1 / -1; flex-direction: row; align-items: center; min-height: 60px; }

@@ -716,3 +716,33 @@ categoría "Reguladores de estrés", que solo tenía el caldo frío mineral, y l
 decocción de cola de caballo como ficha aparte: queda como ingrediente del
 bioestimulante de ortiga. El caldo Visosa y los microorganismos de silo de maíz
 salieron de la lista.
+
+## Qué muestra el inicio, y de dónde sale cada número
+
+Desde el 21/11/2026, con la configuración completa, el inicio arranca con un
+tablero (`js/tablero.js`) y el menú baja a una grilla. Lo eligió Martín entre
+varias propuestas; el reloj del cobre quedó afuera a propósito, porque el
+Seguimiento y el Plan ya lo muestran con su detalle por sector.
+
+- **Hoy te toca**: lo pendiente de hoy, lo atrasado y, si un biopreparado tarda
+  en elaborarse (el campo `tiempo` de su ficha), cuándo hay que empezarlo para
+  llegar a su **primera** aplicación del plan. Solo la primera: las siguientes
+  salen de la misma tanda, y un aviso que aparece siempre no se lee.
+- **Plan cumplido**: la misma cuenta que el semáforo del Seguimiento, con la
+  misma función (`Seguimiento.agendaDe`). Un «no se aplicó» cuenta como
+  cumplido.
+- **Puntualidad**: días entre lo programado y lo aplicado; «en fecha» es hasta
+  2 días. Lo «ante necesidad» y lo de fuera del plan no tienen fecha programada
+  y no entran.
+- **Monitoreo al día**: sectores con algún monitoreo en los últimos 7 días.
+  Ojo: hoy no hay forma de registrar «revisé y no vi nada», así que un sector
+  sano y bien mirado figura como atrasado.
+- **Prevención**: de lo aplicado en la temporada (una vez por producto y día),
+  cuánto estaba en el calendario del plan. Lo demás es respuesta: tratamientos
+  armados desde un monitoreo, productos «ante necesidad» y aplicaciones fuera
+  del plan.
+- **La tira de días**: una semana para atrás y una para adelante, un renglón
+  por producto, con forma además de color (lleno, hueco, cruz, rombo).
+
+Todo sale de la base del teléfono: funciona sin señal, pero un teléfono nuevo
+arranca con el tablero vacío aunque la planilla tenga la temporada.

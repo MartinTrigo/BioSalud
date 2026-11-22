@@ -228,8 +228,13 @@
       </button>`;
     }).join("");
 
+    // Con la configuración completa el inicio arranca con el tablero (hoy,
+    // relojes y la tira de días, ver js/tablero.js) y el menú baja a una
+    // grilla de dos columnas. Antes de eso el menú sigue como lista, con la
+    // explicación de cada sección, que es lo que necesita quien recién empieza.
     vista.innerHTML = `
-      ${habilitada ? resumen(config) : `
+      ${habilitada ? resumen(config) + `<section id="tablero-inicio" aria-label="Resumen de la temporada">
+        <p class="cargando">Armando el resumen…</p></section>` : `
         <p class="aviso aviso--info">
           <strong>Empezá por la configuración.</strong> Cargá los datos de tu
           establecimiento y tus sectores de riego. Hasta que estén, las secciones
@@ -237,7 +242,7 @@
           se puede leer desde ahora.
         </p>`}
 
-      <div class="menu">
+      <div class="menu${habilitada ? " menu--grilla" : ""}">
         ${menu}
         <button class="menu__boton menu__boton--config" data-ir="config">
           <span class="menu__icono">⚙️</span>
@@ -248,7 +253,7 @@
         </button>
         <!-- El manual es una página aparte, como la guía de AMA Producción:
              se lee entera, con índice, y se puede pasar por mensaje. -->
-        <a class="menu__boton" href="ayuda/">
+        <a class="menu__boton menu__boton--ancho" href="ayuda/">
           <span class="menu__icono">❓</span>
           <span>
             <span class="menu__titulo">Manual de uso</span>
@@ -282,6 +287,9 @@
     vista.querySelectorAll("[data-ir]").forEach((b) => {
       b.onclick = () => ir(b.dataset.ir);
     });
+
+    const tablero = document.getElementById("tablero-inicio");
+    if (tablero) window.Tablero.render(tablero, ir);
 
     document.getElementById("btn-sugerencia").onclick = () => window.Sugerencias.abrir();
 

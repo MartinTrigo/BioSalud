@@ -106,9 +106,18 @@ window.Seguimiento = (function () {
   const nombreSector = (id) => (sector(id) || { nombre: "Sector que ya no está" }).nombre;
 
   // Todas las aplicaciones de la temporada, una por renglón, fecha y sector.
-  function agenda() {
+  //
+  // Es una cuenta pura —recibe todo y no mira el estado de esta pantalla—
+  // porque la usa también el tablero del inicio (js/tablero.js): los dos
+  // tienen que decir lo mismo sobre qué está hecho y qué está atrasado.
+  function agendaDe(rs, regs, sectores) {
+    // El primero que aparezca, como hacía registroDe con find.
+    const porId = new Map();
+    (regs || []).forEach((a) => { if (!porId.has(a.ocurrencia_id)) porId.set(a.ocurrencia_id, a); });
+    const nombre = (id) => ((sectores || []).find((s) => s.id === id)
+      || { nombre: "Sector que ya no está" }).nombre;
     const lista = [];
-    renglones.forEach((r) => {
+    (rs || []).forEach((r) => {
       const fechas = window.Plan.ocurrencias(r);
       (r.sectores || []).forEach((s) => {
         fechas.forEach((fecha) => {
@@ -118,8 +127,8 @@ window.Seguimiento = (function () {
             plan: r,
             fecha: fecha,
             sector: s,
-            nombreSector: nombreSector(s),
-            registro: registroDe(id),
+            nombreSector: nombre(s),
+            registro: porId.get(id),
           });
         });
       });
@@ -128,6 +137,8 @@ window.Seguimiento = (function () {
     return lista.sort((a, b) =>
       a.fecha.localeCompare(b.fecha) || String(a.plan.producto).localeCompare(String(b.plan.producto)));
   }
+
+  const agenda = () => agendaDe(renglones, registradas, config.sectores || []);
 
   // LO QUE ESTÁ LISTO PARA CUANDO HAGA FALTA.
   //
@@ -718,5 +729,5 @@ window.Seguimiento = (function () {
     pintar();
   }
 
-  return { render };
+  return { render, agendaDe };
 })();
