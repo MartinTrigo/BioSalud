@@ -57,7 +57,10 @@ window.Problemas = (function () {
   // Un renglón por problema, con su último monitoreo, los más recientes arriba.
   function lista(monitoreos, soloRecientes) {
     const ultimos = {};
-    (monitoreos || []).forEach((m) => {
+    // Una recorrida "sin novedad" es un monitoreo pero no un problema: deja el
+    // sector al día y nada más. Sin este filtro aparecería en la lista de
+    // problemas para seguir y como motivo de una aplicación.
+    (monitoreos || []).filter((m) => !m.sin_novedad).forEach((m) => {
       const k = clave(m);
       if (!ultimos[k] || porFecha(ultimos[k], m) < 0) ultimos[k] = m;
     });

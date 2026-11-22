@@ -178,7 +178,9 @@ window.Tablero = (function () {
   const SEVERIDAD = { Leve: 1, Media: 2, Alta: 3 };
 
   function sanidad(d, enTemporada, h) {
-    const mons = d.monitoreos.filter((m) => enTemporada(m.fecha) && m.fecha <= h);
+    // Las recorridas sin novedad cuentan para el reloj de monitoreo, no acá:
+    // no son una plaga.
+    const mons = d.monitoreos.filter((m) => !m.sin_novedad && enTemporada(m.fecha) && m.fecha <= h);
     const apls = d.aplicaciones.filter((a) => a.estado === "Aplicada"
       && enTemporada(a.fecha_aplicada || a.fecha) && (a.fecha_aplicada || a.fecha) <= h);
     if (!mons.length && !apls.length) return null;
@@ -549,7 +551,8 @@ window.Tablero = (function () {
     if (!mo.filas.length) return `<p class="nota">Cargá tus sectores en Configuración.</p>`;
     return `
       <p class="nota">Un sector está al día si se monitoreó en los últimos ${MONITOREO_DIAS} días.
-        Cuenta cada monitoreo registrado, de cualquier plaga o síntoma.</p>
+        Cuenta cada monitoreo registrado: de una plaga, de un síntoma o una recorrida
+        sin novedad.</p>
       <ul class="tablero__lista">${mo.filas.map((f) => `
         <li class="${f.alDia ? "" : "tablero__atrasado"}"><strong>${esc(f.nombre)}</strong> · ${
           f.dias === null ? "sin monitoreos" : f.dias === 0 ? "hoy"

@@ -734,9 +734,13 @@ Seguimiento y el Plan ya lo muestran con su detalle por sector.
 - **Puntualidad**: días entre lo programado y lo aplicado; «en fecha» es hasta
   2 días. Lo «ante necesidad» y lo de fuera del plan no tienen fecha programada
   y no entran.
-- **Monitoreo al día**: sectores con algún monitoreo en los últimos 7 días.
-  Ojo: hoy no hay forma de registrar «revisé y no vi nada», así que un sector
-  sano y bien mirado figura como atrasado.
+- **Monitoreo al día**: sectores con algún monitoreo en los últimos 7 días,
+  incluida la **recorrida sin novedad**: el botón «Revisé y no vi nada» de
+  Monitoreo, que se agregó el mismo día porque sin él un sector sano y bien
+  mirado figuraba como atrasado. Guarda un monitoreo por sector con
+  `sin_novedad: true` y «Sin novedad» en Qué se observó y en Tipo, así la
+  planilla lo muestra sin columnas nuevas ni cambiar el servicio. No es un
+  problema: `Problemas.lista` lo deja afuera, y tampoco entra en la curva.
 - **Prevención**: de lo aplicado en la temporada (una vez por producto y día),
   cuánto estaba en el calendario del plan. Lo demás es respuesta: tratamientos
   armados desde un monitoreo, productos «ante necesidad» y aplicaciones fuera

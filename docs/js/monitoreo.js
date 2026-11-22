@@ -220,7 +220,30 @@ window.Monitoreo = (function () {
       </optgroup>`;
     }).join("");
 
-    return `
+    // RECORRIDA SIN NOVEDAD. Antes solo se podía registrar un problema, así
+    // que un sector sano y bien mirado quedaba igual que uno que nadie miró, y
+    // el reloj "Monitoreo al día" del inicio castigaba justo a la chacra que
+    // estaba bien. Va primero y en un toque: es el caso más común en una
+    // recorrida, y si cuesta trabajo nadie lo anota. No se ofrece cuando se
+    // está siguiendo un problema ya visto.
+    const sinNovedad = t.seguimiento ? "" : `
+      <div class="tarjeta sin-novedad">
+        <h2>¿Recorriste y estaba todo bien?</h2>
+        <p class="nota">Anotalo igual: un monitoreo sin plagas ni síntomas también
+          es un registro, y deja el sector al día.</p>
+        <div class="campo">
+          <span class="campo__titulo">Sectores que recorriste</span>
+          ${window.Util.chipsSectores(sectores, [], "sn-sector")}
+        </div>
+        <div class="campo">
+          <label for="sn-fecha">Fecha</label>
+          <input id="sn-fecha" type="date" value="${esc(hoy())}">
+        </div>
+        <p class="campo__error" id="sn-error" hidden></p>
+        <button class="boton boton--secundario boton--ancho" id="sn-guardar">✔ Revisé y no vi nada</button>
+      </div>`;
+
+    return `${sinNovedad}
       <div class="tarjeta">
         <h2>¿Qué observaste?</h2>
         <p class="nota">Registrá lo que encontraste recorriendo la chacra. Si no
@@ -445,6 +468,59 @@ window.Monitoreo = (function () {
   // base —con cuatro fotos tarda— dejaba el monitoreo o el tratamiento dos
   // veces.
   let guardando = false;
+
+  // Un registro por sector, con "Sin novedad" en Qué se observó y en Tipo: así
+  // se lee solo en la planilla, sin columnas nuevas ni cambiar el servicio.
+  async function guardarSinNovedad() {
+    if (guardando) return;
+    const marcados = [...destino.querySelectorAll(".sn-sector:checked")].map((c) => c.value);
+    const fecha = valor("#sn-fecha");
+    const aviso = destino.querySelector("#sn-error");
+    const problema = !marcados.length ? "Elegí al menos un sector."
+      : !fecha ? "Falta la fecha."
+      : fecha > hoy() ? "La fecha no puede ser posterior a hoy." : "";
+    if (problema) {
+      aviso.textContent = problema;
+      aviso.hidden = false;
+      return;
+    }
+
+    guardando = true;
+    try {
+      for (const sid of marcados) {
+        const sec = sector(sid);
+        const datos = {
+          id: window.BioDB.nuevoId(),
+          fecha: fecha,
+          sector: sec ? sec.nombre : "",
+          sector_id: sid,
+          bancal: "",
+          cultivo: sec ? sec.cultivo || "" : "",
+          deteccion: "Sin novedad",
+          plaga_id: null,
+          tipo: "Sin novedad",
+          incidencia: "",
+          severidad: "",
+          revisadas: "",
+          aviso_tecnico: false,
+          problema_id: "",
+          sin_novedad: true,
+          observaciones: "",
+          fotos: 0,
+          creado: new Date().toISOString(),
+        };
+        await window.BioDB.guardar("monitoreos", datos);
+        await window.BioDB.encolarCon(datos.id, "monitoreos", datos);
+        registros.unshift(datos);
+      }
+    } finally {
+      guardando = false;
+    }
+    brindis(marcados.length === 1 ? "Recorrida registrada: sin novedad"
+      : `Recorrida registrada en ${marcados.length} sectores: sin novedad`);
+    pintar();
+    window.Envio.sincronizar(true);
+  }
 
   async function guardar() {
     if (guardando) return;
@@ -937,6 +1013,14 @@ window.Monitoreo = (function () {
   function historial() {
     if (!registros.length) return "";
     const problemas = window.Problemas.lista(registros, false);
+    // De las recorridas sin novedad basta la última de cada sector: es lo que
+    // dice si está al día.
+    const ultimaSana = new Map();
+    registros.filter((r) => r.sin_novedad).forEach((r) => {
+      const u = ultimaSana.get(r.sector_id);
+      if (!u || r.fecha > u.fecha) ultimaSana.set(r.sector_id, r);
+    });
+    const sanas = [...ultimaSana.values()].sort((a, b) => String(b.fecha).localeCompare(String(a.fecha)));
     return `
       <details class="grupo separado">
         <summary class="grupo__cab">
@@ -950,6 +1034,8 @@ window.Monitoreo = (function () {
           <span class="grupo__flecha" aria-hidden="true"></span>
         </summary>
         <div class="grupo__cuerpo">
+          ${sanas.length ? `<p class="nota">✔ Última recorrida sin novedad: ${sanas.map((r) =>
+            `${esc(r.sector)} ${esc(fechaCorta(r.fecha))}`).join(" · ")}.</p>` : ""}
           <ul class="indice">
             ${problemas.slice(0, 20).map((p) => {
               const r = p.ultimo;
@@ -1002,6 +1088,12 @@ window.Monitoreo = (function () {
     if (guardarBtn) guardarBtn.onclick = guardar;
 
     // Cambiar el sector o lo descripto cambia qué problemas anteriores se
+    const sinNovedad = destino.querySelector("#sn-guardar");
+    if (sinNovedad) sinNovedad.onclick = guardarSinNovedad;
+    destino.querySelectorAll(".sn-sector").forEach((c) => {
+      c.onchange = () => { const a = destino.querySelector("#sn-error"); if (a) a.hidden = true; };
+    });
+
     // ofrecen para seguir.
     ["#m-sector", "#m-otro"].forEach((id) => {
       const campo = destino.querySelector(id);

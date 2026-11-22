@@ -1245,3 +1245,8 @@ polyline.curva__linea, line.curva__linea { fill: none; stroke-width: 2.4; stroke
   vertical-align: 2px;
 }
 .dato__botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+
+/* Recorrida sin novedad, arriba del formulario de Monitoreo (js/monitoreo.js). */
+.sin-novedad { border-left: 5px solid var(--verde-claro); }
+.sin-novedad h2 { margin-bottom: 4px; }
+.sin-novedad .campo__error:not([hidden]) { display: block; color: var(--error); margin: 0 0 8px; }
